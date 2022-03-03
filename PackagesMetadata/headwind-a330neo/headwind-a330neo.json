@@ -1,0 +1,16 @@
+{
+  "business": {
+    "PriceInUSD": 0.0,
+    "ThirdPartyShortName": "headwind",
+    "AccountSellerId": "sellerid",
+    "UseFirstAvailableReleaseDate": true
+  },
+  "marketplace": {
+    "sections": [
+      {
+        "category": "Aircraft",
+        "section": "Piston"
+      }
+    ]
+  }
+}

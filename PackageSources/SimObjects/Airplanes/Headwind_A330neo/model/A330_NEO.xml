@@ -9,36 +9,21 @@
 		<LOD minSize="30" ModelFile="A330NEO_LOD02.gltf"/>
 		<LOD minSize="12" ModelFile="A330NEO_LOD03.gltf"/>
 	</LODS>
-	<Animation name="l_wing_flex" guid="03735249-ea40-4466-8e26-d8b289c8866e" length="100" type="Sim" typeParam2="l_wing_flex" typeParam="AutoPlay"/>
-	<Animation name="r_wing_flex" guid="3ebff7bd-bbb1-4a54-8492-a621829f3558" length="100" type="Sim" typeParam2="r_wing_flex" typeParam="AutoPlay"/>
-	<PartInfo>
-		<Name>r_wing_flex</Name>
-		<AnimLength>100</AnimLength>
-		<Animation>
-			<Parameter>
-				<Sim>
-					<Variable>WING FLEX PCT:2</Variable>
-					<Scale>0.75</Scale>
-					<Units>percent</Units>
-					<Bias>25</Bias>
-				</Sim>
-			</Parameter>
-		</Animation>
-	</PartInfo>
-	<PartInfo>
-		<Name>l_wing_flex</Name>
-		<AnimLength>100</AnimLength>
-		<Animation>
-			<Parameter>
-				<Sim>
-					<Variable>WING FLEX PCT:1</Variable>
-					<Scale>0.75</Scale>
-					<Units>percent</Units>
-					<Bias>25</Bias>
-				</Sim>
-			</Parameter>
-		</Animation>
-	</PartInfo>
+
+
+<NodeAnimation type="WingFlex">
+    <Node>WING_BONE_01_LEFT</Node> <!-- the left wing bone closest to the center -->
+    <Node>WING_BONE_02_LEFT</Node> <!-- in between -->
+    <Node>WING_BONE_03_LEFT</Node> <!-- in between -->
+    <Node>WING_BONE_04_LEFT</Node> <!-- in between -->
+    <Node>WING_BONE_01_RIGHT</Node> <!-- the right wing bone closest to the center -->
+    <Node>WING_BONE_02_RIGHT</Node> <!-- in between -->
+    <Node>WING_BONE_03_RIGHT</Node> <!-- in between -->
+    <Node>WING_BONE_04_RIGHT</Node> <!-- in between -->
+    <Node>Engine_PIVOT_1_LEFT</Node> <!-- the left wing engine pivot node closest to the center -->
+    <Node>Engine_PIVOT_1_RIGHT</Node> <!-- the right wing engine pivot node closest to the center -->
+</NodeAnimation>
+	
 	<Behaviors>
 		<Include ModelBehaviorFile="A339X\A32NX_Interior_Generics.xml"/>
 		<Include ModelBehaviorFile="Asobo\Exterior.xml"/>
@@ -85,6 +70,7 @@
 				<ANIM_NAME_LEFT>l_aileron_percent_key</ANIM_NAME_LEFT>
 				<ANIM_NAME_RIGHT>r_aileron_percent_key</ANIM_NAME_RIGHT>
 			</UseTemplate>
+			
 			<UseTemplate Name="ASOBO_HANDLING_Rudder_Template">
 				<ANIM_NAME>rudder_percent_key</ANIM_NAME>
 				<USE_INTEGRATED_TRIM>True</USE_INTEGRATED_TRIM>
