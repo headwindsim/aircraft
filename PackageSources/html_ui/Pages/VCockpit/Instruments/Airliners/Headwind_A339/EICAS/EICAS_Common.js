@@ -13,6 +13,12 @@ class EICASCommonDisplay extends Airliners.EICASTemplateElement {
     init() {
         this.tatText = this.querySelector("#TATValue");
         this.satText = this.querySelector("#SATValue");
+        this.isaText = this.querySelector("#ISAValue");
+        this.isaContainer = this.querySelector("#ISA");
+        this.areAdirsAligned = null;
+        this.isSATVisible = null;
+        this.isTATVisible = null;
+        this.isISAVisible = null;
         this.currentSeconds = 0;
         this.currentMinutes = 0;
         this.hoursText = this.querySelector("#HoursValue");
@@ -24,10 +30,9 @@ class EICASCommonDisplay extends Airliners.EICASTemplateElement {
         this.loadFactorVisible = new NXLogic_MemoryNode(true);
         this.gwUnit = this.querySelector("#GWUnit");
         this.gwValue = this.querySelector("#GWValue");
-        this.conversionWeight = parseFloat(NXDataStore.get("CONFIG_USING_METRIC_UNIT", "1"));
-        this.gwUnit.textContent = this.conversionWeight === 1 ? "KG" : "LBS";
-        this.refreshTAT(0, true);
-        this.refreshSAT(0, true);
+        this.refreshTAT(0);
+        this.refreshSAT(0);
+        this.refreshISA(0);
         this.refreshClock();
         this.refreshGrossWeight(true);
         this.isInitialised = true;
@@ -36,37 +41,70 @@ class EICASCommonDisplay extends Airliners.EICASTemplateElement {
         if (!this.isInitialised) {
             return;
         }
-        this.refreshTAT(Math.round(Simplane.getTotalAirTemperature()));
-        this.refreshSAT(Math.round(Simplane.getAmbientTemperature()));
+
+        const airDataReferenceSource = this.getStatusAirDataReferenceSource();
+        const sat = Math.round(ADIRS.getValue(`L:A32NX_ADIRS_ADR_${airDataReferenceSource}_STATIC_AIR_TEMPERATURE`, 'Celsius'));
+        this.refreshTAT(Math.round(ADIRS.getValue(`L:A32NX_ADIRS_ADR_${airDataReferenceSource}_TOTAL_AIR_TEMPERATURE`, 'Celsius')));
+        this.refreshSAT(sat);
+        this.refreshISA(Math.round(ADIRS.getValue(`L:A32NX_ADIRS_ADR_${airDataReferenceSource}_INTERNATIONAL_STANDARD_ATMOSPHERE_DELTA`, 'Celsius')), sat);
+
         this.refreshClock();
         this.refreshLoadFactor(_deltaTime, SimVar.GetSimVarValue("G FORCE", "GFORCE"));
         this.refreshGrossWeight();
-        this.refreshADIRS();
     }
-    refreshTAT(_value, _force = false) {
-        //if ((_value != this.currentTAT) || _force) {
-        this.currentTAT = _value;
-        if (this.tatText != null) {
-            if (this.currentTAT > 0) {
-                this.tatText.textContent = "+" + this.currentTAT.toString();
-            } else {
-                this.tatText.textContent = this.currentTAT.toString();
-            }
+
+    getStatusAirDataReferenceSource() {
+        return this.getStatusSupplier(SimVar.GetSimVarValue('L:A32NX_AIR_DATA_SWITCHING_KNOB', 'Enum'));
+    }
+
+    getStatusSupplier(knobValue) {
+        const adirs3ToCaptain = 0;
+        return knobValue === adirs3ToCaptain ? 3 : 1;
+    }
+
+    refreshTAT(value) {
+        if (Number.isNaN(value)) {
+            this.tatText.textContent = "XX";
+            this.toggleWarning(true, this.tatText);
+        } else {
+            this.setValueOnTemperatureElement(value, this.tatText);
+            this.toggleWarning(false, this.tatText);
         }
-        //}
     }
-    refreshSAT(_value, _force = false) {
-        //if ((_value != this.currentSAT) || _force) {
-        this.currentSAT = _value;
-        if (this.satText != null) {
-            if (this.currentSAT > 0) {
-                this.satText.textContent = "+" + this.currentSAT.toString();
-            } else {
-                this.satText.textContent = this.currentSAT.toString();
-            }
+
+    refreshSAT(value) {
+        if (Number.isNaN(value)) {
+            this.satText.textContent = "XX";
+            this.toggleWarning(true, this.satText);
+        } else {
+            this.setValueOnTemperatureElement(value, this.satText);
+            this.toggleWarning(false, this.satText);
         }
-        //}
     }
+
+    refreshISA(value, sat) {
+        const isInStdMode = Simplane.getPressureSelectedMode(Aircraft.A320_NEO) === "STD";
+        // As ISA relates to SAT, we cannot present ISA when SAT is unavailable. We might want to move this into
+        // Rust ADIRS code itself.
+        const isaShouldBeVisible = isInStdMode && !Number.isNaN(value) && !Number.isNaN(sat);
+        this.isaContainer.setAttribute("visibility", isaShouldBeVisible ? "visible" : "hidden");
+
+        this.setValueOnTemperatureElement(value, this.isaText);
+    }
+
+    setValueOnTemperatureElement(value, element) {
+        if (value > 0) {
+            element.textContent = "+" + value.toString().padStart(2);
+        } else {
+            element.textContent = (value < 0 ? "-" : "") + Math.abs(value).toString().padStart(2);
+        }
+    }
+
+    toggleWarning(isWarning, element) {
+        element.classList.toggle("Warning", isWarning);
+        element.classList.toggle("Value", !isWarning);
+    }
+
     refreshLoadFactor(_deltaTime, value) {
         const conditionsMet = value > 1.4 || value < 0.7;
         const loadFactorSet = this.loadFactorSet.write(conditionsMet, _deltaTime);
@@ -115,12 +153,19 @@ class EICASCommonDisplay extends Airliners.EICASTemplateElement {
         const fuelWeight = SimVar.GetSimVarValue("FUEL TOTAL QUANTITY WEIGHT", "kg");
         const emptyWeight = SimVar.GetSimVarValue("EMPTY WEIGHT", "kg");
         const payloadWeight = this.getPayloadWeight("kg");
-        const gw = Math.round((emptyWeight + fuelWeight + payloadWeight) * this.conversionWeight);
+        const gw = Math.round(NXUnits.kgToUser(emptyWeight + fuelWeight + payloadWeight));
+        const gwUnit = NXUnits.userWeightUnit();
         if ((gw != this.currentGW) || _force) {
             this.currentGW = gw;
             if (this.gwValue != null) {
                 // Lower EICAS displays GW in increments of 100
                 this.gwValue.textContent = (Math.floor(this.currentGW / 100) * 100).toString();
+            }
+        }
+        if (gwUnit != this.currentGwUnit) {
+            this.currentGwUnit = gwUnit;
+            if (this.gwUnit != null) {
+                this.gwUnit.textContent = gwUnit;
             }
         }
     }
@@ -131,23 +176,6 @@ class EICASCommonDisplay extends Airliners.EICASTemplateElement {
             payloadWeight += SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${i}`, unit);
         }
         return payloadWeight;
-    }
-    refreshADIRS() {
-        if (this.tatText != null && this.satText != null) {
-            if (SimVar.GetSimVarValue("L:A320_Neo_ADIRS_STATE", "Enum") != 2) {
-                this.tatText.textContent = "XX";
-                this.tatText.classList.add("Warning");
-                this.tatText.classList.remove("Value");
-                this.satText.textContent = "XX";
-                this.satText.classList.add("Warning");
-                this.satText.classList.remove("Value");
-            } else {
-                this.satText.classList.add("Value");
-                this.satText.classList.remove("Warning");
-                this.tatText.classList.add("Value");
-                this.tatText.classList.remove("Warning");
-            }
-        }
     }
 }
 customElements.define("eicas-common-display", EICASCommonDisplay);

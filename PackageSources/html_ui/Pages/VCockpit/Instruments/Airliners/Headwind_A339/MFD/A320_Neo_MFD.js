@@ -71,6 +71,7 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
         ]);
         this.chronoAcc = 0;
         this.chronoStart = 0;
+        this.poweredDuringPreviousUpdate = false;
     }
     init() {
         super.init();
@@ -97,7 +98,6 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
         const url = document.getElementsByTagName("a320-neo-mfd-element")[0].getAttribute("url");
         // 1 is captain, 2 is first officer
         this.screenIndex = parseInt(url.substring(url.length - 1));
-        this.potIndex = this.screenIndex == 1 ? 89 : 91;
         this.isCaptainsND = this.screenIndex === 1;
         this.isFirstOfficersND = this.screenIndex === 1;
         this.side = this.isCaptainsND ? 'L' : 'R';
@@ -105,15 +105,12 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
         this.compass.showILS(this.showILS);
         this.info.showILS(this.showILS);
 
-        //SELF TEST
-        this.selfTestDiv = document.querySelector("#SelfTestDiv");
-        this.selfTestTimerStarted = false;
-        this.selfTestTimer = -1;
+        // LCD OVERLAY
+        this.lcdOverlay = document.querySelector("#LcdOverlay");
 
         //ENGINEERING TEST
         this.engTestDiv = document.querySelector("#MfdEngTest");
         this.engMaintDiv = document.querySelector("#MfdMaintMode");
-
         //CHRONO
         SimVar.SetSimVarValue(`L:AUTOPILOT_CHRONO_STATE_${this.side}`, "number", 0);
         this.chronoDiv = document.querySelector("#div_Chrono");
@@ -122,10 +119,18 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
         this.text_chrono_suffix = document.querySelector("#text_chrono_suffix");
         this.IsChronoDisplayed = 0;
 
-        this.electricity = this.gps.getChildById("Electricity");
-
         this.mapUpdateThrottler = new UpdateThrottler(this.screenIndex == 1 ? 100 : 400);
         this.updateThrottler = new UpdateThrottler(this.screenIndex == 1 ? 300 : 500);
+
+        this.displayUnit = new DisplayUnit(
+            this.gps.getChildById("Electricity"),
+            () => {
+                return SimVar.GetSimVarValue(`L:A32NX_ELEC_${this.isCaptainMfd() ? "AC_ESS_SHED" : "AC_2"}_BUS_IS_POWERED`, "Bool");
+            },
+            () => parseInt(NXDataStore.get("CONFIG_SELF_TEST_TIME", "15")),
+            this.screenIndex == 1 ? 89 : 91,
+            document.querySelector("#SelfTestDiv")
+        );
     }
     displayChronoTime() {
         const totalSeconds = this.getTotalChronoSeconds();
@@ -162,55 +167,41 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
     }
 
     onUpdate() {
-        const currentKnobValue = SimVar.GetSimVarValue("LIGHT POTENTIOMETER:" + this.potIndex, "number");
-        if (currentKnobValue <= 0.0) {
-            this.selfTestLastKnobValue = currentKnobValue;
-            return;
-        }
-        let _deltaTime = this.getDeltaTime();
-        super.onUpdate(_deltaTime);
-        const mapDeltaTime = this.mapUpdateThrottler.canUpdate(_deltaTime);
+        let deltaTime = this.getDeltaTime();
+        super.onUpdate(deltaTime);
+
+        const mapDeltaTime = this.mapUpdateThrottler.canUpdate(deltaTime);
         if (mapDeltaTime != -1) {
             this.updateMap(mapDeltaTime);
         }
 
-        const knobChanged = (currentKnobValue >= 0.1 && this.selfTestLastKnobValue < 0.1);
-
-        _deltaTime = this.updateThrottler.canUpdate(_deltaTime, knobChanged);
-        if (_deltaTime === -1) {
+        deltaTime = this.updateThrottler.canUpdate(deltaTime, this.displayUnit.isJustNowTurnedOn());
+        if (deltaTime === -1) {
             return;
         }
 
-        this.updateNDInfo(_deltaTime);
+        this.lcdOverlay.style.opacity = SimVar.GetSimVarValue("L:A32NX_MFD_MASK_OPACITY", "number");
+
+        this.displayUnit.update(deltaTime);
+
+        this.updateNDInfo(deltaTime);
 
         //TCAS
-        this.map.instrument.TCASManager.update(_deltaTime);
+        this.map.instrument.TCASManager.update(deltaTime);
 
-        const ADIRSState = SimVar.GetSimVarValue("L:A320_Neo_ADIRS_STATE", "Enum");
+        const failed = ADIRS.mapNotAvailable(this.screenIndex);
 
-        if (ADIRSState != 2) {
+        const usesGpsAsPrimary = SimVar.GetSimVarValue("L:A32NX_ADIRS_USES_GPS_AS_PRIMARY", "bool");
+
+        if (!usesGpsAsPrimary) {
             document.querySelector("#GPSPrimary").setAttribute("visibility", "hidden");
             document.querySelector("#GPSPrimaryLost").setAttribute("visibility", "visible");
             document.querySelector("#rect_GPSPrimary").setAttribute("visibility", "visible");
-
-            //Simvar to find out if the GPS messages have been already acknowledged in the FCU by clicking the CLR button.
-            var GPSPrimAck = SimVar.GetSimVarValue("L:GPSPrimaryAcknowledged", "bool");
-            //Getting the current GPS value to compare whether if the GPS is lost in the middle (After Aligns)
-            //OR The aircraft is started from the very first time.
-            var GPSPrimaryCurrVal = SimVar.GetSimVarValue("L:GPSPrimary", "bool");
-            if (GPSPrimaryCurrVal && GPSPrimAck) { //Resetting the acknowledged flag, if the GPS flag changed in the middle.
-                SimVar.SetSimVarValue("L:GPSPrimaryAcknowledged", "bool", 0);
-            }
-            SimVar.SetSimVarValue("L:GPSPrimary", "bool", 0);
         } else {
             document.querySelector("#GPSPrimaryLost").setAttribute("visibility", "hidden");
-            var GPSPrimAck = SimVar.GetSimVarValue("L:GPSPrimaryAcknowledged", "bool");
-            var GPSPrimaryCurrVal = SimVar.GetSimVarValue("L:GPSPrimary", "bool");
-            if (!GPSPrimaryCurrVal && GPSPrimAck) { //Resetting the acknowledged flag, if the GPS flag changed in the middle.
-                SimVar.SetSimVarValue("L:GPSPrimaryAcknowledged", "bool", 0);
-            }
+            const GPSPrimAck = SimVar.GetSimVarValue("L:GPSPrimaryAcknowledged", "bool");
 
-            //Clearing the ND message if the message displayed in the FMC is acknowledged by pressing the CLR button.
+            // Clearing the ND message if the message displayed in the FMC is acknowledged by pressing the CLR button.
             if (!GPSPrimAck) {
                 document.querySelector("#GPSPrimary").setAttribute("visibility", "visible");
                 document.querySelector("#rect_GPSPrimary").setAttribute("visibility", "visible");
@@ -218,10 +209,9 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
                 document.querySelector("#rect_GPSPrimary").setAttribute("visibility", "hidden");
                 document.querySelector("#GPSPrimary").setAttribute("visibility", "hidden");
             }
-            SimVar.SetSimVarValue("L:GPSPrimary", "bool", 1);
         }
 
-        if (ADIRSState != 2 && !this.map.planMode && this.modeChangeTimer == -1) {
+        if (failed && !this.map.planMode && this.modeChangeTimer == -1) {
             document.querySelector("#MapFail").setAttribute("visibility", "visible");
             document.querySelector("#Map").setAttribute("style", "display:none");
         } else {
@@ -230,24 +220,7 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
         }
 
         if (this.map.instrument.airplaneIconElement._image) {
-            this.map.instrument.airplaneIconElement._image.setAttribute("visibility", ADIRSState != 2 ? "hidden" : "visible");
-        }
-
-        const ACPowerStateChange = SimVar.GetSimVarValue("L:ACPowerStateChange","Bool");
-        const ACPowerAvailable = SimVar.GetSimVarValue("L:ACPowerAvailable","Bool");
-
-        if ((knobChanged || ACPowerStateChange) && ACPowerAvailable && !this.selfTestTimerStarted) {
-            this.selfTestDiv.style.display = "block";
-            this.selfTestTimer = parseInt(NXDataStore.get("CONFIG_SELF_TEST_TIME", "15"));
-            this.selfTestTimerStarted = true;
-        }
-
-        if (this.selfTestTimer >= 0) {
-            this.selfTestTimer -= _deltaTime / 1000;
-            if (this.selfTestTimer <= 0) {
-                this.selfTestDiv.style.display = "none";
-                this.selfTestTimerStarted = false;
-            }
+            this.map.instrument.airplaneIconElement._image.setAttribute("visibility", failed ? "hidden" : "visible");
         }
 
         // ND Chrono Logic
@@ -263,42 +236,32 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
         // 0 Off
         // 1 Running
         // 2 Stopped
-        if (ACPowerAvailable) {
-            // If Chrono button is pushed on
-            if (AP_ChronoBtnState) {
-                if (AP_IsChronoState === 2) {
-                    // Hide & Clear the chrono if it is already stopped.
-                    this.chronoDiv.setAttribute("style", "display:none");
-                    SimVar.SetSimVarValue(`L:AUTOPILOT_CHRONO_STATE_${this.side}`, "number", 0);
-                    SimVar.SetSimVarValue(`L:PUSH_AUTOPILOT_CHRONO_${this.side}`, "bool", 0);
-                    this.chronoStart = 0;
-                    this.chronoAcc = 0;
-                    this.IsChronoDisplayed = 0;
-                } else {
-                    // Display and start the timer.
-                    this.chronoDiv.setAttribute("style", "display:block");
-                    this.IsChronoDisplayed = 1;
-                    SimVar.SetSimVarValue(`L:AUTOPILOT_CHRONO_STATE_${this.side}`, "number", 1);
-                    if (this.chronoStart === 0) {
-                        this.chronoStart = SimVar.GetGlobalVarValue("ABSOLUTE TIME", "Seconds");
-                    }
-                    this.displayChronoTime();
-                }
-            } else {
-                // Chrono button is pushed OFF
-                if (AP_IsChronoState !== 0 && this.IsChronoDisplayed) {
-                    // Will stop the timer ONLY if it is visible on screen
-                    SimVar.SetSimVarValue(`L:AUTOPILOT_CHRONO_STATE_${this.side}`, "number", 2);
-                }
-            }
-        } else {
-            if (AP_ChronoBtnState !== 0 || AP_IsChronoState !== 0) {
-                SimVar.SetSimVarValue(`L:PUSH_AUTOPILOT_CHRONO_${this.side}`, "bool", 0);
-                SimVar.SetSimVarValue(`L:AUTOPILOT_CHRONO_STATE_${this.side}`, "number", 0);
+
+        // If Chrono button is pushed on
+        if (AP_ChronoBtnState) {
+            if (AP_IsChronoState === 2) {
+                // Hide & Clear the chrono if it is already stopped.
                 this.chronoDiv.setAttribute("style", "display:none");
+                SimVar.SetSimVarValue(`L:AUTOPILOT_CHRONO_STATE_${this.side}`, "number", 0);
+                SimVar.SetSimVarValue(`L:PUSH_AUTOPILOT_CHRONO_${this.side}`, "bool", 0);
                 this.chronoStart = 0;
                 this.chronoAcc = 0;
                 this.IsChronoDisplayed = 0;
+            } else {
+                // Display and start the timer.
+                this.chronoDiv.setAttribute("style", "display:block");
+                this.IsChronoDisplayed = 1;
+                SimVar.SetSimVarValue(`L:AUTOPILOT_CHRONO_STATE_${this.side}`, "number", 1);
+                if (this.chronoStart === 0) {
+                    this.chronoStart = SimVar.GetGlobalVarValue("ABSOLUTE TIME", "Seconds");
+                }
+                this.displayChronoTime();
+            }
+        } else {
+            // Chrono button is pushed OFF
+            if (AP_IsChronoState !== 0 && this.IsChronoDisplayed) {
+                // Will stop the timer ONLY if it is visible on screen
+                SimVar.SetSimVarValue(`L:AUTOPILOT_CHRONO_STATE_${this.side}`, "number", 2);
             }
         }
 
@@ -307,17 +270,10 @@ class A320_Neo_MFD_MainPage extends NavSystemPage {
         } else {
             updateDisplayDMC("MFD2", this.engTestDiv, this.engMaintDiv);
         }
-
-        this.selfTestLastKnobValue = currentKnobValue;
-        this.updateScreenState();
     }
 
-    updateScreenState() {
-        if (SimVar.GetSimVarValue("L:ACPowerAvailable","bool")) {
-            this.electricity.style.display = "block";
-        } else {
-            this.electricity.style.display = "none";
-        }
+    isCaptainMfd() {
+        return this.screenIndex == 1;
     }
 
     _updateNDFiltersStatuses() {
@@ -849,35 +805,71 @@ class A320_Neo_MFD_NDInfo extends NavSystemElement {
         if (currentKnobValue <= 0.0) {
             return;
         }
+
+        const airDataReferenceSource = ADIRS.getNdAirDataReferenceSource(this.screenIndex);
+        const inertialReferenceSource = ADIRS.getNdInertialReferenceSource(this.screenIndex);
         if (this.ndInfo != null) {
-            this.ndInfo.update(_deltaTime);
+            this.ndInfo.update(_deltaTime, airDataReferenceSource, inertialReferenceSource);
         }
-        const ADIRSState = SimVar.GetSimVarValue("L:A320_Neo_ADIRS_STATE", "Enum");
-        const groundSpeed = Math.round(Simplane.getGroundSpeed());
-        const gs = this.ndInfo.querySelector("#GS_Value");
-        const tas = this.ndInfo.querySelector("#TAS_Value");
-        const wd = this.ndInfo.querySelector("#Wind_Direction");
-        const ws = this.ndInfo.querySelector("#Wind_Strength");
-        const wa = this.ndInfo.querySelector("#Wind_Arrow");
+
+        const failed = ADIRS.mapNotAvailable(this.screenIndex);
+
+        const tasElement = this.ndInfo.querySelector("#TAS_Value");
+        const trueAirSpeed = ADIRS.getValue(`L:A32NX_ADIRS_ADR_${airDataReferenceSource}_TRUE_AIRSPEED`, "Knots");
+        if (trueAirSpeed !== this.lastTrueAirSpeed) {
+            this.lastTrueAirSpeed = trueAirSpeed;
+            if (Number.isNaN(trueAirSpeed)) {
+                tasElement.textContent = "";
+            } else if (trueAirSpeed < 0.00001) {
+                tasElement.textContent = "---";
+            } else {
+                tasElement.textContent = Math.round(trueAirSpeed).toString().padStart(3);
+            }
+        }
+
+        const windDirectionElement = this.ndInfo.querySelector("#Wind_Direction");
+        const windVelocityElement = this.ndInfo.querySelector("#Wind_Strength");
+        const windArrowElement = this.ndInfo.querySelector("#Wind_Arrow");
+        const windDirection = ADIRS.getValue(`L:A32NX_ADIRS_IR_${inertialReferenceSource}_WIND_DIRECTION`, "Degrees");
+        const windVelocity = ADIRS.getValue(`L:A32NX_ADIRS_IR_${inertialReferenceSource}_WIND_VELOCITY`, "Knots");
+        if (windVelocity !== this.lastWindVelocity || windDirection !== this.lastWindDirection) {
+            this.lastWindDirection = windDirection;
+            this.lastWindVelocity = windVelocity;
+            if (Number.isNaN(windVelocity) || Number.isNaN(windDirection)) {
+                windDirectionElement.textContent = "";
+                windVelocityElement.textContent = "";
+                windArrowElement.style.display = "none";
+            } else if (windVelocity < 0.00001) {
+                windDirectionElement.textContent = "---";
+                windVelocityElement.textContent = "---";
+            } else {
+                windDirectionElement.textContent = Math.round(windDirection).toString().padStart(3, '0');
+                windVelocityElement.textContent = Math.round(windVelocity).toString();
+                windArrowElement.style.display = "block";
+            }
+
+            if (Number.isNaN(windVelocity) || Number.isNaN(windDirection) || windVelocity <= 2) {
+                windArrowElement.style.display = "none";
+            }
+        }
+
+        const gsElement = this.ndInfo.querySelector("#GS_Value");
+        const groundSpeed = Math.round(ADIRS.getValue(`L:A32NX_ADIRS_IR_${inertialReferenceSource}_GROUND_SPEED`, "Knots"));
+        if (groundSpeed !== this.lastGroundSpeed) {
+            this.lastGroundSpeed = groundSpeed;
+            if (Number.isNaN(groundSpeed)) {
+                gsElement.textContent = "";
+            } else {
+                gsElement.textContent = Math.round(groundSpeed).toString().padStart(3);
+            }
+        }
+
+        // Show/Hide waypoint group when ADIRS not aligned
         const wptg = this.ndInfo.querySelector("#Waypoint_Group");
         const wptPPOS = this.ndInfo.querySelector("#Waypoint_PPOS");
-        if (ADIRSState != 2 || groundSpeed <= 100) {
-            //Hide TAS, and wind info
-            tas.textContent = "---";
-            wd.textContent = "---";
-            ws.textContent = "---";
-            wa.setAttribute("visibility", "hidden");
-        } else {
-            wa.setAttribute("visibility", "visible");
-        }
-        if (ADIRSState != 2) {
-            gs.textContent = "---";
-        } else {
-            gs.textContent = groundSpeed.toString().padStart(3);
-        }
-        // Show/Hide waypoint group when ADIRS not aligned
-        wptPPOS.setAttribute("visibility", (ADIRSState != 2) ? "visible" : "hidden");
-        wptg.setAttribute("visibility", (ADIRSState != 2) ? "hidden" : "visible");
+
+        wptPPOS.setAttribute("visibility", failed ? "visible" : "hidden");
+        wptg.setAttribute("visibility", failed ? "hidden" : "visible");
     }
     onExit() {
     }

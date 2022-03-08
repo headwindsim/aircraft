@@ -1,0 +1,1 @@
+export enum TOD_INPUT_MODE {MANUAL, AUTO}

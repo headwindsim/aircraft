@@ -706,6 +706,7 @@ class FlightPlanManager {
     }
     clearFlightPlan(callback = EmptyCallback.Void) {
         Coherent.call("CLEAR_CURRENT_FLIGHT_PLAN").then(() => {
+            SimVar.SetSimVarValue("L:FLIGHTPLAN_USE_DECEL_WAYPOINT", "number", 0);
             this._incrementFlightPlanVersion();
             this.updateFlightPlan(() => {
                 this.updateCurrentApproach(() => {
@@ -1528,6 +1529,7 @@ class FlightPlanManager {
         Coherent.call("ACTIVATE_DIRECT_TO", icao).then(() => {
             this._incrementFlightPlanVersion();
             this.updateFlightPlan(callback);
+            SimVar.SetSimVarValue("K:A32NX.FMGC_DIR_TO_TRIGGER", "number", 1);
         });
     }
     cancelDirectTo(callback = EmptyCallback.Void) {

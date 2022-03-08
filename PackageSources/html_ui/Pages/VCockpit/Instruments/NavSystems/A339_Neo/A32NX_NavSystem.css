@@ -1,18 +1,9 @@
-﻿@font-face {
-  font-family: "Roboto";
-  src: url("/Fonts_A339/RobotoMono-Medium.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal; }
+﻿@import url("/CSS_A339/A32NX_Display_Common.css");
 
 @font-face {
-  font-family: "Roboto-Light";
-  src: url("/Fonts_A339/RobotoMono-Light.ttf") format("truetype");
+  font-family: "ECAMFontRegular";
+  src: url("/Fonts_A339/ECAMFontRegular.ttf") format("truetype");
+  fill: var(--displayMagenta);
   font-weight: normal;
-  font-style: normal; }
-
-@font-face {
-  font-family: "Roboto-Bold";
-  src: url("/Fonts_A339/RobotoMono-Bold.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal; }
-
+  font-style: normal;
+}

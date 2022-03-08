@@ -1,0 +1,19 @@
+root = true
+
+[*]
+charset = utf-8
+indent_size = 4
+indent_style = space
+insert_final_newline = false
+tab_width = 4
+
+[*.{h,hpp,c,cpp}]
+end_of_line = lf
+indent_size = 2
+tab_width = 2
+
+# YAML is usually 2 spaces
+# Asobo indents json and css with 2 spaces
+[*.{yml,json,css,scss,eslintrc}]
+indent_size = 2
+tab_width = 2

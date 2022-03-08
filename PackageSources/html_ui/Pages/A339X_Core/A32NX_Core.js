@@ -29,9 +29,9 @@ class A32NX_Core {
                 updateInterval: 150,
             },
             {
-                name: 'Electricity',
-                module: new A32NX_Electricity(),
-                updateInterval: 100,
+                name: 'Boarding',
+                module: new A32NX_Boarding(),
+                updateInterval: 150,
             },
             {
                 name: 'LocalVars',
@@ -64,17 +64,16 @@ class A32NX_Core {
                 updateInterval: 500,
             },
         ];
-
         this.moduleThrottlers = {};
         for (const moduleDefinition of this.modules) {
             this.moduleThrottlers[moduleDefinition.name] = new UpdateThrottler(moduleDefinition.updateInterval);
         }
 
         this.soundManager = new A32NX_SoundManager();
+        this.tipsManager = new A32NX_TipsManager();
     }
 
     init(startTime) {
-        this.ACPowerStateChange = false;
         this.getDeltaTime = A32NX_Util.createDeltaTimeCalculator(startTime);
         this.modules.forEach(moduleDefinition => {
             if (typeof moduleDefinition.module.init === "function") {
@@ -90,7 +89,6 @@ class A32NX_Core {
         }
 
         const startTime = ENABLE_TOTAL_UPDATE_TIME_TRACING ? Date.now() : 0;
-        this.updateACPowerStateChange();
 
         const deltaTime = this.getDeltaTime();
 
@@ -113,13 +111,5 @@ class A32NX_Core {
 
             console.warn(`NXCore update took: ${updateTime.toFixed(2)}ms (${updatedModules} modules updated)`);
         }
-    }
-
-    updateACPowerStateChange() {
-        const engineOn = Simplane.getEngineActive(0) || Simplane.getEngineActive(1);
-        const externalPowerOn = SimVar.GetSimVarValue("EXTERNAL POWER AVAILABLE:1", "Bool") === 1 && SimVar.GetSimVarValue("EXTERNAL POWER ON", "Bool") === 1;
-        const apuOn = SimVar.GetSimVarValue("L:APU_GEN_ONLINE", "bool");
-        const isACPowerAvailable = engineOn || apuOn || externalPowerOn;
-        this.ACPowerStateChange = (isACPowerAvailable != this.ACPowerLastState);
     }
 }

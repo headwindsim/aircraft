@@ -3,13 +3,27 @@
 This is the source code of the freeware A330-900neo for MSFS. If you only want to use the aircraft in MSFS please use this package : https://fr.flightsim.to/file/18198/airbus-a330-900neo-conversion
 If you want to contribute pull this repository and drag & drop the HeadwindA330neo.xml over fspackagetool.exe
 
+## How to build
+Make sure docker are isntalled. Prefferably with WSL2 backend.
+
+- First, run following command on powershell. This will install the A32NX docker images and node modules.
+```shell
+.\scripts\dev-env\run.cmd ./scripts/setup.sh
+```
+- Build all A32NX module by running following command on powershell. This isntall A32NX modules to PackageSources.
+```shell
+.\scripts\dev-env\run.cmd ./scripts/build.sh
+```
+- Drag and drop fspackagetool.exe to the project root.
+- Drag HeadwindA330neo.xml to fspackagetool.exe to build the package.
+
 ## Open source
 Open Source Projects contributing to the realisation of this MSFS A330-900 Neo :
 
 Systems, cockpit, cockpit texture, sound : FlyByWire - https://github.com/flybywiresim
 FBW integration : Tyler58546 - https://github.com/tyler58546/pmp-a330-fbw-compatibility
 Cockpit 3D parts, learning : Project Mega Pack - https://github.com/Project-Mega-Pack
- 
+
 ## Licences
 
 The original contents of this repository are DUAL LICENSED. Original textual-form source code in this file is licensed under the GNU General Public License version 3.

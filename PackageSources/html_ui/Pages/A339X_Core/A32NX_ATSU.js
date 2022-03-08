@@ -37,7 +37,7 @@ function fetchTimeValue() {
     return null;
 }
 
-const getMETAR = async (icaos, lines, store, updateView) => {
+const getMETAR = async (icaos, lines, updateView) => {
     const storedMetarSrc = NXDataStore.get("CONFIG_METAR_SRC", "MSFS");
     for (const icao of icaos) {
         if (icao !== "") {
@@ -55,11 +55,10 @@ const getMETAR = async (icaos, lines, store, updateView) => {
                 });
         }
     }
-    store["sendStatus"] = "SENT";
     updateView();
 };
 
-const getTAF = async (icaos, lines, store, updateView) => {
+const getTAF = async (icaos, lines, updateView) => {
     const storedTafSrc = NXDataStore.get("CONFIG_TAF_SRC", "NOAA");
     for (const icao of icaos) {
         if (icao !== "") {
@@ -77,7 +76,6 @@ const getTAF = async (icaos, lines, store, updateView) => {
                 });
         }
     }
-    store["sendStatus"] = "SENT";
     updateView();
 };
 
@@ -133,7 +131,7 @@ const lbsToKg = (value) => {
  * @param {FMCMainDisplay} mcdu FMCMainDisplay
  * @param {() => void} updateView
  */
-const getSimBriefOfp = (mcdu, updateView) => {
+const getSimBriefOfp = (mcdu, updateView, callback = () => {}) => {
     const simBriefUserId = NXDataStore.get("CONFIG_SIMBRIEF_USERID", "");
 
     if (!simBriefUserId) {
@@ -142,6 +140,7 @@ const getSimBriefOfp = (mcdu, updateView) => {
     }
 
     mcdu.simbrief["sendStatus"] = "REQUESTING";
+
     updateView();
 
     return SimBriefApi.getSimBriefOfp(simBriefUserId)
@@ -173,7 +172,7 @@ const getSimBriefOfp = (mcdu, updateView) => {
             mcdu.simbrief["tripFuel"] = mcdu.simbrief["units"] === 'kgs' ? data.fuel.enroute_burn : lbsToKg(data.fuel.enroute_burn);
             mcdu.simbrief["sendStatus"] = "DONE";
 
-            updateView();
+            callback();
 
             return mcdu.simbrief;
         })

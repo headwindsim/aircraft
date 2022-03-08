@@ -6,6 +6,9 @@ class CDUNavRadioPage {
         mcdu.refreshPageCallback = () => {
             CDUNavRadioPage.ShowPage(mcdu);
         };
+        mcdu.returnPageCallback = () => {
+            CDUNavRadioPage.ShowPage(mcdu);
+        };
         const radioOn = mcdu.isRadioNavActive();
         let vor1FrequencyCell = "";
         let vor1CourseCell = "";
@@ -54,6 +57,8 @@ class CDUNavRadioPage {
                             mcdu.requestCall(() => {
                                 CDUNavRadioPage.ShowPage(mcdu);
                             });
+                        } else {
+                            mcdu.addNewMessage(NXSystemMessages.notInDatabase);
                         }
                     });
                 } else if (isFinite(numValue)) {
@@ -109,20 +114,14 @@ class CDUNavRadioPage {
             };
             ilsFrequencyCell = "[\xa0\xa0]/[\xa0\xa0.\xa0]";
             ilsCourseCell = "";
-            const approach = mcdu.flightPlanManager.getApproach();
-            const ilsIdent = mcdu.radioNav.getILSBeacon(1);
-            const runway = mcdu.flightPlanManager.getApproachRunway();
             if (mcdu.ilsFrequency != 0) {
-                let ilsIdentStr = "[\xa0\xa0]";
-                if (ilsIdent.ident != "") {
-                    ilsIdentStr = "{small}" + ilsIdent.ident + "{end}";
-                }
                 if (mcdu._ilsFrequencyPilotEntered) {
-                    ilsFrequencyCell = ilsIdentStr + "/" + mcdu.ilsFrequency.toFixed(2);
-                    ilsCourseCell = "{inop}____{end}";
-                } else {
-                    ilsFrequencyCell = ilsIdentStr + "{small}" + "/" + mcdu.ilsFrequency.toFixed(2) + "{end}";
-                    ilsCourseCell = "{small}" + ilsIdent.course.toFixed(0).padStart(3, "0") + "{end}";
+                    const ilsIdent = mcdu.radioNav.getILSBeacon(1);
+                    ilsFrequencyCell = `{small}${ilsIdent.ident.trim().padStart(4, "\xa0")}{end}/${mcdu.ilsFrequency.toFixed(2)}`;
+                    ilsCourseCell = "{small}F" + ilsIdent.course.toFixed(0).padStart(3, "0") + "{end}";
+                } else if (mcdu.ilsAutoTuned) {
+                    ilsFrequencyCell = `{small}${mcdu.ilsAutoIdent.padStart(4, "\xa0")}/${mcdu.ilsFrequency.toFixed(2)}{end}`;
+                    ilsCourseCell = `{small}F${mcdu.ilsAutoCourse.toFixed(0).padStart(3, "0")}{end}`;
                 }
             }
             mcdu.onLeftInput[2] = (value) => {
@@ -143,14 +142,18 @@ class CDUNavRadioPage {
                 const numValue = parseFloat(value);
                 if (!isFinite(numValue) && value.length >= 2 && value.length <= 3) {
                     mcdu.getOrSelectNDBsByIdent(value, (navaids) => {
-                        mcdu.adf1FreqIsPilotEntered = false;
-                        mcdu.adf1IdIsPilotEntered = true;
-                        mcdu.adf1IdPilotValue = value;
-                        mcdu.adf1Frequency = navaids.infos.frequencyMHz;
-                        mcdu.radioNav.setADFActiveFrequency(1, mcdu.adf1Frequency);
-                        mcdu.requestCall(() => {
-                            CDUNavRadioPage.ShowPage(mcdu);
-                        });
+                        if (navaids) {
+                            mcdu.adf1FreqIsPilotEntered = false;
+                            mcdu.adf1IdIsPilotEntered = true;
+                            mcdu.adf1IdPilotValue = value;
+                            mcdu.adf1Frequency = navaids.infos.frequencyMHz;
+                            mcdu.radioNav.setADFActiveFrequency(1, mcdu.adf1Frequency);
+                            mcdu.requestCall(() => {
+                                CDUNavRadioPage.ShowPage(mcdu);
+                            });
+                        } else {
+                            mcdu.addNewMessage(NXSystemMessages.notInDatabase);
+                        }
                     });
                 } else if (isFinite(numValue)) {
                     if (!/^\d{3,4}(\.\d{1})?$/.test(value)) {
@@ -211,6 +214,8 @@ class CDUNavRadioPage {
                             mcdu.requestCall(() => {
                                 CDUNavRadioPage.ShowPage(mcdu);
                             });
+                        } else {
+                            mcdu.addNewMessage(NXSystemMessages.notInDatabase);
                         }
                     });
                 } else if (isFinite(numValue)) {
@@ -280,11 +285,15 @@ class CDUNavRadioPage {
                     mcdu.adf2IdIsPilotEntered = true;
                     mcdu.adf2IdPilotValue = value;
                     mcdu.getOrSelectNDBsByIdent(value, (navaids) => {
-                        mcdu.adf2Frequency = navaids.infos.frequencyMHz;
-                        mcdu.radioNav.setADFActiveFrequency(2, mcdu.adf2Frequency);
-                        mcdu.requestCall(() => {
-                            CDUNavRadioPage.ShowPage(mcdu);
-                        });
+                        if (navaids) {
+                            mcdu.adf2Frequency = navaids.infos.frequencyMHz;
+                            mcdu.radioNav.setADFActiveFrequency(2, mcdu.adf2Frequency);
+                            mcdu.requestCall(() => {
+                                CDUNavRadioPage.ShowPage(mcdu);
+                            });
+                        } else {
+                            mcdu.addNewMessage(NXSystemMessages.notInDatabase);
+                        }
                     });
                 } else if (isFinite(numValue)) {
                     if (!/^\d{3,4}(\.\d{1})?$/.test(value)) {

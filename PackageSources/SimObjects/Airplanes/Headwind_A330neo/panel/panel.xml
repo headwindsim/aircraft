@@ -62,13 +62,6 @@
   </Instrument>
 
   <Instrument>
-    <Name>A320_Neo_BRK</Name>
-    <Electric>
-      <Simvar name="CIRCUIT ON:52" unit="Boolean"/>
-    </Electric>
-  </Instrument>
-
-  <Instrument>
     <Name>A320_Neo_BAT</Name>
     <Electric>
       <Simvar name="CIRCUIT ON:52" unit="Boolean"/>
@@ -124,7 +117,7 @@
 			<Type>Warning</Type>
 			<SoundEvent>aural_stall</SoundEvent>
 			<Condition>
-				<Simvar name="STALL WARNING" unit="Bool"/>
+				<Simvar name="L:A32NX_STALL_WARNING" unit="Bool"/>
 			</Condition>
 		</Alert>
 	</VoicesAlerts>

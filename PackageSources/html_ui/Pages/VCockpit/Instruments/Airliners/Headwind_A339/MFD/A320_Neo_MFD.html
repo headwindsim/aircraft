@@ -5,6 +5,8 @@
     <glasscockpit-highlight id="highlight"></glasscockpit-highlight>
     <div id="Mainframe">
         <div id="Electricity" state="off">
+            <div id="LcdOverlay"></div>
+            <div id="BacklightBleed"></div>
             <svg id="MfdEngTest" class="engineering-mode-overlay" viewBox="0 0 600 600">
                 <text class="start" x="9" y="250">P/N : C19755BA01</text>
                 <text class="start" x="10" y="270">S/N : C1975517332</text>
@@ -156,7 +158,7 @@
                 </svg>
             </div>
 
-            <div style="position: absolute; left: 0%; top: 0%; width: 100%; height: 100%; border: none; display: none;" id="SelfTestDiv">
+            <div style="position: absolute; left: 0%; top: 0%; width: 100%; height: 100%; border: none;" id="SelfTestDiv">
                 <svg id="SelfTest" viewBox="0 0 600 600" style="position:absolute; top:0%; left: 0%; width: 100%; height:100%;">
                     <rect fill="url(#Backlight)" x="0" y="0" width="100%" height="100%"></rect>
                     <text id="self_test_text" class="valueText" text-anchor="middle" x="50%" y="50%" font-size="24px">SELF TEST IN PROGRESS</text>
@@ -189,17 +191,20 @@
 <script type="text/html" import-script="/JS/dataStorage.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Utils/NXDataStore.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_DMC.js"></script>
+<script type="text/html" import-script="/Pages/A339X_Core/DisplayUnit.js"></script>
+<script type="text/html" import-script="/Pages/A339X_Core/Adirs.js"></script>
+<script type="text/html" import-script="/JS/Services/ToolBarPanels.js"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/Utils/RadioNav.js"></script>
 
-<script type="text/html" import-script="/Pages/VCockpit/instruments/NavSystems/Shared/Templates/Highlight/Highlight.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/Shared/Templates/Highlight/Highlight.js"></script>
 
-<script type="text/html" import-script="/Pages/VCockpit/instruments/NavSystems/Shared/LogicElements/SelectableElement.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/instruments/NavSystems/Shared/LogicElements/SearchField.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/Shared/LogicElements/SelectableElement.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/Shared/LogicElements/SearchField.js"></script>
 
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339_Neo/map/A32NX_MapInstrument.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339_Neo/Map/A32NX_MapInstrument.html"></script>
 
-<script type="text/html" import-script="/Pages/VCockpit/instruments/NavSystems/A339_Neo/A32NX_NavSystem.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/A339_Neo/A32NX_NavSystem.js"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/A32NX_BaseAirliners.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/A32NX_BaseNDCompass.js"></script> <!-- MODIFIED -->

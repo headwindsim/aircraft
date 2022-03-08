@@ -54,6 +54,7 @@ const NXSystemMessages = {
 
 const NXFictionalMessages = {
     noSimBriefUser:         new McduMessage("NO SIMBRIEF USER", false, false),
+    noAirportSpecified:     new McduMessage("NO AIRPORT SPECIFIED", false, false),
     fltNbrInUse:            new McduMessage("FLT NBR IN USE", false, false),
     notYetImplemented:      new McduMessage("NOT YET IMPLEMENTED", false, false),
     recipientNotFound:      new McduMessage("RECIPIENT NOT FOUND", false, false),
@@ -70,6 +71,6 @@ const NXFictionalMessages = {
     firstIndexNotFound:     new McduMessage("1ST INDEX NOT FOUND", false, false),
     noRefWpt:               new McduMessage("NO REF WAYPOINT", false, false),
     noWptInfos:             new McduMessage("NO WAYPOINT INFOS", false, false),
-    emptyMessage:           new McduMessage(),
-    weightUnitChanged:      new McduMessage("UNIT CHANGED RELOAD A/C", true, true)
+    emptyMessage:           new McduMessage(""),
+    reloadPlaneApply:       new McduMessage("RELOAD A/C TO APPLY", true, true)
 };

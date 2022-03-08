@@ -141,8 +141,8 @@ var A320_Neo_LowerECAM_BLEED;
             const eng1Running = SimVar.GetSimVarValue("ENG COMBUSTION:1", "bool");
             const eng2Running = SimVar.GetSimVarValue("ENG COMBUSTION:2", "bool");
             const xBleedValveOpen = SimVar.GetSimVarValue("L:x_bleed_valve", "bool");
-            const throttleEng1 = SimVar.GetSimVarValue("GENERAL ENG THROTTLE LEVER POSITION:1", "number");
-            const throttleEng2 = SimVar.GetSimVarValue("GENERAL ENG THROTTLE LEVER POSITION:1", "number");
+            const throttleEng1 = SimVar.GetSimVarValue("L:A32NX_AUTOTHRUST_TLA:1", "number");
+            const throttleEng2 = SimVar.GetSimVarValue("L:A32NX_AUTOTHRUST_TLA:1", "number");
             const apuBleedAirValveOpen = SimVar.GetSimVarValue("L:A32NX_APU_BLEED_AIR_VALVE_OPEN", "Bool");
             const currentXbleedState = SimVar.GetSimVarValue("L:A32NX_KNOB_OVHD_AIRCOND_XBLEED_Position", "number");
             const radioHeight = SimVar.GetSimVarValue("RADIO HEIGHT", "Feet");
@@ -150,9 +150,9 @@ var A320_Neo_LowerECAM_BLEED;
             const fadecStatus = [SimVar.GetSimVarValue("L:A32NX_FADEC_POWERED_ENG1", "bool"), SimVar.GetSimVarValue("L:A32NX_FADEC_POWERED_ENG1", "bool")];
             const groundSpeed = SimVar.GetSimVarValue("GPS GROUND SPEED", "Meters per second");
             const wingAntiInceState = SimVar.GetSimVarValue("STRUCTURAL DEICE SWITCH", "bool");
-            const packRequestedlvl = Math.min(...[SimVar.GetSimVarValue("L:A320_Neo_AIRCOND_LVL_1", "Position(0-6)"),
-                SimVar.GetSimVarValue("L:A320_Neo_AIRCOND_LVL_2", "Position(0-6)"),
-                SimVar.GetSimVarValue("L:A320_Neo_AIRCOND_LVL_3", "Position(0-6)")]);
+            const packRequestedlvl = Math.min(...[SimVar.GetSimVarValue("L:A320_Neo_AIRCOND_LVL_1", "number"),
+                SimVar.GetSimVarValue("L:A320_Neo_AIRCOND_LVL_2", "number"),
+                SimVar.GetSimVarValue("L:A320_Neo_AIRCOND_LVL_3", "number")]);
             const outsidePressureINHG = SimVar.GetSimVarValue("AMBIENT PRESSURE", "inHg");
             const cabinAltFeet = SimVar.GetSimVarValue("PRESSURIZATION CABIN ALTITUDE", "feet");
             const cabinAltMeters = cabinAltFeet * this.feetToMeters;
@@ -168,7 +168,7 @@ var A320_Neo_LowerECAM_BLEED;
             let currentEngineBleedState = [0, 0];
             currentEngineBleedState = [SimVar.GetSimVarValue("BLEED AIR ENGINE:1", "Bool"), SimVar.GetSimVarValue("BLEED AIR ENGINE:2", "Bool")];
 
-            if (throttleEng1 > 0.891 && throttleEng2 > 0.891) {
+            if (throttleEng1 > 42 && throttleEng2 > 42) {
                 this.thrustTOGAApplied = true;
             } else {
                 this.thrustTOGAApplied = false;

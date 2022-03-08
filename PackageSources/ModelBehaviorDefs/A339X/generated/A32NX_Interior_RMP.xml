@@ -1,9 +1,5 @@
 <ModelBehaviors>
     <Template Name="FBW_RADIO_MANAGEMENT_PANEL_Template">
-        <DefaultTemplateParameters>
-            <ELEC_BUS>(L:ACPowerAvailable, boolean)</ELEC_BUS>
-        </DefaultTemplateParameters>
-
         <UseTemplate Name="FBW_RMP_CONTROLS_Template"/>
         <UseTemplate Name="FBW_RMP_COMMS_MODE_SELECTION_Template"/>
         <UseTemplate Name="FBW_RMP_NAV_MODE_SELECTION_Template"/>
@@ -17,8 +13,8 @@
                 <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
                 <NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
                 <ANIM_NAME>SWITCH_RADIO#SIDE#_1</ANIM_NAME>
-                <WWISE_EVENT_1>radio_switch_on</WWISE_EVENT_1>
-                <WWISE_EVENT_2>radio_switch_off</WWISE_EVENT_2>
+                <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
                 <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.RADIO_SELECT_TURN_RMP_ON</ANIMTIP_0>
                 <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.RADIO_SELECT_TURN_RMP_OFF</ANIMTIP_1>
                 <ANIM_CODE>(L:A32NX_RMP_#SIDE#_TOGGLE_SWITCH, number) 100 *</ANIM_CODE>
@@ -71,8 +67,8 @@
                 <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
                 <NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
                 <ANIM_NAME>PUSH_RADIO#SIDE#_ARROWS</ANIM_NAME>
-                <WWISE_EVENT_1>radio_push_button_on</WWISE_EVENT_1>
-                <WWISE_EVENT_2>radio_push_button_off</WWISE_EVENT_2>
+                <WWISE_EVENT_1>fcubutton</WWISE_EVENT_1>
+                <WWISE_EVENT_2>fcubutton</WWISE_EVENT_2>
                 <TOOLTIPID>TT:COCKPIT.TOOLTIPS.RADIO_FREQUENCY_TRANSFER_KEY</TOOLTIPID>
                 <LEFT_SINGLE_CODE>(&gt;H:A32NX_RMP_#SIDE#_TRANSFER_BUTTON_PRESSED)</LEFT_SINGLE_CODE>
             </UseTemplate>
@@ -124,10 +120,19 @@
         <Component ID="PUSH_RADIO#SIDE#_SEL_SEQ2" Node="PUSH_RADIO#SIDE#_SEL_SEQ2">
             <UseTemplate Name="ASOBO_GT_Emissive_Gauge">
                 <EMISSIVE_CODE>
-                    #ELEC_BUS# sp0
-                    (L:A32NX_RMP_L_SELECTED_MODE, number) 1 != sp1
-                    (L:A32NX_RMP_R_SELECTED_MODE, number) 2 != sp2
-                    l0 (L:A32NX_RMP_#SIDE#_TOGGLE_SWITCH, bool) and l1 l2 or and
+                    #INDICATORS_POWERED# sp0
+                    (L:A32NX_OVHD_INTLT_ANN, number) 2 == if{
+                      0.05
+                    } els{
+                      1
+                    } sp1
+                    (L:A32NX_RMP_L_SELECTED_MODE, number) 1 != sp2
+                    (L:A32NX_RMP_R_SELECTED_MODE, number) 2 != sp3
+                    (L:A32NX_RMP_#SIDE#_TOGGLE_SWITCH, bool) l2 l3 or and (L:A32NX_OVHD_INTLT_ANN, number) 0 == or l0 and if{
+                      1 l1 *
+                    } els{
+                      0
+                    }
                 </EMISSIVE_CODE>
             </UseTemplate>
         </Component>
@@ -146,9 +151,9 @@
                 <ANIM_LENGTH>100</ANIM_LENGTH>
                 <ANIM_CODE>(L:XMLVAR_RMP_#SIDE#_NavLockOff) 100 *</ANIM_CODE>
                 <LEFT_SINGLE_CODE>(L:XMLVAR_RMP_#SIDE#_NavLockOff) ! (&gt;L:XMLVAR_RMP_#SIDE#_NavLockOff)</LEFT_SINGLE_CODE>
-                <WWISE_EVENT_1>radio_lock_on</WWISE_EVENT_1>
+                <WWISE_EVENT_1/>
                 <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
-                <WWISE_EVENT_2>radio_lock_off</WWISE_EVENT_2>
+                <WWISE_EVENT_2/>
                 <NORMALIZED_TIME_2>0.</NORMALIZED_TIME_2>
                 <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.GENERIC_BUTTON_GUARD_ON</ANIMTIP_0>
                 <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.GENERIC_BUTTON_GUARD_OFF</ANIMTIP_1>
@@ -195,11 +200,12 @@
     <Template Name="FBW_RMP_MODE_BUTTON_AND_LED">
         <DefaultTemplateParameters>
             <INOP>0</INOP>
+            <MODE_ID>0</MODE_ID>
             <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
             <NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
             <NODE_ID>PUSH_RADIO#SIDE#_#BASE_NAME#</NODE_ID>
-            <WWISE_EVENT_1>radio_push_button_on</WWISE_EVENT_1>
-            <WWISE_EVENT_2>radio_push_button_off</WWISE_EVENT_2>
+            <WWISE_EVENT_1>fcubutton</WWISE_EVENT_1>
+            <WWISE_EVENT_2>fcubutton</WWISE_EVENT_2>
             <ANIM_NAME_BUTTON>PUSH_RADIO#SIDE#_#BASE_NAME#</ANIM_NAME_BUTTON>
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.RADIO_SELECT_#BASE_NAME#</TOOLTIPID>
         </DefaultTemplateParameters>
@@ -229,9 +235,18 @@
             <UseTemplate Name="ASOBO_GT_Emissive_Gauge">
                 <EMISSIVE_CODE>
                     #INOP# sp0
-                    #ELEC_BUS# sp1
+                    #INDICATORS_POWERED# sp1
                     #MODE_ID# sp2
-                    l0 ! l1 and (L:A32NX_RMP_#SIDE#_TOGGLE_SWITCH, bool) and (L:A32NX_RMP_#SIDE#_SELECTED_MODE, number) l2 == and
+                    (L:A32NX_OVHD_INTLT_ANN, number) 2 == if{
+                      0.05
+                    } els{
+                      1
+                    } sp3
+                    l0 ! (L:A32NX_RMP_#SIDE#_TOGGLE_SWITCH, bool) and (L:A32NX_RMP_#SIDE#_SELECTED_MODE, number) l2 == and (L:A32NX_OVHD_INTLT_ANN, number) 0 == or l1 and if{
+                      1 l3 *
+                    } els{
+                      0
+                    }
                 </EMISSIVE_CODE>
             </UseTemplate>
         </Component>
@@ -245,7 +260,7 @@
         <Component ID="#BACKLIGHT_NAME#" Node="#BACKLIGHT_NAME#">
             <UseTemplate Name="ASOBO_GT_Emissive_Gauge">
                 <EMISSIVE_CODE>
-                   (A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent over 100)
+                   (A:LIGHT POTENTIOMETER:#POTENTIOMETER#, Percent over 100) #BACKLIGHTS_POWERED# *
                 </EMISSIVE_CODE>
             </UseTemplate>
         </Component>

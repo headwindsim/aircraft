@@ -7,31 +7,6 @@ class A32NX_APU {
         this.lastAPUBleedState = -1;
     }
     update(_deltaTime) {
-        const available = SimVar.GetSimVarValue("L:A32NX_OVHD_APU_START_PB_IS_AVAILABLE", "Bool");
-        const apuSwitchIsOn = !!SimVar.GetSimVarValue("A:APU SWITCH", "Bool");
-
-        // Until everything that depends on the APU is moved into WASM,
-        // we still need to synchronise some of the WASM state with the sim's state.
-        if (available && !apuSwitchIsOn) {
-            // This event will open the fuel valve leading to the APU.
-            SimVar.SetSimVarValue("K:FUELSYSTEM_VALVE_TOGGLE", "Number", 8);
-            // This event will set `A:APU SWITCH` to 1, meaning the sim will start the APU.
-            // In systems.cfg, the `apu_pct_rpm_per_second` setting is set to 1, meaning the APU starts in one second.
-            SimVar.SetSimVarValue("K:APU_STARTER", "Number", 1);
-        } else if (!available && apuSwitchIsOn) {
-            // This event will set `A:APU SWITCH` to 0, meaning the sim will stop the APU.
-            // In systems.cfg, the `apu_pct_rpm_per_second` setting is set to 1, meaning the APU stops in one second.
-            SimVar.SetSimVarValue("K:APU_OFF_SWITCH", "Number", 1);
-            // This event will close the fuel valve leading to the APU.
-            SimVar.SetSimVarValue("K:FUELSYSTEM_VALVE_TOGGLE", "Number", 8);
-        }
-
-        const apuGenActive = SimVar.GetSimVarValue("APU GENERATOR ACTIVE", "Bool");
-
-        // This logic is consistently faulty in the JavaScript code: of course it should also take into
-        // account if engine generators are supplying electricity. We'll fix this when we create the electrical system.
-        SimVar.SetSimVarValue("L:APU_GEN_ONLINE", "Bool", available && apuGenActive ? 1 : 0);
-
         const apuBleedOn = SimVar.GetSimVarValue("L:A32NX_OVHD_PNEU_APU_BLEED_PB_IS_ON", "Bool");
         if (apuBleedOn !== this.lastAPUBleedState) {
             this.lastAPUBleedState = apuBleedOn;

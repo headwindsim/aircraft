@@ -1,0 +1,8 @@
+# Math JS External Library https://mathjs.org/
+PackageSources/html_ui/Pages/A32NX_Core/math.js
+build.*.js
+buildSrc/*
+igniter.config.mjs
+src/instruments/ecam-page-template/template.js
+src/instruments/devServer/bundles/*
+PackageSources/html_ui/JS_A339/generated/*.js

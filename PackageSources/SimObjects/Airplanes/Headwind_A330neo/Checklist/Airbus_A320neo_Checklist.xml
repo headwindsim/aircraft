@@ -2,7 +2,7 @@
 <SimBase.Document Type="Checklist" version="1,0">
     <Checklist.Checklist>
         <IncludeCheckpointLibrary FileName="CheckpointsLibrary\\Asobo_DefaultCheckpointLibrary.xml"/>
-        <IncludeCheckpointLibrary FileName="SimObjects\\Airplanes\\HeadWind_A330_Neo\\Checklist\\Library.xml"/>
+        <IncludeCheckpointLibrary FileName="SimObjects\\Airplanes\\FlyByWire_A320_NEO\\Checklist\\Library.xml"/>
         <Step ChecklistStepId="PREFLIGHT_GATE">
             <!-- Before starting engine -->
             <Page SubjectTT="TT:PRELIMINARY COCKPIT PREP.">

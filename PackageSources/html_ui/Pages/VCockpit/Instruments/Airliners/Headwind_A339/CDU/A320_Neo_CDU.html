@@ -2,9 +2,8 @@
 
 <script type="text/html" id="A320_Neo_CDU">
     <glasscockpit-highlight id="highlight"></glasscockpit-highlight>
+    <div id="BacklightBleed"></div>
     <div id="Mainframe">
-        <div id="Electricity" state="off">
-        </div>
     </div>
 </script>
 
@@ -17,21 +16,24 @@
 <script type="text/html" import-script="/Pages/A339X_Utils/NXLogic.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Utils/NXSpeeds.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Utils/NXSystemMessages.js"></script>
+<script type="text/html" import-script="/Pages/A339X_Utils/NXUnits.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Utils/SimBriefApi.js"></script>
+<script type="text/html" import-script="/Pages/A339X_Core/Adirs.js"></script>
+<script type="text/html" import-script="/Pages/A339X_Core/A32NX_PayloadConstructor.js"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/Utils/RadioNav.js"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/FlightElements/Runway.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/instruments/FlightElements_A339/Waypoint.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/FlightElements_A339/Waypoint.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/FlightElements/Approach.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/instruments/FlightElements_A339/WaypointLoader.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/FlightElements_A339/WaypointLoader.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/FlightElements/FlightPlan.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/instruments/NavSystems/LogicElements_A339/A32NX_FlightPlanManager.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/LogicElements_A339/A32NX_FlightPlanManager.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/FlightElements/GeoCalc.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/instruments/NavSystems/Shared/LogicElements/SearchField.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/Shared/LogicElements/SearchField.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/FlightElements/NearestWaypoint.js"></script>
 
-<script type="text/html" import-script="/Pages/VCockpit/instruments/NavSystems/A339_Neo/A32NX_NavSystem.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/A339_Neo/A32NX_NavSystem.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/A32NX_BaseAirliners.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/FMC/A32NX_FMCMainDisplay.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/FMC/A32NX_FMCDataManager.js"></script>
@@ -39,7 +41,7 @@
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/A320_Neo_CDU_DataIndexPage.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/A320_Neo_CDU_PositionMonitorPage.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/A320_Neo_CDU_ProgressPage.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/A320_Neo_CDU_IdentPage.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/A330_Neo_CDU_IdentPage.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/A320_Neo_CDU_AvailableFlightPlanPage.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/A320_Neo_CDU_FlightPlanPage.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/A320_Neo_CDU_FuelPredPage.js"></script>
@@ -58,6 +60,7 @@
 
 <!-- ATSU/AOC Pages -->
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_ATSU_Menu.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_AOC_AirportList.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_AOC_Menu.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_AOC_MessagesReceived.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_AOC_MessagesSent.js"></script>
@@ -79,7 +82,7 @@
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_Comm_Menu.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_ATSU_DatalinkStatus.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_AOC_Init.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A320_Neo_CDU_AOC_OFPData.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/ATSU/A330_Neo_CDU_AOC_OFPData.js"></script>
 
 <!-- CFDS Pages -->
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/CFDS/A320_Neo_CDU_CFDS_Menu.js"></script>
@@ -111,13 +114,8 @@
 
 <!-- OPTIONS Pages -->
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_Menu.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_ADIRS.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_MCDU_KB.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_AOC.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_AOC_METAR.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_AOC_ATIS.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_AOC_TAF.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_CIDS.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_FMGC.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_REALISM.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_TELEX.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/CDU/OPTIONS/A320_Neo_CDU_OPTIONS_AOC_SIMBRIEF.js"></script>
@@ -151,8 +149,8 @@
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_APU.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_BrakeTemp.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_Refuel.js"></script>
+<script type="text/html" import-script="/Pages/A339X_Core/A32NX_Boarding.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_DMC.js"></script>
-<script type="text/html" import-script="/Pages/A339X_Core/A32NX_Electricity.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_LocalVarUpdater.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_FADEC.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_GPWS.js"></script>
@@ -160,6 +158,7 @@
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_Core.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_ATSU.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_FuelPred.js"></script>
+<script type="text/html" import-script="/Pages/A339X_Core/A32NX_TipsManager.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/FMGC/A32NX_ConstraintManager.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/FMGC/A32NX_FlightPhaseManager.js"></script>
 

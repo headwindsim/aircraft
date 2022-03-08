@@ -4,6 +4,9 @@ class CDUFlightPlanPage {
         mcdu.flightPlanManager.updateWaypointDistances(true /* approach */);
         mcdu.clearDisplay();
         mcdu.page.Current = mcdu.page.FlightPlanPage;
+        mcdu.returnPageCallback = () => {
+            CDUFlightPlanPage.ShowPage(mcdu, offset);
+        };
         mcdu.activeSystem = 'FMGC';
         CDUFlightPlanPage._timer = 0;
         mcdu.pageUpdate = () => {
@@ -12,8 +15,9 @@ class CDUFlightPlanPage {
                 CDUFlightPlanPage.ShowPage(mcdu, offset);
             }
         };
-        const isFlying = Simplane.getAltitudeAboveGround() > 10 ||
-            Simplane.getEngineThrottleMode(0) >= ThrottleMode.FLEX_MCT && Simplane.getEngineThrottleMode(1) >= ThrottleMode.FLEX_MCT;
+        mcdu.pageRedrawCallback = () => CDUFlightPlanPage.ShowPage(mcdu, offset);
+        const flightPhase = SimVar.GetSimVarValue("L:A32NX_FWC_FLIGHT_PHASE", "Enum");
+        const isFlying = flightPhase >= 5 && flightPhase <= 7;
         let originIdentCell = "----";
         let runway = null;
         let showFrom = false;
@@ -67,7 +71,7 @@ class CDUFlightPlanPage {
             let destEFOBCell = "---";
             if (mcdu.flightPlanManager.getDestination()) {
                 destDistCell = mcdu.flightPlanManager.getDestination().liveDistanceTo.toFixed(0);
-                destEFOBCell = (mcdu.getDestEFOB(isFlying) * mcdu._conversionWeight).toFixed(1);
+                destEFOBCell = (NXUnits.kgToUser(mcdu.getDestEFOB(isFlying))).toFixed(1);
                 if (isFlying) {
                     destTimeCell = FMCMainDisplay.secondsToUTC(mcdu.flightPlanManager.getDestination().liveUTCTo);
                 } else {
@@ -193,7 +197,6 @@ class CDUFlightPlanPage {
                 let apprElev = "-----";
                 let apprColor = "white";
                 if (approachRunway) {
-                    apprElev = (approachRunway.elevation * 3.280).toFixed(0).toString();
                     apprColor = color;
                 }
                 apprElev = apprElev.padStart(6,"\xa0");

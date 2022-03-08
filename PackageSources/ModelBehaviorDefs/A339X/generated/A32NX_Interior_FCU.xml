@@ -139,9 +139,11 @@
                 </CLOCKWISE_CODE>
 
                 <PULL_CODE>
+                    (&gt;H:A320_Neo_FCU_ALT_PULL)
                     (&gt;H:A320_Neo_CDU_MODE_SELECTED_ALTITUDE)
                 </PULL_CODE>
                 <PUSH_CODE>
+                    (&gt;H:A320_Neo_FCU_ALT_PUSH)
                     (&gt;H:A320_Neo_CDU_MODE_MANAGED_ALTITUDE)
                 </PUSH_CODE> <!-- TODO - Change - Should be managed climb/descent (comment from Asobo) -->
 
@@ -159,8 +161,8 @@
             <NODE_ID>AIRBUS_Push_Heading_Track</NODE_ID>
             <ANIM_NAME>AIRBUS_Push_Heading_Track</ANIM_NAME>
             <PART_ID>AIRBUS_Push_Heading_Track</PART_ID>
-            <WWISE_EVENT_1>autopilot_push_button2_on</WWISE_EVENT_1>
-            <WWISE_EVENT_2>autopilot_push_button2_off</WWISE_EVENT_2>
+            <WWISE_EVENT_1>fcubutton</WWISE_EVENT_1>
+            <WWISE_EVENT_2>fcubutton</WWISE_EVENT_2>
             <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
             <NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
             <TOOLTIPID>%((L:A32NX_TRK_FPA_MODE_ACTIVE, bool))%{if}TT:COCKPIT.TOOLTIPS.HDGVS_TRK_SET_HDG%{else}TT:COCKPIT.TOOLTIPS.HDGVS_TRK_SET_TRK%{end}</TOOLTIPID>
@@ -217,26 +219,23 @@
             <UseTemplate Name="ASOBO_GT_Knob_Infinite_PushPull">
                 <CLOCKWISE_CODE>
                     (L:A32NX_TRK_FPA_MODE_ACTIVE, bool) 1 == if{
-                        (&gt;H:A320_Neo_FCU_AP_INC_TRACK)
+                        (&gt;H:A320_Neo_FCU_HDG_INC_TRACK)
                     } els{
-                        1 (&gt;K:HEADING_BUG_INC)
-                        (&gt;H:A320_Neo_CDU_AP_INC_HEADING)
+                        (&gt;H:A320_Neo_FCU_HDG_INC_HEADING)
                     }
                 </CLOCKWISE_CODE>
                 <ANTICLOCKWISE_CODE>
                     (L:A32NX_TRK_FPA_MODE_ACTIVE, bool) 1 == if{
-                        (&gt;H:A320_Neo_FCU_AP_DEC_TRACK)
+                        (&gt;H:A320_Neo_FCU_HDG_DEC_TRACK)
                     } els{
-                        1 (&gt;K:HEADING_BUG_DEC)
-                        (&gt;H:A320_Neo_CDU_AP_DEC_HEADING)
+                        (&gt;H:A320_Neo_FCU_HDG_DEC_HEADING)
                     }
                 </ANTICLOCKWISE_CODE>
                 <PULL_CODE>
-                    (&gt;H:A320_Neo_CDU_MODE_SELECTED_HEADING)
+                    (&gt;H:A320_Neo_FCU_HDG_PULL)
                 </PULL_CODE>
                 <PUSH_CODE>
-                    (&gt;H:A320_Neo_CDU_MODE_MANAGED_HEADING)
-                    (&gt;H:A320_Neo_FCU_MODE_MANAGED_HEADING)
+                    (&gt;H:A320_Neo_FCU_HDG_PUSH)
                 </PUSH_CODE>
                 <CENTER_RADIUS>0</CENTER_RADIUS>
                 <WWISE_EVENT_1>QNHknob</WWISE_EVENT_1>
@@ -285,30 +284,65 @@
             <UseTemplate Name="ASOBO_GT_Knob_Infinite_PushPull">
                 <CLOCKWISE_CODE>
                     (L:A32NX_TRK_FPA_MODE_ACTIVE, bool) 1 == if{
-                        (&gt;H:A320_Neo_FCU_AP_INC_FPA)
+                        (&gt;H:A320_Neo_FCU_VS_INC_FPA)
                     } els{
-                        3 (&gt;K:AP_VS_VAR_INC)
-                        (&gt;H:A320_Neo_FCU_VS_INC)
+                        (&gt;H:A320_Neo_FCU_VS_INC_VS)
                     }
+                    (&gt;H:A320_Neo_CDU_VS)
                 </CLOCKWISE_CODE>
                 <ANTICLOCKWISE_CODE>
                     (L:A32NX_TRK_FPA_MODE_ACTIVE, bool) 1 == if{
-                        (&gt;H:A320_Neo_FCU_AP_DEC_FPA)
+                        (&gt;H:A320_Neo_FCU_VS_DEC_FPA)
                     } els{
-                        3 (&gt;K:AP_VS_VAR_DEC)
-                        (&gt;H:A320_Neo_FCU_VS_DEC)
+                        (&gt;H:A320_Neo_FCU_VS_DEC_VS)
                     }
+                    (&gt;H:A320_Neo_CDU_VS)
                 </ANTICLOCKWISE_CODE>
                 <PULL_CODE>
-                    (&gt;H:A320_Neo_FCU_VS_HOLD)
+                    (&gt;H:A320_Neo_FCU_VS_PULL)
+                    (&gt;H:A320_Neo_CDU_VS)
                 </PULL_CODE>
                 <PUSH_CODE>
-                    (&gt;H:A320_Neo_FCU_VS_ZERO)
+                    (&gt;H:A320_Neo_FCU_VS_PUSH)
+                    (&gt;H:A320_Neo_CDU_VS)
                 </PUSH_CODE>
                 <CENTER_RADIUS>0</CENTER_RADIUS>
                 <WWISE_EVENT_1>QNHknob</WWISE_EVENT_1>
                 <WWISE_EVENT_2>QNHknob</WWISE_EVENT_2>
             </UseTemplate>
         </Component>
+    </Template>
+
+    <Template Name="FBW_Airbus_Autoland_Warning">
+        <DefaultTemplateParameters>
+            <NODE_ID>PUSH_AUTOPILOT_AUTOLAND_#SIDE#</NODE_ID>
+            <SEQ_POWERED>1</SEQ_POWERED>
+            <NO_SEQ1/>
+            <WWISE_EVENT_1>mpb1on</WWISE_EVENT_1>
+            <WWISE_EVENT_2>mpb1off</WWISE_EVENT_2>
+        </DefaultTemplateParameters>
+
+        <UseTemplate Name="FBW_Push_Held">
+            <NO_SEQ1/>
+            <SEQ2_POWERED>(L:A32NX_ELEC_#BUS_TOP#_BUS_IS_POWERED, Bool) (L:A32NX_ELEC_#BUS_BOTTOM#_BUS_IS_POWERED, Bool) and</SEQ2_POWERED>
+            <SEQ2_CODE>(L:A32NX_AUTOPILOT_AUTOLAND_WARNING, bool) (E:ABSOLUTE TIME, seconds) 1 % 0.4 &gt; and</SEQ2_CODE>
+            <SEQ2_EMISSIVE_DRIVES_VISIBILITY>True</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+            <SEQ3_POWERED>(L:A32NX_ELEC_#BUS_TOP#_BUS_IS_POWERED, Bool) (L:A32NX_ELEC_#BUS_BOTTOM#_BUS_IS_POWERED, Bool) ! and</SEQ3_POWERED>
+            <SEQ3_CODE>(L:A32NX_AUTOPILOT_AUTOLAND_WARNING, bool) (E:ABSOLUTE TIME, seconds) 1 % 0.4 &gt; and</SEQ3_CODE>
+            <SEQ3_EMISSIVE_DRIVES_VISIBILITY>True</SEQ3_EMISSIVE_DRIVES_VISIBILITY>
+            <SEQ4_POWERED>(L:A32NX_ELEC_#BUS_TOP#_BUS_IS_POWERED, Bool) ! (L:A32NX_ELEC_#BUS_BOTTOM#_BUS_IS_POWERED, Bool) and</SEQ4_POWERED>
+            <SEQ4_CODE>(L:A32NX_AUTOPILOT_AUTOLAND_WARNING, bool) (E:ABSOLUTE TIME, seconds) 1 % 0.4 &gt; and</SEQ4_CODE>
+            <SEQ4_EMISSIVE_DRIVES_VISIBILITY>True</SEQ4_EMISSIVE_DRIVES_VISIBILITY>
+            <LEFT_SINGLE_CODE/>
+            <HOLD_SIMVAR/>
+        </UseTemplate>
+
+        <!-- Hide the old light -->
+        <Component ID="#NODE_ID#_SEQ1_HIDE" Node="#NODE_ID#_SEQ1">
+            <UseTemplate Name="ASOBO_GT_Visibility_Code">
+                <VISIBILITY_CODE>0</VISIBILITY_CODE>
+            </UseTemplate>
+        </Component>
+
     </Template>
 </ModelBehaviors>
