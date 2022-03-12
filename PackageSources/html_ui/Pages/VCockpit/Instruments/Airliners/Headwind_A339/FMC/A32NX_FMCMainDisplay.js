@@ -438,17 +438,17 @@ class FMCMainDisplay extends BaseAirliners {
         this.managedSpeedTargetIsMach = false;
         this.managedSpeedLimit = 250;
         this.managedSpeedLimitAlt = 10000;
-        this.managedSpeedClimb = 290;
+        this.managedSpeedClimb = 300;
         this.managedSpeedClimbIsPilotEntered = false;
-        this.managedSpeedClimbMach = .78;
+        this.managedSpeedClimbMach = .82;
         // this.managedSpeedClimbMachIsPilotEntered = false;
-        this.managedSpeedCruise = 290;
+        this.managedSpeedCruise = 300;
         this.managedSpeedCruiseIsPilotEntered = false;
-        this.managedSpeedCruiseMach = .78;
+        this.managedSpeedCruiseMach = .82;
         // this.managedSpeedCruiseMachIsPilotEntered = false;
-        this.managedSpeedDescend = 290;
+        this.managedSpeedDescend = 300;
         this.managedSpeedDescendIsPilotEntered = false;
-        this.managedSpeedDescendMach = .78;
+        this.managedSpeedDescendMach = .82;
         // this.managedSpeedDescendMachIsPilotEntered = false;
         this.cruiseFlightLevelTimeOut = undefined;
         this.flaps = NaN;
@@ -1052,17 +1052,17 @@ class FMCMainDisplay extends BaseAirliners {
 
     getClbManagedSpeedFromCostIndex() {
         const dCI = (this.costIndex / 999) ** 2;
-        return 290 * (1 - dCI) + 330 * dCI;
+        return 300 * (1 - dCI) + 330 * dCI;
     }
 
     getCrzManagedSpeedFromCostIndex() {
         const dCI = (this.costIndex / 999) ** 2;
-        return 290 * (1 - dCI) + 310 * dCI;
+        return 300 * (1 - dCI) + 330 * dCI;
     }
 
     getDesManagedSpeedFromCostIndex() {
         const dCI = this.costIndex / 999;
-        return 288 * (1 - dCI) + 300 * dCI;
+        return 308 * (1 - dCI) + 330 * dCI;
     }
 
     getAppManagedSpeed() {
