@@ -11,24 +11,24 @@
 	</LODS>
 
 
-<NodeAnimation type="WingFlex">
-    <Node>WING_BONE_01_LEFT</Node> <!-- the left wing bone closest to the center -->
-    <Node>WING_BONE_02_LEFT</Node> <!-- in between -->
-    <Node>WING_BONE_03_LEFT</Node> <!-- in between -->
-    <Node>WING_BONE_04_LEFT</Node> <!-- in between -->
-    <Node>WING_BONE_01_RIGHT</Node> <!-- the right wing bone closest to the center -->
-    <Node>WING_BONE_02_RIGHT</Node> <!-- in between -->
-    <Node>WING_BONE_03_RIGHT</Node> <!-- in between -->
-    <Node>WING_BONE_04_RIGHT</Node> <!-- in between -->
-    <Node>Engine_PIVOT_1_LEFT</Node> <!-- the left wing engine pivot node closest to the center -->
-    <Node>Engine_PIVOT_1_RIGHT</Node> <!-- the right wing engine pivot node closest to the center -->
-</NodeAnimation>
-	
+	<NodeAnimation type="WingFlex">
+		<Node>WING_BONE_01_LEFT</Node> <!-- the left wing bone closest to the center -->
+		<Node>WING_BONE_02_LEFT</Node> <!-- in between -->
+		<Node>WING_BONE_03_LEFT</Node> <!-- in between -->
+		<Node>WING_BONE_04_LEFT</Node> <!-- in between -->
+		<Node>WING_BONE_01_RIGHT</Node> <!-- the right wing bone closest to the center -->
+		<Node>WING_BONE_02_RIGHT</Node> <!-- in between -->
+		<Node>WING_BONE_03_RIGHT</Node> <!-- in between -->
+		<Node>WING_BONE_04_RIGHT</Node> <!-- in between -->
+		<Node>Engine_PIVOT_1_LEFT</Node> <!-- the left wing engine pivot node closest to the center -->
+		<Node>Engine_PIVOT_1_RIGHT</Node> <!-- the right wing engine pivot node closest to the center -->
+	</NodeAnimation>
+
 	<Behaviors>
-		<Include ModelBehaviorFile="A339X\A32NX_Interior_Generics.xml"/>
+		<Include ModelBehaviorFile="A339X\Exterior\A32NX_Exterior_Includes.xml"/>
 		<Include ModelBehaviorFile="Asobo\Exterior.xml"/>
-    <Include ModelBehaviorFile="Asobo\Generic\FX.xml"/>
-		<Include Path="A339X\A32NX_Exterior.xml"/>
+		<Include ModelBehaviorFile="Asobo\Generic\FX.xml"/>
+		<Include Path="A339X\generated\A32NX_Exterior.xml"/>
 		<Component ID="LIGHTING">
 			<UseTemplate Name="ASOBO_LIGHTING_Exterior_Retractable_Light_Template">
 				<LIGHT_TYPE>LANDING</LIGHT_TYPE>
@@ -66,11 +66,10 @@
 				<TRIM_ONLY>True</TRIM_ONLY>
 				<ANIM_NAME_TRIM>trimtab_elevator_key</ANIM_NAME_TRIM>
 			</UseTemplate>
-			<UseTemplate Name="ASOBO_HANDLING_Aileron_Template">
+			<UseTemplate Name="FBW_HANDLING_Aileron_Template">
 				<ANIM_NAME_LEFT>l_aileron_percent_key</ANIM_NAME_LEFT>
 				<ANIM_NAME_RIGHT>r_aileron_percent_key</ANIM_NAME_RIGHT>
 			</UseTemplate>
-			
 			<UseTemplate Name="ASOBO_HANDLING_Rudder_Template">
 				<ANIM_NAME>rudder_percent_key</ANIM_NAME>
 				<USE_INTEGRATED_TRIM>True</USE_INTEGRATED_TRIM>
@@ -178,11 +177,11 @@
                 <BLURRED_NODE_ID>PROP_BLURRED_RIGHT</BLURRED_NODE_ID>
                 <BLURRED_SPINNER_NODE_ID>PROP_BLURRED_CONE_RIGHT</BLURRED_SPINNER_NODE_ID>
             </UseTemplate>
-            <UseTemplate Name="ASOBO_ENGINE_Turbine_ReverseThrust_Template">
+            <UseTemplate Name="FBW_ENGINE_Turbine_ReverseThrust_Template">
                 <ID>1</ID>
                 <ANIM_NAME>thrust_rev_1</ANIM_NAME>
             </UseTemplate>
-            <UseTemplate Name="ASOBO_ENGINE_Turbine_ReverseThrust_Template">
+            <UseTemplate Name="FBW_ENGINE_Turbine_ReverseThrust_Template">
                 <ID>2</ID>
                 <ANIM_NAME>thrust_rev_2</ANIM_NAME>
             </UseTemplate>
