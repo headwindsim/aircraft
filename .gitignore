@@ -31,3 +31,5 @@ PackageSources/ModelBehaviorDefs/A339X/generated
 temp-test
 media_source
 *.zip
+command_list.txt
+dos2unix.exe

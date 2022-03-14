@@ -23,7 +23,6 @@
 		<Node>Engine_PIVOT_1_LEFT</Node> <!-- the left wing engine pivot node closest to the center -->
 		<Node>Engine_PIVOT_1_RIGHT</Node> <!-- the right wing engine pivot node closest to the center -->
 	</NodeAnimation>
-
 	<Behaviors>
 		<Include ModelBehaviorFile="A339X\Exterior\A32NX_Exterior_Includes.xml"/>
 		<Include ModelBehaviorFile="Asobo\Exterior.xml"/>
