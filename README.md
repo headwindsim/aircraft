@@ -7,6 +7,7 @@ If you want to contribute pull this repository and drag & drop the HeadwindA330n
 Make sure docker are isntalled. Prefferably with WSL2 backend.
 
 - First, run following command on powershell. This will install the A32NX docker images and node modules.
+
 For powershell:
 ```shell
 .\scripts\dev-env\run.cmd ./scripts/setup.sh
@@ -16,6 +17,7 @@ For Git Bash/Linux:
 ./scripts/dev-env/run.sh ./scripts/setup.sh
 ```
 - Build all A32NX module by running following command on powershell. This isntall A32NX modules to PackageSources.
+
 For powershell:
 ```shell
 .\scripts\dev-env\run.cmd ./scripts/build.sh
@@ -27,6 +29,7 @@ For Git Bash/Linux:
 - Drag and drop fspackagetool.exe to the project root.
 - Drag HeadwindA330neo.xml to fspackagetool.exe to build the package.
 Alternatively, you can run following command to build:
+
 For powershell:
 ```shell
 .\fspackagetool.exe HeadwindA330neo.xml
