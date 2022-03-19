@@ -33,3 +33,7 @@ media_source
 *.zip
 command_list.txt
 dos2unix.exe
+_package.json
+scripts/dev-env/_run.cmd
+scripts/dev-env/_run.sh
+/new_container
