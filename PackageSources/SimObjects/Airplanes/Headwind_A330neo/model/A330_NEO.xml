@@ -5,9 +5,9 @@
 		<!-- minimum display size in % (should be bounding sphere vertical screen size, sphere will often be slightly larger than you expect) -->
 		<!-- default minSize is 0 -->
 		<LOD minSize="80" ModelFile="A330NEO_LOD00.gltf"/>
-		<LOD minSize="60" ModelFile="A330NEO_LOD01.gltf"/>
+		<!-- <LOD minSize="60" ModelFile="A330NEO_LOD01.gltf"/>
 		<LOD minSize="30" ModelFile="A330NEO_LOD02.gltf"/>
-		<LOD minSize="12" ModelFile="A330NEO_LOD03.gltf"/>
+		<LOD minSize="12" ModelFile="A330NEO_LOD03.gltf"/>-->
 	</LODS>
 
 
