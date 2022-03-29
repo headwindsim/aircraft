@@ -394,7 +394,7 @@
 		<Component ID="CHOKES_C_GEAR" Node="CHOKES_C_GEAR">
 			<UseTemplate Name="ASOBO_GT_Visibility_Code">
 				<VISIBILITY_CODE>
-					(A:BRAKE PARKING INDICATOR, Bool)
+					(L:A32NX_PARK_BRAKE_LEVER_POS, Bool)
 					(A:LIGHT BEACON ON, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:1, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:2, Bool) ! and
@@ -404,7 +404,7 @@
 		<Component ID="CHOKES_L_GEAR" Node="CHOKES_L_GEAR">
 			<UseTemplate Name="ASOBO_GT_Visibility_Code">
 				<VISIBILITY_CODE>
-					(A:BRAKE PARKING INDICATOR, Bool)
+					(L:A32NX_PARK_BRAKE_LEVER_POS, Bool)
 					(A:LIGHT BEACON ON, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:1, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:2, Bool) ! and
@@ -414,7 +414,7 @@
 		<Component ID="CHOKES_R_GEAR" Node="CHOKES_R_GEAR">
 			<UseTemplate Name="ASOBO_GT_Visibility_Code">
 				<VISIBILITY_CODE>
-					(A:BRAKE PARKING INDICATOR, Bool)
+					(L:A32NX_PARK_BRAKE_LEVER_POS, Bool)
 					(A:LIGHT BEACON ON, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:1, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:2, Bool) ! and
@@ -424,7 +424,7 @@
 		<Component ID="PLOTS_R" Node="PLOTS_R">
 			<UseTemplate Name="ASOBO_GT_Visibility_Code">
 				<VISIBILITY_CODE>
-					(A:BRAKE PARKING INDICATOR, Bool)
+					(L:A32NX_PARK_BRAKE_LEVER_POS, Bool)
 					(A:LIGHT BEACON ON, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:1, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:2, Bool) ! and
@@ -434,7 +434,7 @@
 		<Component ID="PLOTS_L" Node="PLOTS_L">
 			<UseTemplate Name="ASOBO_GT_Visibility_Code">
 				<VISIBILITY_CODE>
-					(A:BRAKE PARKING INDICATOR, Bool)
+					(L:A32NX_PARK_BRAKE_LEVER_POS, Bool)
 					(A:LIGHT BEACON ON, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:1, Bool) ! and
 					(A:GENERAL ENG COMBUSTION:2, Bool) ! and

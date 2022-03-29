@@ -26,7 +26,7 @@ class AnimationAileronHandler {
   static constexpr double DROOP_MINIMUM_FLAPS_EXTENSION = 0.01;
   static constexpr double ANTI_DROOP_RATE = 1.0;
   static constexpr double ANTI_DROOP_BIAS_OFF = 0.0;
-  static constexpr double ANTI_DROOP_BIAS_ON = 0.0;
+  static constexpr double ANTI_DROOP_BIAS_ON = -1.2;
   static constexpr double ANTI_DROOP_PITCH_ATTITUDE_REFERENCE = 2.5;
 
   bool antiDroopInhibited = false;
