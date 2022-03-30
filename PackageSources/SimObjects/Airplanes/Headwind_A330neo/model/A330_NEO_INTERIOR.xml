@@ -6,6 +6,7 @@
         <!-- minimum display size in % (should be bounding sphere vertical screen size, sphere will often be slightly larger than you expect) -->
         <!-- default minSize is 0 -->
         <LOD minSize="150" ModelFile="A330_NEO_INTERIOR_LOD00.gltf"/>
+        <LOD minSize="150" ModelFile="A330_NEO_INTERIOR_LOD01.gltf"/>
     </LODS>
 
     <Behaviors>
@@ -1379,7 +1380,7 @@
                     <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_OFF</ANIMTIP_0>
                     <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_ON</ANIMTIP_1>
                     <TYPE>OnOff_TwoSimvars</TYPE>
-					
+
 					<WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
                     <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
 
