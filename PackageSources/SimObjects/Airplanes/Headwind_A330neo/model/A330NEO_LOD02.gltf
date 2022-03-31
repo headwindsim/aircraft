@@ -55,11 +55,11 @@
                 116,
                 117,
                 118,
-                119,
-                120,
-                123,
-                124,
+                121,
+                122,
+                125,
                 127,
+                128,
                 129,
                 130,
                 131,
@@ -69,11 +69,11 @@
                 135,
                 136,
                 137,
-                138,
                 139,
                 141,
                 143,
                 145,
+                146,
                 147,
                 148,
                 149,
@@ -96,11 +96,11 @@
                 166,
                 167,
                 168,
-                169,
-                170,
-                173,
-                176,
-                181,
+                171,
+                174,
+                179,
+                184,
+                185,
                 186,
                 187,
                 188,
@@ -123,9 +123,7 @@
                 205,
                 206,
                 207,
-                208,
-                209,
-                210
+                208
             ]
         }
     ],
@@ -1819,22 +1817,6 @@
             ]
         },
         {
-            "name" : "PILOT_0",
-            "translation" : [
-                0.5043748021125793,
-                0.9002199172973633,
-                20.2373104095459
-            ]
-        },
-        {
-            "name" : "PILOT_1",
-            "translation" : [
-                -0.49181705713272095,
-                0.9002199172973633,
-                20.2373104095459
-            ]
-        },
-        {
             "name" : "door_3_axis",
             "translation" : [
                 -2.271810531616211,
@@ -1874,7 +1856,7 @@
         },
         {
             "children" : [
-                121
+                119
             ],
             "extras" : {},
             "mesh" : 75,
@@ -1887,7 +1869,7 @@
         },
         {
             "children" : [
-                122
+                120
             ],
             "name" : "door_3_axis2",
             "translation" : [
@@ -1922,7 +1904,7 @@
         },
         {
             "children" : [
-                125
+                123
             ],
             "extras" : {},
             "mesh" : 77,
@@ -1935,7 +1917,7 @@
         },
         {
             "children" : [
-                126
+                124
             ],
             "name" : "Vide.004",
             "translation" : [
@@ -1951,7 +1933,7 @@
         },
         {
             "children" : [
-                128
+                126
             ],
             "name" : "Vide.005",
             "translation" : [
@@ -2080,7 +2062,7 @@
         },
         {
             "children" : [
-                140
+                138
             ],
             "name" : "LIGHT_ASOBO_NavigationGreenPoint",
             "translation" : [
@@ -2096,7 +2078,7 @@
         },
         {
             "children" : [
-                142
+                140
             ],
             "name" : "LIGHT_ASOBO_NavigationRedPoint",
             "translation" : [
@@ -2117,7 +2099,7 @@
         },
         {
             "children" : [
-                144
+                142
             ],
             "name" : "LIGHT_ASOBO_StrobeWingLeftOuterPoint",
             "translation" : [
@@ -2138,7 +2120,7 @@
         },
         {
             "children" : [
-                146
+                144
             ],
             "name" : "LIGHT_ASOBO_StrobeWingRightOuterPoint",
             "translation" : [
@@ -2434,8 +2416,8 @@
         },
         {
             "children" : [
-                172,
-                171
+                170,
+                169
             ],
             "name" : "Armature.025"
         },
@@ -2461,8 +2443,8 @@
         },
         {
             "children" : [
-                175,
-                174
+                173,
+                172
             ],
             "name" : "Armature.026"
         },
@@ -2500,10 +2482,10 @@
         },
         {
             "children" : [
+                176,
+                177,
                 178,
-                179,
-                180,
-                177
+                175
             ],
             "name" : "Armature.027"
         },
@@ -2541,10 +2523,10 @@
         },
         {
             "children" : [
+                181,
+                182,
                 183,
-                184,
-                185,
-                182
+                180
             ],
             "name" : "Armature.028"
         },
@@ -3447,42 +3429,42 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 119,
+                        "node" : 117,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 1,
                     "target" : {
-                        "node" : 119,
+                        "node" : 117,
                         "path" : "rotation"
                     }
                 },
                 {
                     "sampler" : 2,
                     "target" : {
-                        "node" : 120,
+                        "node" : 118,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 3,
                     "target" : {
-                        "node" : 120,
+                        "node" : 118,
                         "path" : "rotation"
                     }
                 },
                 {
                     "sampler" : 4,
                     "target" : {
-                        "node" : 123,
+                        "node" : 121,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 5,
                     "target" : {
-                        "node" : 123,
+                        "node" : 121,
                         "path" : "rotation"
                     }
                 }
@@ -3526,42 +3508,42 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 124,
+                        "node" : 122,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 1,
                     "target" : {
-                        "node" : 124,
+                        "node" : 122,
                         "path" : "rotation"
                     }
                 },
                 {
                     "sampler" : 2,
                     "target" : {
-                        "node" : 127,
+                        "node" : 125,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 3,
                     "target" : {
-                        "node" : 127,
+                        "node" : 125,
                         "path" : "rotation"
                     }
                 },
                 {
                     "sampler" : 4,
                     "target" : {
-                        "node" : 129,
+                        "node" : 127,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 5,
                     "target" : {
-                        "node" : 129,
+                        "node" : 127,
                         "path" : "rotation"
                     }
                 }
@@ -3739,7 +3721,7 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 133,
+                        "node" : 131,
                         "path" : "rotation"
                     }
                 }
@@ -3758,7 +3740,7 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 134,
+                        "node" : 132,
                         "path" : "rotation"
                     }
                 }
@@ -3777,21 +3759,21 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 171,
+                        "node" : 169,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 1,
                     "target" : {
-                        "node" : 171,
+                        "node" : 169,
                         "path" : "rotation"
                     }
                 },
                 {
                     "sampler" : 2,
                     "target" : {
-                        "node" : 171,
+                        "node" : 169,
                         "path" : "scale"
                     }
                 }
@@ -3820,21 +3802,21 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 174,
+                        "node" : 172,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 1,
                     "target" : {
-                        "node" : 174,
+                        "node" : 172,
                         "path" : "rotation"
                     }
                 },
                 {
                     "sampler" : 2,
                     "target" : {
-                        "node" : 174,
+                        "node" : 172,
                         "path" : "scale"
                     }
                 }
@@ -3863,21 +3845,21 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 177,
+                        "node" : 175,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 1,
                     "target" : {
-                        "node" : 177,
+                        "node" : 175,
                         "path" : "rotation"
                     }
                 },
                 {
                     "sampler" : 2,
                     "target" : {
-                        "node" : 177,
+                        "node" : 175,
                         "path" : "scale"
                     }
                 }
@@ -3906,21 +3888,21 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 182,
+                        "node" : 180,
                         "path" : "translation"
                     }
                 },
                 {
                     "sampler" : 1,
                     "target" : {
-                        "node" : 182,
+                        "node" : 180,
                         "path" : "rotation"
                     }
                 },
                 {
                     "sampler" : 2,
                     "target" : {
-                        "node" : 182,
+                        "node" : 180,
                         "path" : "scale"
                     }
                 }
@@ -10324,28 +10306,28 @@
         {
             "inverseBindMatrices" : 586,
             "joints" : [
-                171
+                169
             ],
             "name" : "Armature.025"
         },
         {
             "inverseBindMatrices" : 593,
             "joints" : [
-                174
+                172
             ],
             "name" : "Armature.026"
         },
         {
             "inverseBindMatrices" : 608,
             "joints" : [
-                177
+                175
             ],
             "name" : "Armature.027"
         },
         {
             "inverseBindMatrices" : 651,
             "joints" : [
-                182
+                180
             ],
             "name" : "Armature.028"
         }

@@ -40,7 +40,9 @@
             "nodes" : [
                 0,
                 1,
-                2
+                2,
+                3,
+                4
             ]
         }
     ],
@@ -73,6 +75,22 @@
                 0.07230716943740845,
                 1.7758300304412842,
                 20.349124908447266
+            ]
+        },
+        {
+            "name" : "PILOT_0",
+            "translation" : [
+                0.5043748021125793,
+                0.9002199172973633,
+                20.2373104095459
+            ]
+        },
+        {
+            "name" : "PILOT_1",
+            "translation" : [
+                -0.49181705713272095,
+                0.9002199172973633,
+                20.2373104095459
             ]
         }
     ],
@@ -241,6 +259,25 @@
             }
         },
         {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
+            "name" : "A339_AIRFRAME_BLACK",
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.0042355675250291824,
+                    0.0042355675250291824,
+                    0.0042355675250291824,
+                    1
+                ],
+                "metallicFactor" : 0,
+                "roughnessFactor" : 0.5
+            }
+        },
+        {
             "alphaMode" : "BLEND",
             "emissiveFactor" : [
                 0.800000011920929,
@@ -330,6 +367,15 @@
                     },
                     "indices" : 7,
                     "material" : 0
+                },
+                {
+                    "attributes" : {
+                        "POSITION" : 8,
+                        "NORMAL" : 9,
+                        "TEXCOORD_0" : 10
+                    },
+                    "indices" : 11,
+                    "material" : 1
                 }
             ]
         },
@@ -338,14 +384,14 @@
             "primitives" : [
                 {
                     "attributes" : {
-                        "POSITION" : 8,
-                        "NORMAL" : 9,
-                        "TEXCOORD_0" : 10,
-                        "TEXCOORD_1" : 11,
-                        "COLOR_0" : 12
+                        "POSITION" : 12,
+                        "NORMAL" : 13,
+                        "TEXCOORD_0" : 14,
+                        "TEXCOORD_1" : 15,
+                        "COLOR_0" : 16
                     },
-                    "indices" : 13,
-                    "material" : 1
+                    "indices" : 17,
+                    "material" : 2
                 }
             ]
         }
@@ -416,7 +462,7 @@
         {
             "bufferView" : 4,
             "componentType" : 5126,
-            "count" : 40594,
+            "count" : 33183,
             "max" : [
                 1.775334358215332,
                 2.7335989475250244,
@@ -432,23 +478,57 @@
         {
             "bufferView" : 5,
             "componentType" : 5126,
-            "count" : 40594,
+            "count" : 33183,
             "type" : "VEC3"
         },
         {
             "bufferView" : 6,
             "componentType" : 5126,
-            "count" : 40594,
+            "count" : 33183,
             "type" : "VEC2"
         },
         {
             "bufferView" : 7,
             "componentType" : 5123,
-            "count" : 70992,
+            "count" : 56532,
             "type" : "SCALAR"
         },
         {
             "bufferView" : 8,
+            "componentType" : 5126,
+            "count" : 8291,
+            "max" : [
+                0.738974392414093,
+                1.9338188171386719,
+                29.660507202148438
+            ],
+            "min" : [
+                -1.2982456684112549,
+                0.849628746509552,
+                28.078012466430664
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 9,
+            "componentType" : 5126,
+            "count" : 8291,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 10,
+            "componentType" : 5126,
+            "count" : 8291,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 11,
+            "componentType" : 5123,
+            "count" : 14460,
+            "type" : "SCALAR"
+        },
+        {
+            "bufferView" : 12,
             "componentType" : 5126,
             "count" : 259,
             "max" : [
@@ -464,31 +544,31 @@
             "type" : "VEC3"
         },
         {
-            "bufferView" : 9,
+            "bufferView" : 13,
             "componentType" : 5126,
             "count" : 259,
             "type" : "VEC3"
         },
         {
-            "bufferView" : 10,
+            "bufferView" : 14,
             "componentType" : 5126,
             "count" : 259,
             "type" : "VEC2"
         },
         {
-            "bufferView" : 11,
+            "bufferView" : 15,
             "componentType" : 5126,
             "count" : 259,
             "type" : "VEC2"
         },
         {
-            "bufferView" : 12,
+            "bufferView" : 16,
             "componentType" : 5126,
             "count" : 259,
             "type" : "VEC4"
         },
         {
-            "bufferView" : 13,
+            "bufferView" : 17,
             "componentType" : 5123,
             "count" : 324,
             "type" : "SCALAR"
@@ -517,58 +597,78 @@
         },
         {
             "buffer" : 0,
-            "byteLength" : 487128,
+            "byteLength" : 398196,
             "byteOffset" : 1347576
         },
         {
             "buffer" : 0,
-            "byteLength" : 487128,
-            "byteOffset" : 1834704
+            "byteLength" : 398196,
+            "byteOffset" : 1745772
         },
         {
             "buffer" : 0,
-            "byteLength" : 324752,
-            "byteOffset" : 2321832
+            "byteLength" : 265464,
+            "byteOffset" : 2143968
         },
         {
             "buffer" : 0,
-            "byteLength" : 141984,
-            "byteOffset" : 2646584
+            "byteLength" : 113064,
+            "byteOffset" : 2409432
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 99492,
+            "byteOffset" : 2522496
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 99492,
+            "byteOffset" : 2621988
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 66328,
+            "byteOffset" : 2721480
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 28920,
+            "byteOffset" : 2787808
         },
         {
             "buffer" : 0,
             "byteLength" : 3108,
-            "byteOffset" : 2788568
+            "byteOffset" : 2816728
         },
         {
             "buffer" : 0,
             "byteLength" : 3108,
-            "byteOffset" : 2791676
+            "byteOffset" : 2819836
         },
         {
             "buffer" : 0,
             "byteLength" : 2072,
-            "byteOffset" : 2794784
+            "byteOffset" : 2822944
         },
         {
             "buffer" : 0,
             "byteLength" : 2072,
-            "byteOffset" : 2796856
+            "byteOffset" : 2825016
         },
         {
             "buffer" : 0,
             "byteLength" : 4144,
-            "byteOffset" : 2798928
+            "byteOffset" : 2827088
         },
         {
             "buffer" : 0,
             "byteLength" : 648,
-            "byteOffset" : 2803072
+            "byteOffset" : 2831232
         }
     ],
     "buffers" : [
         {
-            "byteLength" : 2803720,
+            "byteLength" : 2831880,
             "uri" : "A330_NEO_INTERIOR_LOD01.bin"
         }
     ]

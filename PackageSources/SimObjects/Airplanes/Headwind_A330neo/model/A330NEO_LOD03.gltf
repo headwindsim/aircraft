@@ -53,10 +53,10 @@
                 23,
                 24,
                 25,
-                26,
                 27,
                 29,
                 31,
+                32,
                 33,
                 34,
                 35,
@@ -64,12 +64,12 @@
                 37,
                 38,
                 39,
-                40,
-                41,
+                42,
                 44,
                 46,
                 48,
                 50,
+                51,
                 52,
                 53,
                 54,
@@ -96,9 +96,7 @@
                 75,
                 76,
                 77,
-                78,
-                79,
-                80
+                78
             ]
         }
     ],
@@ -418,22 +416,6 @@
             ]
         },
         {
-            "name" : "PILOT_0",
-            "translation" : [
-                0.5043748021125793,
-                0.9002199172973633,
-                20.2373104095459
-            ]
-        },
-        {
-            "name" : "PILOT_1",
-            "translation" : [
-                -0.49181705713272095,
-                0.9002199172973633,
-                20.2373104095459
-            ]
-        },
-        {
             "extras" : {},
             "mesh" : 17,
             "name" : "node85.012",
@@ -451,7 +433,7 @@
         },
         {
             "children" : [
-                28
+                26
             ],
             "extras" : {},
             "mesh" : 18,
@@ -474,7 +456,7 @@
         },
         {
             "children" : [
-                30
+                28
             ],
             "extras" : {},
             "mesh" : 20,
@@ -503,7 +485,7 @@
         },
         {
             "children" : [
-                32
+                30
             ],
             "extras" : {},
             "mesh" : 22,
@@ -623,8 +605,8 @@
         },
         {
             "children" : [
-                42,
-                43
+                40,
+                41
             ],
             "extras" : {},
             "mesh" : 30,
@@ -647,7 +629,7 @@
         },
         {
             "children" : [
-                45
+                43
             ],
             "name" : "LIGHT_ASOBO_NavigationGreenPoint",
             "translation" : [
@@ -663,7 +645,7 @@
         },
         {
             "children" : [
-                47
+                45
             ],
             "name" : "LIGHT_ASOBO_NavigationRedPoint",
             "translation" : [
@@ -684,7 +666,7 @@
         },
         {
             "children" : [
-                49
+                47
             ],
             "name" : "LIGHT_ASOBO_StrobeWingLeftOuterPoint",
             "translation" : [
@@ -705,7 +687,7 @@
         },
         {
             "children" : [
-                51
+                49
             ],
             "name" : "LIGHT_ASOBO_StrobeWingRightOuterPoint",
             "translation" : [
@@ -1068,7 +1050,7 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 35,
+                        "node" : 33,
                         "path" : "rotation"
                     }
                 }
@@ -1087,7 +1069,7 @@
                 {
                     "sampler" : 0,
                     "target" : {
-                        "node" : 36,
+                        "node" : 34,
                         "path" : "rotation"
                     }
                 }

@@ -2,48 +2,48 @@ class A32NX_PayloadConstructor {
     constructor() {
         this.paxStations = {
             rows1_6: {
-                name: 'ROWS [1-6]',
-                seats: 36,
-                weight: 3024,
+                name: 'ROWS [1-9]',
+                seats: 32,
+                weight: 2688,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 2 + 1,
                 position: 21.98,
-                seatsRange: [1, 36],
-                simVar: "A32NX_PAX_TOTAL_ROWS_1_6"
+                seatsRange: [1, 32],
+                simVar: "A32NX_PAX_TOTAL_ROWS_1_9"
             },
             rows7_13: {
-                name: 'ROWS [7-13]',
-                seats: 42,
-                weight: 3530,
+                name: 'ROWS [10-21]',
+                seats: 136,
+                weight: 296562,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 3 + 1,
                 position: 2.86,
-                seatsRange: [37, 78],
-                simVar: "A32NX_PAX_TOTAL_ROWS_7_13"
+                seatsRange: [32, 168],
+                simVar: "A32NX_PAX_TOTAL_ROWS_10_21"
             },
             rows14_21: {
-                name: 'ROWS [14-21]',
-                seats: 48,
-                weight: 4032,
+                name: 'ROWS [22-26]',
+                seats: 40,
+                weight: 3360,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 4 + 1,
                 position: -15.34,
-                seatsRange: [79, 126],
-                simVar: "A32NX_PAX_TOTAL_ROWS_14_21"
+                seatsRange: [168, 208],
+                simVar: "A32NX_PAX_TOTAL_ROWS_22_26"
             },
             rows22_29: {
-                name: 'ROWS [22-29]',
-                seats: 48,
-                weight: 4032,
+                name: 'ROWS [27-43]',
+                seats: 131,
+                weight: 11004,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 5 + 1,
                 position: -32.81,
-                seatsRange: [127, 174],
-                simVar: "A32NX_PAX_TOTAL_ROWS_22_29"
+                seatsRange: [208, 339],
+                simVar: "A32NX_PAX_TOTAL_ROWS_27_43"
             },
         };
 
@@ -66,7 +66,7 @@ class A32NX_PayloadConstructor {
             },
             fwdBag: {
                 name: 'FWD BAGGAGE/CONTAINER',
-                weight: 3402,
+                weight: 3600,
                 stationIndex: 6 + 1,
                 position: 18.28,
                 visible: true,
@@ -74,7 +74,7 @@ class A32NX_PayloadConstructor {
             },
             aftCont: {
                 name: 'AFT CONTAINER',
-                weight: 2426,
+                weight: 5500,
                 stationIndex: 7 + 1,
                 position: -15.96,
                 visible: true,
