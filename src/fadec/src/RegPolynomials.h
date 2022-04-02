@@ -119,13 +119,15 @@ class Polynomial {
   double correctedEGT(double cn1, double cff, double mach, double alt) {
     double outCEGT = 0;
 
+    double cff_a330 = cff/2.53;
+
     double c_EGT[16] = {443.3145034,    0.0000000e+00, 3.0141710e+00,  3.9132758e-02, -4.8488279e+02, -1.2890964e-03,
                         -2.2332050e-02, 8.3849683e-05, 6.0478647e+00,  6.9171710e-05, -6.5369271e-07, -8.1438322e-03,
                         -5.1229403e-07, 7.4657497e+01, -4.6016728e-03, 2.8637860e-08};
 
-    outCEGT = c_EGT[0] + c_EGT[1] + (c_EGT[2] * cn1) + (c_EGT[3] * cff) + (c_EGT[4] * mach) + (c_EGT[5] * alt) +
-              (c_EGT[6] * powFBW(cn1, 2)) + (c_EGT[7] * cn1 * cff) + (c_EGT[8] * cn1 * mach) + (c_EGT[9] * cn1 * alt) +
-              (c_EGT[10] * powFBW(cff, 2)) + (c_EGT[11] * mach * cff) + (c_EGT[12] * cff * alt) + (c_EGT[13] * powFBW(mach, 2)) +
+    outCEGT = c_EGT[0] + c_EGT[1] + (c_EGT[2] * cn1) + (c_EGT[3] * cff_a330) + (c_EGT[4] * mach) + (c_EGT[5] * alt) +
+              (c_EGT[6] * powFBW(cn1, 2)) + (c_EGT[7] * cn1 * cff_a330) + (c_EGT[8] * cn1 * mach) + (c_EGT[9] * cn1 * alt) +
+              (c_EGT[10] * powFBW(cff_a330, 2)) + (c_EGT[11] * mach * cff_a330) + (c_EGT[12] * cff_a330 * alt) + (c_EGT[13] * powFBW(mach, 2)) +
               (c_EGT[14] * mach * alt) + (c_EGT[15] * powFBW(alt, 2));
 
     return outCEGT;
@@ -137,7 +139,7 @@ class Polynomial {
   double correctedFuelFlow(double cn1, double mach, double alt) {
     double outCFF = 0;
 
-    double a330_f = 1; ///2.53;
+    double a330_f = 2.53;
 
     double c_Flow[21] = {-639.6602981, 0.00000e+00,  1.03705e+02,  -2.23264e+03, 5.70316e-03, -2.29404e+00, 1.08230e+02,
                          2.77667e-04,  -6.17180e+02, -7.20713e-02, 2.19013e-07,  2.49418e-02, -7.31662e-01, -1.00003e-05,
@@ -159,9 +161,11 @@ class Polynomial {
   double oilGulpPct(double thrust) {
     double outOilGulpPct = 0;
 
+    double thrust_a330 = thrust/2.53;
+
     double c_OilGulp[3] = {20.1968848, -1.2270302e-4, 1.78442e-8};
 
-    outOilGulpPct = c_OilGulp[0] + (c_OilGulp[1] * thrust) + (c_OilGulp[2] * powFBW(thrust, 2));
+    outOilGulpPct = c_OilGulp[0] + (c_OilGulp[1] * thrust_a330) + (c_OilGulp[2] * powFBW(thrust_a330, 2));
 
     return outOilGulpPct / 100;
   }
