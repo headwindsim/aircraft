@@ -4,7 +4,7 @@ class A32NX_PayloadConstructor {
             rows1_6: {
                 name: 'ROWS [1-9]',
                 seats: 32,
-                weight: 2688,
+                weight: 4144,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 2 + 1,
@@ -15,7 +15,7 @@ class A32NX_PayloadConstructor {
             rows7_13: {
                 name: 'ROWS [10-21]',
                 seats: 136,
-                weight: 296562,
+                weight: 9112,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 3 + 1,
@@ -26,7 +26,7 @@ class A32NX_PayloadConstructor {
             rows14_21: {
                 name: 'ROWS [22-26]',
                 seats: 40,
-                weight: 3360,
+                weight: 2680,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 4 + 1,
@@ -37,7 +37,7 @@ class A32NX_PayloadConstructor {
             rows22_29: {
                 name: 'ROWS [27-43]',
                 seats: 131,
-                weight: 11004,
+                weight: 8777,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 5 + 1,
@@ -50,7 +50,7 @@ class A32NX_PayloadConstructor {
         this.payloadStations = {
             pilot: {
                 name: 'PILOT',
-                weight: 84,
+                weight: 64,
                 stationIndex: 0 + 1,
                 position: 42.36,
                 visible: false,
@@ -58,7 +58,7 @@ class A32NX_PayloadConstructor {
             },
             firstOfficer: {
                 name: 'FIRST OFFICER',
-                weight: 84,
+                weight: 64,
                 stationIndex: 1 + 1,
                 position: 42.36,
                 visible: false,
@@ -82,7 +82,7 @@ class A32NX_PayloadConstructor {
             },
             aftBag: {
                 name: 'AFT BAGGAGE',
-                weight: 2110,
+                weight: 5000,
                 stationIndex: 8 + 1,
                 position: -27.10,
                 visible: true,
