@@ -4,7 +4,7 @@ class A32NX_PayloadConstructor {
             rows1_6: {
                 name: 'ROWS [1-9]',
                 seats: 32,
-                weight: 4144,
+                weight: 4170,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 2 + 1,
@@ -15,7 +15,7 @@ class A32NX_PayloadConstructor {
             rows7_13: {
                 name: 'ROWS [10-21]',
                 seats: 136,
-                weight: 9112,
+                weight: 11424,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 3 + 1,
@@ -26,7 +26,7 @@ class A32NX_PayloadConstructor {
             rows14_21: {
                 name: 'ROWS [22-26]',
                 seats: 40,
-                weight: 2680,
+                weight: 3440,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 4 + 1,
@@ -37,7 +37,7 @@ class A32NX_PayloadConstructor {
             rows22_29: {
                 name: 'ROWS [27-43]',
                 seats: 131,
-                weight: 8777,
+                weight: 11004,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 5 + 1,
@@ -50,7 +50,7 @@ class A32NX_PayloadConstructor {
         this.payloadStations = {
             pilot: {
                 name: 'PILOT',
-                weight: 64,
+                weight: 84,
                 stationIndex: 0 + 1,
                 position: 42.36,
                 visible: false,
@@ -58,7 +58,7 @@ class A32NX_PayloadConstructor {
             },
             firstOfficer: {
                 name: 'FIRST OFFICER',
-                weight: 64,
+                weight: 84,
                 stationIndex: 1 + 1,
                 position: 42.36,
                 visible: false,
@@ -66,7 +66,7 @@ class A32NX_PayloadConstructor {
             },
             fwdBag: {
                 name: 'FWD BAGGAGE/CONTAINER',
-                weight: 3600,
+                weight: 4626,
                 stationIndex: 6 + 1,
                 position: 18.28,
                 visible: true,
@@ -74,7 +74,7 @@ class A32NX_PayloadConstructor {
             },
             aftCont: {
                 name: 'AFT CONTAINER',
-                weight: 5500,
+                weight: 6531,
                 stationIndex: 7 + 1,
                 position: -15.96,
                 visible: true,
@@ -82,7 +82,7 @@ class A32NX_PayloadConstructor {
             },
             aftBag: {
                 name: 'AFT BAGGAGE',
-                weight: 5000,
+                weight: 5450,
                 stationIndex: 8 + 1,
                 position: -27.10,
                 visible: true,
@@ -90,7 +90,7 @@ class A32NX_PayloadConstructor {
             },
             aftBulk: {
                 name: 'AFT BULK/LOOSE',
-                weight: 1497,
+                weight: 2612,
                 stationIndex: 9 + 1,
                 position: -37.35,
                 visible: true,
