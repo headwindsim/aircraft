@@ -369,7 +369,7 @@ const payloadConstruct = new A32NX_PayloadConstructor();
 const paxStations = payloadConstruct.paxStations;
 const cargoStations = payloadConstruct.payloadStations;
 
-const MAX_SEAT_AVAILABLE = 174;
+const MAX_SEAT_AVAILABLE = 298;
 const PAX_WEIGHT = 84;
 const BAG_WEIGHT = 20;
 
