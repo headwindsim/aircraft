@@ -35,7 +35,7 @@ class CDUAocOfpData {
             }
         }
 
-        const maxAllowableFuel = 19046; // in kilograms
+        const maxAllowableFuel = 109185; // in kilograms
 
         let blockFuel = "_____[color]amber";
         let taxiFuel = "____[color]amber";
