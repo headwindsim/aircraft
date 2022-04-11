@@ -3,47 +3,47 @@ class A32NX_PayloadConstructor {
         this.paxStations = {
             rows1_6: {
                 name: 'ROWS [1-9]',
-                seats: 32,
-                weight: 4170,
+                seats: 34,
+                weight: 2856,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 2 + 1,
                 position: 21.98,
                 seatsRange: [1, 32],
-                simVar: "A32NX_PAX_TOTAL_ROWS_1_9"
+                simVar: "A32NX_PAX_TOTAL_ROWS_1_6"
             },
             rows7_13: {
                 name: 'ROWS [10-21]',
-                seats: 136,
-                weight: 11424,
+                seats: 96,
+                weight: 8064,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 3 + 1,
                 position: 2.86,
                 seatsRange: [32, 168],
-                simVar: "A32NX_PAX_TOTAL_ROWS_10_21"
+                simVar: "A32NX_PAX_TOTAL_ROWS_7_13"
             },
             rows14_21: {
                 name: 'ROWS [22-26]',
                 seats: 40,
-                weight: 3440,
+                weight: 3360,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 4 + 1,
                 position: -15.34,
                 seatsRange: [168, 208],
-                simVar: "A32NX_PAX_TOTAL_ROWS_22_26"
+                simVar: "A32NX_PAX_TOTAL_ROWS_14_21"
             },
             rows22_29: {
                 name: 'ROWS [27-43]',
-                seats: 131,
-                weight: 11004,
+                seats: 128,
+                weight: 10752,
                 pax: 0,
                 paxTarget: 0,
                 stationIndex: 5 + 1,
                 position: -32.81,
                 seatsRange: [208, 339],
-                simVar: "A32NX_PAX_TOTAL_ROWS_27_43"
+                simVar: "A32NX_PAX_TOTAL_ROWS_22_29"
             },
         };
 
@@ -66,7 +66,7 @@ class A32NX_PayloadConstructor {
             },
             fwdBag: {
                 name: 'FWD BAGGAGE/CONTAINER',
-                weight: 4626,
+                weight: 5960,
                 stationIndex: 6 + 1,
                 position: 18.28,
                 visible: true,
