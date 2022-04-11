@@ -245,10 +245,10 @@ class CDUAocOfpData {
                 paxRemaining -= pax;
             }
 
-            await fillStation(paxStations['rows22_29'], .275 , numberOfPax);
-            await fillStation(paxStations['rows14_21'], .275, numberOfPax);
-            await fillStation(paxStations['rows7_13'], .240 , numberOfPax);
-            await fillStation(paxStations['rows1_6'], 1 , paxRemaining);
+            await fillStation(paxStations['rows22_29'], .43, numberOfPax);
+            await fillStation(paxStations['rows14_21'], .14, numberOfPax);
+            await fillStation(paxStations['rows7_13'], .33, numberOfPax);
+            await fillStation(paxStations['rows1_6'], 1, paxRemaining);
             return;
         }
 
