@@ -1,6 +1,6 @@
 # Headwind a330-900neo for MSFS
 
-This is the source code of the freeware A330-900neo for MSFS. If you only want to use the aircraft in MSFS please use this package : https://fr.flightsim.to/file/18198/airbus-a330-900neo-conversion
+This is the source code of the freeware A330-900neo for MSFS. If you only want to use the aircraft in MSFS please use this package : https://flightsim.to/file/18198/airbus-a330-900neo-conversion
 If you want to contribute pull this repository and drag & drop the HeadwindA330neo.xml over fspackagetool.exe
 
 ## How to build
