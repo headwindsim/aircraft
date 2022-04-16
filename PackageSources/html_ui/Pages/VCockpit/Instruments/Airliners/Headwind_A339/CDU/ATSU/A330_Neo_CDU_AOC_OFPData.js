@@ -369,7 +369,7 @@ const payloadConstruct = new A32NX_PayloadConstructor();
 const paxStations = payloadConstruct.paxStations;
 const cargoStations = payloadConstruct.payloadStations;
 
-const MAX_SEAT_AVAILABLE = 298;
+const MAX_SEAT_AVAILABLE = 290;
 const PAX_WEIGHT = 84;
 const BAG_WEIGHT = 20;
 
@@ -382,7 +382,7 @@ function getZfwcg() {
     const leMacZ = -5.39; // Value from Debug Weight
     const macSize = 13.45; // Value from Debug Aircraft Sim Tunning
 
-    const emptyWeight = 302000 * 0.453592; // Value from flight_model.cfg to kgs
+    const emptyWeight = 292124 * 0.453592; // Value from flight_model.cfg to kgs
     // const emptyPosition = -21; // Value from flight_model.cfg
     const emptyPosition = -8; // Value from flight_model.cfg
     const emptyMoment = emptyPosition * emptyWeight;
@@ -419,6 +419,6 @@ function getTotalPayload() {
 }
 
 function getZfw() {
-    const emptyWeight = 302000 * 0.453592; // Value from flight_model.cfg to kgs
+    const emptyWeight = 292124 * 0.453592; // Value from flight_model.cfg to kgs
     return emptyWeight + getTotalPayload();
 }
