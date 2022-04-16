@@ -35,7 +35,7 @@ class CDUAocOfpData {
             }
         }
 
-        const maxAllowableFuel = 109185; // in kilograms
+        const maxAllowableFuel = 111665; // in kilograms
 
         let blockFuel = "_____[color]amber";
         let taxiFuel = "____[color]amber";
@@ -245,9 +245,9 @@ class CDUAocOfpData {
                 paxRemaining -= pax;
             }
 
-            await fillStation(paxStations['rows22_29'], .43, numberOfPax);
-            await fillStation(paxStations['rows14_21'], .14, numberOfPax);
-            await fillStation(paxStations['rows7_13'], .33, numberOfPax);
+            await fillStation(paxStations['rows22_29'], .45, numberOfPax);
+            await fillStation(paxStations['rows14_21'], .37, numberOfPax);
+            await fillStation(paxStations['rows7_13'], .08, numberOfPax);
             await fillStation(paxStations['rows1_6'], 1, paxRemaining);
             return;
         }
@@ -369,7 +369,7 @@ const payloadConstruct = new A32NX_PayloadConstructor();
 const paxStations = payloadConstruct.paxStations;
 const cargoStations = payloadConstruct.payloadStations;
 
-const MAX_SEAT_AVAILABLE = 298;
+const MAX_SEAT_AVAILABLE = 290;
 const PAX_WEIGHT = 84;
 const BAG_WEIGHT = 20;
 
@@ -379,12 +379,11 @@ const BAG_WEIGHT = 20;
 function getZfwcg() {
     const currentPaxWeight = PAX_WEIGHT + BAG_WEIGHT;
 
-    const leMacZ = -5.39; // Value from Debug Weight
-    const macSize = 13.45; // Value from Debug Aircraft Sim Tunning
+    const leMacZ = -21.63; // Value from Debug Weight
+    const macSize = 25.49; // Value from Debug Aircraft Sim Tunning
 
-    const emptyWeight = 302000 * 0.453592; // Value from flight_model.cfg to kgs
-    // const emptyPosition = -21; // Value from flight_model.cfg
-    const emptyPosition = -8; // Value from flight_model.cfg
+    const emptyWeight = 292124 * 0.453592; // Value from flight_model.cfg to kgs
+    const emptyPosition = -27; // Value from flight_model.cfg
     const emptyMoment = emptyPosition * emptyWeight;
 
     const paxTotalMass = Object.values(paxStations).map((station) => (SimVar.GetSimVarValue(`L:${station.simVar}_DESIRED`, "Number") * currentPaxWeight)).reduce((acc, cur) => acc + cur, 0);
@@ -419,6 +418,6 @@ function getTotalPayload() {
 }
 
 function getZfw() {
-    const emptyWeight = 302000 * 0.453592; // Value from flight_model.cfg to kgs
+    const emptyWeight = 292124 * 0.453592; // Value from flight_model.cfg to kgs
     return emptyWeight + getTotalPayload();
 }
