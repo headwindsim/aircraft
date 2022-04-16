@@ -246,8 +246,8 @@ class CDUAocOfpData {
             }
 
             await fillStation(paxStations['rows22_29'], .45, numberOfPax);
-            await fillStation(paxStations['rows14_21'], .36, numberOfPax);
-            await fillStation(paxStations['rows7_13'], .07, numberOfPax);
+            await fillStation(paxStations['rows14_21'], .37, numberOfPax);
+            await fillStation(paxStations['rows7_13'], .08, numberOfPax);
             await fillStation(paxStations['rows1_6'], 1, paxRemaining);
             return;
         }
