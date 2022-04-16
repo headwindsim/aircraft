@@ -379,12 +379,11 @@ const BAG_WEIGHT = 20;
 function getZfwcg() {
     const currentPaxWeight = PAX_WEIGHT + BAG_WEIGHT;
 
-    const leMacZ = -5.39; // Value from Debug Weight
-    const macSize = 13.45; // Value from Debug Aircraft Sim Tunning
+    const leMacZ = -21.63; // Value from Debug Weight
+    const macSize = 25.49; // Value from Debug Aircraft Sim Tunning
 
     const emptyWeight = 292124 * 0.453592; // Value from flight_model.cfg to kgs
-    // const emptyPosition = -21; // Value from flight_model.cfg
-    const emptyPosition = -8; // Value from flight_model.cfg
+    const emptyPosition = -27; // Value from flight_model.cfg
     const emptyMoment = emptyPosition * emptyWeight;
 
     const paxTotalMass = Object.values(paxStations).map((station) => (SimVar.GetSimVarValue(`L:${station.simVar}_DESIRED`, "Number") * currentPaxWeight)).reduce((acc, cur) => acc + cur, 0);
