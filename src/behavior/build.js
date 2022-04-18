@@ -7,7 +7,7 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 
 const SRC = path.resolve(__dirname, 'src');
-const OUT = path.resolve(__dirname, '..', '..', 'PackageSources/ModelBehaviorDefs/A339X/generated');
+const OUT = path.resolve(__dirname, '..', '..', 'headwind-a330neo/ModelBehaviorDefs/A339X/generated');
 
 fs.mkdirSync(OUT, { recursive: true });
 

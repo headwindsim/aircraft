@@ -1,0 +1,66 @@
+name: PR
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: install
+        run: sudo ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: npm run lint
+        run: ./scripts/dev-env/run.sh npm run lint
+      - name: lint-rust.sh
+        run: |
+          ./scripts/dev-env/run.sh scripts/lint-rust.sh
+  test-rust:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: test-rust.sh
+        run: |
+          ./scripts/dev-env/run.sh scripts/test-rust.sh
+  test-js:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: npm install
+        run: ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: npm test
+        run: npm test
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    env:
+      A32NX_PRODUCTION_BUILD: 1
+      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
+      ZIP_NAME: HEADWIND-A339.zip
+      BUILD_DIR_NAME: zip-build
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+      - name: Build A339
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/setup.sh
+          ./scripts/dev-env/run.sh ./scripts/build.sh --no-tty -j 4
+          ls
+      - name: Generate ZIP file
+        run: |
+          mkdir ./${{ env.BUILD_DIR_NAME }}
+          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwind-a330neo/
+      - uses: actions/upload-artifact@v2
+        with:
+          name: HEADWIND-A339
+          path: ${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }}

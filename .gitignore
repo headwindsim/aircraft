@@ -25,9 +25,9 @@ node_modules
 /src/instruments/devServer/instruments.json
 /src/instruments/src/EFB/dist
 /src/autothrottle/target
-PackageSources/html_ui/Pages/VCockpit/Instruments/A32NX_A339
-PackageSources/html_ui/generated
-PackageSources/ModelBehaviorDefs/A339X/generated
+headwind-a330neo/html_ui/Pages/VCockpit/Instruments/A32NX_A339
+headwind-a330neo/html_ui/generated
+headwind-a330neo/ModelBehaviorDefs/A339X/generated
 temp-test
 media_source
 *.zip
@@ -38,3 +38,7 @@ scripts/dev-env/_run.cmd
 scripts/dev-env/_run.sh
 /new_container
 src/~$A339_calc.ods
+
+.idea/
+
+.eslintcache
