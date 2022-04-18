@@ -90,21 +90,21 @@ const OverviewPage = (props: OverviewPageProps) => {
                                 {' '}
                                 MRW
                             </h3>
-                            <span className="mt-2 text-lg">251,900 [kg]</span>
+                            <span className="mt-2 text-lg">242,900 [kg]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 MZFW
                             </h3>
-                            <span className="mt-2 text-lg">137,000 [kg]</span>
+                            <span className="mt-2 text-lg">177,000 [kg]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconUsers className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 Max PAX
                             </h3>
-                            <span className="mt-2 text-lg">301</span>
+                            <span className="mt-2 text-lg">290</span>
                         </div>
                         <div className="w-1/2">
                             <h3 className="text-xl font-medium flex items-center">
@@ -126,7 +126,7 @@ const OverviewPage = (props: OverviewPageProps) => {
                                 {' '}
                                 MTOW
                             </h3>
-                            <span className="mt-2 text-lg">251,000 [kg]</span>
+                            <span className="mt-2 text-lg">242,000 [kg]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
@@ -140,7 +140,7 @@ const OverviewPage = (props: OverviewPageProps) => {
                                 {' '}
                                 Max Cargo
                             </h3>
-                            <span className="mt-2 text-lg">16,000 [kg]</span>
+                            <span className="mt-2 text-lg">44,836 [kg]</span>
                         </div>
                     </div>
                 </div>
