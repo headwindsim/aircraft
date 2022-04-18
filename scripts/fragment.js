@@ -20,16 +20,16 @@ const execute = async () => {
                 sourceDir: './ModelBehaviorDefs'
             }, {
                 name: 'Textures',
-                sourceDir: './SimObjects/AirPlanes/Headwind_A330neo/TEXTURE'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/TEXTURE'
             }, {
                 name: 'Sound',
-                sourceDir: './SimObjects/AirPlanes/Headwind_A330neo/sound'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/sound'
             }, {
                 name: 'Model',
-                sourceDir: './SimObjects/AirPlanes/Headwind_A330neo/model'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/model'
             }, {
                 name: 'Panels',
-                sourceDir: './SimObjects/AirPlanes/Headwind_A330neo/panel'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/panel'
             }, {
                 name: 'MarketplaceData',
                 sourceDir: './MarketplaceData'
