@@ -1,8 +1,0 @@
-<Project Version="2" Name="HeadwindA330neo" FolderName="Packages">
-	<OutputDirectory>.</OutputDirectory>
-	<TemporaryOutputDirectory>_PackageInt</TemporaryOutputDirectory>
-	<Packages>
-		<Package>PackageDefinitions\headwind-a330neo.xml</Package>
-	</Packages>
-</Project>
-

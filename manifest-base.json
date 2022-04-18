@@ -1,12 +1,12 @@
 {
-  "creator": "FlyByWire Simulations",
+  "creator": "Headwind",
   "release_notes": {
     "neutral": {
-      "LastUpdate": "VERSION 0.7.4\\nSim Update 7 Hotfix compatibility",
+      "LastUpdate": "",
       "OlderHistory": ""
     }
   },
-  "title": "A32NX",
+  "title": "Airbus A330-900 NEO",
   "dependencies": [
     {
       "package_version": "0.1.99",

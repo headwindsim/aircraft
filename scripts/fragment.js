@@ -4,7 +4,7 @@ const fs = require('fs');
 const execute = async () => {
     try {
         const result = await fragmenter.pack({
-            baseDir: './PackageSources',
+            baseDir: './headwind-a330neo',
             outDir: './build-modules',
             modules: [{
                 name: 'effects',

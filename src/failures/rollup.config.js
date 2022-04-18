@@ -36,7 +36,7 @@ module.exports = {
         }),
     ],
     output: {
-        file: join(root, 'PackageSources/html_ui/JS_A339/generated/failures.js'),
+        file: join(root, 'headwind-a330neo/html_ui/JS_A339/generated/failures.js'),
         format: 'umd',
         name: 'Failures',
     },

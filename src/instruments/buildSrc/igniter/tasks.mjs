@@ -60,12 +60,12 @@ export function getInstrumentsIgniterTasks() {
         ...baseInstruments.map(({ name }) => new ExecTask(
             name,
             `node src/instruments/buildSrc/igniter/worker.mjs ${name}`,
-            [join('src/instruments/src', name), join('PackageSources/html_ui/Pages/VCockpit/Instruments/A32NX_A339', name)],
+            [join('src/instruments/src', name), join('headwind-a330neo/html_ui/Pages/VCockpit/Instruments/A32NX_A339', name)],
         )),
         ...ecamPages.map(({ name, path }) => new ExecTask(
             name,
             `node src/instruments/buildSrc/igniter/worker.mjs ${name}`,
-            [join('src/instruments/src', path), join('PackageSources/html_ui/Pages/VCockpit/Instruments/A32NX_A339/EcamPages', name)],
+            [join('src/instruments/src', path), join('headwind-a330neo/html_ui/Pages/VCockpit/Instruments/A32NX_A339/EcamPages', name)],
         )),
     ];
 }

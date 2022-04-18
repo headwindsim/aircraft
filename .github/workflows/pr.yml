@@ -46,7 +46,7 @@ jobs:
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: A339.zip
+      ZIP_NAME: HEADWIND-A339.zip
       BUILD_DIR_NAME: zip-build
     steps:
       - name: Checkout source
@@ -55,11 +55,12 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh ./scripts/setup.sh
           ./scripts/dev-env/run.sh ./scripts/build.sh --no-tty -j 4
+          ls
       - name: Generate ZIP file
         run: |
           mkdir ./${{ env.BUILD_DIR_NAME }}
           zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwind-a330neo/
       - uses: actions/upload-artifact@v2
         with:
-          name: A339
+          name: HEADWIND-A339
           path: ${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }}
