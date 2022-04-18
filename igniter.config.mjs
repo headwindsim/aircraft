@@ -12,11 +12,11 @@ export default new TaskOfTasks('a32nx', [
         ], ['src/systems', 'Cargo.lock', 'Cargo.toml', 'headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm']),
         new ExecTask('systems-autopilot', [
             'src/fbw/build.sh',
-            'wasm-opt -O1 -o headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm headwind_a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm'
+            'wasm-opt -O1 -o headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm'
         ], ['src/fbw', 'headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm']),
         new ExecTask('systems-fadec', [
             'src/fadec/build.sh',
-            'wasm-opt -O1 -o headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm headwind_a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm'
+            'wasm-opt -O1 -o headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm'
         ], ['src/fadec', 'headwind-a330neo/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm']),
     ], true),
 
