@@ -15,7 +15,7 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
       - name: install
-        run: ./scripts/dev-env/run.sh ./scripts/setup.sh
+        run: sudo ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: npm run lint
         run: ./scripts/dev-env/run.sh npm run lint
       - name: lint-rust.sh
