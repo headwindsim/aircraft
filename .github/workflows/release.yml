@@ -28,7 +28,7 @@ jobs:
       - name: Generate ZIP file
         run: |
           mkdir ./${{ env.BUILD_DIR_NAME }}
-          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwind-a330neo/
+          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.RELEASE_ZIP_NAME }} ./headwind-a330neo/
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
