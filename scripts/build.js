@@ -41,7 +41,7 @@ const GIT_COMMIT_SHA = process.env.GITHUB_SHA
     : executeGitCommand('git rev-parse --short HEAD');
 
 const MS_FILETIME_EPOCH = 116444736000000000n;
-const A32NX = path.resolve(__dirname, '..', 'headwind-a330neo');
+const A32NX = path.resolve(__dirname, '..', 'headwind-a330-900');
 
 const edition = require('../package.json').edition;
 
