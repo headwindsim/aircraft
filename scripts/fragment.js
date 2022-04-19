@@ -13,9 +13,6 @@ const execute = async () => {
                 name: 'html_ui',
                 sourceDir: './html_ui'
             }, {
-                name: 'CUSTOMIZE',
-                sourceDir: './CUSTOMIZE'
-            }, {
                 name: 'ModelBehaviorDefs',
                 sourceDir: './ModelBehaviorDefs'
             }, {
@@ -31,8 +28,8 @@ const execute = async () => {
                 name: 'Panels',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/panel'
             }, {
-                name: 'MarketplaceData',
-                sourceDir: './MarketplaceData'
+                name: 'ContentInfo',
+                sourceDir: './ContentInfo'
             }]
         });
         console.log(result);

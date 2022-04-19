@@ -42,3 +42,5 @@ src/~$A339_calc.ods
 .idea/
 
 .eslintcache
+
+build-modules/
