@@ -25,8 +25,9 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh ./scripts/setup.sh
           ./scripts/dev-env/run.sh ./scripts/build.sh --no-tty -j 4
-      - name: Generate ZIP file
+      - name: Build ZIP file
         run: |
+          ./scripts/dev-env/run.sh node ./scripts/fragment.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
           zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.RELEASE_ZIP_NAME }} ./headwind-a330neo/
       - name: Create Release
