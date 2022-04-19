@@ -56,7 +56,7 @@ jobs:
         with:
           token: ${{ github.token }}
           tag: ${{ env.MASTER_PRE_RELEASE_TAG }}
-          assets: '*.zip'
+          assets: '*'
       - name: Upload Assets to vstable
         uses: dwenegar/upload-release-assets@v1
         env:
