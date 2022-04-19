@@ -53,7 +53,7 @@ jobs:
               --url https://api.github.com/repos/${{ github.repository }}/releases/assets/$assetId \
               --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'
           fi
-      - name: Upload Multiple Assets to a Release
+      - name: Upload Assets to vmain
         uses: dwenegar/upload-release-assets@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
@@ -67,5 +67,5 @@ jobs:
             --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data-raw '{
-              "body": "This pre-release has its asset updated on every commit to the main branch\nDo not use the source code assets, they are never updated\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest main build: https://github.com/${{ github.repository }}/releases/download/${{ env.MASTER_PRE_RELEASE_TAG }}/${{ env.MASTER_ZIP_NAME }}"
+              "body": "This pre-release has its asset updated on every commit to the main branch\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest main build: https://github.com/${{ github.repository }}/releases/download/${{ env.MASTER_PRE_RELEASE_TAG }}/full.zip"
             }'
