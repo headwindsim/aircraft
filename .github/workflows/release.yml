@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       A32NX_PRODUCTION_BUILD: 1
-      MASTER_PRE_RELEASE_ID: 64726634
+      MASTER_PRE_RELEASE_ID: 64726773
       MASTER_PRE_RELEASE_TAG: vstable
       RELEASE_ZIP_NAME: HEADWIND-A330-900-stable.zip
       BUILD_DIR_NAME: stable
