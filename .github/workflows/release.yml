@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       A32NX_PRODUCTION_BUILD: 1
+      MASTER_PRE_RELEASE_ID: 64726634
+      MASTER_PRE_RELEASE_TAG: vstable
       RELEASE_ZIP_NAME: HEADWIND-A330-900-stable.zip
       BUILD_DIR_NAME: stable
     steps:
@@ -29,7 +31,7 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh node ./scripts/fragment.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
-          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.RELEASE_ZIP_NAME }} ./headwind-a330neo/
+          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.RELEASE_ZIP_NAME }} ./headwind-a330-900/
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -49,3 +51,25 @@ jobs:
           asset_path: ./${{ env.BUILD_DIR_NAME }}/${{ env.RELEASE_ZIP_NAME }}
           asset_name: ${{ env.RELEASE_ZIP_NAME }}
           asset_content_type: application/zip
+      - name: Delete old release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ github.token }}
+          tag: ${{ env.MASTER_PRE_RELEASE_TAG }}
+          assets: '*.zip'
+      - name: Upload Assets to vstable
+        uses: dwenegar/upload-release-assets@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          release_id: ${{ env.MASTER_PRE_RELEASE_ID }}
+          assets_path: ./build-modules/
+      - name: Update vstable pre-release body
+        run: |
+          curl --request PATCH \
+            --url 'https://api.github.com/repos/${{ github.repository }}/releases/${{ env.MASTER_PRE_RELEASE_ID }}' \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+              "body": "This pre-release has its asset updated on every release\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest stable build: https://github.com/${{ github.repository }}/releases/download/${{ env.MASTER_PRE_RELEASE_TAG }}/full.zip"
+            }'

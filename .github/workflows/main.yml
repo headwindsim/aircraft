@@ -33,26 +33,12 @@ jobs:
       - name: Build ZIP files
         run: |
           ./scripts/dev-env/run.sh node ./scripts/fragment.js
-
-          mkdir ./${{ env.BUILD_DIR_NAME }}
-          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.MASTER_ZIP_NAME }} ./headwind-a330neo/
-      - name: Get and delete master pre-release zip asset
-        run: |
-          echo 'checking for first release asset...'
-          assets=$( \
-            curl --location --request GET \
-              --url https://api.github.com/repos/${{ github.repository }}/releases/${{ env.MASTER_PRE_RELEASE_ID }}/assets
-          )
-
-          if [ $(echo $assets | jq '.[0].size') -eq '0' ]; then
-            echo 'no asset to delete'
-          else
-            assetId=$(echo $assets | jq '.[0].id')
-            echo 'deleting asset '$assetId
-            curl --request DELETE \
-              --url https://api.github.com/repos/${{ github.repository }}/releases/assets/$assetId \
-              --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'
-          fi
+      - name: Delete old release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ github.token }}
+          tag: ${{ env.MASTER_PRE_RELEASE_TAG }}
+          assets: '*.zip'
       - name: Upload Assets to vmain
         uses: dwenegar/upload-release-assets@v1
         env:
