@@ -12,7 +12,7 @@ export default new TaskOfTasks('a32nx', [
         ], ['src/systems', 'Cargo.lock', 'Cargo.toml', 'headwind-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm']),
         new ExecTask('systems-autopilot', [
             'src/fbw/build.sh',
-            'wasm-opt -O1 -o hheadwind-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm headwind-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm'
+            'wasm-opt -O1 -o headwind-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm headwind-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm'
         ], ['src/fbw', 'headwind-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm']),
         new ExecTask('systems-fadec', [
             'src/fadec/build.sh',
