@@ -17,7 +17,7 @@ const execute = async () => {
                 sourceDir: './ModelBehaviorDefs'
             }, {
                 name: 'Textures',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/TEXTURE'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture'
             }, {
                 name: 'Sound',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/sound'
