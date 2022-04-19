@@ -36,7 +36,7 @@ module.exports = {
         }),
     ],
     output: {
-        file: join(root, 'headwind-a330-900/html_ui/JS_A339/generated/failures.js'),
+        file: join(root, 'headwind-aircraft-a330-900/html_ui/JS_A339/generated/failures.js'),
         format: 'umd',
         name: 'Failures',
     },

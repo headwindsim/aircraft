@@ -10,11 +10,11 @@ export function getTemplatePlugin({ name, config, imports = [], isInstrument }) 
             elementName: `a32nx-${name.toLowerCase()}`,
             config,
             imports,
-            outputDir: join(Directories.root, 'headwind-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339'),
+            outputDir: join(Directories.root, 'headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339'),
         });
     }
     return ecamPageTemplate({
         name,
-        outputDir: join(Directories.root, 'headwind-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339/EcamPages'),
+        outputDir: join(Directories.root, 'headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339/EcamPages'),
     });
 }

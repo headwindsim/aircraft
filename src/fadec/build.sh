@@ -3,7 +3,7 @@
 # get directory of this script relative to root
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-OUTPUT="${DIR}/../../headwind-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm"
+OUTPUT="${DIR}/../../headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm"
 
 set -ex
 

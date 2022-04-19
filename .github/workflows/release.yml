@@ -12,7 +12,7 @@ jobs:
       A32NX_PRODUCTION_BUILD: 1
       MASTER_PRE_RELEASE_ID: 64726773
       MASTER_PRE_RELEASE_TAG: vstable
-      RELEASE_ZIP_NAME: HEADWIND-A330-900-stable.zip
+      RELEASE_ZIP_NAME: headwind-aircraft-a330-900-stable.zip
       BUILD_DIR_NAME: stable
     steps:
       - name: Checkout source
@@ -31,7 +31,7 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh node ./scripts/fragment.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
-          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.RELEASE_ZIP_NAME }} ./headwind-a330-900/
+          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.RELEASE_ZIP_NAME }} ./headwind-aircraft-a330-900/
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

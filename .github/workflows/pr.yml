@@ -59,7 +59,7 @@ jobs:
       - name: Generate ZIP file
         run: |
           mkdir ./${{ env.BUILD_DIR_NAME }}
-          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwind-a330-900/
+          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwind-aircraft-a330-900/
       - uses: actions/upload-artifact@v2
         with:
           name: HEADWIND-A339
