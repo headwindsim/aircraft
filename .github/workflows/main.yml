@@ -66,5 +66,5 @@ jobs:
             --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data-raw '{
-              "body": "This release has its asset updated on every commit to the main branch\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest main build: https://github.com/${{ github.repository }}/releases/download/${{ env.MAIN_PRE_RELEASE_TAG }}/{{ env.MAIN_ZIP_NAME }}"
+              "body": "This release has its asset updated on every commit to the main branch\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest main build: https://github.com/${{ github.repository }}/releases/download/${{ env.MAIN_PRE_RELEASE_TAG }}/${{ env.MAIN_ZIP_NAME }}"
             }'
