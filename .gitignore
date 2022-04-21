@@ -25,9 +25,10 @@ node_modules
 /src/instruments/devServer/instruments.json
 /src/instruments/src/EFB/dist
 /src/autothrottle/target
-headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339
-headwind-aircraft-a330-900/html_ui/generated
-headwind-aircraft-a330-900/ModelBehaviorDefs/A339X/generated
+/headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339
+/headwind-aircraft-a330-900/html_ui/generated
+/headwind-aircraft-a330-900/html_ui/JS_A339/generated
+/headwind-aircraft-a330-900/ModelBehaviorDefs/A339X/generated
 temp-test
 media_source
 *.zip
