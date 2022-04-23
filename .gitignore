@@ -45,3 +45,6 @@ src/~$A339_calc.ods
 .eslintcache
 
 build-modules/
+headwind-aircraft-a330-900/layout.json
+headwind-aircraft-a330-900/manifest.json
+headwind-aircraft-a330-900/build_info.json
