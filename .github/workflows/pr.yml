@@ -22,7 +22,6 @@ jobs:
           ./scripts/dev-env/run.sh scripts/lint-rust.sh
   test-rust:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -31,7 +30,6 @@ jobs:
           ./scripts/dev-env/run.sh scripts/test-rust.sh
   test-js:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -41,7 +39,6 @@ jobs:
         run: npm test
   build:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
