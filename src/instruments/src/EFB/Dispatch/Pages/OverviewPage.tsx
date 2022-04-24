@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IconAlignRight, IconBox, IconPlane, IconSwitchHorizontal, IconUsers, IconBolt } from '@tabler/icons';
-import fuselage from '../../Assets/330neo-outline-nose.svg';
+import fuselage from '../../Assets/320neo-outline-nose.svg';
 import { useSimVar } from '../../../Common/simVars';
-
-/* eslint-disable react/no-unused-prop-types */
 
 type OverviewPageProps = {
     weights: {
@@ -57,14 +55,14 @@ const OverviewPage = (props: OverviewPageProps) => {
     let [airline] = useSimVar('ATC AIRLINE', 'String', 1_000);
 
     if (airline === 0 || null || '') {
-        airline = 'Headwind';
+        airline = 'FlyByWire Simulations';
     }
 
     return (
         <div className="flex mt-6">
             <div className="w-1/2 mr-3">
                 <div className="text-white overflow-hidden bg-navy-lighter rounded-2xl shadow-lg p-6 h-efb-nav">
-                    <h2 className="text-2xl font-medium">Airbus A330-900neo</h2>
+                    <h2 className="text-2xl font-medium">Airbus A320neo</h2>
                     <span className="text-lg">{airline}</span>
                     <div className="flex items-center justify-center mt-6">
                         <img className="flip-horizontal h-48 -ml-96 mr-32" src={fuselage} />
@@ -76,35 +74,35 @@ const OverviewPage = (props: OverviewPageProps) => {
                                 {' '}
                                 Model
                             </h3>
-                            <span className="mt-2 text-lg">A330-941N [A339]</span>
+                            <span className="mt-2 text-lg">A320-251N [A20N]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconSwitchHorizontal className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 Range
                             </h3>
-                            <span className="mt-2 text-lg">7200 [nm]</span>
+                            <span className="mt-2 text-lg">3400 [nm]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 MRW
                             </h3>
-                            <span className="mt-2 text-lg">242,900 [kg]</span>
+                            <span className="mt-2 text-lg">79,400 [kg]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 MZFW
                             </h3>
-                            <span className="mt-2 text-lg">177,000 [kg]</span>
+                            <span className="mt-2 text-lg">64,300 [kg]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconUsers className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 Max PAX
                             </h3>
-                            <span className="mt-2 text-lg">290</span>
+                            <span className="mt-2 text-lg">174</span>
                         </div>
                         <div className="w-1/2">
                             <h3 className="text-xl font-medium flex items-center">
@@ -112,35 +110,35 @@ const OverviewPage = (props: OverviewPageProps) => {
                                 {' '}
                                 Engines
                             </h3>
-                            <span className="mt-2 text-lg">Rolls-Royce Trent 7000-72</span>
+                            <span className="mt-2 text-lg">CFM LEAP 1A-26</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconAlignRight className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 Mmo
                             </h3>
-                            <span className="mt-2 text-lg">0.86</span>
+                            <span className="mt-2 text-lg">0.82</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 MTOW
                             </h3>
-                            <span className="mt-2 text-lg">242,000 [kg]</span>
+                            <span className="mt-2 text-lg">79,000 [kg]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 Max Fuel Capacity
                             </h3>
-                            <span className="mt-2 text-lg">139,090 [l]</span>
+                            <span className="mt-2 text-lg">23,721 [l]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
                                 {' '}
                                 Max Cargo
                             </h3>
-                            <span className="mt-2 text-lg">44,836 [kg]</span>
+                            <span className="mt-2 text-lg">9,435 [kg]</span>
                         </div>
                     </div>
                 </div>

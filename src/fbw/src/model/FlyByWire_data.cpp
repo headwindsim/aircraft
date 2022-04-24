@@ -1,7 +1,7 @@
 #include "FlyByWire.h"
 #include "FlyByWire_private.h"
 
-FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
+FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P{
 
   {
     {
@@ -194,6 +194,24 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
   },
 
 
+  { 0.0, 100.0, 150.0, 200.0, 250.0, 300.0, 400.0 },
+
+
+  { 0.0, 50.0, 100.0, 200.0 },
+
+
+  { 0.0, 50.0, 100.0, 200.0 },
+
+
+  { 0.0, 50.0, 100.0, 200.0 },
+
+
+  { 0.0, 50.0, 100.0, 200.0 },
+
+
+  { 0.0, 50.0, 100.0, 200.0 },
+
+
   { 0.0, 0.06, 0.1, 0.2, 1.0 },
 
 
@@ -204,6 +222,15 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
 
   { 0.0, 100.0, 150.0, 200.0, 250.0, 300.0, 400.0 },
+
+
+  { 0.0, 120.0, 150.0, 380.0 },
+
+
+  { 0.0, 140.0, 180.0, 220.0, 250.0, 270.0, 300.0, 320.0, 400.0 },
+
+
+  { 0.0, 130.0, 200.0, 250.0, 300.0 },
 
   0.5,
 
@@ -217,6 +244,14 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   2.0,
 
+  0.3,
+
+  5.0,
+
+  0.3,
+
+  5.0,
+
   1.6,
 
   1.0,
@@ -225,21 +260,51 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   2.0,
 
-  0.5,
-
-  0.5,
-
-  0.5,
+  0.3,
 
   5.0,
 
-  10.0,
+  0.3,
+
+  5.0,
+
+  0.3,
+
+  5.0,
 
   0.5,
 
   0.5,
 
   0.5,
+
+  2.0,
+
+  0.5,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
+
+  1.0,
 
   1.0,
 
@@ -284,6 +349,18 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
   0.0,
 
   2.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
 
   0.0,
 
@@ -300,6 +377,26 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
   0.0,
 
   30.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
+
+  0.0,
 
   0.0,
 
@@ -347,9 +444,25 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   -67.0,
 
-  -10.0,
-
   -20.0,
+
+
+  { 0.1, 0.1, 0.15, 0.2, 0.3, 0.5, 0.5 },
+
+
+  { 0.0, 0.0, -30.0, -30.0 },
+
+
+  { 0.0, 0.0, -30.0, -30.0 },
+
+
+  { 0.0, 0.0, -30.0, -30.0 },
+
+
+  { 0.0, 0.0, -30.0, -30.0 },
+
+
+  { 0.0, 0.0, -30.0, -30.0 },
 
 
   { 1.0, 1.0, 0.5, 0.3, 0.3 },
@@ -363,19 +476,24 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   { 1.4, 1.4, 1.4, 1.2, 1.0, 0.8, 0.8 },
 
+
+  { -15.0, -15.0, -15.0, -2.0 },
+
+
+  { 1.1, 1.3, 1.8, 2.0, 2.2, 2.5, 2.7, 3.2, 3.8 },
+
+
+  { 3.0, 3.0, 2.5, 1.0, 1.0 },
+
   30.0,
 
   30.0,
 
   67.0,
 
-  10.0,
-
   20.0,
 
   5.0,
-
-  1.0,
 
   100.0,
 
@@ -403,9 +521,11 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   -1.0,
 
-  -1.0,
-
   -0.33333333333333331,
+
+  -4.0,
+
+  -1.0,
 
   -1.0,
 
@@ -417,15 +537,19 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   -15.0,
 
+  -2.0,
+
   -1000.0,
 
-  -5.0,
+  -0.25,
 
   -45.0,
 
   -50.0,
 
   -45.0,
+
+  -5.0,
 
   1.0,
 
@@ -451,9 +575,11 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   1.0,
 
-  1.0,
-
   4.0,
+
+  2.0,
+
+  1.0,
 
   1.0,
 
@@ -465,9 +591,11 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   15.0,
 
+  2.0,
+
   0.33333333333333331,
 
-  5.0,
+  2.0,
 
   45.0,
 
@@ -475,11 +603,11 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   45.0,
 
+  5.0,
+
   true,
 
   0.0,
-
-  0.5,
 
   -0.4,
 
@@ -501,13 +629,7 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   0.0,
 
-  -15.0,
-
-  0.2,
-
-  0.25,
-
-  -1.0,
+  0.0,
 
 
   { -2.0, 0.0, 1.5 },
@@ -517,22 +639,18 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   0.0,
 
-  0.1,
+  1.0,
+
+  1.0,
+
+  0.0,
+
+  0.06,
 
   0.0,
 
   -0.8,
 
-  0.0,
-
-  0.2,
-
-
-  { -2.0, 0.0, 1.5 },
-
-
-  { -1.0, 0.0, 1.0 },
-
   1.0,
 
   1.0,
@@ -540,20 +658,6 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
   0.0,
 
   0.0,
-
-  0.0,
-
-  0.2,
-
-  1.0,
-
-  -0.25,
-
-
-  { -2.0, 0.0, 1.5 },
-
-
-  { -1.0, 0.0, 1.0 },
 
   30.0,
 
@@ -589,7 +693,7 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   0.0,
 
-  0.0,
+  1.0,
 
   0.0,
 
@@ -756,7 +860,7 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
   0.0,
 
 
-  { -12.0, 0.0, 12.0 },
+  { -9.0, 0.0, 9.0 },
 
 
   { -1.0, 0.0, 1.0 },
@@ -789,25 +893,129 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   0.1019367991845056,
 
-  33.0,
+  0.0,
 
-  -33.0,
+  2.0,
+
+  0.0,
+
+  0.0,
+
+  2.0,
+
+  0.0,
+
+  0.0,
+
+  1.0,
 
   0.017453292519943295,
 
-  0.0,
+  100.0,
 
-  2.0,
+  0.1019367991845056,
 
-  0.0,
 
-  0.0,
+  { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 },
 
-  2.0,
 
-  0.0,
+  { 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 400.0 },
 
-  0.0,
+  2000.0,
+
+  100.0,
+
+  0.51444444444444448,
+
+  1.0,
+
+  0.2,
+
+  0.2,
+
+  1.0,
+
+  -0.25,
+
+
+  { -2.0, 0.0, 1.5 },
+
+
+  { -1.0, 0.0, 1.0 },
+
+
+  { 13.5, 13.5 },
+
+
+  { 0.0, 350.0 },
+
+
+  { 0.5, 0.5 },
+
+
+  { 0.0, 350.0 },
+
+  1.0,
+
+  -1.0,
+
+  0.06,
+
+  1.0,
+
+  -1.0,
+
+  30.0,
+
+  -30.0,
+
+  1.0,
+
+  0.017453292519943295,
+
+  100.0,
+
+  0.1019367991845056,
+
+
+  { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 },
+
+
+  { 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 400.0 },
+
+  2000.0,
+
+  100.0,
+
+  0.51444444444444448,
+
+  1.0,
+
+
+  { 13.5, 13.5 },
+
+
+  { 0.0, 350.0 },
+
+
+  { 0.5, 0.5 },
+
+
+  { 0.0, 350.0 },
+
+  1.0,
+
+  -1.0,
+
+  0.06,
+
+  1.0,
+
+  -1.0,
+
+  30.0,
+
+  -30.0,
 
   0.0,
 
@@ -844,7 +1052,61 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
   1.0,
 
 
-  { 1.0, 1.0, 10.0, 35.0, 60.0, 100.0, 100.0 },
+  { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 },
+
+
+  { 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 400.0 },
+
+  2000.0,
+
+  100.0,
+
+  0.51444444444444448,
+
+  1.0,
+
+  33.0,
+
+  -33.0,
+
+  0.017453292519943295,
+
+
+  { 13.5, 13.5 },
+
+
+  { 0.0, 350.0 },
+
+
+  { 0.5, 0.5 },
+
+
+  { 0.0, 350.0 },
+
+  1.0,
+
+  -1.0,
+
+  0.06,
+
+  1.0,
+
+  -1.0,
+
+  30.0,
+
+  -30.0,
+
+  1.0,
+
+  0.017453292519943295,
+
+  100.0,
+
+  0.1019367991845056,
+
+
+  { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 },
 
 
   { 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 400.0 },
@@ -868,6 +1130,78 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
 
   { 0.0, 350.0 },
+
+  1.0,
+
+  -1.0,
+
+  0.06,
+
+  1.0,
+
+  -1.0,
+
+  30.0,
+
+  -30.0,
+
+  1.0,
+
+  0.017453292519943295,
+
+  100.0,
+
+  0.1019367991845056,
+
+
+  { 100.0, 100.0, 100.0, 100.0, 100.0, 100.0, 100.0 },
+
+
+  { 100.0, 150.0, 200.0, 250.0, 300.0, 350.0, 400.0 },
+
+  2000.0,
+
+  100.0,
+
+  0.51444444444444448,
+
+  1.0,
+
+  -15.0,
+
+  0.2,
+
+  0.25,
+
+  -1.0,
+
+
+  { -2.0, 0.0, 1.5 },
+
+
+  { -1.0, 0.0, 1.0 },
+
+
+  { 13.5, 13.5 },
+
+
+  { 0.0, 350.0 },
+
+
+  { 0.5, 0.5 },
+
+
+  { 0.0, 350.0 },
+
+  1.0,
+
+  -1.0,
+
+  0.06,
+
+  1.0,
+
+  -1.0,
 
   30.0,
 
@@ -959,6 +1293,12 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   -25.0,
 
+  1.0,
+
+  0.0,
+
+  1.0,
+
   25.0,
 
   -25.0,
@@ -971,7 +1311,9 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   0.0,
 
-  2.0,
+  25.0,
+
+  -25.0,
 
   0.0,
 
@@ -981,33 +1323,31 @@ FlyByWireModelClass::Parameters_FlyByWire_T FlyByWireModelClass::FlyByWire_P = {
 
   1.0,
 
+  1.0,
+
   0.0,
+
+  1.0,
+
+  0.0,
+
+  1.0,
+
+  1.0,
+
+  0.0,
+
+  1.0,
+
+  0.0,
+
+  1.0,
 
   0.33333333333333331,
 
   1.7,
 
   -1.7,
-
-  1.0,
-
-  0.0,
-
-  1.0,
-
-  0.0,
-
-  1.0,
-
-  1.0,
-
-  0.0,
-
-  1.0,
-
-  0.0,
-
-  1.0,
 
   -0.033333333333333333,
 

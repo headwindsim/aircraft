@@ -1,28 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { MemoryRouter as Router } from 'react-router-dom';
+import { customAlphabet } from 'nanoid';
+import { NXDataStore } from '@shared/persistence';
+import { usePersistentProperty } from '@instruments/common/persistence';
 import { FailuresOrchestratorProvider } from './failures-orchestrator-provider';
 import Efb from './Efb';
-import logo from './Assets/headwind-logo.svg';
+import { render } from '../Common/index';
+import { readSettingsFromPersistentStorage } from './Settings/sync';
+import { useInteractionEvent } from '../util';
 
 import './Assets/Reset.scss';
 import './Assets/Efb.scss';
-import { render } from '../Common/index';
-import { readSettingsFromPersistentStorage } from './Settings/sync';
-import { useSimVar } from '../Common/simVars';
 
-const ScreenBlank = () => {
-    const [, setTurnedOn] = useSimVar('L:A32NX_EFB_TURNED_ON', 'number');
-
-    return (
-        <div onClick={() => setTurnedOn(1)} style={{ width: '100vw', height: '100vh' }} />
-    );
-};
+import logo from './Assets/fbw-logo.svg';
 
 const ScreenLoading = () => (
     <div className="loading-screen">
         <div className="center">
             <div className="placeholder">
-                <img src={logo} className="headwind-logo" alt="logo" />
+                <img src={logo} className="fbw-logo" alt="logo" />
                 {' '}
                 flyPad
             </div>
@@ -33,47 +29,65 @@ const ScreenLoading = () => (
     </div>
 );
 
-const EFBLoad = () => {
-    const [content, setContent] = useState('off');
-    const [isTurnedOn, setTurnedOn] = useSimVar('L:A32NX_EFB_TURNED_ON', 'number');
+export enum ContentState {
+    OFF,
+    LOADING,
+    LOADED
+}
 
-    useEffect(() => {
-        switch (isTurnedOn) {
-        case 0:
-            setContent('off');
-            break;
-        case 1:
-            if (content !== 'loading') {
-                setContent('loading');
-                setTimeout(() => {
-                    setTurnedOn(2);
-                }, 6000);
-            }
-            break;
-        case 2:
-            setContent('loaded');
-            break;
-        default:
-            throw new RangeError();
+interface PowerContextInterface {
+    content: ContentState,
+    setContent: (ContentState) => void
+}
+
+export const PowerContext = React.createContext<PowerContextInterface>(undefined as any);
+
+const EFBLoad = () => {
+    const [content, setContent] = useState<ContentState>(ContentState.OFF);
+    const [, setSessionId] = usePersistentProperty('A32NX_SENTRY_SESSION_ID');
+
+    function offToLoaded() {
+        setContent(ContentState.LOADING);
+        setTimeout(() => {
+            setContent(ContentState.LOADED);
+        }, 6000);
+    }
+
+    useEffect(() => () => setSessionId(''), []);
+
+    useInteractionEvent('A32NX_EFB_POWER', () => {
+        if (content === ContentState.OFF) {
+            offToLoaded();
+        } else {
+            setContent(ContentState.OFF);
         }
-    }, [isTurnedOn]);
+    });
 
     switch (content) {
-    case 'off':
-        return <ScreenBlank />;
-    case 'loading':
+    case ContentState.OFF:
+        return <div className="w-screen h-screen" onClick={() => offToLoaded()} />;
+    case ContentState.LOADING:
         return <ScreenLoading />;
-    case 'loaded':
+    case ContentState.LOADED:
         return (
             <Router>
-                <Efb />
+                <PowerContext.Provider value={{ content, setContent }}>
+                    <Efb />
+                </PowerContext.Provider>
             </Router>
         );
     default:
-        throw new Error();
+        throw new Error('Invalid content state provided');
     }
 };
 
 readSettingsFromPersistentStorage();
 
-render(<FailuresOrchestratorProvider><EFBLoad /></FailuresOrchestratorProvider>);
+const ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const SESSION_ID_LENGTH = 14;
+const nanoid = customAlphabet(ALPHABET, SESSION_ID_LENGTH);
+const generatedSessionID = nanoid();
+
+NXDataStore.set('A32NX_SENTRY_SESSION_ID', generatedSessionID);
+
+render(<FailuresOrchestratorProvider><EFBLoad /></FailuresOrchestratorProvider>, true, true);

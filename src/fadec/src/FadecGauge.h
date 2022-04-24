@@ -15,12 +15,13 @@
 #include <MSFS\MSFS_Render.h>
 #include <SimConnect.h>
 
+#include <chrono>
 #include <cmath>
 #include <iostream>
 #include <string>
-//#include <chrono>    // For PerfProf
 
 #include "EngineControl.h"
+//#include "ThrustLimits.h"
 #include "RegPolynomials.h"
 #include "SimVars.h"
 #include "Tables.h"
@@ -43,14 +44,26 @@ class FadecGauge {
     if (SUCCEEDED(SimConnect_Open(&hSimConnect, "FadecGauge", nullptr, 0, 0, 0))) {
       std::cout << "FADEC: SimConnect connected." << std::endl;
 
+      // SimConnect Payload Definitions
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::PayloadStation1, "PAYLOAD STATION WEIGHT:1", "Pounds");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::PayloadStation2, "PAYLOAD STATION WEIGHT:2", "Pounds");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::PayloadStation3, "PAYLOAD STATION WEIGHT:3", "Pounds");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::PayloadStation4, "PAYLOAD STATION WEIGHT:4", "Pounds");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::PayloadStation5, "PAYLOAD STATION WEIGHT:5", "Pounds");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::PayloadStation6, "PAYLOAD STATION WEIGHT:6", "Pounds");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::PayloadStation7, "PAYLOAD STATION WEIGHT:7", "Pounds");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::PayloadStation8, "PAYLOAD STATION WEIGHT:8", "Pounds");
+
       // SimConnect Tanker Definitions
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelControls, "FUEL TANK LEFT MAIN QUANTITY", "Gallons");
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelControls, "FUEL TANK RIGHT MAIN QUANTITY", "Gallons");
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelControls, "FUEL TANK CENTER QUANTITY", "Gallons");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelLeftMain, "FUEL TANK LEFT MAIN QUANTITY", "Gallons");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelRightMain, "FUEL TANK RIGHT MAIN QUANTITY", "Gallons");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelCenterMain, "FUEL TANK CENTER QUANTITY", "Gallons");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelLeftAux, "FUEL TANK LEFT AUX QUANTITY", "Gallons");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelRightAux, "FUEL TANK RIGHT AUX QUANTITY", "Gallons");
 
       // SimConnect Oil Temperature Definitions
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilControls, "GENERAL ENG OIL TEMPERATURE:1", "Celsius");
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilControls, "GENERAL ENG OIL TEMPERATURE:2", "Celsius");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilTempLeft, "GENERAL ENG OIL TEMPERATURE:1", "Celsius");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilTempRight, "GENERAL ENG OIL TEMPERATURE:2", "Celsius");
 
       // SimConnect Oil Pressure Definitions
       SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilPsiLeft, "GENERAL ENG OIL PRESSURE:1", "Psi");
@@ -63,7 +76,6 @@ class FadecGauge {
       // Simulation Data
       SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::SimulationDataTypeId, "SIMULATION TIME", "NUMBER");
       SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::SimulationDataTypeId, "SIMULATION RATE", "NUMBER");
-
       std::cout << "FADEC: SimConnect registrations complete." << std::endl;
       return true;
     }
@@ -85,6 +97,7 @@ class FadecGauge {
     }
 
     EngineControlInstance.initialize();
+
     isConnected = true;
 
     return true;
@@ -109,7 +122,7 @@ class FadecGauge {
       // store previous simulation time
       previousSimulationTime = simulationData.simulationTime;
       // update engines
-      EngineControlInstance.update(calculatedSampleTime);
+      EngineControlInstance.update(calculatedSampleTime, simulationData.simulationTime);
     }
 
     return true;
@@ -205,6 +218,7 @@ class FadecGauge {
   bool killFADEC() {
     std::cout << "FADEC: Disconnecting ..." << std::endl;
     EngineControlInstance.terminate();
+
     isConnected = false;
     unregister_all_named_vars();
 

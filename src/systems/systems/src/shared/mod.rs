@@ -1,13 +1,31 @@
 use crate::{
     electrical::{ElectricalElement, ElectricitySource, Potential},
+    pneumatic::{EngineModeSelector, EngineState, PneumaticValveSignal},
     simulation::UpdateContext,
 };
+
 use num_derive::FromPrimitive;
 use std::{cell::Ref, fmt::Display, time::Duration};
-use uom::si::{f64::*, thermodynamic_temperature::degree_celsius};
+use uom::si::{
+    f64::*,
+    length::meter,
+    pressure::{hectopascal, pascal},
+    thermodynamic_temperature::{degree_celsius, kelvin},
+};
+
+pub mod low_pass_filter;
+pub mod pid;
+pub mod update_iterator;
 
 mod random;
 pub use random::*;
+pub mod arinc429;
+
+pub trait ReservoirAirPressure {
+    fn green_reservoir_pressure(&self) -> Pressure;
+    fn blue_reservoir_pressure(&self) -> Pressure;
+    fn yellow_reservoir_pressure(&self) -> Pressure;
+}
 
 pub trait AuxiliaryPowerUnitElectrical:
     ControllerSignal<ContactorSignal> + ApuAvailable + ElectricalElement + ElectricitySource
@@ -39,8 +57,21 @@ pub trait ApuStart {
     fn start_is_on(&self) -> bool;
 }
 
-pub trait RamAirTurbineHydraulicLoopPressurised {
-    fn is_rat_hydraulic_loop_pressurised(&self) -> bool;
+pub trait HydraulicGeneratorControlUnit {
+    fn max_allowed_power(&self) -> Power;
+    fn motor_speed(&self) -> AngularVelocity;
+}
+
+pub trait ControlValveCommand {
+    fn valve_position_command(&self) -> Ratio;
+}
+
+pub trait EmergencyGeneratorPower {
+    fn generated_power(&self) -> Power;
+}
+
+pub trait FeedbackPositionPickoffUnit {
+    fn angle(&self) -> Angle;
 }
 
 pub trait LandingGearRealPosition {
@@ -66,7 +97,7 @@ pub trait LgciuGearExtension {
     fn all_up_and_locked(&self) -> bool;
 }
 
-pub trait LgciuInterface: LgciuWeightOnWheels + LgciuGearExtension {}
+pub trait LgciuSensors: LgciuWeightOnWheels + LgciuGearExtension {}
 pub trait EngineCorrectedN1 {
     fn corrected_n1(&self) -> Ratio;
 }
@@ -77,6 +108,53 @@ pub trait EngineCorrectedN2 {
 
 pub trait EngineUncorrectedN2 {
     fn uncorrected_n2(&self) -> Ratio;
+}
+
+pub trait Cabin {
+    fn altitude(&self) -> Length;
+    fn pressure(&self) -> Pressure;
+}
+
+pub trait PneumaticBleed {
+    fn apu_bleed_is_on(&self) -> bool;
+    fn engine_crossbleed_is_on(&self) -> bool;
+}
+
+pub trait EngineStartState {
+    fn left_engine_state(&self) -> EngineState;
+    fn right_engine_state(&self) -> EngineState;
+    fn engine_mode_selector(&self) -> EngineModeSelector;
+}
+
+pub trait EngineBleedPushbutton {
+    fn left_engine_bleed_pushbutton_is_auto(&self) -> bool;
+    fn right_engine_bleed_pushbutton_is_auto(&self) -> bool;
+}
+
+pub trait GroundSpeed {
+    fn ground_speed(&self) -> Velocity;
+}
+
+pub trait SectionPressure {
+    fn pressure(&self) -> Pressure;
+    fn pressure_downstream_leak_valve(&self) -> Pressure;
+    fn is_pressure_switch_pressurised(&self) -> bool;
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum HydraulicColor {
+    Green,
+    Blue,
+    Yellow,
+}
+impl Display for HydraulicColor {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Green => write!(f, "GREEN"),
+            Self::Blue => write!(f, "BLUE"),
+            Self::Yellow => write!(f, "YELLOW"),
+        }
+    }
 }
 
 /// The common types of electrical buses within Airbus aircraft.
@@ -192,9 +270,18 @@ pub trait ControllerSignal<S> {
     fn signal(&self) -> Option<S>;
 }
 
-pub enum PneumaticValveSignal {
-    Open,
-    Close,
+#[derive(Clone, Copy)]
+pub struct ApuBleedAirValveSignal {
+    target_open_amount: Ratio,
+}
+impl PneumaticValveSignal for ApuBleedAirValveSignal {
+    fn new(target_open_amount: Ratio) -> Self {
+        Self { target_open_amount }
+    }
+
+    fn target_open_amount(&self) -> Ratio {
+        self.target_open_amount
+    }
 }
 
 pub trait PneumaticValve {
@@ -269,7 +356,7 @@ impl DelayedPulseTrueLogicGate {
     }
 
     pub fn update(&mut self, context: &UpdateContext, expression_result: bool) {
-        self.true_delayed_gate.update(&context, expression_result);
+        self.true_delayed_gate.update(context, expression_result);
 
         let gate_out = self.true_delayed_gate.output();
 
@@ -366,16 +453,112 @@ pub fn interpolation(xs: &[f64], ys: &[f64], intermediate_x: f64) -> f64 {
     }
 }
 
+/// Converts a given `bool` value into an `f64` representing that boolean value in the simulator.
+pub fn from_bool(value: bool) -> f64 {
+    if value {
+        1.0
+    } else {
+        0.0
+    }
+}
+
 pub fn to_bool(value: f64) -> bool {
     (value - 1.).abs() < f64::EPSILON
 }
 
+pub struct InternationalStandardAtmosphere;
+impl InternationalStandardAtmosphere {
+    const TEMPERATURE_LAPSE_RATE: f64 = 0.0065;
+    const GAS_CONSTANT_DRY_AIR: f64 = 287.04;
+    const GRAVITY_ACCELERATION: f64 = 9.807;
+    const GROUND_PRESSURE_PASCAL: f64 = 101325.;
+    const GROUND_TEMPERATURE_KELVIN: f64 = 288.15;
+
+    fn ground_pressure() -> Pressure {
+        Pressure::new::<pascal>(Self::GROUND_PRESSURE_PASCAL)
+    }
+
+    pub fn pressure_at_altitude(altitude: Length) -> Pressure {
+        Self::ground_pressure()
+            * (1.
+                - Self::TEMPERATURE_LAPSE_RATE * altitude.get::<meter>()
+                    / Self::GROUND_TEMPERATURE_KELVIN)
+                .powf(
+                    Self::GRAVITY_ACCELERATION
+                        / Self::GAS_CONSTANT_DRY_AIR
+                        / Self::TEMPERATURE_LAPSE_RATE,
+                )
+    }
+
+    pub fn temperature_at_altitude(altitude: Length) -> ThermodynamicTemperature {
+        ThermodynamicTemperature::new::<kelvin>(
+            Self::GROUND_TEMPERATURE_KELVIN
+                - Self::TEMPERATURE_LAPSE_RATE * altitude.get::<meter>(),
+        )
+    }
+}
+
 /// The ratio of flow velocity past a boundary to the local speed of sound.
-#[derive(Clone, Copy, Debug, PartialEq, PartialOrd)]
+#[derive(Clone, Copy, Default, Debug, PartialEq, PartialOrd)]
 pub struct MachNumber(pub f64);
-impl Default for MachNumber {
-    fn default() -> Self {
-        Self(0.)
+
+impl From<f64> for MachNumber {
+    fn from(value: f64) -> Self {
+        MachNumber(value)
+    }
+}
+
+impl From<MachNumber> for f64 {
+    fn from(value: MachNumber) -> Self {
+        value.0
+    }
+}
+
+pub trait AverageExt: Iterator {
+    fn average<M>(self) -> M
+    where
+        M: Average<Self::Item>,
+        Self: Sized,
+    {
+        M::average(self)
+    }
+}
+
+impl<I: Iterator> AverageExt for I {}
+
+pub trait Average<A = Self> {
+    fn average<I>(iter: I) -> Self
+    where
+        I: Iterator<Item = A>;
+}
+
+impl Average for Pressure {
+    fn average<I>(iter: I) -> Self
+    where
+        I: Iterator<Item = Pressure>,
+    {
+        let mut sum = 0.0;
+        let mut count: usize = 0;
+
+        for v in iter {
+            sum += v.get::<hectopascal>();
+            count += 1;
+        }
+
+        if count > 0 {
+            Pressure::new::<hectopascal>(sum / (count as f64))
+        } else {
+            Pressure::new::<hectopascal>(0.)
+        }
+    }
+}
+
+impl<'a> Average<&'a Pressure> for Pressure {
+    fn average<I>(iter: I) -> Self
+    where
+        I: Iterator<Item = &'a Pressure>,
+    {
+        iter.copied().average()
     }
 }
 
@@ -426,7 +609,7 @@ mod delayed_true_logic_gate_tests {
         test_bed.run_with_delta(Duration::from_millis(0));
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -440,7 +623,7 @@ mod delayed_true_logic_gate_tests {
         test_bed.run_with_delta(Duration::from_millis(0));
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -454,7 +637,7 @@ mod delayed_true_logic_gate_tests {
         test_bed.run_with_delta(Duration::from_millis(0));
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), true);
+        assert!(test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -472,7 +655,7 @@ mod delayed_true_logic_gate_tests {
         test_bed.run_with_delta(Duration::from_millis(100));
         test_bed.run_with_delta(Duration::from_millis(200));
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 }
 
@@ -522,7 +705,7 @@ mod delayed_false_logic_gate_tests {
 
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -534,7 +717,7 @@ mod delayed_false_logic_gate_tests {
         test_bed.command(|a| a.set_expression(true));
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), true);
+        assert!(test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -549,7 +732,7 @@ mod delayed_false_logic_gate_tests {
         test_bed.command(|a| a.set_expression(false));
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), true);
+        assert!(test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -564,7 +747,7 @@ mod delayed_false_logic_gate_tests {
         test_bed.command(|a| a.set_expression(false));
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -582,7 +765,7 @@ mod delayed_false_logic_gate_tests {
         test_bed.run_with_delta(Duration::from_millis(100));
         test_bed.run_with_delta(Duration::from_millis(200));
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), true);
+        assert!(test_bed.query(|a| a.gate_output()));
     }
 }
 
@@ -632,7 +815,7 @@ mod delayed_pulse_true_logic_gate_tests {
 
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -644,7 +827,7 @@ mod delayed_pulse_true_logic_gate_tests {
         test_bed.command(|a| a.set_expression(true));
         test_bed.run_with_delta(Duration::from_millis(0));
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -656,7 +839,7 @@ mod delayed_pulse_true_logic_gate_tests {
         test_bed.command(|a| a.set_expression(false));
         test_bed.run();
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -672,7 +855,7 @@ mod delayed_pulse_true_logic_gate_tests {
         test_bed.command(|a| a.set_expression(false));
         test_bed.run_with_delta(Duration::from_millis(300));
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 
     #[test]
@@ -685,15 +868,15 @@ mod delayed_pulse_true_logic_gate_tests {
         test_bed.command(|a| a.set_expression(true));
         test_bed.run_with_delta(Duration::from_millis(1200));
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), true);
+        assert!(test_bed.query(|a| a.gate_output()));
 
         test_bed.run_with_delta(Duration::from_millis(100));
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
 
         test_bed.run_with_delta(Duration::from_millis(1200));
 
-        assert_eq!(test_bed.query(|a| a.gate_output()), false);
+        assert!(!test_bed.query(|a| a.gate_output()));
     }
 }
 #[cfg(test)]
@@ -862,5 +1045,22 @@ mod electrical_bus_type_tests {
             ElectricalBusType::DirectCurrentHot(2).to_string(),
             "DC_HOT_2"
         );
+    }
+}
+
+#[cfg(test)]
+mod average_tests {
+    use super::*;
+
+    #[test]
+    fn average_returns_average() {
+        let iterator = [
+            Pressure::new::<hectopascal>(100.),
+            Pressure::new::<hectopascal>(200.),
+            Pressure::new::<hectopascal>(300.),
+        ];
+
+        let average: Pressure = iterator.iter().average();
+        assert_eq!(average, Pressure::new::<hectopascal>(200.));
     }
 }

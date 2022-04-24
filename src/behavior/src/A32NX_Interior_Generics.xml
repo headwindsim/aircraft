@@ -644,4 +644,179 @@
         </Component>
     </Template>
 
+
+    <!--
+    Template for syncing lights. Works by simultaneously toggling the light circuit buses temporary, given a condition.
+    Requires the lights in *.fx to be synced and timed properly to work, as this template only ensures a common timeline.
+
+    Main Parameters:
+            - SYNC_FREQUENCY        Default: 1          Speed of update loop, N per second.
+            - SYNC_TOGGLE_BUSES     <no default>        The buses for the lights that should be synced.
+            - SYNC_CONDITION        <no default>        The condition to trigger a sync. This is often two or more switches.
+            - SYNC_REQUISITE        <no default>        The required main buses for the circuits.
+    -->
+    <Template Name="FBW_Light_Sync">
+        <DefaultTemplateParameters>
+            <SYNC_FREQUENCY>1</SYNC_FREQUENCY>
+            <SYNC_TOGGLE_BUSES></SYNC_TOGGLE_BUSES>
+            <SYNC_CONDITION></SYNC_CONDITION>
+        </DefaultTemplateParameters>
+
+        <UseTemplate Name="ASOBO_GT_Update">
+            <FREQUENCY>#SYNC_FREQUENCY#</FREQUENCY>
+            <UPDATE_CODE>
+                #SYNC_REQUISITE# if{
+                    #SYNC_CONDITION# if{
+                        (O:SYNC_BUS_TMPOFF, bool) 1 == if{
+                            #SYNC_TOGGLE_BUSES#
+                            0 (&gt;O:SYNC_BUS_TMPOFF, bool)
+                            1 (&gt;O:SYNC_BUS_SYNCED, bool)
+                        }
+                        (O:SYNC_BUS_SYNCED, bool) 0 == if{
+                            #SYNC_TOGGLE_BUSES#
+                            1 (&gt;O:SYNC_BUS_TMPOFF, bool)
+                        }
+                    } els{
+                        0 (&gt;O:SYNC_BUS_SYNCED, bool)
+                    }
+                }  els{
+                    0 (&gt;O:SYNC_BUS_SYNCED, bool)
+                }
+            </UPDATE_CODE>
+        </UseTemplate>
+    </Template>
+
+
+    <!--
+    Template for delaying LDG LT and sync them with their animation.
+    Works by disabling the LDG LT bus until landing light is fully extended.
+
+    Main Parameters:
+            - DELAY_FREQUENCY       Default: 10         Speed of update loop, N per second.
+            - DELAY_TIME            <no default>        Delay of the bus.
+            - DELAY_LT_INDEX        <no default>        The LDG LT index.
+            - DELAY_CIRCUIT         <no default>        The LDG LT circuit.
+            - DELAY_BUS             <no default>        The LDG LT bus.
+    -->
+    <Template Name="FBW_LDGLT_Delay">
+        <DefaultTemplateParameters>
+            <DELAY_FREQUENCY>10</DELAY_FREQUENCY>
+            <DELAY_TIME></DELAY_TIME>
+            <DELAY_LT_INDEX></DELAY_LT_INDEX>
+            <DELAY_CIRCUIT></DELAY_CIRCUIT>
+            <DELAY_BUS></DELAY_BUS>
+        </DefaultTemplateParameters>
+
+        <UseTemplate Name="ASOBO_GT_Update">
+            <FREQUENCY>#DELAY_FREQUENCY#</FREQUENCY>
+            <UPDATE_CODE>
+                (L:LIGHTING_LANDING_#DELAY_LT_INDEX#, bool) 1 == if{
+                    (O:DELAY_TIMER_#DELAY_LT_INDEX#, number) #DELAY_TIME# #DELAY_FREQUENCY# * &lt; if{
+                        (O:DELAY_TIMER_#DELAY_LT_INDEX#, number) 1 + (&gt;O:DELAY_TIMER_#DELAY_LT_INDEX#, number)
+                    }
+                    #DELAY_BUS# (>A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#DELAY_CIRCUIT#, Bool) if{
+                        #DELAY_CIRCUIT# #DELAY_BUS# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+                    }
+                }
+                (L:LIGHTING_LANDING_#DELAY_LT_INDEX#, bool) 2 == if{
+                    (O:DELAY_TIMER_#DELAY_LT_INDEX#, number) 0 &gt; if{
+                        (O:DELAY_TIMER_#DELAY_LT_INDEX#, number) 1 - (&gt;O:DELAY_TIMER_#DELAY_LT_INDEX#, number)
+                    }
+                }
+                (L:LIGHTING_LANDING_#DELAY_LT_INDEX#, bool) 0 == if{
+                    (O:DELAY_TIMER_#DELAY_LT_INDEX#, number) #DELAY_TIME# #DELAY_FREQUENCY# * &lt; if{
+                        (O:DELAY_TIMER_#DELAY_LT_INDEX#, number) 1 + (&gt;O:DELAY_TIMER_#DELAY_LT_INDEX#, number)
+                    }
+                    (O:DELAY_TIMER_#DELAY_LT_INDEX#, number) #DELAY_TIME# #DELAY_FREQUENCY# * == if{
+                        #DELAY_BUS# (>A:BUS LOOKUP INDEX, Number) (A:CIRCUIT CONNECTION ON:#DELAY_CIRCUIT#, Bool) ! if{
+                            #DELAY_CIRCUIT# #DELAY_BUS# (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE)
+                        }
+                    }
+                }
+            </UPDATE_CODE>
+        </UseTemplate>
+    </Template>
+
+
+    <!--
+    Template for toggling of light potentiometers that not are bound to a specific lightdef.Type.
+    Needs a condition, requisite and a potentiometer to toggle.
+
+    Main Parameters:
+            - SYNC_FREQUENCY        Default: 1          Speed of update loop, N per second.
+            - TOGGLE_CONDITION      <Boolean>           The condition to trigger a toggle.
+            - TOGGLE_REQUISITE      <Boolean>           The required powered BUS for potentiometer.
+            - POTENTIOMETER         <Number>            The potentiometer index # to toggle.
+    -->
+    <Template Name="FBW_Potentiometer_Toggle">
+        <DefaultTemplateParameters>
+            <SYNC_FREQUENCY>1</SYNC_FREQUENCY>
+            <TOGGLE_REQUISITE></TOGGLE_REQUISITE>
+            <TOGGLE_CONDITION></TOGGLE_CONDITION>
+        </DefaultTemplateParameters>
+
+        <UseTemplate Name="ASOBO_GT_Update">
+            <FREQUENCY>#SYNC_FREQUENCY#</FREQUENCY>
+            <UPDATE_CODE>
+                #TOGGLE_REQUISITE# #TOGGLE_CONDITION# and 100 * #POTENTIOMETER# (&gt;K:2:LIGHT_POTENTIOMETER_SET)
+            </UPDATE_CODE>
+        </UseTemplate>
+    </Template>
+
+
+    <!--
+    Wrapper utility template for animation interaction speeds allowing
+    for control of all button, switches and korry's from one place.
+
+    Main parameters:
+            - ANIM_TYPE             <no default>        Type of interaction (KNOB, SWITCH, BUTTON, BUTTON_HELD, BUTTON_2WAY,
+                                                        BUTTON_PROTECTED, KORRY_BUTTON, KORRY_HELD, KORRY_PROTECTED)
+            - ANIM_TEMPLATE         <no default>        The template to call with these animation parameters
+    -->
+    <Template Name="FBW_Anim_Interactions">
+        <Parameters Type="Default">
+            <Switch Param="ANIM_TYPE">
+                <Case Value="KNOB">
+                    <ANIM_LAG>1000</ANIM_LAG>
+                </Case>
+                <Case Value="SWITCH">
+                    <ANIM_LAG>1000</ANIM_LAG>
+                </Case>
+                <Case Value="BUTTON">
+                    <ANIM_DURATION>0.25</ANIM_DURATION>
+                    <ANIM_LAG>3000</ANIM_LAG>
+                </Case>
+                <Case Value="BUTTON_HELD">
+                    <ANIM_LENGTH>20</ANIM_LENGTH>
+                    <ANIM_DURATION>0.05</ANIM_DURATION>
+                    <ANIM_LAG>1000</ANIM_LAG>
+                </Case>
+                <Case Value="BUTTON_2WAY">
+                    <ANIM_LAG>2500</ANIM_LAG>
+                </Case>
+                <Case Value="BUTTON_PROTECTED">
+                    <ANIM_LENGTH>100</ANIM_LENGTH>
+                    <ANIM_DURATION>0.2</ANIM_DURATION>
+                    <ANIM_LAG>1000</ANIM_LAG>
+                </Case>
+                <Case Value="KORRY_BUTTON">
+                    <ANIM_DURATION>0.2</ANIM_DURATION>
+                    <ANIM_LAG>2000</ANIM_LAG>
+                    <ANIM_LENGTH>100</ANIM_LENGTH>
+                </Case>
+                <Case Value="KORRY_HELD">
+                    <ANIM_LENGTH>20</ANIM_LENGTH>
+                    <ANIM_DURATION>0.05</ANIM_DURATION>
+                    <ANIM_LAG>1000</ANIM_LAG>
+                </Case>
+                <Case Value="KORRY_PROTECTED">
+                    <ANIM_LENGTH>100</ANIM_LENGTH>
+                    <ANIM_DURATION>0.2</ANIM_DURATION>
+                    <ANIM_LAG>1000</ANIM_LAG>
+                </Case>
+            </Switch>
+        </Parameters>
+        <UseTemplate Name="#ANIM_TEMPLATE#"></UseTemplate>
+    </Template>
+
 </ModelBehaviors>

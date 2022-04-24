@@ -19,6 +19,13 @@ enum DisplayUnitState {
     Standby
 }
 
+function BacklightBleed(props) {
+    if (props.homeCockpit) {
+        return null;
+    }
+    return <div className="BacklightBleed" />;
+}
+
 export const DisplayUnit: React.FC<DisplayUnitProps> = (props) => {
     const [coldDark] = useSimVar('L:A32NX_COLD_AND_DARK_SPAWN', 'Bool', 200);
     const [state, setState] = useState((coldDark) ? DisplayUnitState.Off : DisplayUnitState.Standby);
@@ -26,6 +33,7 @@ export const DisplayUnit: React.FC<DisplayUnitProps> = (props) => {
 
     const [potentiometer] = useSimVar(`LIGHT POTENTIOMETER:${props.potentiometerIndex}`, 'percent over 100', 200);
     const [electricityState] = useSimVar(props.electricitySimvar, 'bool', 200);
+    const [homeCockpit] = useSimVar('L:A32NX_HOME_COCKPIT_ENABLED', 'bool', 200);
 
     useUpdate((deltaTime) => {
         if (timer !== null) {
@@ -38,6 +46,11 @@ export const DisplayUnit: React.FC<DisplayUnitProps> = (props) => {
                 setState(DisplayUnitState.On);
                 setTimer(null);
             }
+        }
+
+        // override MSFS menu animations setting for this instrument
+        if (!document.documentElement.classList.contains('animationsEnabled')) {
+            document.documentElement.classList.add('animationsEnabled');
         }
     });
 
@@ -57,12 +70,12 @@ export const DisplayUnit: React.FC<DisplayUnitProps> = (props) => {
             setState(DisplayUnitState.Off);
             setTimer(null);
         }
-    });
+    }, [state, potentiometer, electricityState]);
 
     if (state === DisplayUnitState.Selftest) {
         return (
             <>
-                <div className="BacklightBleed" />
+                <BacklightBleed homeCockpit={homeCockpit} />
                 <svg className="SelfTest" viewBox="0 0 600 600">
                     <rect className="SelfTestBackground" x="0" y="0" width="100%" height="100%" />
 
@@ -88,9 +101,10 @@ export const DisplayUnit: React.FC<DisplayUnitProps> = (props) => {
             <></>
         );
     }
+
     return (
         <>
-            <div className="BacklightBleed" />
+            <BacklightBleed homeCockpit={homeCockpit} />
             <div style={{ display: state === DisplayUnitState.On ? 'block' : 'none' }}>{props.children}</div>
         </>
     );

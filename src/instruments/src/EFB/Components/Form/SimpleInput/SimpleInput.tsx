@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 type SimpleInputProps = {
     label?: string,
@@ -6,6 +6,8 @@ type SimpleInputProps = {
     labelPosition?: 'col' | 'row';
     value?: any,
     onChange?: (value: string) => void,
+    onFocus?: (value: string) => void,
+    onBlur?: (value: string) => void
     min?: number,
     max?: number,
     number?: boolean,
@@ -16,9 +18,10 @@ type SimpleInputProps = {
     className?: string,
     maxLength?: number,
     noLabel?: boolean,
+    disabled?: boolean,
 };
 
-const SimpleInput: FC<SimpleInputProps> = (props) => {
+const SimpleInput = (props: SimpleInputProps) => {
     const [displayValue, setDisplayValue] = useState<string>(props.value?.toString() ?? '');
     const [focused, setFocused] = useState(false);
 
@@ -32,18 +35,23 @@ const SimpleInput: FC<SimpleInputProps> = (props) => {
     }, [props.value]);
 
     const onChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        let originalValue = event.currentTarget.value;
+        if (!props.disabled) {
+            let originalValue = event.currentTarget.value;
 
-        if (props.number) {
-            originalValue = originalValue.replace(/[^\d.-]/g, ''); // Replace all non-numeric characters
+            if (props.number) {
+                originalValue = originalValue.replace(/[^\d.-]/g, ''); // Replace all non-numeric characters
+            }
+
+            props.onChange?.(originalValue);
+            setDisplayValue(originalValue);
         }
-
-        props.onChange?.(originalValue);
-        setDisplayValue(originalValue);
     };
 
-    const onFocus = (): void => {
+    const onFocus = (event: React.FocusEvent<HTMLInputElement>): void => {
         setFocused(true);
+        if (!props.disabled) {
+            props.onFocus?.(event.target.value);
+        }
     };
 
     const onFocusOut = (event: React.FocusEvent<HTMLInputElement>): void => {
@@ -52,9 +60,16 @@ const SimpleInput: FC<SimpleInputProps> = (props) => {
 
         setDisplayValue(constrainedValue);
         setFocused(false);
+
+        if (!props.disabled) {
+            props.onBlur?.(event.target.value);
+        }
     };
 
     const getConstrainedValue = (value: string): string => {
+        if (!props.number) {
+            return value;
+        }
         let constrainedValue = value;
         let numericValue = parseFloat(value);
 
@@ -86,13 +101,12 @@ const SimpleInput: FC<SimpleInputProps> = (props) => {
     };
 
     useEffect(() => {
-        if (!process.env.SIMVAR_DISABLE) {
-            if (focused) {
-                Coherent.trigger('FOCUS_INPUT_FIELD');
-            } else {
-                Coherent.trigger('UNFOCUS_INPUT_FIELD');
-            }
+        if (focused) {
+            Coherent.trigger('FOCUS_INPUT_FIELD');
+        } else {
+            Coherent.trigger('UNFOCUS_INPUT_FIELD');
         }
+
         return () => {
             Coherent.trigger('UNFOCUS_INPUT_FIELD');
         };
@@ -112,6 +126,7 @@ const SimpleInput: FC<SimpleInputProps> = (props) => {
                             onFocus={onFocus}
                             onBlur={onFocusOut}
                             maxLength={props.maxLength}
+                            disabled={props.disabled}
                         />
                     </>
                 )
@@ -129,6 +144,7 @@ const SimpleInput: FC<SimpleInputProps> = (props) => {
                                     onFocus={onFocus}
                                     onBlur={onFocusOut}
                                     maxLength={props.maxLength}
+                                    disabled={props.disabled}
                                 />
                             </div>
                         </div>

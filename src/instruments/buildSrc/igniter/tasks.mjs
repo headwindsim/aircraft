@@ -40,6 +40,22 @@ const ecamPages = [
         name: 'fuel-page',
         path: 'SD/Pages/Fuel',
     },
+    {
+        name: 'apu-page',
+        path: 'SD/Pages/Apu',
+    },
+    {
+        name: 'press-page',
+        path: 'SD/Pages/Press',
+    },
+    {
+        name: 'bleed-page',
+        path: 'SD/Pages/Bleed',
+    },
+    {
+        name: 'status-page',
+        path: 'SD/Pages/Status',
+    },
 ];
 
 export function getInputs() {
@@ -60,12 +76,12 @@ export function getInstrumentsIgniterTasks() {
         ...baseInstruments.map(({ name }) => new ExecTask(
             name,
             `node src/instruments/buildSrc/igniter/worker.mjs ${name}`,
-            [join('src/instruments/src', name), join('headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339', name)],
+            [join('src/instruments/src', name), join('headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX', name)],
         )),
         ...ecamPages.map(({ name, path }) => new ExecTask(
             name,
             `node src/instruments/buildSrc/igniter/worker.mjs ${name}`,
-            [join('src/instruments/src', path), join('headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339/EcamPages', name)],
+            [join('src/instruments/src', path), join('headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX/EcamPages', name)],
         )),
     ];
 }

@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from '@instruments/common/index';
 import { PageTitle } from '../../Common/PageTitle';
-import { getRenderTarget, setIsEcamPage } from '../../../Common/defaults';
+import { setIsEcamPage } from '../../../Common/defaults';
 import { SimVarProvider, useSimVar } from '../../../Common/simVars';
 import { EcamPage } from '../../Common/EcamPage';
 import { SvgGroup } from '../../Common/SvgGroup';
@@ -244,7 +244,7 @@ const Bus = ({ x, y, width, name, number, isNormal, isShed } : BusProps) => {
     return (
         <SvgGroup x={x} y={y}>
             <rect width={width} height={busHeight} className="Bus" />
-            <text x={width / 2} y={10.5} className={`Large ${number ? 'Right' : 'Middle'} ${isNormal ? 'Green' : 'Amber'}`} dominantBaseline="middle">{name}</text>
+            <text x={width / 2} y={21} className={`QuiteLarge ${number ? 'Right' : 'Middle'} ${isNormal ? 'Green' : 'Amber'}`}>{name}</text>
             {number ? <text x={(width / 2) + 3.75} y={22} className={`ExtraLarge ${isNormal ? 'Green' : 'Amber'}`}>{number}</text> : null}
             {isShed ? <text x={(width / 2)} y={busHeight + 8.25} className="Middle ExtraSmall Amber" dominantBaseline="middle">SHED</text> : null}
         </SvgGroup>
@@ -518,4 +518,4 @@ const Wire = ({ d, amber }: WireProps) => {
     return <path className={classes} d={d} />;
 };
 
-ReactDOM.render(<SimVarProvider><ElecPage /></SimVarProvider>, getRenderTarget());
+render(<SimVarProvider><ElecPage /></SimVarProvider>);

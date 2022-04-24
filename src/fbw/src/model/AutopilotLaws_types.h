@@ -2,6 +2,22 @@
 #define RTW_HEADER_AutopilotLaws_types_h_
 #include "rtwtypes.h"
 
+#ifndef DEFINED_TYPEDEF_FOR_ap_raw_laws_flare_
+#define DEFINED_TYPEDEF_FOR_ap_raw_laws_flare_
+
+struct ap_raw_laws_flare
+{
+  boolean_T condition_Flare;
+  real_T H_dot_radio_fpm;
+  real_T H_dot_c_fpm;
+  real_T delta_Theta_H_dot_deg;
+  real_T delta_Theta_bz_deg;
+  real_T delta_Theta_bx_deg;
+  real_T delta_Theta_beta_c_deg;
+};
+
+#endif
+
 #ifndef DEFINED_TYPEDEF_FOR_ap_raw_time_
 #define DEFINED_TYPEDEF_FOR_ap_raw_time_
 
@@ -67,6 +83,7 @@ struct ap_raw_data
   real_T flight_guidance_xtk_nmi;
   real_T flight_guidance_tae_deg;
   real_T flight_guidance_phi_deg;
+  real_T flight_guidance_phi_limit_deg;
   real_T flight_phase;
   real_T V2_kn;
   real_T VAPP_kn;
@@ -89,6 +106,9 @@ struct ap_raw_data
   real_T flaps_handle_index;
   boolean_T is_engine_operative_1;
   boolean_T is_engine_operative_2;
+  real_T altimeter_setting_left_mbar;
+  real_T altimeter_setting_right_mbar;
+  real_T total_weight_kg;
 };
 
 #endif
@@ -108,6 +128,7 @@ struct ap_raw_laws_input
   real_T vertical_mode_armed;
   real_T mode_reversion_lateral;
   real_T mode_reversion_vertical;
+  real_T mode_reversion_vertical_target_fpm;
   boolean_T mode_reversion_TRK_FPA;
   boolean_T mode_reversion_triple_click;
   boolean_T mode_reversion_fma;
@@ -123,6 +144,9 @@ struct ap_raw_laws_input
   boolean_T EXPED_mode_active;
   boolean_T FD_disconnect;
   boolean_T FD_connect;
+  boolean_T TCAS_message_disarm;
+  boolean_T TCAS_message_RA_inhibit;
+  boolean_T TCAS_message_TRK_FPA_deselection;
 };
 
 #endif
@@ -188,6 +212,7 @@ struct ap_data
   real_T flight_guidance_xtk_nmi;
   real_T flight_guidance_tae_deg;
   real_T flight_guidance_phi_deg;
+  real_T flight_guidance_phi_limit_deg;
   real_T flight_phase;
   real_T V2_kn;
   real_T VAPP_kn;
@@ -209,6 +234,8 @@ struct ap_data
   real_T flaps_handle_index;
   boolean_T is_engine_operative_1;
   boolean_T is_engine_operative_2;
+  boolean_T altimeter_setting_changed;
+  real_T total_weight_kg;
 };
 
 #endif
@@ -232,8 +259,10 @@ struct ap_raw_output
 {
   real_T ap_on;
   real_T Phi_loc_c;
+  real_T Nosewheel_c;
   ap_raw_output_command flight_director;
   ap_raw_output_command autopilot;
+  ap_raw_laws_flare flare_law;
 };
 
 #endif
@@ -259,6 +288,54 @@ struct ap_output_law
   real_T flight_director;
   real_T autopilot;
 };
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_lateral_mode_
+#define DEFINED_TYPEDEF_FOR_lateral_mode_
+
+typedef enum {
+  lateral_mode_NONE = 0,
+  lateral_mode_HDG = 10,
+  lateral_mode_TRACK = 11,
+  lateral_mode_NAV = 20,
+  lateral_mode_LOC_CPT = 30,
+  lateral_mode_LOC_TRACK = 31,
+  lateral_mode_LAND = 32,
+  lateral_mode_FLARE = 33,
+  lateral_mode_ROLL_OUT = 34,
+  lateral_mode_RWY = 40,
+  lateral_mode_RWY_TRACK = 41,
+  lateral_mode_GA_TRACK = 50
+} lateral_mode;
+
+#endif
+
+#ifndef DEFINED_TYPEDEF_FOR_vertical_mode_
+#define DEFINED_TYPEDEF_FOR_vertical_mode_
+
+typedef enum {
+  vertical_mode_NONE = 0,
+  vertical_mode_ALT = 10,
+  vertical_mode_ALT_CPT = 11,
+  vertical_mode_OP_CLB = 12,
+  vertical_mode_OP_DES = 13,
+  vertical_mode_VS = 14,
+  vertical_mode_FPA = 15,
+  vertical_mode_ALT_CST = 20,
+  vertical_mode_ALT_CST_CPT = 21,
+  vertical_mode_CLB = 22,
+  vertical_mode_DES = 23,
+  vertical_mode_FINAL_DES = 24,
+  vertical_mode_GS_CPT = 30,
+  vertical_mode_GS_TRACK = 31,
+  vertical_mode_LAND = 32,
+  vertical_mode_FLARE = 33,
+  vertical_mode_ROLL_OUT = 34,
+  vertical_mode_SRS = 40,
+  vertical_mode_SRS_GA = 41,
+  vertical_mode_TCAS = 50
+} vertical_mode;
 
 #endif
 #endif

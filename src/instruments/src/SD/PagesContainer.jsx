@@ -1,17 +1,17 @@
-import { useState } from 'react/cjs/react.production.min.js';
+import { useState } from 'react';
 import { getSimVar, useInteractionEvent } from '../util.js';
 import { EngPage } from './Pages/Eng/Eng.tsx';
-import { BleedPage } from './Pages/Bleed.jsx';
-import { PressPage } from './Pages/Press.jsx';
+import { BleedPage } from './Pages/Bleed/Bleed.tsx';
+import { PressPage } from './Pages/Press/Press.tsx';
 import { ElecPage } from './Pages/Elec/Elec.tsx';
 import { HydPage } from './Pages/Hyd/Hyd.tsx';
 import { FuelPage } from './Pages/Fuel/Fuel.tsx';
-import { ApuPage } from './Pages/Apu.jsx';
+import { ApuPage } from './Pages/Apu/Apu.tsx';
 import { CondPage } from './Pages/Cond/Cond.tsx';
 import { DoorPage } from './Pages/Door/Door.tsx';
 import { WheelPage } from './Pages/Wheel/Wheel.tsx';
 import { FctlPage } from './Pages/Fctl/Fctl.tsx';
-import { StatusPage } from './Pages/Status.jsx';
+import { StatusPage } from './Pages/Status/Status.tsx';
 import { CrzPage } from './Pages/Crz/Crz.tsx';
 
 export const PagesContainer = () => {

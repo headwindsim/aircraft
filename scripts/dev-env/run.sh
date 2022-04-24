@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE="ghcr.io/kevinwidjaja21/a339-fbw@sha256:79a522e325745b6fd8957504169291b919b0a350c834794ca9c6fa4ae0da75c5"
+IMAGE="ghcr.io/flybywiresim/dev-env@sha256:b7c1230b06425d2c3499545cef1ca831455845ec05e40d105969ae50f6074013"
 
 # only set `-it` if there is a tty
 if [ -t 0 ] && [ -t 1 ];
@@ -11,7 +11,7 @@ fi
 # Disable git-bash path conversion on windows
 export MSYS_NO_PATHCONV=1
 
-docker image inspect $IMAGE 1> /dev/null || docker system prune --filter label=kevinwidjaja21=true -f
+docker image inspect $IMAGE 1> /dev/null || docker system prune --filter label=flybywiresim=true -f
 
 docker run \
     --rm $TTY_PARAM \

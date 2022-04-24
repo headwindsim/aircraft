@@ -6,10 +6,10 @@ edition = "2018"
 
 [lib]
 test = false
-doctest = false
-doc = false
 
 [dependencies]
 uom = "0.30.0"
 systems = { path = "../systems" }
 msfs = { git = "https://github.com/flybywiresim/msfs-rs", branch = "main" }
+fxhash = "0.2.1"
+enum_dispatch = "0.3.7"
