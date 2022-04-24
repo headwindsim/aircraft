@@ -10,7 +10,6 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.draft == false
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
