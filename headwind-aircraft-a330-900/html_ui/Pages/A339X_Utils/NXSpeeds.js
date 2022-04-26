@@ -331,7 +331,7 @@ function _correctMass(m) {
 /**
  * Calculate green dot speed
  * Calculation:
- * Gross weight (t) * 2 + 85 when below FL200
+ * Gross weight (t) * 0.6 + 107 when below FL200
  * @returns {number}
  */
 function _computeGD(m) {

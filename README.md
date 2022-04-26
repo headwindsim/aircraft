@@ -26,18 +26,6 @@ For Git Bash/Linux:
 ```shell
 ./scripts/dev-env/run.sh ./scripts/build.sh
 ```
-- Drag and drop fspackagetool.exe to the project root.
-- Drag HeadwindA330neo.xml to fspackagetool.exe to build the package.
-Alternatively, you can run following command to build:
-
-For powershell:
-```shell
-.\fspackagetool.exe HeadwindA330neo.xml
-```
-For Git Bash/Linux:
-```shell
-./fspackagetool.exe HeadwindA330neo.xml
-```
 
 ## Open source
 Open Source Projects contributing to the realisation of this MSFS A330-900 Neo :
