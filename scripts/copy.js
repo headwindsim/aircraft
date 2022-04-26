@@ -21,14 +21,14 @@ fs.mkdirSync("../src", { recursive: true });
 const buildDir = path.resolve(__dirname, '..', 'src');
 
 const a32nxSourcesDir = path.resolve(__dirname, '..', 'a32nx/src');
-const customSourcesDir = path.resolve(__dirname, '..', 'a339-src');
+const customSourcesDir = path.resolve(__dirname, '..', 'src-a339');
 
 
 fs.mkdirSync("../headwind-aircraft-a330-900/html_ui", { recursive: true });
 const distDir = path.resolve(__dirname, '..', 'headwind-aircraft-a330-900/html_ui');
 
 const a32nxHtmlUiDir = path.resolve(__dirname, '..', 'a32nx/flybywire-aircraft-a320-neo/html_ui');
-const customHtmlUiDir = path.resolve(__dirname, '..', 'a339-src/html_ui');
+const customHtmlUiDir = path.resolve(__dirname, '..', 'src-a339/html_ui');
 
 
 copyDir(a32nxSourcesDir, buildDir);
