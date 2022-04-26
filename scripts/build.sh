@@ -2,6 +2,12 @@
 
 set -ex
 
+# run copy task
+node scripts/copy.js
+
+chmod +x ./src/fbw/build.sh
+chmod +x ./src/fadec/build.sh
+
 # store current file ownership
 ORIGINAL_USER_ID=$(stat -c '%u' /external)
 ORIGINAL_GROUP_ID=$(stat -c '%g' /external)

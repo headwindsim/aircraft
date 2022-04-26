@@ -10,13 +10,15 @@ jobs:
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      MAIN_PRE_RELEASE_ID: 64726828
+      MAIN_PRE_RELEASE_ID: 65166047
       MAIN_PRE_RELEASE_TAG: vmain
       MAIN_ZIP_NAME: headwind-aircraft-a330-900-main.zip
       BUILD_DIR_NAME: vmain
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: Set BUILT_DATE_TIME
         run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
