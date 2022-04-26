@@ -14,6 +14,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: install
         run: sudo ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: npm run lint

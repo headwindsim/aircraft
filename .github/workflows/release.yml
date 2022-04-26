@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: Create .env file
         run: |
           echo A32NX_PRODUCTION_BUILD=1 >> .env
