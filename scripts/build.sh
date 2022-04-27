@@ -5,10 +5,10 @@ set -ex
 # run copy task
 #node scripts/copy.js
 
-cp -rva /a32nx/src /src
-cp -rva /src-a339 ~/src
+cp -rva /a32nx/src/. /src
+cp -rva /src-a339/. /src
 
-cp -rva /a32nx/flybywire-aircraft-a320-neo/html_ui /headwind-aircraft-a330-900/html_ui
+cp -rva /a32nx/flybywire-aircraft-a320-neo/html_ui/. /headwind-aircraft-a330-900/html_ui
 
 mv /headwind-aircraft-a330-900/html_ui/JS /headwind-aircraft-a330-900/html_ui/A339X_JS
 mv /headwind-aircraft-a330-900/html_ui/Fonts /headwind-aircraft-a330-900/html_ui/A339X_Fonts
@@ -23,7 +23,7 @@ mv /headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/A32
 mv /headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/LogicElements /headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/A339X_LogicElements
 mv /headwind-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer /headwind-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/A339X_Printer
 
-cp -rva /src-a339/html_ui ~/headwind-aircraft-a330-900/html_ui
+cp -rva /src-a339/html_ui/. /headwind-aircraft-a330-900/html_ui
 
 chmod +x ./src/fbw/build.sh
 chmod +x ./src/fadec/build.sh
