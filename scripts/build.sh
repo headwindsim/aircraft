@@ -4,8 +4,8 @@ set -ex
 
 # copy from fbw source
 ls
-cp -rva ./a32nx/src/. /src
-cp -rva ./src-a339/. /src
+cp -rva ./a32nx/src/. ./src
+cp -rva ./src-a339/. ./src
 
 cp -rva ./a32nx/flybywire-aircraft-a320-neo/html_ui/. ./headwind-aircraft-a330-900/html_ui
 
