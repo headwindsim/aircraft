@@ -60,12 +60,12 @@ export function getInstrumentsIgniterTasks() {
         ...baseInstruments.map(({ name }) => new ExecTask(
             name,
             `node src/instruments/buildSrc/igniter/worker.mjs ${name}`,
-            [join('src/instruments/src', name), join('headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX', name)],
+            [join('src/instruments/src', name), join('headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X', name)],
         )),
         ...ecamPages.map(({ name, path }) => new ExecTask(
             name,
             `node src/instruments/buildSrc/igniter/worker.mjs ${name}`,
-            [join('src/instruments/src', path), join('headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX/EcamPages', name)],
+            [join('src/instruments/src', path), join('headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/EcamPages', name)],
         )),
     ];
 }

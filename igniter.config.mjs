@@ -4,7 +4,7 @@ import { getInstrumentsIgniterTasks } from './src/instruments/buildSrc/igniter/t
 export default new TaskOfTasks('a330-900', [
     new TaskOfTasks('build', [
         new TaskOfTasks('instruments', getInstrumentsIgniterTasks(), true),
-        new ExecTask('failures','npm run build:failures', ['src/failures', 'headwind-aircraft-a330-900/html_ui/JS/generated/failures.js']),
+        new ExecTask('failures','npm run build:failures', ['src/failures', 'headwind-aircraft-a330-900/html_ui/A339X_JS/generated/failures.js']),
         new ExecTask('behavior','node src/behavior/build.js', ['src/behavior', 'headwind-aircraft-a330-900/ModelBehaviorDefs/A339X/generated']),
         new ExecTask('systems', [
             'cargo build --target wasm32-wasi --release',

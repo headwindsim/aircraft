@@ -55,7 +55,7 @@ class A32NX_Boarding {
     }
 
     async loadPayload() {
-        const MAX_SEAT_AVAILABLE = 298;
+        const MAX_SEAT_AVAILABLE = 290;
         const PAX_WEIGHT = 84;
         const BAG_WEIGHT = 20;
 
