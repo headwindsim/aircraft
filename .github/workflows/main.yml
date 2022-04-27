@@ -10,7 +10,7 @@ jobs:
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      MAIN_PRE_RELEASE_ID: 65411308
+      MAIN_PRE_RELEASE_ID: 64726828
       MAIN_PRE_RELEASE_TAG: vmain
       MAIN_ZIP_NAME: headwind-aircraft-a330-900-main.zip
       BUILD_DIR_NAME: vmain
