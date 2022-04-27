@@ -45,6 +45,6 @@ fs.renameSync("../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/
 fs.renameSync("../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/FlightElements", "../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X_FlightElements");
 fs.renameSync("../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/A320_Neo", "../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/A339X");
 fs.renameSync("../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/LogicElements", "../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/A339X_LogicElements");
-fs.renameSync("../headwind-aircraft-a330-900/html_ui/Pages/VLiveries/Liveries/Printer", "../headwind-aircraft-a330-900/html_ui/Pages/VLiveries/Liveries/A339X_Printer");
+fs.renameSync("../headwind-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer", "../headwind-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/A339X_Printer");
 
 copyDir(customHtmlUiDir, distDir);
