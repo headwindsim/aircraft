@@ -14,8 +14,12 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: install
         run: sudo ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
       - name: npm run lint
         run: ./scripts/dev-env/run.sh npm run lint
       - name: lint-rust.sh
@@ -27,6 +31,10 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
       - name: test-rust.sh
         run: |
           ./scripts/dev-env/run.sh scripts/test-rust.sh
@@ -36,8 +44,12 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: npm install
         run: ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
       - name: npm test
         run: npm test
   build:
@@ -46,21 +58,27 @@ jobs:
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: HEADWIND-A339.zip
+      ZIP_NAME: HEADWIND-A339X.zip
       BUILD_DIR_NAME: zip-build
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
-      - name: Build A339
+        with:
+          submodules: recursive
+      - name: Setup Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: Copy Sources
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/copy.sh
+      - name: Build A339X Package
+        run: |
           ./scripts/dev-env/run.sh ./scripts/build.sh --no-tty -j 4
-          ls
       - name: Generate ZIP file
         run: |
           mkdir ./${{ env.BUILD_DIR_NAME }}
           zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwind-aircraft-a330-900/
       - uses: actions/upload-artifact@v2
         with:
-          name: HEADWIND-A339
+          name: HEADWIND-A339X
           path: ${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }}

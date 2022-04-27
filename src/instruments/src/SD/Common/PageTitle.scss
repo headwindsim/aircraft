@@ -1,9 +1,0 @@
-@import "./definitions";
-
-#pageTitle {
-  &.PageTitle {
-    font-size: $font-size-title;
-    text-decoration: underline;
-    fill: $display-white;
-  }
-}

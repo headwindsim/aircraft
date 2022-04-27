@@ -1,7 +1,7 @@
 import { ExecTask, TaskOfTasks } from '@flybywiresim/igniter';
 import { getInstrumentsIgniterTasks } from './src/instruments/buildSrc/igniter/tasks.mjs';
 
-export default new TaskOfTasks('a32nx', [
+export default new TaskOfTasks('a330-900', [
     new TaskOfTasks('build', [
         new TaskOfTasks('instruments', getInstrumentsIgniterTasks(), true),
         new ExecTask('failures','npm run build:failures', ['src/failures', 'headwind-aircraft-a330-900/html_ui/JS_A339/generated/failures.js']),
