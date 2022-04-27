@@ -34,21 +34,21 @@
 
 @font-face {
   font-family: "Roboto";
-  src: url("/A339X_Fonts/RobotoMono-Medium.ttf") format("truetype");
+  src: url("/Fonts/RobotoMono-Medium.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Roboto-Light";
-  src: url("/A339X_Fonts/RobotoMono-Light.ttf") format("truetype");
+  src: url("/Fonts/RobotoMono-Light.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Roboto-Bold";
-  src: url("/A339X_Fonts/RobotoMono-Bold.ttf") format("truetype");
+  src: url("/Fonts/RobotoMono-Bold.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
