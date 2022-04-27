@@ -25,9 +25,14 @@ jobs:
           echo CLIENT_ID=${{ secrets.NAVIGRAPH_CLIENT_ID }} >> .env
           echo CLIENT_SECRET=${{ secrets.NAVIGRAPH_CLIENT_SECRET }} >> .env
           echo CHARTFOX_SECRET=${{ secrets.CHARTFOX_SECRET }} >> .env
-      - name: Build A330-900
+      - name: Setup Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: Copy Sources
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/copy.sh
+      - name: Build A339X Package
+        run: |
           ./scripts/dev-env/run.sh ./scripts/build.sh --no-tty -j 4
       - name: Build ZIP file
         run: |
