@@ -18,6 +18,8 @@ jobs:
           submodules: recursive
       - name: install
         run: sudo ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
       - name: npm run lint
         run: ./scripts/dev-env/run.sh npm run lint
       - name: lint-rust.sh
@@ -29,6 +31,10 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
       - name: test-rust.sh
         run: |
           ./scripts/dev-env/run.sh scripts/test-rust.sh
@@ -38,8 +44,12 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
       - name: npm install
         run: ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
       - name: npm test
         run: npm test
   build:
