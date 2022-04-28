@@ -1,7 +1,7 @@
 {
   "name": "A339-a32nx",
-  "version": "0.104",
-  "edition": "development",
+  "version": "0.105",
+  "edition": "stable",
   "scripts": {
     "lint": "eslint --cache **/*.{js,mjs,jsx,ts,tsx}",
     "lint-fix": "npm run lint -- --fix",
