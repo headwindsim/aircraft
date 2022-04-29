@@ -1,12 +1,17 @@
-# Headwind A330-900neo for MSFS
+[![GitHub latest release version](https://img.shields.io/github/v/release/headwind-msfs/a330-900.svg?style=for-the-badge)](https://github.com/headwind-msfs/a330-900/releases/latest)
+[![Github All Releases download count](https://img.shields.io/github/downloads/headwind-msfs/a330-900/total?style=for-the-badge)](https://github.com/headwind-msfs/a330-900/releases/latest)
+[![GitHub contributors](https://img.shields.io/github/contributors/headwind-msfs/a330-900.svg?style=for-the-badge)](https://github.com/headwind-msfs/a330-900/graphs/contributors)
 
-This is the main repository hosting the source code of the freeware A330-900neo for MSFS. If you only want to use the aircraft in MSFS please use this package : https://flightsim.to/file/18198/airbus-a330-900neo-conversion
-If you want to contribute pull this repository and drag & drop the HeadwindA330neo.xml over fspackagetool.exe
+[![Discord](https://img.shields.io/discord/965000103150645258.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.com/invite/UxWy8C6kgv)
+
+# Headwind A339X - A330-900neo
+
+Welcome to the Headwind A339X Project! This is a open source project to create a free Airbus A330-900neo in Microsoft Flight Simulator and is mainly based on the FlyByWire A32NX. If you only want to use the aircraft in MSFS please download the Addon here: https://flightsim.to/file/18198/airbus-a330-900neo-conversion
 
 ## How to build
 Make sure docker are isntalled. Prefferably with WSL2 backend.
 
-- First, run following command on powershell. This will install the A32NX docker images and node modules.
+#### 1. First, run following command on powershell. This will install the A32NX docker images and node modules.
 
 For powershell:
 ```shell
@@ -16,7 +21,18 @@ For Git Bash/Linux:
 ```shell
 ./scripts/dev-env/run.sh ./scripts/setup.sh
 ```
-- Build all A32NX module by running following command on powershell. This isntall A32NX modules to PackageSources.
+#### 2. As next step we will copy the original source files and copy-over our source files.
+
+For powershell:
+```shell
+.\scripts\dev-env\run.cmd ./scripts/copy.sh
+```
+For Git Bash/Linux:
+```shell
+./scripts/dev-env/run.sh ./scripts/copy.sh
+```
+
+#### 3. Build all A32NX module by running following command on powershell. 
 
 For powershell:
 ```shell
@@ -26,6 +42,8 @@ For Git Bash/Linux:
 ```shell
 ./scripts/dev-env/run.sh ./scripts/build.sh
 ```
+
+#### 4. The package is now ready to use. Copy the folder "headwind-aircraft-a330-900" to your CommunityPackage folder in MSFS.
 
 ## Open source
 Open Source Projects contributing to the realisation of this MSFS A330-900 Neo :
