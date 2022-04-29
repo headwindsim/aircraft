@@ -2,7 +2,7 @@
 [![Github All Releases download count](https://img.shields.io/github/downloads/headwind-msfs/a330-900/total?style=for-the-badge)](https://github.com/headwind-msfs/a330-900/releases/latest)
 [![GitHub contributors](https://img.shields.io/github/contributors/headwind-msfs/a330-900.svg?style=for-the-badge)](https://github.com/headwind-msfs/a330-900/graphs/contributors)
 
-[![Discord](https://img.shields.io/discord/965000103150645258.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.com/invite/UxWy8C6kgv)
+[![Discord](https://img.shields.io/discord/965000103150645258?label=Discord&style=for-the-badge)](https://discord.com/invite/UxWy8C6kgv)
 
 # Headwind A339X - A330-900neo
 
