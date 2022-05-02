@@ -11,6 +11,7 @@
 /headwind-aircraft-a330-900/build_info.json
 /headwind-aircraft-a330-900/html_ui/**
 /headwind-aircraft-a330-900/**/*.png
+/headwind-aircraft-a330-900/ModelBehaviorDefs/A339X/generated
 !/docs/**
 !/src-a339/**
 !/scripts/**
