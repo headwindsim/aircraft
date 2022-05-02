@@ -40,9 +40,7 @@ node_modules
 /src-a339/instruments/src/EFB/dist
 /src-a339/instruments/buildSrc/custom/*
 /src-a339/autothrottle/target
-/src-a339/package/Package
-/src-a339/package/PackageSources/*
-!/src-a339/package/PackageSources/**/*.png
+/src-a339/project/Packages
 *.wasm
 /target
 /src-a339/instruments/src/EFB/web/
