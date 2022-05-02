@@ -1,6 +1,7 @@
 # Math JS External Library https://mathjs.org/
 headwind-aircraft-a330-900/html_ui/Pages/A32NX_Core/math.js
 a32nx/flybywire-aircraft-a320-neo/html_ui/Pages/A32NX_Core/math.js
+headwind-aircraft-a330-900/html_ui/Pages/A339X_Core/math.js
 build.*.js
 buildSrc/*
 igniter.config.mjs
