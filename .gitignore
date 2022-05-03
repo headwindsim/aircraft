@@ -60,3 +60,4 @@ src/instruments/buildSrc/custom/*
 !/headwind-aircraft-a330-900/CORS SERVER/*
 msfs-avionics-mirror/src/sdk/build/**
 *.tgz
+/src
