@@ -5,8 +5,8 @@
     "es2021": true
   },
   "ignorePatterns": [
-    "/headwind-aircraft-a330-900/html_ui/JS/fmgc/**",
-    "/headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX/**",
+    "/headwind-aircraft-a330-900/html_ui/JS_A339/fmgc/**",
+    "/headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/**",
     "typings/**"
   ],
   // DO NOT CHANGE THIS FILE (unless you are an admin) (if admin, make sure you change the same file in the latest asobo branch as well)
