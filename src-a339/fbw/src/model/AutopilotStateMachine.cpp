@@ -1384,7 +1384,7 @@ void AutopilotStateMachineModelClass::AutopilotStateMachine_FLARE_during(void)
 {
   AutopilotStateMachine_B.out.mode = vertical_mode_FLARE;
   AutopilotStateMachine_B.out.law = vertical_law_FLARE;
-  if ((AutopilotStateMachine_B.BusAssignment_g.data.H_radio_ft <= 50.0) &&
+  if ((AutopilotStateMachine_B.BusAssignment_g.data.H_radio_ft <= 45.0) &&
       ((AutopilotStateMachine_B.BusAssignment_g.output.enabled_AP1 != 0.0) ||
        (AutopilotStateMachine_B.BusAssignment_g.output.enabled_AP2 != 0.0))) {
     AutopilotStateMachine_B.out.mode_autothrust = athr_requested_mode_THRUST_IDLE;

@@ -440,7 +440,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.managedSpeedLimitAlt = 10000;
         this.managedSpeedClimb = 300;
         this.managedSpeedClimbIsPilotEntered = false;
-        this.managedSpeedClimbMach = .80;
+        this.managedSpeedClimbMach = .82;
         // this.managedSpeedClimbMachIsPilotEntered = false;
         this.managedSpeedCruise = 300;
         this.managedSpeedCruiseIsPilotEntered = false;
@@ -448,7 +448,7 @@ class FMCMainDisplay extends BaseAirliners {
         // this.managedSpeedCruiseMachIsPilotEntered = false;
         this.managedSpeedDescend = 300;
         this.managedSpeedDescendIsPilotEntered = false;
-        this.managedSpeedDescendMach = .80;
+        this.managedSpeedDescendMach = .82;
         // this.managedSpeedDescendMachIsPilotEntered = false;
         this.cruiseFlightLevelTimeOut = undefined;
         this.flaps = NaN;
