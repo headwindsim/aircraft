@@ -2,19 +2,19 @@
  * TO V2 speed table
  * calls function(gross weight (t)) which returns CAS.
  * Indexes: 0 - Config 1 + F, 1 - Config 2, 2 - Config 3.
- * Sub-Indexes: 0 to 7 represent gross weight (t) in 20t steps from 100 to 240.
+ * Sub-Indexes: 0 to 9 represent gross weight (t) in 5t steps from 40 to 80.
  */
 const to = [
     [
         () => 126,
         () => 126,
         () => 126,
-        () => 126,
-        () => 127,
-        () => 132,
-        () => 137,
-        () => 142,
-        () => 147,
+        (m) => 126 + 0.2 * (m - 50),
+        (m) => 127 + m - 55,
+        (m) => 132 + m - 60,
+        (m) => 137 + m - 65,
+        (m) => 142 + m - 70,
+        (m) => 147 + m - 75,
         () => 151
     ], // Conf 1 + F
     [
@@ -22,11 +22,11 @@ const to = [
         () => 126,
         () => 126,
         () => 126,
-        (m) => 126,
-        (m) => 127,
-        (m) => 132,
-        (m) => 137,
-        (m) => 141,
+        (m) => 126 + 0.2 * (m - 55),
+        (m) => 127 + m - 60,
+        (m) => 132 + m - 65,
+        (m) => 137 + 0.8 * (m - 70),
+        (m) => 141 + m - 75,
         () => 146
     ], // Conf 2
     [
@@ -35,10 +35,10 @@ const to = [
         () => 125,
         () => 125,
         () => 125,
-        (m) => 125,
-        (m) => 128,
-        (m) => 132,
-        (m) => 137,
+        (m) => 125 + 0.6 * (m - 60),
+        (m) => 128 + 0.8 * (m - 65),
+        (m) => 132 + m - 70,
+        (m) => 137 + 0.8 * (m - 75),
         () => 141
     ] // Conf 3
 ];
@@ -47,79 +47,79 @@ const to = [
  * Stall speed table
  * calls function(gross weight (t), landing gear) which returns CAS.
  * Indexes: 0 - Clean config, 1 - Config 1 + F, 2 - Config 2, 3 - Config 3, 4 - Config Full, 5 - Config 1.
- * Sub-Indexes: 0 to 7 represent gross weight (t) in 20t steps from 100 to 240.
+ * Sub-Indexes: 0 to 9 represent gross weight (t) in 5t steps from 40 to 80.
  */
 const vs = [
     [
         () => 124,
-        (m) => 124,
-        (m) => 131,
-        (m) => 138,
-        (m) => 145,
-        (m) => 150,
-        (m) => 155,
-        (m) => 161,
-        (m) => 166,
+        (m) => 124 + 1.4 * (m - 40),
+        (m) => 131 + 1.4 * (m - 45),
+        (m) => 138 + 1.4 * (m - 50),
+        (m) => 145 + m - 55,
+        (m) => 150 + 1.2 * (m - 60),
+        (m) => 155 + 1.2 * (m - 65),
+        (m) => 161 + m - 70,
+        (m) => 166 + 1.2 * (m - 75),
         () => 172
     ], // Clean Conf
     [
         () => 93,
-        (m) => 93,
-        (m) => 98,
-        (m) => 103,
-        (m) => 108,
-        (m) => 112,
-        (m) => 117,
-        (m) => 121,
-        (m) => 125,
+        (m) => 93 + m - 40,
+        (m) => 98 + m - 45,
+        (m) => 103 + m - 50,
+        (m) => 108 + .8 * (m - 55),
+        (m) => 112 + m - 60,
+        (m) => 117 + .8 + (m - 65),
+        (m) => 121 + .8 + (m - 70),
+        (m) => 125 + m - 75,
         () => 130
     ], // Conf 1 + F
     [
         () => 91,
-        (m) => 91,
-        (m) => 96,
-        (m) => 101,
-        (m) => 105,
-        (m) => 110,
-        (m) => 114,
-        (m) => 119,
-        (m) => 122,
+        (m) => 91 + m - 40,
+        (m) => 96 + m - 45,
+        (m) => 101 + .8 * (m - 50),
+        (m) => 105 + m - 55,
+        (m) => 110 + .8 * (m - 60),
+        (m) => 114 + m - 65,
+        (m) => 119 + .6 * (m - 70),
+        (m) => 122 + .8 * (m - 75),
         () => 126
     ], // Conf 2
     [
-        (_, ldg) => 91,
-        (m, ldg) => 91,
-        (m, ldg) => 96,
-        (m, ldg) => 101,
-        (m, ldg) => 105,
-        (m, ldg) => 110,
-        (m, ldg) => 114,
-        (m, ldg) => 119,
-        (m, ldg) => 122,
-        (_, ldg) => 126
+        (_, ldg) => 91 - ldg * 2,
+        (m, ldg) => 91 + m - 40 - ldg * 2,
+        (m, ldg) => 96 + m - 45 - ldg * 2,
+        (m, ldg) => 101 + .8 * (m - 50) - ldg * 2,
+        (m, ldg) => 105 + m - 55 - ldg * 2,
+        (m, ldg) => 110 + .8 * (m - 60) - ldg * 2,
+        (m, ldg) => 114 + m - 65 - ldg * 2,
+        (m, ldg) => 119 + .6 * (m - 70) - ldg * 2,
+        (m, ldg) => 122 + .8 * (m - 75) - ldg * 2,
+        (_, ldg) => 126 - ldg * 2
     ], // Conf 3
     [
         () => 84,
-        (m) => 84,
-        (m) => 88,
-        (m) => 93,
-        (m) => 97,
-        (m) => 101,
-        (m) => 105,
-        (m) => 109,
-        (m) => 113,
+        (m) => 84 + .8 * (m - 40),
+        (m) => 88 + m - 45,
+        (m) => 93 + .8 * (m - 50),
+        (m) => 97 + .8 * (m - 55),
+        (m) => 101 + .8 * (m - 60),
+        (m) => 105 + .8 * (m - 65),
+        (m) => 109 + .8 * (m - 70),
+        (m) => 113 + .6 * (m - 75),
         () => 116
     ], // Conf Full
     [
         () => 102,
-        (m) => 102,
-        (m) => 107,
-        (m) => 112,
-        (m) => 117,
-        (m) => 123,
-        (m) => 127,
-        (m) => 132,
-        (m) => 137,
+        (m) => 102 + m - 40,
+        (m) => 107 + m - 45,
+        (m) => 112 + m - 50,
+        (m) => 117 + 1.2 * (m - 55),
+        (m) => 123 + .8 * (m - 60),
+        (m) => 127 + m - 65,
+        (m) => 132 + m - 70,
+        (m) => 137 + .8 * (m - 75),
         () => 141
     ] // Conf 1
 ];
@@ -128,80 +128,80 @@ const vs = [
  * Lowest selectable Speed Table
  * calls function(gross weigh (t), landing gear) which returns CAS, automatically compensates for cg.
  * Indexes: 0 - Clean config, 1 - Config 1 + F, 2 - Config 2, 3 - Config 3, 4 - Config Full, 5 - Config 1.
- * Sub-Indexes: 0 to 7 represent gross weight (t) in 20t steps from 100 to 240.
+ * Sub-Indexes: 0 to 9 represent gross weight (t) in 5t steps from 40 to 80.
  */
 const vls = [
     [
         () => 159,
-        (m) => 159,
-        (m) => 168,
-        (m) => 177,
-        (m) => 186,
-        (m) => 192,
-        (m) => 198,
-        (m) => 206,
-        (m) => 212,
+        (m) => 159 + 1.8 * (m - 40),
+        (m) => 168 + 1.8 * (m - 45),
+        (m) => 177 + 1.8 * (m - 50),
+        (m) => 186 + 1.2 * (m - 55),
+        (m) => 192 + 1.2 * (m - 60),
+        (m) => 198 + 1.6 * (m - 65),
+        (m) => 206 + 1.2 * (m - 70),
+        (m) => 212 + 1.6 * (m - 75),
         () => 220
     ], // Clean Config
     [
         () => 114,
-        (m) => 114,
-        (m) => 121,
-        (m) => 127,
-        (m) => 133,
-        (m) => 138,
-        (m) => 144,
-        (m) => 149,
-        (m) => 154,
+        (m) => 114 + 1.4 * (m - 40),
+        (m) => 121 + 1.2 * (m - 45),
+        (m) => 127 + 1.2 * (m - 50),
+        (m) => 133 + m - 55,
+        (m) => 138 + 1.2 * (m - 60),
+        (m) => 144 + m - 65,
+        (m) => 149 + m - 70,
+        (m) => 154 + 1.2 * (m - 75),
         () => 160
     ], // Config 1 + F
     [
-        () => 122,
-        (m) => 122,
-        (m) => 126,
-        (m) => 135,
-        (m) => 143,
-        (m) => 150,
-        (m) => 158,
-        (m) => 165,
-        (m) => 165,
-        () => 165
+        () => 110,
+        (m) => 110 + 1.8 * (m - 40),
+        (m) => 119 + 1.2 * (m - 45),
+        (m) => 125 + 1.2 * (m - 50),
+        (m) => 131 + 1.2 * (m - 55),
+        (m) => 137 + m - 60,
+        (m) => 142 + .6 * (m - 65),
+        (m) => 145 + .8 * (m - 70),
+        (m) => 149 + m - 75,
+        () => 154
     ], // Config 2
     [
-        (_, ldg) => 118,
-        (m, ldg) => 118,
-        (m, ldg) => 122,
-        (m, ldg) => 130,
-        (m, ldg) => 138,
-        (m, ldg) => 145,
-        (m, ldg) => 152,
-        (m, ldg) => 159,
-        (m, ldg) => 159,
-        (_, ldg) => 159
+        (_, ldg) => 117 - ldg,
+        (m, ldg) => correctCg(m, (m, cg) => cg < 25 ? 117 + .4 * (m - 40) : 117) - ldg,
+        (m, ldg) => correctCg(m, (m, cg) => cg < 25 ? 119 + 1.2 * (m - 45) : 117 + 1.4 * (m - 45)) - ldg,
+        (m, ldg) => correctCg(m, (m, cg) => cg < 25 ? 125 + 1.2 * (m - 50) : 124 + 1.2 * (m - 50)) - ldg,
+        (m, ldg) => correctCg(m, (m, cg) => cg < 25 ? 131 + 1.2 * (m - 55) : 130 + m - 55) - ldg,
+        (m, ldg) => correctCg(m, (m, cg) => cg < 25 ? 137 + m - 60 : 135 + 1.2 * (m - 60)) - ldg,
+        (m, ldg) => correctCg(m, (m, cg) => (cg < 25 ? 142 : 141) + m - 65) - ldg,
+        (m, ldg) => correctCg(m, (m, cg) => (cg < 25 ? 147 : 146) + m - 70) - ldg,
+        (m, ldg) => correctCg(m, (m, cg) => cg < 25 ? 152 + .8 * (m - 75) : 151 + m - 65) - ldg,
+        (_, ldg) => 156 - ldg
     ], // Config 3
     [
-        () => 118,
-        () => 118,
-        () => 120,
-        (m) => 128,
-        (m) => 136,
-        (m) => 143,
-        (m) => 150,
-        (m) => 157,
-        (m) => 156,
-        () => 157
+        () => 116,
+        () => 116,
+        () => 116,
+        (m) => 116 + correctCg(m, (m, cg) => (cg < 25 ? .8 : .6) * (m - 50)),
+        (m) => correctCg(m, (m, cg) => (cg < 25 ? 120 : 119) + m - 55),
+        (m) => correctCg(m, (m, cg) => (cg < 25 ? 125 : 124) + m - 60),
+        (m) => correctCg(m, (m, cg) => (cg < 25 ? 130 : 129) + m - 65),
+        (m) => correctCg(m, (m, cg) => cg < 25 ? 135 + .8 * (m - 70) : 134 + m - 70),
+        (m) => 139 + .8 * (m - 75),
+        () => 143
     ], // Config Full
     [
-        () => 138,
-        (m) => 138,
-        (m) => 143,
-        (m) => 152,
-        (m) => 162,
-        (m) => 170,
-        (m) => 179,
-        (m) => 187,
-        (m) => 187,
-        () => 187
+        () => 125,
+        (m) => 125 + 1.4 * (m - 40),
+        (m) => 132 + 1.2 * (m - 45),
+        (m) => 138 + 1.2 * (m - 50),
+        (m) => 144 + 1.4 * (m - 55),
+        (m) => 151 + m - 60,
+        (m) => 156 + 1.2 * (m - 65),
+        (m) => 162 + 1.4 * (m - 70),
+        (m) => 169 + .8 * (m - 75),
+        () => 173
     ] // Config 1
 ];
 
@@ -209,44 +209,44 @@ const vls = [
  * Lowest selectable Speed Table for TakeOff ONLY
  * calls function(gross weight (t)) which returns CAS.
  * Indexes: 0 - Clean config, 1 - Config 1 + F, 2 - Config 2, 3 - Config 3, 4 - Config Full, 5 - Config 1.
- * Sub-Indexes: 0 to 7 represent gross weight (t) in 20t steps from 100 to 240.
+ * Sub-Indexes: 0 to 9 represent gross weight (t) in 5t steps from 40 to 80.
  */
 const vlsTo = [
     vls[0], // Clean Config
     [
         () => 105,
-        (m) => 105,
-        (m) => 111,
-        (m) => 116,
-        (m) => 122,
-        (m) => 127,
-        (m) => 132,
-        (m) => 137,
-        (m) => 141,
+        (m) => 105 + 1.2 * (m - 40),
+        (m) => 111 + m - 45,
+        (m) => 116 + 1.2 * (m - 50),
+        (m) => 122 + m - 55,
+        (m) => 127 + m - 60,
+        (m) => 132 + m - 65,
+        (m) => 137 + .8 * (m - 70),
+        (m) => 141 + 1.2 * (m - 75),
         () => 147
     ], // Config 1 + F
     [
         (_) => 101,
-        (m) => 101,
-        (m) => 108,
-        (m) => 114,
-        (m) => 119,
-        (m) => 125,
-        (m) => 130,
-        (m) => 132,
-        (m) => 136,
+        (m) => 101 + 1.4 * (m - 40),
+        (m) => 108 + 1.2 * (m - 45),
+        (m) => 114 + m - 50,
+        (m) => 119 + 1.2 * (m - 55),
+        (m) => 125 + m - 60,
+        (m) => 130 + .4 * (m - 65),
+        (m) => 132 + .8 * (m - 70),
+        (m) => 136 + .8 * (m - 75),
         () => 140
     ], // Config 2
     [
         () => 101,
-        (m) => 101,
-        (m) => 106,
-        (m) => 112,
-        (m) => 116,
-        (m) => 122,
-        (m) => 127,
-        (m) => 132,
-        (m) => 136,
+        (m) => 101 + m - 40,
+        (m) => 106 + 1.2 * (m - 45),
+        (m) => 112 + .8 * (m - 50),
+        (m) => 116 + 1.2 * (m - 55),
+        (m) => 122 + m - 60,
+        (m) => 127 + m - 65,
+        (m) => 132 + .8 * (m - 70),
+        (m) => 136 + .8 * (m - 75),
         () => 140
     ], // Config 3
     vls[4], // Config Full
@@ -256,37 +256,37 @@ const vlsTo = [
 /**
  * F-Speed Table
  * calls function(gross weight (t)) which returns CAS.
- * Indexes: 0 to 7 represent gross weight (t) in 20t steps from 100 to 240.
+ * Indexes: 0 to 9 represent gross weight (t) in 5t steps from 40 to 80.
  */
 const f = [
-    () => 123,
-    () => 123,
-    () => 128,
-    (m) => 137,
-    (m) => 145,
-    (m) => 153,
-    (m) => 161,
-    (m) => 168,
-    (m) => 168,
-    () => 168
+    () => 131,
+    () => 131,
+    () => 131,
+    (m) => 131 + 1.2 * (m - 50),
+    (m) => 137 + 1.4 * (m - 55),
+    (m) => 144 + m - 60,
+    (m) => 149 + 1.2 * (m - 65),
+    (m) => 155 + m - 70,
+    (m) => 160 + 1.20 * (m - 75),
+    () => 166
 ];
 
 /**
  * S-Speed Table
  * calls function(gross weight (t)) which returns CAS.
- * Indexes: 0 to 7 represent gross weight (t) in 20t steps from 100 to 240.
+ * Indexes: 0 to 9 represent gross weight (t) in 5t steps from 40 to 80.
  */
 const s = [
     () => 152,
-    (m) => 152,
-    (m) => 157,
-    (m) => 168,
-    (m) => 178,
-    (m) => 187,
-    (m) => 197,
-    (m) => 205,
-    (m) => 205,
-    () => 205
+    (m) => 152 + 1.8 * (m - 40),
+    (m) => 161 + 1.6 * (m - 45),
+    (m) => 169 + 1.8 * (m - 50),
+    (m) => 178 + 1.6 * (m - 55),
+    (m) => 186 + 1.4 * (m - 60),
+    (m) => 193 + 1.4 * (m - 65),
+    (m) => 200 + 1.4 * (m - 70),
+    (m) => 207 + 1.4 * (m - 75),
+    () => 214
 ];
 
 /**
@@ -295,14 +295,14 @@ const s = [
  */
 const vfeFS = [
     215, // Config 1 + F
-    196, // Config 2
-    186, // Config 3
-    180, // Config Full
-    240 // Config 1
+    200, // Config 2
+    185, // Config 3
+    177, // Config Full
+    230 // Config 1
 ];
 
-const Vmo = 330;
-const Mmo = 0.86;
+const Vmo = 350;
+const Mmo = 0.82;
 
 /**
  * Correct input function for cg
@@ -322,20 +322,17 @@ function correctCg(m, f, cg = SimVar.GetSimVarValue("CG PERCENT", "percent")) {
  * @private
  */
 function _correctMass(m) {
-    const min = 135;
-    const max = 252;
-    const step = 13;
-    return Math.ceil(((m > max ? max : m) - min) / step);
+    return Math.ceil(((m > 80 ? 80 : m) - 40) / 5);
 }
 
 /**
  * Calculate green dot speed
  * Calculation:
- * Gross weight (t) * 0.6 + 107 when below FL200
+ * Gross weight (t) * 2 + 85 when below FL200
  * @returns {number}
  */
 function _computeGD(m) {
-    return m * 0.6 + 107;
+    return m * 2 + 85;
 }
 
 /**
@@ -364,7 +361,7 @@ function _addWindComponent(vw) {
  * @returns {number} angle diff
  * @private
  */
-function _getAngleDiff(a, b) {
+function _getdiffAngle(a, b) {
     return 180 - Math.abs(Math.abs(a - b) - 180);
 }
 
@@ -489,7 +486,7 @@ class NXSpeedsTo {
      * @param alt {number} field altitude
      */
     constructor(m = 60, fPos = 1, alt = 0) {
-        this.v2 = Math.floor(to[fPos - 1][_correctMass(m)](m) + (fPos === 2 ? (Math.abs(alt * 0.0002)) : 0)) + 20;
+        this.v2 = Math.floor(to[fPos - 1][_correctMass(m)](m) + (fPos === 2 ? (Math.abs(alt * 0.0002)) : 0));
         this.vr = this.v2 - 4;
         this.v1 = this.v2 - 5;
     }
@@ -531,7 +528,7 @@ class NXSpeedsUtils {
      * @returns {number} velocity headwind
      */
     static getHeadwind(v, a, b) {
-        return v * Math.cos(_getAngleDiff(a, b) * (Math.PI / 180));
+        return v * Math.cos(_getdiffAngle(a, b) * (Math.PI / 180));
     }
 
     /**
@@ -552,7 +549,7 @@ class NXSpeedsUtils {
      */
     static getVtargetGSMini(vapp, windDiff) {
         return Math.max(vapp, Math.min(Math.round(vapp + windDiff), Math.round(
-            SimVar.GetSimVarValue("L:A32NX_FLAPS_HANDLE_INDEX", "Number") === 4 ? Simplane.getMaxSpeed(Aircraft.A320_NEO) - 5 : Simplane.getNextFlapsExtendSpeed(Aircraft.A320_NEO)
+            SimVar.GetSimVarValue("L:A32NX_FLAPS_HANDLE_INDEX", "Number") === 4 ? SimVar.GetSimVarValue("L:A32NX_SPEEDS_VMAX", "Number") - 5 : SimVar.GetSimVarValue("L:A32NX_SPEEDS_VFEN", "Number")
         )));
     }
 

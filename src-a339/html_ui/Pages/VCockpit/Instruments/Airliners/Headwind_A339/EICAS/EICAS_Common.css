@@ -1,4 +1,4 @@
-﻿@import url("/CSS_A339/A32NX_Display_Common.css");
+@import url("/CSS_A339/A32NX_Display_Common.css");
 
 :root {
   --bodyHeightScale: 1;
@@ -46,6 +46,9 @@ eicas-common-display line {
 eicas-common-display text {
   font-size: 20px;
   font-family: "ECAMFontRegular";
+}
+eicas-common-display text.Cyan {
+  fill: var(--displayCyan) !important;
 }
 eicas-common-display text.Title {
   fill: var(--displayWhite) !important;

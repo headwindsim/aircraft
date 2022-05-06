@@ -1,11 +1,5 @@
 /// <reference path="./Types.d.ts" />
 
-import {
-    Angl16, Celcius, Degrees, Feet, FeetPerMinute, Gallons, Heading, InchesOfMercury, Kilograms, Knots,
-    Mach, Millibar, NauticalMiles, Percent, PercentOver100, PressurePerSquareInch, Radians, RadiansPerSecond,
-    RotationsPerMinute, Seconds
-} from "../../../types";
-
 declare global {
     class GlassCockpitSettings {
         FuelFlow:                ColorRangeDisplay;
@@ -366,6 +360,7 @@ declare global {
          * Equal to getEngineCommandedN1
          */
         function getAutopilotCommandedN1(engineIndex: number): Percent | null;
+        function getEngineActive(engineIndex: number): true;
         function getEngineType(): EngineType | null;
         function getEngineRPM(engineIndex: number): RotationsPerMinute | null;
         function getEnginePower(engineIndex: number): Percent | null;
@@ -420,7 +415,6 @@ declare global {
         function getMaxWeight(): Kilograms | null;
         function getGearPosition(): Percent | null;
         function getUnitIsMetric(): boolean | null;
-        function getCurrentFlightPhase(forceSimVarCall?: boolean): FlightPhase | null;
         function getWorldRegion(): WorldRegion;
     }
 }

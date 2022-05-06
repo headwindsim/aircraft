@@ -1,12 +1,11 @@
 class FMCMainDisplay extends BaseAirliners {
     constructor() {
         super(...arguments);
+        FMCMainDisplay.DEBUG_INSTANCE = this;
         this.flightPhaseUpdateThrottler = new UpdateThrottler(800);
         this.fmsUpdateThrottler = new UpdateThrottler(250);
         this._progBrgDistUpdateThrottler = new UpdateThrottler(2000);
         this.ilsUpdateThrottler = new UpdateThrottler(5000);
-        this.currentFlightPhase = SimVar.GetSimVarValue("L:A32NX_INITIAL_FLIGHT_PHASE", "number") || FmgcFlightPhases.PREFLIGHT;
-        this.flightPhaseManager = new A32NX_FlightPhaseManager(this);
         this._apCooldown = 500;
         this._radioNavOn = false;
         this._vhf1Frequency = 0;
@@ -14,6 +13,8 @@ class FMCMainDisplay extends BaseAirliners {
         this._rcl1Frequency = 0;
         this._pre2Frequency = 0;
         this._atc1Frequency = 0;
+        this.lastFlightPlanVersion = 0;
+        this._messageQueue = new A32NX_MessageQueue(this);
 
         /** Declaration of every variable used (NOT initialization) */
         this.currentFlightPlanWaypointIndex = undefined;
@@ -38,8 +39,6 @@ class FMCMainDisplay extends BaseAirliners {
         this.perfApprTemp = undefined;
         this.perfApprWindHeading = undefined;
         this.perfApprWindSpeed = undefined;
-        this.perfApprTransAlt = undefined;
-        this.perfApprTransAltPilotEntered = undefined;
         this.v1Speed = undefined;
         this.vRSpeed = undefined;
         this.v2Speed = undefined;
@@ -54,7 +53,6 @@ class FMCMainDisplay extends BaseAirliners {
         this.perfApprFlaps3 = undefined;
         this._lockConnectIls = undefined;
         this._apNavIndex = undefined;
-        this._apLocalizerOn = undefined;
         this._canSwitchToNav = undefined;
         this._vhf1Frequency = undefined;
         this._vhf2Frequency = undefined;
@@ -63,7 +61,10 @@ class FMCMainDisplay extends BaseAirliners {
         this._vor2Frequency = undefined;
         this._vor2Course = undefined;
         this._ilsFrequency = undefined;
+        this._ilsIcao = undefined;
+        this._ilsIdent = undefined;
         this._ilsFrequencyPilotEntered = undefined;
+        this._ilsIdentPilotEntered = undefined;
         this._ilsCourse = undefined;
         this._adf1Frequency = undefined;
         this._adf2Frequency = undefined;
@@ -82,8 +83,6 @@ class FMCMainDisplay extends BaseAirliners {
         this.engineOutAccelerationAltitude = undefined;
         this.engineOutAccelerationAltitudeGoaround = undefined;
         this.engineOutAccelerationAltitudeIsPilotEntered = undefined;
-        this.transitionAltitude = undefined;
-        this.transitionAltitudeIsPilotEntered = undefined;
         this._windDirections = undefined;
         this._fuelPlanningPhases = undefined;
         this._zeroFuelWeightZFWCGEntered = undefined;
@@ -125,11 +124,13 @@ class FMCMainDisplay extends BaseAirliners {
         this._cruiseEntered = undefined;
         this._blockFuelEntered = undefined;
         this.constraintAlt = undefined;
-        this.constraintAltCached = undefined;
         this.fcuSelAlt = undefined;
         this._forceNextAltitudeUpdate = undefined;
         this._lastUpdateAPTime = undefined;
         this.updateAutopilotCooldown = undefined;
+        this._lastHasReachFlex = undefined;
+        this._apMasterStatus = undefined;
+        this._lastRequestedFLCModeWaypointIndex = undefined;
         this._cruiseFlightLevel = undefined;
         this._activeCruiseFlightLevel = undefined;
         this._activeCruiseFlightLevelDefaulToFcu = undefined;
@@ -139,8 +140,12 @@ class FMCMainDisplay extends BaseAirliners {
         this.preSelectedDesSpeed = undefined;
         this.managedSpeedTarget = undefined;
         this.managedSpeedTargetIsMach = undefined;
-        this.managedSpeedLimit = undefined;
-        this.managedSpeedLimitAlt = undefined;
+        this.climbSpeedLimit = undefined;
+        this.climbSpeedLimitAlt = undefined;
+        this.climbSpeedLimitPilot = undefined;
+        this.descentSpeedLimit = undefined;
+        this.descentSpeedLimitAlt = undefined;
+        this.descentSpeedLimitPilot = undefined;
         this.managedSpeedClimb = undefined;
         this.managedSpeedClimbIsPilotEntered = undefined;
         this.managedSpeedClimbMach = undefined;
@@ -156,12 +161,14 @@ class FMCMainDisplay extends BaseAirliners {
         this.cruiseFlightLevelTimeOut = undefined;
         this.flaps = undefined;
         this.ths = undefined;
+        this.ilsAutoFrequency = undefined;
+        this.ilsAutoIcao = undefined;
         this.ilsAutoIdent = undefined;
         this.ilsAutoCourse = undefined;
         this.ilsAutoTuned = undefined;
+        this.tempFpPendingAutoTune = undefined;
         this.ilsTakeoffAutoTuned = undefined;
         this.ilsApproachAutoTuned = undefined;
-        this.climbTransitionGroundAltitude = undefined;
         this.altDestination = undefined;
         this.flightNumber = undefined;
         this.cruiseTemperature = undefined;
@@ -169,9 +176,21 @@ class FMCMainDisplay extends BaseAirliners {
         this.blockFuel = undefined;
         this.zeroFuelWeight = undefined;
         this.zeroFuelWeightMassCenter = undefined;
-        this.gpsPrimaryLostMessageAcknowledged = false;
-        this.gpsPrimaryMessageAcknowledged = false;
         this.activeWpIdx = undefined;
+        this.efisSymbols = undefined;
+        this.groundTempAuto = undefined;
+        this.groundTempPilot = undefined;
+
+        // ATSU data
+        this.atsu = undefined;
+        this.holdSpeedTarget = undefined;
+        this.holdIndex = undefined;
+        this.holdDecelReached = undefined;
+        this.setHoldSpeedMessageActive = undefined;
+        this.managedProfile = undefined;
+        this.speedLimitExceeded = undefined;
+
+        this.onAirport = undefined;
     }
 
     Init() {
@@ -182,6 +201,16 @@ class FMCMainDisplay extends BaseAirliners {
         this.A32NXCore.init(this._lastTime);
 
         this.dataManager = new FMCDataManager(this);
+
+        this.guidanceManager = new Fmgc.GuidanceManager(this.flightPlanManager);
+        this.guidanceController = new Fmgc.GuidanceController(this.flightPlanManager, this.guidanceManager, this);
+        this.navRadioManager = new Fmgc.NavRadioManager(this);
+        this.efisSymbols = new Fmgc.EfisSymbols(this.flightPlanManager, this.guidanceController);
+
+        Fmgc.initFmgcLoop(this, this.flightPlanManager);
+
+        this.guidanceController.init();
+        this.efisSymbols.init();
 
         this.tempCurve = new Avionics.Curve();
         this.tempCurve.interpolationFunction = Avionics.CurveTool.NumberInterpolation;
@@ -229,7 +258,7 @@ class FMCMainDisplay extends BaseAirliners {
                 };
                 const arrivalIndex = this.flightPlanManager.getArrivalProcIndex();
                 if (arrivalIndex >= 0) {
-                    this.flightPlanManager.setArrivalProcIndex(arrivalIndex, callback);
+                    this.flightPlanManager.setArrivalProcIndex(arrivalIndex, callback).catch(console.error);
                 } else {
                     callback();
                 }
@@ -239,31 +268,35 @@ class FMCMainDisplay extends BaseAirliners {
         this.updateFuelVars();
         this.updatePerfSpeeds();
 
-        CDUPerformancePage.UpdateThrRedAccFromOrigin(this, true, true);
+        CDUPerformancePage.UpdateThrRedAccFromOrigin(this);
         CDUPerformancePage.UpdateEngOutAccFromOrigin(this);
-        SimVar.SetSimVarValue("L:AIRLINER_THR_RED_ALT", "Number", this.thrustReductionAltitude);
 
         this.flightPhaseManager.init();
-
-        /** It takes some time until origin and destination are known, placing this inside callback of the flight plan loader doesn't work */
-        setTimeout(() => {
-            const origin = this.flightPlanManager.getOrigin();
-            const dest = this.flightPlanManager.getDestination();
-            if (origin && origin.ident && dest && dest.ident) {
-                this.aocAirportList.init(origin.ident, dest.ident);
-            }
-        }, 1000);
+        this.flightPhaseManager.addOnPhaseChanged(this.onFlightPhaseChanged.bind(this));
 
         // Start the check routine for system health and status
         setInterval(() => {
-            if (this.currentFlightPhase === FmgcFlightPhases.CRUISE && !this._destDataChecked) {
+            if (this.flightPhaseManager.phase === FmgcFlightPhases.CRUISE && !this._destDataChecked) {
+                const adirLat = ADIRS.getLatitude();
+                const adirLong = ADIRS.getLongitude();
+                const ppos = (adirLat.isNormalOperation() && adirLong.isNormalOperation()) ? {
+                    lat: ADIRS.getLatitude().value,
+                    long: ADIRS.getLongitude().value,
+                } : {
+                    lat: NaN,
+                    long: NaN
+                };
+                const stats = this.flightPlanManager.getCurrentFlightPlan().computeWaypointStatistics(ppos);
                 const dest = this.flightPlanManager.getDestination();
-                if (dest && dest.liveDistanceTo < 180) {
+                const destStats = stats.get(this.flightPlanManager.getCurrentFlightPlan().waypoints.length - 1);
+                if (dest && destStats.distanceFromPpos < 180) {
                     this._destDataChecked = true;
                     this.checkDestData();
                 }
             }
         }, 15000);
+
+        SimVar.SetSimVarValue('L:A32NX_FM_LS_COURSE', 'number', -1);
     }
 
     initVariables() {
@@ -274,7 +307,6 @@ class FMCMainDisplay extends BaseAirliners {
         this.routeIndex = 0;
         this.coRoute = "";
         this.tmpOrigin = "";
-        this.transitionAltitude = 10000;
         this.perfTOTemp = NaN;
         this._overridenFlapApproachSpeed = NaN;
         this._overridenSlatApproachSpeed = NaN;
@@ -290,8 +322,6 @@ class FMCMainDisplay extends BaseAirliners {
         this.perfApprTemp = NaN;
         this.perfApprWindHeading = NaN;
         this.perfApprWindSpeed = NaN;
-        this.perfApprTransAlt = 10000;
-        this.perfApprTransAltPilotEntered = false;
         this.v1Speed = undefined;
         this.vRSpeed = undefined;
         this.v2Speed = undefined;
@@ -306,15 +336,17 @@ class FMCMainDisplay extends BaseAirliners {
         this.perfApprFlaps3 = false;
         this._lockConnectIls = false;
         this._apNavIndex = 1;
-        this._apLocalizerOn = false;
         this._canSwitchToNav = false;
         this._vor1Frequency = 0;
         this._vor1Course = 0;
         this._vor2Frequency = 0;
         this._vor2Course = 0;
         this._ilsFrequency = 0;
+        this._ilsIcao = undefined;
+        this._ilsIdent = undefined;
         this._ilsFrequencyPilotEntered = false;
-        this._ilsCourse = 0;
+        this._ilsIdentPilotEntered = false;
+        this._ilsCourse = undefined;
         this._adf1Frequency = 0;
         this._adf2Frequency = 0;
         this._debug = 0;
@@ -325,11 +357,10 @@ class FMCMainDisplay extends BaseAirliners {
         this.accelerationAltitude = NaN;
         this.accelerationAltitudeGoaround = NaN;
         this.accelerationAltitudeIsPilotEntered = false;
+        this.accelerationAltitudeGoaroundIsPilotEntered = false;
         this.engineOutAccelerationAltitude = NaN;
         this.engineOutAccelerationAltitudeGoaround = NaN;
         this.engineOutAccelerationAltitudeIsPilotEntered = false;
-        this.transitionAltitudeIsPilotEntered = false;
-
         this._windDirections = {
             TAILWIND : "TL",
             HEADWIND : "HD"
@@ -362,7 +393,7 @@ class FMCMainDisplay extends BaseAirliners {
         this._fuelPlanningPhase = this._fuelPlanningPhases.PLANNING;
         this._blockFuelEntered = false;
         /* CPDLC Fields */
-        this.tropo = "";
+        this.tropo = undefined;
         this._destDataChecked = false;
         this._towerHeadwind = 0;
         this._EfobBelowMinClr = false;
@@ -372,13 +403,14 @@ class FMCMainDisplay extends BaseAirliners {
             originIcao: "",
             destinationIcao: "",
             blockFuel: "",
+            paxCount: "",
+            cargo: undefined,
             payload: undefined,
             estZfw: "",
             sendStatus: "READY",
             costIndex: "",
             navlog: [],
-            icao_airline: "",
-            flight_number: "",
+            callsign: "",
             alternateIcao: "",
             avgTropopause: "",
             ete: "",
@@ -418,11 +450,12 @@ class FMCMainDisplay extends BaseAirliners {
         this._cruiseEntered = false;
         this._blockFuelEntered = false;
         this.constraintAlt = 0;
-        this.constraintAltCached = 0;
         this.fcuSelAlt = 0;
         this._forceNextAltitudeUpdate = false;
         this._lastUpdateAPTime = NaN;
         this.updateAutopilotCooldown = 0;
+        this._apMasterStatus = false;
+        this._lastRequestedFLCModeWaypointIndex = -1;
         this._cruiseFlightLevel = undefined;
         this._activeCruiseFlightLevel = 0;
         this._activeCruiseFlightLevelDefaulToFcu = false;
@@ -436,9 +469,12 @@ class FMCMainDisplay extends BaseAirliners {
         this.preSelectedDesSpeed = undefined;
         this.managedSpeedTarget = NaN;
         this.managedSpeedTargetIsMach = false;
-        this.managedSpeedLimit = 250;
-        this.managedSpeedLimitAlt = 10000;
-        this.managedSpeedClimb = 300;
+        this.climbSpeedLimit = 250;
+        this.climbSpeedLimitAlt = 10000;
+        this.climbSpeedLimitPilot = false;
+        this.descentSpeedLimit = 250;
+        this.descentSpeedLimitAlt = 10000;
+        this.descentSpeedLimitPilot = false;
         this.managedSpeedClimbIsPilotEntered = false;
         this.managedSpeedClimbMach = .82;
         // this.managedSpeedClimbMachIsPilotEntered = false;
@@ -453,12 +489,14 @@ class FMCMainDisplay extends BaseAirliners {
         this.cruiseFlightLevelTimeOut = undefined;
         this.flaps = NaN;
         this.ths = NaN;
-        this.ilsAutoIdent = '';
-        this.ilsAutoCourse = 0;
+        this.ilsAutoFrequency = undefined;
+        this.ilsAutoIcao = undefined;
+        this.ilsAutoIdent = undefined;
+        this.ilsAutoCourse = undefined;
         this.ilsAutoTuned = false;
         this.ilsTakeoffAutoTuned = false;
         this.ilsApproachAutoTuned = false;
-        this.climbTransitionGroundAltitude = null;
+        this.tempFpPendingAutoTune = false;
         this.altDestination = undefined;
         this.flightNumber = undefined;
         this.cruiseTemperature = undefined;
@@ -466,17 +504,31 @@ class FMCMainDisplay extends BaseAirliners {
         this.blockFuel = undefined;
         this.zeroFuelWeight = undefined;
         this.zeroFuelWeightMassCenter = undefined;
+        this.holdSpeedTarget = undefined;
+        this.holdIndex = 0;
+        this.holdDecelReached = false;
+        this.setHoldSpeedMessageActive = false;
+        this.managedProfile = new Map();
+        this.speedLimitExceeded = false;
+        this.groundTempAuto = undefined;
+        this.groundTempPilot = undefined;
+        this.onAirport = () => { };
+
+        // FMGC Message Queue
+        this._messageQueue.resetQueue();
+
+        // ATSU data
+        this.atsu = new Atsu.Atsu(this);
 
         // Reset SimVars
         SimVar.SetSimVarValue("L:AIRLINER_V1_SPEED", "Knots", NaN);
         SimVar.SetSimVarValue("L:AIRLINER_V2_SPEED", "Knots", NaN);
         SimVar.SetSimVarValue("L:AIRLINER_VR_SPEED", "Knots", NaN);
-        SimVar.SetSimVarValue("L:AIRLINER_TRANS_ALT", "Number", this.transitionAltitude);
-        SimVar.SetSimVarValue("L:AIRLINER_APPR_TRANS_ALT", "Number", this.perfApprTransAlt);
 
-        CDUPerformancePage.UpdateThrRedAccFromOrigin(this, true, true);
+        CDUPerformancePage.UpdateThrRedAccFromOrigin(this);
         CDUPerformancePage.UpdateEngOutAccFromOrigin(this);
         SimVar.SetSimVarValue("L:AIRLINER_THR_RED_ALT", "Number", this.thrustReductionAltitude);
+        SimVar.SetSimVarValue("L:A32NX_ENG_OUT_ACC_ALT", "feet", this.engineOutAccelerationAltitude);
 
         SimVar.SetSimVarValue("L:A32NX_SPEEDS_MANAGED_PFD", "knots", 0);
         SimVar.SetSimVarValue("L:A32NX_SPEEDS_MANAGED_ATHR", "knots", 0);
@@ -487,24 +539,34 @@ class FMCMainDisplay extends BaseAirliners {
         SimVar.SetSimVarValue("L:AIRLINER_DECISION_HEIGHT", "feet", -1);
         SimVar.SetSimVarValue("L:AIRLINER_MINIMUM_DESCENT_ALTITUDE", "feet", 0);
 
-        SimVar.SetSimVarValue("L:A32NX_AP_CSTN_ALT", "feet", this.constraintAlt);
+        SimVar.SetSimVarValue("L:A32NX_FG_ALTITUDE_CONSTRAINT", "feet", this.constraintAlt);
         SimVar.SetSimVarValue("L:A32NX_TO_CONFIG_NORMAL", "Bool", 0);
         SimVar.SetSimVarValue("L:A32NX_CABIN_READY", "Bool", 0);
 
         if (SimVar.GetSimVarValue("L:A32NX_AUTOTHRUST_DISABLED", "number") === 1) {
             SimVar.SetSimVarValue("K:A32NX.ATHR_RESET_DISABLE", "number", 1);
         }
+
+        SimVar.SetSimVarValue("L:A32NX_PFD_MSG_SET_HOLD_SPEED", "bool", false);
     }
 
     onUpdate(_deltaTime) {
         super.onUpdate(_deltaTime);
+
+        this.flightPlanManager.update(_deltaTime);
+        const flightPlanChanged = this.flightPlanManager.currentFlightPlanVersion !== this.lastFlightPlanVersion;
+        if (flightPlanChanged) {
+            this.lastFlightPlanVersion = this.flightPlanManager.currentFlightPlanVersion;
+        }
+
+        Fmgc.updateFmgcLoop(_deltaTime);
 
         if (this._debug++ > 180) {
             this._debug = 0;
         }
         const flightPhaseManagerDelta = this.flightPhaseUpdateThrottler.canUpdate(_deltaTime);
         if (flightPhaseManagerDelta !== -1) {
-            this.flightPhaseManager.checkFlightPhase(flightPhaseManagerDelta);
+            this.flightPhaseManager.shouldActivateNextPhase(flightPhaseManagerDelta);
         }
         this._checkFlightPlan--;
         if (this._checkFlightPlan <= 0) {
@@ -515,11 +577,14 @@ class FMCMainDisplay extends BaseAirliners {
 
         if (this.fmsUpdateThrottler.canUpdate(_deltaTime) !== -1) {
             this.updateRadioNavState();
-            this.updateGPSMessage();
-            this.updateDisplayedConstraints();
+            this.checkSpeedLimit();
         }
 
         this.A32NXCore.update();
+
+        if (flightPlanChanged) {
+            this.updateManagedProfile();
+        }
 
         this.updateAutopilot();
 
@@ -527,28 +592,32 @@ class FMCMainDisplay extends BaseAirliners {
             this.updateProgDistance();
         }
 
-        if (this._flightGuidance) {
-            this._flightGuidance.update(_deltaTime);
+        if (this.guidanceController) {
+            this.guidanceController.update(_deltaTime);
         }
 
         if (this.ilsUpdateThrottler.canUpdate(_deltaTime) !== -1) {
             this.updateIls();
+        }
+
+        if (this.efisSymbols) {
+            this.efisSymbols.update(_deltaTime);
         }
     }
 
     /**
      * This method is called by the FlightPhaseManager after a flight phase change
      * This method initializes AP States, initiates CDUPerformancePage changes and other set other required states
-     * @param _lastFlightPhase {FmgcFlightPhases} Previous FmgcFlightPhase
-     * @param _curFlightPhase {FmgcFlightPhases} New FmgcFlightPhase
+     * @param prevPhase {FmgcFlightPhases} Previous FmgcFlightPhase
+     * @param nextPhase {FmgcFlightPhases} New FmgcFlightPhase
      */
-    onFlightPhaseChanged(_lastFlightPhase, _curFlightPhase) {
+    onFlightPhaseChanged(prevPhase, nextPhase) {
         this.updateConstraints();
         this.updateManagedSpeed();
 
         SimVar.SetSimVarValue("L:A32NX_CABIN_READY", "Bool", 0);
 
-        switch (_curFlightPhase) {
+        switch (nextPhase) {
             case FmgcFlightPhases.TAKEOFF: {
                 this._destDataChecked = false;
 
@@ -571,16 +640,20 @@ class FMCMainDisplay extends BaseAirliners {
                 if (this.page.Current === this.page.ProgressPage) {
                     CDUProgressPage.ShowPage(this);
                 } else {
-                    this.tryUpdatePerfPage(_lastFlightPhase, _curFlightPhase);
+                    this.tryUpdatePerfPage(prevPhase, nextPhase);
                 }
 
                 /** Activate pre selected speed/mach */
-                if (_lastFlightPhase === FmgcFlightPhases.TAKEOFF) {
+                if (prevPhase === FmgcFlightPhases.TAKEOFF) {
                     this.activatePreSelSpeedMach(this.preSelectedClbSpeed);
                 }
 
                 /** Arm preselected speed/mach for next flight phase */
                 this.updatePreSelSpeedMach(this.preSelectedCrzSpeed);
+
+                if (!this.cruiseFlightLevel) {
+                    this.cruiseFlightLevel = Simplane.getAutoPilotDisplayedAltitudeLockValue('feet') / 100;
+                }
 
                 break;
             }
@@ -589,19 +662,25 @@ class FMCMainDisplay extends BaseAirliners {
                 if (this.page.Current === this.page.ProgressPage) {
                     CDUProgressPage.ShowPage(this);
                 } else {
-                    this.tryUpdatePerfPage(_lastFlightPhase, _curFlightPhase);
+                    this.tryUpdatePerfPage(prevPhase, nextPhase);
                 }
 
                 SimVar.SetSimVarValue("L:A32NX_GOAROUND_PASSED", "bool", 0);
-                Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.AUTO);
+                Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.AUTO).catch(console.error).catch(console.error);
 
                 /** Activate pre selected speed/mach */
-                if (_lastFlightPhase === FmgcFlightPhases.CLIMB) {
+                if (prevPhase === FmgcFlightPhases.CLIMB) {
                     this.activatePreSelSpeedMach(this.preSelectedCrzSpeed);
                 }
 
                 /** Arm preselected speed/mach for next flight phase */
                 this.updatePreSelSpeedMach(this.preSelectedDesSpeed);
+
+                // This checks against the pilot defined cruise altitude and the automatically populated cruise altitude
+                if (this.cruiseFlightLevel !== this._cruiseFlightLevel) {
+                    this._cruiseFlightLevel = this.cruiseFlightLevel;
+                    this.addMessageToQueue(NXSystemMessages.newCrzAlt.getModifiedMessage(this._cruiseFlightLevel * 100));
+                }
 
                 break;
             }
@@ -610,20 +689,22 @@ class FMCMainDisplay extends BaseAirliners {
                 if (this.page.Current === this.page.ProgressPage) {
                     CDUProgressPage.ShowPage(this);
                 } else {
-                    this.tryUpdatePerfPage(_lastFlightPhase, _curFlightPhase);
+                    this.tryUpdatePerfPage(prevPhase, nextPhase);
                 }
 
                 this.checkDestData();
 
-                Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.AUTO);
+                Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.AUTO).catch(console.error).catch(console.error);
 
                 /** Activate pre selected speed/mach */
-                if (_lastFlightPhase === FmgcFlightPhases.CRUISE) {
+                if (prevPhase === FmgcFlightPhases.CRUISE) {
                     this.activatePreSelSpeedMach(this.preSelectedDesSpeed);
                 }
 
                 /** Clear pre selected speed/mach */
                 this.updatePreSelSpeedMach(undefined);
+
+                this.cruiseFlightLevel = undefined;
 
                 break;
             }
@@ -632,13 +713,14 @@ class FMCMainDisplay extends BaseAirliners {
                 if (this.page.Current === this.page.ProgressPage) {
                     CDUProgressPage.ShowPage(this);
                 } else {
-                    this.tryUpdatePerfPage(_lastFlightPhase, _curFlightPhase);
+                    this.tryUpdatePerfPage(prevPhase, nextPhase);
                 }
 
                 this.connectIls();
-                this.flightPlanManager.activateApproach();
 
-                Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.AUTO);
+                this.flightPlanManager.activateApproach().catch(console.error);
+
+                Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.AUTO).catch(console.error);
                 SimVar.SetSimVarValue("L:A32NX_GOAROUND_PASSED", "bool", 0);
 
                 this.checkDestData();
@@ -669,16 +751,212 @@ class FMCMainDisplay extends BaseAirliners {
                 }
 
                 const currentHeading = Simplane.getHeadingMagnetic();
-                Coherent.call("HEADING_BUG_SET", 1, currentHeading);
+                Coherent.call("HEADING_BUG_SET", 1, currentHeading).catch(console.error);
 
                 if (this.page.Current === this.page.ProgressPage) {
                     CDUProgressPage.ShowPage(this);
                 } else {
-                    this.tryUpdatePerfPage(_lastFlightPhase, _curFlightPhase);
+                    this.tryUpdatePerfPage(prevPhase, nextPhase);
                 }
 
                 break;
             }
+
+            case FmgcFlightPhases.DONE:
+
+                CDUIdentPage.ShowPage(this);
+
+                this.flightPlanManager.clearFlightPlan().then(() => {
+                    this.initVariables();
+                    this.initMcduVariables();
+                    this.dataManager.deleteAllStoredWaypoints();
+                    this.setScratchpadText('');
+                    SimVar.SetSimVarValue('L:A32NX_COLD_AND_DARK_SPAWN', 'Bool', true).then(() => {
+                        CDUIdentPage.ShowPage(this);
+                    });
+                }).catch(console.error);
+                break;
+        }
+    }
+
+    /** FIXME these functions are in the new VNAV but not in this branch, remove when able */
+    /**
+     *
+     * @param {Feet} alt geopotential altitude
+     * @returns °C
+     */
+    getIsaTemp(alt) {
+        if (alt > (this.tropo ? this.tropo : 36090)) {
+            return -56.5;
+        }
+        return 15 - (0.0019812 * alt);
+    }
+
+    /**
+     *
+     * @param {Feet} alt geopotential altitude
+     * @param {Degrees} isaDev temperature deviation from ISA conditions
+     * @returns °C
+     */
+    getTemp(alt, isaDev = 0) {
+        return this.getIsaTemp(alt) + isaDev;
+    }
+
+    /**
+     *
+     * @param {Feet} alt geopotential altitude
+     * @param {Degrees} isaDev temperature deviation from ISA conditions
+     * @returns hPa
+     */
+    getPressure(alt, isaDev = 0) {
+        if (alt > (this.tropo ? this.tropo : 36090)) {
+            return ((216.65 + isaDev) / 288.15) ** 5.25588 * 1013.2;
+        }
+        return ((288.15 - 0.0019812 * alt + isaDev) / 288.15) ** 5.25588 * 1013.2;
+    }
+
+    /**
+     * @returns {Degrees} temperature deviation from ISA conditions
+     */
+    getIsaDeviation() {
+        const geoAlt = SimVar.GetSimVarValue('INDICATED ALTITUDE', 'feet');
+        const temperature = SimVar.GetSimVarValue('AMBIENT TEMPERATURE', 'celsius');
+        return temperature - this.getIsaTemp(geoAlt);
+    }
+    /** FIXME ^these functions are in the new VNAV but not in this branch, remove when able */
+
+    // TODO better decel distance calc
+    calculateDecelDist(fromSpeed, toSpeed) {
+        return Math.min(20, Math.max(3, (fromSpeed - toSpeed) * 0.15));
+    }
+
+    /*
+        When the aircraft is in the holding, predictions assume that the leg is flown at holding speed
+        with a vertical speed equal to - 1000 ft/mn until reaching a restrictive altitude constraint, the
+        FCU altitude or the exit fix. If FCU or constraint altitude is reached first, the rest of the
+        pattern is assumed to be flown level at that altitude
+        */
+    getHoldingSpeed(speedConstraint = undefined, altitude = undefined) {
+        const fcuAltitude = SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR:3', 'feet');
+        const alt = Math.max(fcuAltitude, altitude ? altitude : 0);
+
+        let kcas = SimVar.GetSimVarValue('L:A32NX_SPEEDS_GD', 'number');
+        if (this.flightPhaseManager.phase === FmgcFlightPhases.APPROACH) {
+            kcas = this.getAppManagedSpeed();
+        }
+
+        if (speedConstraint > 100) {
+            kcas = Math.min(kcas, speedConstraint);
+        }
+
+        // apply icao limits
+        if (alt < 14000) {
+            kcas = Math.min(230, kcas);
+        } else if (alt < 20000) {
+            kcas = Math.min(240, kcas);
+        } else if (alt < 34000) {
+            kcas = Math.min(265, kcas);
+        } else {
+            const isaDeviation = this.getIsaDeviation();
+            const temperature = 273.15 + this.getTemp(alt, isaDeviation);
+            const pressure = this.getPressure(alt, isaDeviation);
+            kcas = Math.min(
+                _convertMachToKCas(0.83, temperature, pressure),
+                kcas,
+            );
+        }
+
+        // apply speed limit/alt
+        if (this.flightPhaseManager.phase <= FmgcFlightPhases.CRUISE) {
+            if (this.climbSpeedLimit !== undefined && alt <= this.climbSpeedLimitAlt) {
+                kcas = Math.min(this.climbSpeedLimit, kcas);
+            }
+        } else if (this.flightPhaseManager.phase < FmgcFlightPhases.GOAROUND) {
+            if (this.descentSpeedLimit !== undefined && alt <= this.descentSpeedLimitAlt) {
+                kcas = Math.min(this.descentSpeedLimit, kcas);
+            }
+        }
+
+        kcas = Math.max(kcas, this.computedVls);
+
+        return Math.ceil(kcas);
+    }
+
+    updateHoldingSpeed() {
+        const currentLegIndex = this.guidanceController.activeLegIndex;
+        const nextLegIndex = currentLegIndex + 1;
+        const currentLegConstraints = this.managedProfile.get(currentLegIndex) || {};
+        const nextLegConstraints = this.managedProfile.get(nextLegIndex) || {};
+
+        const currentLeg = this.flightPlanManager.getWaypoint(currentLegIndex);
+        const nextLeg = this.flightPlanManager.getWaypoint(nextLegIndex);
+
+        const casWord = ADIRS.getCalibratedAirspeed();
+        const cas = casWord.isNormalOperation() ? casWord.value : 0;
+
+        let enableHoldSpeedWarning = false;
+        let holdSpeedTarget = 0;
+        let holdDecelReached = this.holdDecelReached;
+        // FIXME big hack until VNAV can do this
+        if (currentLeg && currentLeg.additionalData.legType === 14 /* HM */) {
+            holdSpeedTarget = this.getHoldingSpeed(currentLegConstraints.descentSpeed, currentLegConstraints.descentAltitude);
+            holdDecelReached = true;
+            enableHoldSpeedWarning = !Simplane.getAutoPilotAirspeedManaged();
+            this.holdIndex = this.flightPlanManager.getActiveWaypointIndex();
+        } else if (nextLeg && nextLeg.additionalData.legType === 14 /* HM */) {
+            const adirLat = ADIRS.getLatitude();
+            const adirLong = ADIRS.getLongitude();
+            if (adirLat.isNormalOperation() && adirLong.isNormalOperation()) {
+                holdSpeedTarget = this.getHoldingSpeed(nextLegConstraints.descentSpeed, nextLegConstraints.descentAltitude);
+
+                const ppos = {
+                    lat: adirLat.value,
+                    long: adirLong.value,
+                };
+                const stats = this.flightPlanManager.getCurrentFlightPlan().computeWaypointStatistics(ppos);
+                const dtg = stats.get(this.flightPlanManager.getActiveWaypointIndex()).distanceFromPpos;
+                // decel range limits are [3, 20] NM
+                const decelDist = this.calculateDecelDist(cas, holdSpeedTarget);
+                if (dtg < decelDist) {
+                    holdDecelReached = true;
+                }
+
+                const gsWord = ADIRS.getGroundSpeed();
+                const gs = gsWord.isNormalOperation() ? gsWord.value : 0;
+                const warningDist = decelDist + gs / 120;
+                if (!Simplane.getAutoPilotAirspeedManaged() && dtg <= warningDist) {
+                    enableHoldSpeedWarning = true;
+                }
+            }
+            this.holdIndex = this.flightPlanManager.getActiveWaypointIndex() + 1;
+        } else {
+            this.holdIndex = 0;
+            holdDecelReached = false;
+        }
+
+        if (holdDecelReached !== this.holdDecelReached) {
+            this.holdDecelReached = holdDecelReached;
+            SimVar.SetSimVarValue('L:A32NX_FM_HOLD_DECEL', 'bool', this.holdDecelReached);
+        }
+
+        if (holdSpeedTarget !== this.holdSpeedTarget) {
+            this.holdSpeedTarget = holdSpeedTarget;
+            SimVar.SetSimVarValue('L:A32NX_FM_HOLD_SPEED', 'number', this.holdSpeedTarget);
+        }
+
+        if (enableHoldSpeedWarning && (cas - this.holdSpeedTarget) > 5) {
+            if (!this.setHoldSpeedMessageActive) {
+                this.setHoldSpeedMessageActive = true;
+                this.addMessageToQueue(
+                    NXSystemMessages.setHoldSpeed,
+                    () => !this.setHoldSpeedMessageActive,
+                    () => SimVar.SetSimVarValue("L:A32NX_PFD_MSG_SET_HOLD_SPEED", "bool", false),
+                );
+                SimVar.SetSimVarValue("L:A32NX_PFD_MSG_SET_HOLD_SPEED", "bool", true);
+            }
+        } else if (this.setHoldSpeedMessageActive) {
+            SimVar.SetSimVarValue("L:A32NX_PFD_MSG_SET_HOLD_SPEED", "bool", false);
+            this.setHoldSpeedMessageActive = false;
         }
     }
 
@@ -704,6 +982,8 @@ class FMCMainDisplay extends BaseAirliners {
         let vPfd = 0;
         let isMach = false;
 
+        this.updateHoldingSpeed();
+
         if (SimVar.GetSimVarValue("L:A32NX_FMA_EXPEDITE_MODE", "number") === 1) {
             const verticalMode = SimVar.GetSimVarValue("L:A32NX_FMA_VERTICAL_MODE", "number");
             if (verticalMode === 12) {
@@ -721,14 +1001,20 @@ class FMCMainDisplay extends BaseAirliners {
                     }
                 }
             } else if (verticalMode === 13) {
-                const T = _convertCtoK(Simplane.getAmbientTemperature());
-                const p = SimVar.GetSimVarValue("AMBIENT PRESSURE", "millibar");
-                //this.managedSpeedTarget = SimVar.GetSimVarValue("L:A32NX_FLAPS_HANDLE_INDEX", "Number") === 0 ? Math.min(340, _convertMachToKCas(.8, T, p)) : SimVar.GetSimVarValue("L:A32NX_SPEEDS_VMAX", "number") - 10;
                 this.managedSpeedTarget = SimVar.GetSimVarValue("L:A32NX_FLAPS_HANDLE_INDEX", "Number") === 0 ? Math.min(340, SimVar.GetGameVarValue("FROM MACH TO KIAS", "number", 0.8)) : SimVar.GetSimVarValue("L:A32NX_SPEEDS_VMAX", "number") - 10;
             }
             vPfd = this.managedSpeedTarget;
+        } else if (this.holdDecelReached) {
+            vPfd = this.holdSpeedTarget;
+            this.managedSpeedTarget = this.holdSpeedTarget;
         } else {
-            switch (this.currentFlightPhase) {
+            if (this.setHoldSpeedMessageActive) {
+                this.setHoldSpeedMessageActive = false;
+                SimVar.SetSimVarValue("L:A32NX_PFD_MSG_SET_HOLD_SPEED", "bool", false);
+                this.removeMessageFromQueue(NXSystemMessages.setHoldSpeed.text);
+            }
+
+            switch (this.flightPhaseManager.phase) {
                 case FmgcFlightPhases.PREFLIGHT: {
                     if (this.v2Speed) {
                         vPfd = this.v2Speed;
@@ -746,8 +1032,8 @@ class FMCMainDisplay extends BaseAirliners {
                 case FmgcFlightPhases.CLIMB: {
                     let speed = this.managedSpeedClimb;
 
-                    if (SimVar.GetSimVarValue("INDICATED ALTITUDE", "feet") < this.managedSpeedLimitAlt) {
-                        speed = Math.min(speed, this.managedSpeedLimit);
+                    if (this.climbSpeedLimit !== undefined && SimVar.GetSimVarValue("INDICATED ALTITUDE", "feet") < this.climbSpeedLimitAlt) {
+                        speed = Math.min(speed, this.climbSpeedLimit);
                     }
 
                     speed = Math.min(speed, this.getSpeedConstraint());
@@ -759,8 +1045,8 @@ class FMCMainDisplay extends BaseAirliners {
                 case FmgcFlightPhases.CRUISE: {
                     let speed = this.managedSpeedCruise;
 
-                    if (SimVar.GetSimVarValue("INDICATED ALTITUDE", "feet") < this.managedSpeedLimitAlt) {
-                        speed = Math.min(speed, this.managedSpeedLimit);
+                    if (this.climbSpeedLimit !== undefined && SimVar.GetSimVarValue("INDICATED ALTITUDE", "feet") < this.climbSpeedLimitAlt) {
+                        speed = Math.min(speed, this.climbSpeedLimit);
                     }
 
                     [this.managedSpeedTarget, isMach] = this.getManagedTargets(speed, this.managedSpeedCruiseMach);
@@ -770,28 +1056,25 @@ class FMCMainDisplay extends BaseAirliners {
                 case FmgcFlightPhases.DESCENT: {
                     let speed = this.managedSpeedDescend;
 
-                    if (Math.round(SimVar.GetSimVarValue("INDICATED ALTITUDE", "feet") / 10) * 10 < 20 * (speed - this.managedSpeedLimit) + 300 + this.managedSpeedLimitAlt) {
-                        speed = Math.min(speed, this.managedSpeedLimit);
+                    if (this.descentSpeedLimit !== undefined && Math.round(SimVar.GetSimVarValue("INDICATED ALTITUDE", "feet") / 10) * 10 < 20 * (speed - this.descentSpeedLimit) + 300 + this.descentSpeedLimitAlt) {
+                        speed = Math.min(speed, this.descentSpeedLimit);
                     }
+
+                    // TODO we really need VNAV to predict where along the leg we should slow to the constraint
+                    speed = Math.min(speed, this.getSpeedConstraint());
 
                     [this.managedSpeedTarget, isMach] = this.getManagedTargets(speed, this.managedSpeedDescendMach);
                     vPfd = this.managedSpeedTarget;
                     break;
                 }
                 case FmgcFlightPhases.APPROACH: {
-                    const ctn = this.getSpeedConstraint(false);
-                    let speed = this.getAppManagedSpeed();
-                    let vls = this.getVApp();
-                    if (isFinite(this.perfApprWindSpeed) && isFinite(this.perfApprWindHeading)) {
-                        vls = NXSpeedsUtils.getVtargetGSMini(vls, NXSpeedsUtils.getHeadWindDiff(this._towerHeadwind));
-                    }
-                    if (ctn !== Infinity) {
-                        vls = Math.max(vls, ctn);
-                        speed = Math.max(speed, ctn);
-                    }
+                    // the displayed target is Vapp (with GSmini)
+                    // the guidance target is lower limited by FAC manouvering speeds (O, S, F) unless in landing config
+                    // constraints are not considered
+                    const speed = this.getAppManagedSpeed();
+                    vPfd = this.getVAppGsMini();
 
-                    vPfd = vls;
-                    this.managedSpeedTarget = Math.max(speed, vls);
+                    this.managedSpeedTarget = Math.max(speed, vPfd);
                     break;
                 }
                 case FmgcFlightPhases.GOAROUND: {
@@ -829,11 +1112,12 @@ class FMCMainDisplay extends BaseAirliners {
 
         // Overspeed protection
         const Vtap = Math.min(this.managedSpeedTarget, SimVar.GetSimVarValue("L:A32NX_SPEEDS_VMAX", "number"));
+
         SimVar.SetSimVarValue("L:A32NX_SPEEDS_MANAGED_PFD", "knots", vPfd);
         SimVar.SetSimVarValue("L:A32NX_SPEEDS_MANAGED_ATHR", "knots", Vtap);
 
         if (this.isAirspeedManaged()) {
-            Coherent.call("AP_SPD_VAR_SET", 0, Vtap);
+            Coherent.call("AP_SPD_VAR_SET", 0, Vtap).catch(console.error);
         }
     }
 
@@ -863,6 +1147,48 @@ class FMCMainDisplay extends BaseAirliners {
                 SimVar.SetSimVarValue("L:A32NX_MachPreselVal", "mach", -1);
             }
         }, 200);
+    }
+
+    checkSpeedLimit() {
+        let speedLimit;
+        let speedLimitAlt;
+        switch (this.flightPhaseManager.phase) {
+            case FmgcFlightPhases.CLIMB:
+            case FmgcFlightPhases.CRUISE:
+                speedLimit = this.climbSpeedLimit;
+                speedLimitAlt = this.climbSpeedLimitAlt;
+                break;
+            case FmgcFlightPhases.DESCENT:
+                speedLimit = this.descentSpeedLimit;
+                speedLimitAlt = this.descentSpeedLimitAlt;
+                break;
+            default:
+                // no speed limit in other phases
+                this.speedLimitExceeded = false;
+                return;
+        }
+
+        if (speedLimit === undefined) {
+            this.speedLimitExceeded = false;
+            return;
+        }
+
+        const cas = ADIRS.getCalibratedAirspeed();
+        const alt = ADIRS.getBaroCorrectedAltitude();
+
+        if (this.speedLimitExceeded) {
+            const resetLimitExceeded = !cas.isNormalOperation() || !alt.isNormalOperation() || alt.value > speedLimitAlt || cas.value <= (speedLimit + 5);
+            if (resetLimitExceeded) {
+                this.speedLimitExceeded = false;
+                this.removeMessageFromQueue(NXSystemMessages.spdLimExceeded.text);
+            }
+        } else if (cas.isNormalOperation() && alt.isNormalOperation()) {
+            const setLimitExceeded = alt.value < (speedLimitAlt - 150) && cas.value > (speedLimit + 10);
+            if (setLimitExceeded) {
+                this.speedLimitExceeded = true;
+                this.addMessageToQueue(NXSystemMessages.spdLimExceeded, () => !this.speedLimitExceeded);
+            }
+        }
     }
 
     updateRadioNavState() {
@@ -916,45 +1242,71 @@ class FMCMainDisplay extends BaseAirliners {
     updateAutopilot() {
         const now = performance.now();
         const dt = now - this._lastUpdateAPTime;
+        let apLogicOn = (this._apMasterStatus || Simplane.getAutoPilotFlightDirectorActive(1));
         this._lastUpdateAPTime = now;
         if (isFinite(dt)) {
             this.updateAutopilotCooldown -= dt;
         }
+        if (SimVar.GetSimVarValue("L:AIRLINER_FMC_FORCE_NEXT_UPDATE", "number") === 1) {
+            SimVar.SetSimVarValue("L:AIRLINER_FMC_FORCE_NEXT_UPDATE", "number", 0);
+            this.updateAutopilotCooldown = -1;
+        }
+
         if (this.updateAutopilotCooldown < 0) {
             this.updatePerfSpeeds();
+            this.updateConstraints();
             this.updateManagedSpeed();
-
-            const activeWpIdx = this.flightPlanManager.getActiveWaypointIndex();
-            if (activeWpIdx !== this.activeWpIdx) {
-                this.activeWpIdx = activeWpIdx;
-                this.updateConstraints();
+            const currentApMasterStatus = SimVar.GetSimVarValue("AUTOPILOT MASTER", "boolean");
+            if (currentApMasterStatus !== this._apMasterStatus) {
+                this._apMasterStatus = currentApMasterStatus;
+                apLogicOn = (this._apMasterStatus || Simplane.getAutoPilotFlightDirectorActive(1));
+                this._forceNextAltitudeUpdate = true;
+                console.log("Enforce AP in Altitude Lock mode. Cause : AP Master Status has changed.");
+                SimVar.SetSimVarValue("L:A320_NEO_FCU_FORCE_IDLE_VS", "Number", 1);
+                if (this._apMasterStatus) {
+                    if (this.flightPlanManager.getWaypointsCount() === 0) {
+                        this._onModeSelectedAltitude();
+                        this._onModeSelectedHeading();
+                    }
+                }
+            }
+            if (apLogicOn) {
+                if (!Simplane.getAutoPilotFLCActive() && !SimVar.GetSimVarValue("AUTOPILOT AIRSPEED HOLD", "Boolean")) {
+                    SimVar.SetSimVarValue("K:AP_PANEL_SPEED_HOLD", "Number", 1);
+                }
+                if (!SimVar.GetSimVarValue("AUTOPILOT HEADING LOCK", "Boolean")) {
+                    if (!SimVar.GetSimVarValue("AUTOPILOT APPROACH HOLD", "Boolean")) {
+                        SimVar.SetSimVarValue("K:AP_PANEL_HEADING_HOLD", "Number", 1);
+                    }
+                }
             }
 
-            // TODO: Figure out usage (maybe for atc?)
-            SimVar.SetSimVarValue("SIMVAR_AUTOPILOT_AIRSPEED_MIN_CALCULATED", "knots", Simplane.getStallProtectionMinSpeed());
-            SimVar.SetSimVarValue("SIMVAR_AUTOPILOT_AIRSPEED_MAX_CALCULATED", "knots", Simplane.getMaxSpeed(Aircraft.A320_NEO));
+            if (this.isAltitudeManaged()) {
+                const prevWaypoint = this.flightPlanManager.getPreviousActiveWaypoint();
+                const nextWaypoint = this.flightPlanManager.getActiveWaypoint();
 
-            if (!this.flightPlanManager.isActiveApproach()) {
-                const activeWaypoint = this.flightPlanManager.getActiveWaypoint();
-                const nextActiveWaypoint = this.flightPlanManager.getNextActiveWaypoint();
-                if (activeWaypoint && nextActiveWaypoint) {
-                    let pathAngle = nextActiveWaypoint.bearingInFP - activeWaypoint.bearingInFP;
-                    while (pathAngle < 180) {
-                        pathAngle += 360;
+                if (prevWaypoint && nextWaypoint) {
+                    const activeWpIdx = this.flightPlanManager.getActiveWaypointIndex();
+
+                    if (activeWpIdx !== this.activeWpIdx) {
+                        this.activeWpIdx = activeWpIdx;
                     }
-                    while (pathAngle > 180) {
-                        pathAngle -= 360;
-                    }
-                    const absPathAngle = 180 - Math.abs(pathAngle);
-                    const airspeed = Simplane.getIndicatedSpeed();
-                    if (airspeed < 400) {
-                        const turnRadius = airspeed * 360 / (1091 * 0.36 / airspeed) / 3600 / 2 / Math.PI;
-                        const activateDistance = Math.pow(90 / absPathAngle, 1.6) * turnRadius * 1.2;
-                        const planeCoordinates = new LatLong(SimVar.GetSimVarValue("PLANE LATITUDE", "degree latitude"), SimVar.GetSimVarValue("PLANE LONGITUDE", "degree longitude"));
-                        const distanceToActive = Avionics.Utils.computeGreatCircleDistance(planeCoordinates, activeWaypoint.infos.coordinates);
-                        if (distanceToActive < activateDistance) {
-                            this.flightPlanManager.setActiveWaypointIndex(this.flightPlanManager.getActiveWaypointIndex() + 1);
+                    if (this.constraintAlt) {
+                        Coherent.call("AP_ALT_VAR_SET_ENGLISH", 2, this.constraintAlt, this._forceNextAltitudeUpdate).catch(console.error);
+                        this._forceNextAltitudeUpdate = false;
+                    } else {
+                        const altitude = Simplane.getAutoPilotSelectedAltitudeLockValue("feet");
+                        if (isFinite(altitude)) {
+                            Coherent.call("AP_ALT_VAR_SET_ENGLISH", 2, altitude, this._forceNextAltitudeUpdate).catch(console.error);
+                            this._forceNextAltitudeUpdate = false;
                         }
+                    }
+                } else {
+                    const altitude = Simplane.getAutoPilotSelectedAltitudeLockValue("feet");
+                    if (isFinite(altitude)) {
+                        SimVar.SetSimVarValue("L:A32NX_FG_ALTITUDE_CONSTRAINT", "feet", 0);
+                        Coherent.call("AP_ALT_VAR_SET_ENGLISH", 2, altitude, this._forceNextAltitudeUpdate).catch(console.error);
+                        this._forceNextAltitudeUpdate = false;
                     }
                 }
             }
@@ -962,6 +1314,23 @@ class FMCMainDisplay extends BaseAirliners {
                 if (SimVar.GetSimVarValue("L:FMC_FLIGHT_PLAN_IS_TEMPORARY", "number") !== 1) {
                     this.flightPlanManager.tryAutoActivateApproach();
                 }
+            }
+            if (Simplane.getAutoPilotAltitudeManaged() && SimVar.GetSimVarValue("L:A320_NEO_FCU_STATE", "number") !== 1) {
+                const currentWaypointIndex = this.flightPlanManager.getActiveWaypointIndex();
+                if (currentWaypointIndex !== this._lastRequestedFLCModeWaypointIndex) {
+                    this._lastRequestedFLCModeWaypointIndex = currentWaypointIndex;
+                    setTimeout(() => {
+                        if (Simplane.getAutoPilotAltitudeManaged()) {
+                            this._onModeManagedAltitude();
+                        }
+                    }, 1000);
+                }
+            }
+
+            if (this.flightPhaseManager.phase === FmgcFlightPhases.GOAROUND && apLogicOn) {
+                //depending if on HDR/TRK or NAV mode, select appropriate Alt Mode (WIP)
+                //this._onModeManagedAltitude();
+                this._onModeSelectedAltitude();
             }
             this.updateAutopilotCooldown = this._apCooldown;
         }
@@ -979,7 +1348,7 @@ class FMCMainDisplay extends BaseAirliners {
         let weight = this.tryEstimateLandingWeight();
         // Actual weight is used during approach phase (FCOM bulletin 46/2), and we also assume during go-around
         // We also fall back to current weight when landing weight is unavailable
-        if (this.currentFlightPhase >= FmgcFlightPhases.APPROACH || !isFinite(weight)) {
+        if (this.flightPhaseManager.phase >= FmgcFlightPhases.APPROACH || !isFinite(weight)) {
             weight = SimVar.GetSimVarValue("TOTAL WEIGHT", "kg") / 1000;
         }
         // if pilot has set approach wind in MCDU we use it, otherwise fall back to current measured wind
@@ -988,81 +1357,170 @@ class FMCMainDisplay extends BaseAirliners {
         } else {
             this.approachSpeeds = new NXSpeedsApp(weight, this.perfApprFlaps3);
         }
-        this.approachSpeeds.valid = this.currentFlightPhase >= FmgcFlightPhases.APPROACH || isFinite(weight);
-    }
-
-    updateGPSMessage() {
-        if (SimVar.GetSimVarValue("L:A32NX_ADIRS_USES_GPS_AS_PRIMARY", "Bool")) {
-            this.gpsPrimaryLostMessageAcknowledged = false;
-        } else {
-            this.gpsPrimaryMessageAcknowledged = false;
-        }
-
-        this.addNewMessage(NXSystemMessages.gpsPrimary, () => {
-            return this.gpsPrimaryMessageAcknowledged ||
-                !SimVar.GetSimVarValue("L:A32NX_ADIRS_USES_GPS_AS_PRIMARY", "Bool");
-        }, () => {
-            this.gpsPrimaryMessageAcknowledged = true;
-        });
-
-        this.addNewMessage(NXSystemMessages.gpsPrimaryLost, () => {
-            return this.gpsPrimaryLostMessageAcknowledged ||
-                SimVar.GetSimVarValue("L:A32NX_ADIRS_USES_GPS_AS_PRIMARY", "Bool");
-        }, () => {
-            this.gpsPrimaryLostMessageAcknowledged = true;
-        });
-
-        SimVar.SetSimVarValue("L:GPSPrimaryAcknowledged", "Bool", this.gpsPrimaryMessageAcknowledged);
-    }
-
-    updateDisplayedConstraints(force = false) {
-        const fcuSelAlt = Simplane.getAutoPilotDisplayedAltitudeLockValue("feet");
-        if (!force && fcuSelAlt === this.fcuSelAlt) {
-            return;
-        }
-        this.fcuSelAlt = fcuSelAlt;
-        this.constraintAlt = A32NX_ConstraintManager.getDisplayedConstraintAltitude(
-            this.currentFlightPhase,
-            this.fcuSelAlt,
-            this.constraintAltCached
-        );
-        SimVar.SetSimVarValue("L:A32NX_AP_CSTN_ALT", "feet", this.constraintAlt);
+        this.approachSpeeds.valid = this.flightPlanManager.phase >= FmgcFlightPhases.APPROACH || isFinite(weight);
     }
 
     updateConstraints() {
-        this.constraintAltCached = A32NX_ConstraintManager.getConstraintAltitude(
-            this.currentFlightPhase,
-            this.flightPlanManager,
-            this.constraintAltCached,
-            this._cruiseFlightLevel * 100
-        );
-        this.updateDisplayedConstraints(true);
+        const activeFpIndex = this.flightPlanManager.getActiveWaypointIndex();
+        const constraints = this.managedProfile.get(activeFpIndex);
+        const fcuSelAlt = Simplane.getAutoPilotDisplayedAltitudeLockValue("feet");
+
+        let constraintAlt = 0;
+        if (constraints) {
+            if ((this.flightPhaseManager.phase < FmgcFlightPhases.CRUISE || this.flightPhaseManager.phase === FmgcFlightPhases.GOAROUND) && isFinite(constraints.climbAltitude) && constraints.climbAltitude < fcuSelAlt) {
+                constraintAlt = constraints.climbAltitude;
+            }
+
+            if ((this.flightPhaseManager.phase > FmgcFlightPhases.CRUISE && this.flightPhaseManager.phase < FmgcFlightPhases.GOAROUND) && isFinite(constraints.descentAltitude) && constraints.descentAltitude > fcuSelAlt) {
+                constraintAlt = constraints.descentAltitude;
+            }
+        }
+
+        if (constraintAlt !== this.constraintAlt) {
+            this.constraintAlt = constraintAlt;
+            SimVar.SetSimVarValue("L:A32NX_FG_ALTITUDE_CONSTRAINT", "feet", this.constraintAlt);
+        }
     }
 
+    // TODO/VNAV: Speed constraint
     getSpeedConstraint() {
-        if (this.flightPlanManager.getIsDirectTo()) {
+        if (!this.navModeEngaged()) {
             return Infinity;
         }
-        const wpt = this.flightPlanManager.getActiveWaypoint();
-        if (typeof wpt === 'undefined' || !isFinite(wpt.speedConstraint) || wpt.speedConstraint < 100) {
-            return Infinity;
+
+        const activeLegIndex = this.guidanceController.activeTransIndex >= 0 ? this.guidanceController.activeTransIndex : this.guidanceController.activeLegIndex;
+        const constraints = this.managedProfile.get(activeLegIndex);
+        if (constraints) {
+            if (this.flightPhaseManager.phase < FmgcFlightPhases.CRUISE || this.flightPhaseManager.phase === FmgcFlightPhases.GOAROUND) {
+                return constraints.climbSpeed;
+            }
+
+            if (this.flightPhaseManager.phase > FmgcFlightPhases.CRUISE && this.flightPhaseManager.phase < FmgcFlightPhases.GOAROUND) {
+                // FIXME proper decel calc
+                if (this.guidanceController.activeLegDtg < this.calculateDecelDist(Math.min(constraints.previousDescentSpeed, this.managedSpeedDescend), constraints.descentSpeed)) {
+                    return constraints.descentSpeed;
+                } else {
+                    return constraints.previousDescentSpeed;
+                }
+            }
         }
-        return wpt.speedConstraint;
+
+        return Infinity;
+    }
+
+    updateManagedProfile() {
+        this.managedProfile.clear();
+
+        const origin = this.flightPlanManager.getPersistentOrigin(FlightPlans.Active);
+        const originElevation = origin ? origin.infos.coordinates.alt : 0;
+        const destination = this.flightPlanManager.getDestination(FlightPlans.Active);
+        const destinationElevation = destination ? destination.infos.coordinates.alt : 0;
+
+        // TODO should we save a constraint already propagated to the current leg?
+
+        // propagate descent speed constraints forward
+        let currentSpeedConstraint = Infinity;
+        let previousSpeedConstraint = Infinity;
+        for (let index = 0; index < this.flightPlanManager.getWaypointsCount(FlightPlans.Active); index++) {
+            const wp = this.flightPlanManager.getWaypoint(index, FlightPlans.Active);
+            if (wp.additionalData.constraintType === 2 /* DES */) {
+                if (wp.speedConstraint > 0) {
+                    currentSpeedConstraint = Math.min(currentSpeedConstraint, Math.round(wp.speedConstraint));
+                }
+            }
+            this.managedProfile.set(index, {
+                descentSpeed: currentSpeedConstraint,
+                previousDescentSpeed: previousSpeedConstraint,
+                climbSpeed: Infinity,
+                previousClimbSpeed: Infinity,
+                climbAltitude: Infinity,
+                descentAltitude: -Infinity,
+            });
+            previousSpeedConstraint = currentSpeedConstraint;
+        }
+
+        // propagate climb speed constraints backward
+        // propagate alt constraints backward
+        currentSpeedConstraint = Infinity;
+        previousSpeedConstraint = Infinity;
+        let currentDesConstraint = -Infinity;
+        let currentClbConstraint = Infinity;
+        for (let index = this.flightPlanManager.getWaypointsCount(FlightPlans.Active) - 1; index >= 0; index--) {
+            const wp = this.flightPlanManager.getWaypoint(index, FlightPlans.Active);
+            if (wp.additionalData.constraintType === 1 /* CLB */) {
+                if (wp.speedConstraint > 0) {
+                    currentSpeedConstraint = Math.min(currentSpeedConstraint, Math.round(wp.speedConstraint));
+                }
+                switch (wp.legAltitudeDescription) {
+                    case 1: // at alt 1
+                    case 3: // at or below alt 1
+                    case 4: // between alt 1 and alt 2
+                        currentClbConstraint = Math.min(currentClbConstraint, Math.round(wp.legAltitude1));
+                        break;
+                    default:
+                        // not constraining
+                }
+            } else if (wp.additionalData.constraintType === 2 /* DES */) {
+                switch (wp.legAltitudeDescription) {
+                    case 1: // at alt 1
+                    case 2: // at or above alt 1
+                        currentDesConstraint = Math.max(currentDesConstraint, Math.round(wp.legAltitude1));
+                        break;
+                    case 4: // between alt 1 and alt 2
+                        currentDesConstraint = Math.max(currentDesConstraint, Math.round(wp.legAltitude2));
+                        break;
+                    default:
+                        // not constraining
+                }
+            }
+            const profilePoint = this.managedProfile.get(index);
+            profilePoint.climbSpeed = currentSpeedConstraint;
+            profilePoint.previousClimbSpeed = previousSpeedConstraint;
+            profilePoint.climbAltitude = currentClbConstraint;
+            profilePoint.descentAltitude = currentDesConstraint;
+            previousSpeedConstraint = currentSpeedConstraint;
+
+            // set some data for LNAV to use for coarse predictions while we lack vnav
+            if (wp.additionalData.constraintType === 1 /* CLB */) {
+                wp.additionalData.predictedSpeed = Math.min(profilePoint.climbSpeed, this.managedSpeedClimb);
+                if (this.climbSpeedLimitAlt && profilePoint.climbAltitude < this.climbSpeedLimitAlt) {
+                    wp.additionalData.predictedSpeed = Math.min(wp.additionalData.predictedSpeed, this.climbSpeedLimit);
+                }
+                wp.additionalData.predictedAltitude = Math.min(profilePoint.climbAltitude, this._cruiseFlightLevel * 100);
+            } else if (wp.additionalData.constraintType === 2 /* DES */) {
+                wp.additionalData.predictedSpeed = Math.min(profilePoint.descentSpeed, this.managedSpeedDescend);
+                if (this.descentSpeedLimitAlt && profilePoint.climbAltitude < this.descentSpeedLimitAlt) {
+                    wp.additionalData.predictedSpeed = Math.min(wp.additionalData.predictedSpeed, this.descentSpeedLimit);
+                }
+                wp.additionalData.predictedAltitude = Math.min(profilePoint.descentAltitude, this._cruiseFlightLevel * 100); ;
+            } else {
+                wp.additionalData.predictedSpeed = this.managedSpeedCruise;
+                wp.additionalData.predictedAltitude = this._cruiseFlightLevel * 100;
+            }
+            // small hack to ensure the terminal procedures and transitions to/from enroute look nice despite lack of altitude predictions
+            if (index <= this.flightPlanManager.getEnRouteWaypointsFirstIndex(FlightPlans.Active)) {
+                wp.additionalData.predictedAltitude = Math.min(originElevation + 10000, wp.additionalData.predictedAltitude);
+                wp.additionalData.predictedSpeed = Math.min(250, wp.additionalData.predictedSpeed);
+            } else if (index >= this.flightPlanManager.getEnRouteWaypointsLastIndex(FlightPlans.Active)) {
+                wp.additionalData.predictedAltitude = Math.min(destinationElevation + 10000, wp.additionalData.predictedAltitude);
+                wp.additionalData.predictedSpeed = Math.min(250, wp.additionalData.predictedSpeed);
+            }
+        }
     }
 
     getClbManagedSpeedFromCostIndex() {
         const dCI = (this.costIndex / 999) ** 2;
-        return 300 * (1 - dCI) + 320 * dCI;
+        return 290 * (1 - dCI) + 330 * dCI;
     }
 
     getCrzManagedSpeedFromCostIndex() {
         const dCI = (this.costIndex / 999) ** 2;
-        return 300 * (1 - dCI) + 320 * dCI;
+        return 290 * (1 - dCI) + 310 * dCI;
     }
 
     getDesManagedSpeedFromCostIndex() {
         const dCI = this.costIndex / 999;
-        return 308 * (1 - dCI) + 320 * dCI;
+        return 288 * (1 - dCI) + 300 * dCI;
     }
 
     getAppManagedSpeed() {
@@ -1085,45 +1543,121 @@ class FMCMainDisplay extends BaseAirliners {
         }
         this.initRadioNav(true);
 
+        this._onModeSelectedHeading();
+        this._onModeSelectedAltitude();
+
         CDUPerformancePage.UpdateThrRedAccFromOrigin(this);
         CDUPerformancePage.UpdateThrRedAccFromDestination(this);
 
         SimVar.SetSimVarValue("K:VS_SLOT_INDEX_SET", "number", 1);
 
-        this.taxiFuelWeight = 0.5;
+        this.taxiFuelWeight = 0.2;
         CDUInitPage.updateTowIfNeeded(this);
     }
 
     onEvent(_event) {
+        if (_event === "MODE_SELECTED_HEADING") {
+            SimVar.SetSimVarValue("L:A32NX_GOAROUND_HDG_MODE", "bool", 1);
+            SimVar.SetSimVarValue("L:A32NX_GOAROUND_NAV_MODE", "bool", 0);
+            if (Simplane.getAutoPilotHeadingManaged()) {
+                if (SimVar.GetSimVarValue("L:A320_FCU_SHOW_SELECTED_HEADING", "number") === 0) {
+                    const currentHeading = Simplane.getHeadingMagnetic();
+                    Coherent.call("HEADING_BUG_SET", 1, currentHeading).catch(console.error);
+                }
+            }
+            this._onModeSelectedHeading();
+        }
+        if (_event === "MODE_MANAGED_HEADING") {
+            SimVar.SetSimVarValue("L:A32NX_GOAROUND_HDG_MODE", "bool", 0);
+            SimVar.SetSimVarValue("L:A32NX_GOAROUND_NAV_MODE", "bool", 1);
+            if (this.flightPlanManager.getWaypointsCount() === 0) {
+                return;
+            }
+            this._onModeManagedHeading();
+        }
         if (_event === "MODE_SELECTED_ALTITUDE") {
-            this.flightPhaseManager.handleFcuAltKnobPushPull();
+            const dist = this.flightPlanManager.getDistanceToDestination();
+            this.flightPhaseManager.handleFcuAltKnobPushPull(dist);
+            this._onModeSelectedAltitude();
             this._onStepClimbDescent();
         }
         if (_event === "MODE_MANAGED_ALTITUDE") {
-            this.flightPhaseManager.handleFcuAltKnobPushPull();
+            const dist = this.flightPlanManager.getDistanceToDestination();
+            this.flightPhaseManager.handleFcuAltKnobPushPull(dist);
+            this._onModeManagedAltitude();
             this._onStepClimbDescent();
         }
         if (_event === "AP_DEC_ALT" || _event === "AP_INC_ALT") {
-            this.flightPhaseManager.handleFcuAltKnobTurn();
+            const dist = this.flightPlanManager.getDistanceToDestination();
+            this.flightPhaseManager.handleFcuAltKnobTurn(dist);
             this._onTrySetCruiseFlightLevel();
         }
+        if (_event === "AP_DEC_HEADING" || _event === "AP_INC_HEADING") {
+            if (SimVar.GetSimVarValue("L:A320_FCU_SHOW_SELECTED_HEADING", "number") === 0) {
+                const currentHeading = Simplane.getHeadingMagnetic();
+                Coherent.call("HEADING_BUG_SET", 1, currentHeading).catch(console.error);
+            }
+            SimVar.SetSimVarValue("L:A320_FCU_SHOW_SELECTED_HEADING", "number", 1);
+        }
         if (_event === "VS") {
-            this.flightPhaseManager.handleFcuVSKnob();
+            const dist = this.flightPlanManager.getDistanceToDestination();
+            this.flightPhaseManager.handleFcuVSKnob(dist, this._onStepClimbDescent.bind(this));
+        }
+    }
+
+    _onModeSelectedHeading() {
+        if (SimVar.GetSimVarValue("AUTOPILOT APPROACH HOLD", "boolean")) {
+            return;
+        }
+        if (!SimVar.GetSimVarValue("AUTOPILOT HEADING LOCK", "Boolean")) {
+            SimVar.SetSimVarValue("K:AP_PANEL_HEADING_HOLD", "Number", 1);
+        }
+        SimVar.SetSimVarValue("K:HEADING_SLOT_INDEX_SET", "number", 1);
+        SimVar.SetSimVarValue("L:A32NX_GOAROUND_HDG_MODE", "bool", 1);
+    }
+
+    _onModeManagedHeading() {
+        if (SimVar.GetSimVarValue("AUTOPILOT APPROACH HOLD", "boolean")) {
+            return;
+        }
+        if (!SimVar.GetSimVarValue("AUTOPILOT HEADING LOCK", "Boolean")) {
+            SimVar.SetSimVarValue("K:AP_PANEL_HEADING_HOLD", "Number", 1);
+        }
+        SimVar.SetSimVarValue("K:HEADING_SLOT_INDEX_SET", "number", 2);
+        SimVar.SetSimVarValue("L:A320_FCU_SHOW_SELECTED_HEADING", "number", 0);
+    }
+
+    _onModeSelectedAltitude() {
+        if (!Simplane.getAutoPilotGlideslopeHold()) {
+            SimVar.SetSimVarValue("L:A320_NEO_FCU_FORCE_IDLE_VS", "Number", 1);
+        }
+        SimVar.SetSimVarValue("K:ALTITUDE_SLOT_INDEX_SET", "number", 1);
+        Coherent.call("AP_ALT_VAR_SET_ENGLISH", 1, Simplane.getAutoPilotDisplayedAltitudeLockValue(), this._forceNextAltitudeUpdate).catch(console.error);
+    }
+
+    _onModeManagedAltitude() {
+        SimVar.SetSimVarValue("K:ALTITUDE_SLOT_INDEX_SET", "number", 2);
+        Coherent.call("AP_ALT_VAR_SET_ENGLISH", 1, Simplane.getAutoPilotDisplayedAltitudeLockValue(), this._forceNextAltitudeUpdate).catch(console.error);
+        Coherent.call("AP_ALT_VAR_SET_ENGLISH", 2, Simplane.getAutoPilotDisplayedAltitudeLockValue(), this._forceNextAltitudeUpdate).catch(console.error);
+        if (!Simplane.getAutoPilotGlideslopeHold()) {
+            this.requestCall(() => {
+                SimVar.SetSimVarValue("L:A320_NEO_FCU_FORCE_IDLE_VS", "Number", 1);
+            });
         }
     }
 
     _onStepClimbDescent() {
-        if (!(this.currentFlightPhase === FmgcFlightPhases.CLIMB || this.currentFlightPhase === FmgcFlightPhases.CRUISE)) {
+        if (!(this.flightPhaseManager.phase === FmgcFlightPhases.CLIMB || this.flightPhaseManager.phase === FmgcFlightPhases.CRUISE)) {
             return;
         }
 
         const _targetFl = Simplane.getAutoPilotDisplayedAltitudeLockValue() / 100;
 
         if (
-            (this.currentFlightPhase === FmgcFlightPhases.CLIMB && _targetFl > this.cruiseFlightLevel) ||
-            (this.currentFlightPhase === FmgcFlightPhases.CRUISE && _targetFl !== this.cruiseFlightLevel)
+            (this.flightPhaseManager.phase === FmgcFlightPhases.CLIMB && _targetFl > this.cruiseFlightLevel) ||
+            (this.flightPhaseManager.phase === FmgcFlightPhases.CRUISE && _targetFl !== this.cruiseFlightLevel)
         ) {
-            this.addNewMessage(NXSystemMessages.newCrzAlt.getSetMessage(_targetFl * 100));
+            this.addMessageToQueue(NXSystemMessages.newCrzAlt.getModifiedMessage(_targetFl * 100));
             this.cruiseFlightLevel = _targetFl;
             this._cruiseFlightLevel = _targetFl;
         }
@@ -1135,7 +1669,7 @@ class FMCMainDisplay extends BaseAirliners {
      * @private
      */
     _onTrySetCruiseFlightLevel() {
-        if (!(this.currentFlightPhase === FmgcFlightPhases.CLIMB || this.currentFlightPhase === FmgcFlightPhases.CRUISE)) {
+        if (!(this.flightPhaseManager.phase === FmgcFlightPhases.CLIMB || this.flightPhaseManager.phase === FmgcFlightPhases.CRUISE)) {
             return;
         }
 
@@ -1144,8 +1678,8 @@ class FMCMainDisplay extends BaseAirliners {
         if ((activeVerticalMode >= 11 && activeVerticalMode <= 15) || (activeVerticalMode >= 21 && activeVerticalMode <= 23)) {
             const fcuFl = Simplane.getAutoPilotDisplayedAltitudeLockValue() / 100;
 
-            if (this.currentFlightPhase === FmgcFlightPhases.CLIMB && fcuFl > this.cruiseFlightLevel ||
-                this.currentFlightPhase === FmgcFlightPhases.CRUISE && fcuFl !== this.cruiseFlightLevel
+            if (this.flightPhaseManager.phase === FmgcFlightPhases.CLIMB && fcuFl > this.cruiseFlightLevel ||
+                this.flightPhaseManager.phase === FmgcFlightPhases.CRUISE && fcuFl !== this.cruiseFlightLevel
             ) {
                 if (this.cruiseFlightLevelTimeOut) {
                     clearTimeout(this.cruiseFlightLevelTimeOut);
@@ -1155,11 +1689,11 @@ class FMCMainDisplay extends BaseAirliners {
                 this.cruiseFlightLevelTimeOut = setTimeout(() => {
                     if (fcuFl === Simplane.getAutoPilotDisplayedAltitudeLockValue() / 100 &&
                         (
-                            this.currentFlightPhase === FmgcFlightPhases.CLIMB && fcuFl > this.cruiseFlightLevel ||
-                            this.currentFlightPhase === FmgcFlightPhases.CRUISE && fcuFl !== this.cruiseFlightLevel
+                            this.flightPhaseManager.phase === FmgcFlightPhases.CLIMB && fcuFl > this.cruiseFlightLevel ||
+                            this.flightPhaseManager.phase === FmgcFlightPhases.CRUISE && fcuFl !== this.cruiseFlightLevel
                         )
                     ) {
-                        this.addNewMessage(NXSystemMessages.newCrzAlt.getSetMessage(fcuFl * 100));
+                        this.addMessageToQueue(NXSystemMessages.newCrzAlt.getModifiedMessage(fcuFl * 100));
                         this.cruiseFlightLevel = fcuFl;
                         this._cruiseFlightLevel = fcuFl;
                         if (this.page.Current === this.page.ProgressPage) {
@@ -1175,7 +1709,7 @@ class FMCMainDisplay extends BaseAirliners {
     /* FMS CHECK ROUTINE */
 
     checkDestData() {
-        this.addNewMessage(NXSystemMessages.enterDestData, () => {
+        this.addMessageToQueue(NXSystemMessages.enterDestData, () => {
             return isFinite(this.perfApprQNH) && isFinite(this.perfApprTemp) && isFinite(this.perfApprWindHeading) && isFinite(this.perfApprWindSpeed);
         });
     }
@@ -1222,15 +1756,15 @@ class FMCMainDisplay extends BaseAirliners {
                     this.cruiseTemperature = temp;
                     return true;
                 } else {
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
             } else {
-                this.addNewMessage(NXSystemMessages.notAllowed);
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
                 return false;
             }
         }
-        this.addNewMessage(NXSystemMessages.formatError);
+        this.setScratchpadMessage(NXSystemMessages.formatError);
         return false;
     }
 
@@ -1244,12 +1778,12 @@ class FMCMainDisplay extends BaseAirliners {
                     this.updateManagedSpeeds();
                     return true;
                 } else {
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
             }
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -1261,25 +1795,25 @@ class FMCMainDisplay extends BaseAirliners {
     tryUpdateTropo(tropo) {
         if (tropo === FMCMainDisplay.clrValue) {
             if (this.tropo) {
-                this.tropo = "";
+                this.tropo = undefined;
                 return true;
             }
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return false;
         }
 
         if (!tropo.match(/^(?=(\D*\d){4,5}\D*$)/g)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
 
         const value = parseInt(tropo);
         if (isFinite(value) && value >= 0 && value <= 60000) {
-            this.tropo = ("" + Math.round(value / 10) * 10).padStart(5, "0");
+            this.tropo = Math.round(value / 10) * 10;
             return true;
         }
 
-        this.addNewMessage(NXSystemMessages.entryOutOfRange);
+        this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
         return false;
     }
 
@@ -1291,7 +1825,7 @@ class FMCMainDisplay extends BaseAirliners {
                     SimVar.SetSimVarValue("L:MAP_SHOW_TEMPORARY_FLIGHT_PLAN", "number", 1);
                     callback(result);
                 });
-            });
+            }).catch(console.error);
         } else {
             callback(true);
         }
@@ -1299,7 +1833,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     tryUpdateFromTo(fromTo, callback = EmptyCallback.Boolean) {
         if (fromTo === FMCMainDisplay.clrValue) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return callback(false);
         }
         const from = fromTo.split("/")[0];
@@ -1308,29 +1842,33 @@ class FMCMainDisplay extends BaseAirliners {
             if (airportFrom) {
                 this.dataManager.GetAirportByIdent(to).then((airportTo) => {
                     if (airportTo) {
+                        this.atsu.atc.resetAtisAutoUpdate();
                         this.eraseTemporaryFlightPlan(() => {
                             this.flightPlanManager.clearFlightPlan(() => {
+                                this.tempFpPendingAutoTune = true;
                                 this.flightPlanManager.setOrigin(airportFrom.icao, () => {
                                     this.tmpOrigin = airportFrom.ident;
+                                    this.setGroundTempFromOrigin();
                                     this.flightPlanManager.setDestination(airportTo.icao, () => {
-                                        this.aocAirportList.init(this.tmpOrigin, airportTo.ident);
+                                        this.flightPlanManager.getWaypoint(0).endsInDiscontinuity = true;
+                                        this.flightPlanManager.getWaypoint(0).discontinuityCanBeCleared = true;
                                         this.tmpOrigin = airportTo.ident;
                                         SimVar.SetSimVarValue("L:FLIGHTPLAN_USE_DECEL_WAYPOINT", "number", 1);
                                         callback(true);
-                                    });
-                                });
-                            });
+                                    }).catch(console.error);
+                                }).catch(console.error);
+                            }).catch(console.error);
                         });
                     } else {
-                        this.addNewMessage(NXSystemMessages.notInDatabase);
+                        this.setScratchpadMessage(NXSystemMessages.notInDatabase);
                         callback(false);
                     }
-                });
+                }).catch(console.error);
             } else {
-                this.addNewMessage(NXSystemMessages.notInDatabase);
+                this.setScratchpadMessage(NXSystemMessages.notInDatabase);
                 callback(false);
             }
-        });
+        }).catch(console.error);
     }
 
     /**
@@ -1353,7 +1891,7 @@ class FMCMainDisplay extends BaseAirliners {
             return true;
         }
         if (!this.altDestination) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return false;
         }
 
@@ -1365,11 +1903,11 @@ class FMCMainDisplay extends BaseAirliners {
                 this._routeAltFuelTime = FMCMainDisplay.minutesTohhmm(A32NX_FuelPred.computeUserAltTime(this._routeAltFuelWeight * 1000, 290));
                 return true;
             } else {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
         }
-        this.addNewMessage(NXSystemMessages.formatError);
+        this.setScratchpadMessage(NXSystemMessages.formatError);
         return false;
     }
 
@@ -1379,7 +1917,7 @@ class FMCMainDisplay extends BaseAirliners {
             return true;
         }
         if (!this.representsDecimalNumber(fuel)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
 
@@ -1388,33 +1926,34 @@ class FMCMainDisplay extends BaseAirliners {
             if (this.isMinDestFobInRange(value)) {
                 this._minDestFobEntered = true;
                 if (value < this._minDestFob) {
-                    this.addNewMessage(NXSystemMessages.checkMinDestFob);
+                    this.setScratchpadMessage(NXSystemMessages.checkMinDestFob);
                 }
                 this._minDestFob = value;
                 return true;
             } else {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
         }
-        this.addNewMessage(NXSystemMessages.formatError);
+        this.setScratchpadMessage(NXSystemMessages.formatError);
         return false;
     }
 
     async tryUpdateAltDestination(altDestIdent) {
         if (altDestIdent === "NONE" || altDestIdent === FMCMainDisplay.clrValue) {
+            this.atsu.atc.resetAtisAutoUpdate();
             this.altDestination = undefined;
             this._DistanceToAlt = 0;
             return true;
         }
-        const airportAltDest = await this.dataManager.GetAirportByIdent(altDestIdent);
+        const airportAltDest = await this.dataManager.GetAirportByIdent(altDestIdent).catch(console.error);
         if (airportAltDest) {
+            this.atsu.atc.resetAtisAutoUpdate();
             this.altDestination = airportAltDest;
-            this.aocAirportList.alternate = altDestIdent;
             this.tryUpdateDistanceToAlt();
             return true;
         }
-        this.addNewMessage(NXSystemMessages.notInDatabase);
+        this.setScratchpadMessage(NXSystemMessages.notInDatabase);
         return false;
     }
 
@@ -1460,7 +1999,7 @@ class FMCMainDisplay extends BaseAirliners {
      */
     tryUpdateRouteTrip(dynamic = false) {
         let airDistance = 0;
-        const groundDistance = dynamic ? this.flightPlanManager.getDestination().liveDistanceTo : this.flightPlanManager.getDestination().cumulativeDistanceInFP;
+        const groundDistance = dynamic ? this.flightPlanManager.getDistanceToDestination(0) : this.flightPlanManager.getDestination().cumulativeDistanceInFP;
         if (this._windDir === this._windDirections.TAILWIND) {
             airDistance = A32NX_FuelPred.computeAirDistance(groundDistance, this.averageWind);
         } else if (this._windDir === this._windDirections.HEADWIND) {
@@ -1469,11 +2008,11 @@ class FMCMainDisplay extends BaseAirliners {
 
         let altToUse = this.cruiseFlightLevel;
         // Use the cruise level for calculations otherwise after cruise use descent altitude down to 10,000 feet.
-        if (this.currentFlightPhase >= FmgcFlightPhases.DESCENT) {
+        if (this.flightPhaseManager.phase >= FmgcFlightPhases.DESCENT) {
             altToUse = SimVar.GetSimVarValue("PLANE ALTITUDE", 'Feet') / 100;
         }
 
-        if ((20 <= airDistance && airDistance <= 3100) && (100 <= altToUse && altToUse <= 410)) {
+        if ((20 <= airDistance && airDistance <= 3100) && (100 <= altToUse && altToUse <= 390)) {
             const deviation = (this.zeroFuelWeight + this._routeFinalFuelWeight + this._routeAltFuelWeight - A32NX_FuelPred.refWeight) * A32NX_FuelPred.computeNumbers(airDistance, altToUse, A32NX_FuelPred.computations.CORRECTIONS, false);
 
             this._routeTripFuelWeight = (A32NX_FuelPred.computeNumbers(airDistance, altToUse, A32NX_FuelPred.computations.FUEL, false) + deviation) / 1000;
@@ -1531,36 +2070,36 @@ class FMCMainDisplay extends BaseAirliners {
 
     setOriginRunwayIndex(runwayIndex, callback = EmptyCallback.Boolean) {
         this.ensureCurrentFlightPlanIsTemporary(() => {
-            this.clearAutotunedIls();
+            this.tempFpPendingAutoTune = true;
             this.flightPlanManager.setDepartureProcIndex(-1, () => {
                 this.flightPlanManager.setOriginRunwayIndex(runwayIndex, () => {
                     return callback(true);
-                });
-            });
+                }).catch(console.error);
+            }).catch(console.error);
         });
     }
 
     setRunwayIndex(runwayIndex, callback = EmptyCallback.Boolean) {
         this.ensureCurrentFlightPlanIsTemporary(() => {
             const routeOriginInfo = this.flightPlanManager.getOrigin().infos;
-            this.clearAutotunedIls();
+            this.tempFpPendingAutoTune = true;
             if (!this.flightPlanManager.getOrigin()) {
-                this.addNewMessage(NXFictionalMessages.noOriginSet);
+                this.setScratchpadMessage(NXFictionalMessages.noOriginSet);
                 return callback(false);
             } else if (runwayIndex === -1) {
                 this.flightPlanManager.setDepartureRunwayIndex(-1, () => {
                     this.flightPlanManager.setOriginRunwayIndex(-1, () => {
                         return callback(true);
-                    });
-                });
+                    }).catch(console.error);
+                }).catch(console.error);
             } else if (routeOriginInfo instanceof AirportInfo) {
                 if (routeOriginInfo.oneWayRunways[runwayIndex]) {
                     this.flightPlanManager.setDepartureRunwayIndex(runwayIndex, () => {
                         return callback(true);
-                    });
+                    }).catch(console.error);
                 }
             } else {
-                this.addNewMessage(NXSystemMessages.notInDatabase);
+                this.setScratchpadMessage(NXSystemMessages.notInDatabase);
                 callback(false);
             }
         });
@@ -1568,90 +2107,104 @@ class FMCMainDisplay extends BaseAirliners {
 
     setDepartureIndex(departureIndex, callback = EmptyCallback.Boolean) {
         this.ensureCurrentFlightPlanIsTemporary(() => {
-            const currentRunway = this.flightPlanManager.getDepartureRunway();
+            const currentRunway = this.flightPlanManager.getOriginRunway();
             this.flightPlanManager.setDepartureProcIndex(departureIndex, () => {
                 if (currentRunway) {
+                    SimVar.SetSimVarValue("L:A32NX_DEPARTURE_ELEVATION", "feet", A32NX_Util.meterToFeet(currentRunway.elevation));
                     const departure = this.flightPlanManager.getDeparture();
                     const departureRunwayIndex = departure.runwayTransitions.findIndex(t => {
-                        return t.name.indexOf(currentRunway.designation) !== -1;
+                        return t.runwayNumber === currentRunway.number && t.runwayDesignation === currentRunway.designator;
                     });
                     if (departureRunwayIndex >= -1) {
                         return this.flightPlanManager.setDepartureRunwayIndex(departureRunwayIndex, () => {
                             return callback(true);
-                        });
+                        }).catch(console.error);
                     }
                 }
                 return callback(true);
-            });
+            }).catch(console.error);
         });
     }
 
     setApproachTransitionIndex(transitionIndex, callback = EmptyCallback.Boolean) {
+        //console.log("FMCMainDisplay: setApproachTransitionIndex = ", transitionIndex);
         const arrivalIndex = this.flightPlanManager.getArrivalProcIndex();
         this.ensureCurrentFlightPlanIsTemporary(() => {
             this.flightPlanManager.setApproachTransitionIndex(transitionIndex, () => {
                 this.flightPlanManager.setArrivalProcIndex(arrivalIndex, () => {
                     callback(true);
-                });
-            });
+                }).catch(console.error);
+            }).catch(console.error);
         });
     }
 
     setArrivalProcIndex(arrivalIndex, callback = EmptyCallback.Boolean) {
+        //console.log("FMCMainDisplay: setArrivalProcIndex = ", arrivalIndex);
         this.ensureCurrentFlightPlanIsTemporary(() => {
             this.flightPlanManager.setArrivalProcIndex(arrivalIndex, () => {
                 callback(true);
-            });
+            }).catch(console.error);
         });
     }
 
     setArrivalIndex(arrivalIndex, transitionIndex, callback = EmptyCallback.Boolean) {
+        //console.log("FMCMainDisplay: setArrivalIndex: arrivalIndex=", arrivalIndex, " transitionIndex=", transitionIndex);
         this.ensureCurrentFlightPlanIsTemporary(() => {
             this.flightPlanManager.setArrivalEnRouteTransitionIndex(transitionIndex, () => {
                 this.flightPlanManager.setArrivalProcIndex(arrivalIndex, () => {
                     callback(true);
-                });
-            });
+                }).catch(console.error);
+            }).catch(console.error);
         });
     }
 
     setApproachIndex(approachIndex, callback = EmptyCallback.Boolean) {
+        //console.log("FMCMainDisplay: setApproachIndex = ", approachIndex);
         this.ensureCurrentFlightPlanIsTemporary(() => {
             this.flightPlanManager.setApproachIndex(approachIndex, () => {
                 const approach = this.flightPlanManager.getApproach();
                 if (approach) {
-                    const runway = this.flightPlanManager.getApproachRunway();
+                    const runway = this.flightPlanManager.getDestinationRunway();
                     if (runway) {
                         SimVar.SetSimVarValue("L:A32NX_PRESS_AUTO_LANDING_ELEVATION", "feet", A32NX_Util.meterToFeet(runway.elevation));
                     }
                 }
-                this.clearAutotunedIls();
+                this.tempFpPendingAutoTune = true;
                 callback(true);
-            });
+            }).catch(console.error);
         });
     }
 
     async tuneIlsFromApproach(appr) {
-        const finalLeg = appr.wayPoints[appr.wayPoints.length - 1];
+        const finalLeg = appr.finalLegs[appr.finalLegs.length - 1];
         const ilsIcao = finalLeg.originIcao.trim();
         if (ilsIcao.length > 0) {
             try {
-                const ils = await this.facilityLoader.getFacility(ilsIcao);
+                const ils = await this.facilityLoader.getFacility(ilsIcao).catch(console.error);
                 if (ils.infos.frequencyMHz > 1) {
-                    console.log('Auto-tuning ILS', ils);
-                    this.connectIlsFrequency(ils.infos.frequencyMHz);
+                    this.ilsAutoFrequency = ils.infos.frequencyMHz;
+                    this.ilsAutoIcao = ils.infos.icao;
                     this.ilsAutoIdent = ils.infos.ident;
-                    this.ilsAutoCourse = finalLeg.bearingInFP;
+                    this.ilsAutoCourse = Math.round(finalLeg.course) % 360;
                     this.ilsAutoTuned = true;
-                    if (this.currentFlightPhase > FmgcFlightPhases.TAKEOFF) {
+                    if (!this._ilsFrequencyPilotEntered && !this._ilsIdentPilotEntered) {
+                        this.connectIlsFrequency(this.ilsAutoFrequency);
+                    }
+                    if (this.ilsCourse) {
+                        this.checkRunwayLsCourseMismatch();
+                    } else {
+                        await this.updateIlsCourse();
+                    }
+                    if (this.flightPhaseManager.phase > FmgcFlightPhases.TAKEOFF) {
                         this.ilsApproachAutoTuned = true;
                     } else {
                         this.ilsTakeoffAutoTuned = true;
                     }
+                    this.checkRunwayLsMismatch();
                     return true;
                 }
             } catch (error) {
-                console.log('tuneIlsFromApproach', error);
+                console.error('tuneIlsFromApproach', error);
                 return false;
             }
         }
@@ -1662,87 +2215,134 @@ class FMCMainDisplay extends BaseAirliners {
         this.ilsAutoTuned = false;
         this.ilsApproachAutoTuned = false;
         this.ilsTakeoffAutoTuned = false;
-        this.ilsAutoIdent = "";
-        this.ilsAutoCourse = 0;
+        this.ilsAutoFrequency = undefined;
+        this.ilsAutoIdent = undefined;
+        this.ilsAutoCourse = undefined;
+        this.updateIlsCourse();
     }
 
     async updateIls() {
-        if (this._ilsFrequencyPilotEntered) {
-            return;
-        }
+        await this.updateIlsCourse();
 
         let airport;
         let runway;
 
-        if (this.currentFlightPhase > FmgcFlightPhases.TAKEOFF) {
-            if (this.ilsApproachAutoTuned) {
+        if (this.flightPhaseManager.phase > FmgcFlightPhases.TAKEOFF) {
+            if (this.ilsApproachAutoTuned || this.flightPlanManager.getCurrentFlightPlanIndex() !== 0) {
                 return;
             }
             this.ilsAutoTuned = false;
             // for unknown reasons, the approach returned here doesn't have the approach waypoints which we need
             const appr = this.flightPlanManager.getApproach();
-            if (appr.name.indexOf('ILS') === -1 && appr.name.indexOf('LOC') === -1) {
-                return;
-            }
-            airport = this.flightPlanManager.getDestination();
-            runway = this.flightPlanManager.getApproachRunway();
+            if (appr) {
+                if (appr.approachType !== ApproachType.APPROACH_TYPE_ILS && appr.approachType !== ApproachType.APPROACH_TYPE_LOC) {
+                    return;
+                }
+                airport = this.flightPlanManager.getDestination();
+                runway = this.flightPlanManager.getDestinationRunway();
 
-            const planeLla = new LatLongAlt(
-                SimVar.GetSimVarValue("PLANE LATITUDE", "degree latitude"),
-                SimVar.GetSimVarValue("PLANE LONGITUDE", "degree longitude")
-            );
-            const runwayDistance = Avionics.Utils.computeGreatCircleDistance(planeLla, runway.beginningCoordinates);
-            if (runwayDistance > 300) {
-                return;
+                const planeLla = new LatLongAlt(
+                    SimVar.GetSimVarValue("PLANE LATITUDE", "degree latitude"),
+                    SimVar.GetSimVarValue("PLANE LONGITUDE", "degree longitude")
+                );
+                if (runway && runway.beginningCoordinates) {
+                    const runwayDistance = Avionics.Utils.computeGreatCircleDistance(planeLla, runway.beginningCoordinates);
+                    if (runwayDistance > 300) {
+                        return;
+                    }
+                }
             }
         } else {
-            if (this.ilsTakeoffAutoTuned) {
+            if (this.ilsTakeoffAutoTuned || this.flightPlanManager.getCurrentFlightPlanIndex() !== 0) {
                 return;
             }
             this.ilsAutoTuned = false;
             airport = this.flightPlanManager.getOrigin();
-            runway = this.flightPlanManager.getDepartureRunway();
+            runway = this.flightPlanManager.getOriginRunway();
         }
 
         // If the airport has correct navdata, the ILS will be listed as the reference navaid (originIcao in MSFS land) on at least the last leg of the
         // ILS approach procedure(s). Tuning this way gives us the ident, and the course
-        if (airport && airport.infos && runway) {
+        if (airport && airport.infos && airport.infos.icao.charAt(0) === 'A' && runway) {
             for (let i = 0; i < airport.infos.approaches.length && !this.ilsAutoTuned; i++) {
                 const appr = airport.infos.approaches[i];
                 // L(eft), C(entre), R(ight), T(true North) are the possible runway designators (ARINC424)
                 // If there are multiple procedures for the same type of approach, an alphanumeric suffix is added to their names (last subpattern)
                 // We are a little more lenient than ARINC424 in an effort to match non-perfect navdata, so we allow dashes, spaces, or nothing before the suffix
-                const match = appr.name.trim().match(/^(ILS|LOC) (RW)?([0-9]{1,2}[LCRT]?)([\s\-]*[A-Z0-9])?$/);
-                if (
-                    match !== null
-                    && Avionics.Utils.formatRunway(match[3]) === Avionics.Utils.formatRunway(runway.designation)
-                    && appr.wayPoints.length > 0
-                ) {
-                    await this.tuneIlsFromApproach(appr);
+                if (appr && appr.finalLegs) {
+                    if (
+                        (appr.approachType === ApproachType.APPROACH_TYPE_ILS || appr.approachType === ApproachType.APPROACH_TYPE_LOC)
+                        && appr.runwayNumber === runway.number
+                        && appr.runwayDesignator === runway.designator
+                        && appr.finalLegs.length > 0
+                    ) {
+                        await this.tuneIlsFromApproach(appr);
+                    }
                 }
             }
         }
     }
 
+    async updateIlsCourse() {
+        let course = -1;
+        if (this.ilsCourse !== undefined) {
+            course = this.ilsCourse;
+        } else if (this.ilsAutoTuned && (!this._ilsIdentPilotEntered || this._ilsIcao === this.ilsAutoIcao) && !this._ilsFrequencyPilotEntered) {
+            course = this.ilsAutoCourse;
+        } else if (this.ilsFrequency > 0 && SimVar.GetSimVarValue('L:A32NX_RADIO_RECEIVER_LOC_IS_VALID', 'number') === 1) {
+            course = SimVar.GetSimVarValue('NAV LOCALIZER:3', 'degrees');
+        }
+        return SimVar.SetSimVarValue('L:A32NX_FM_LS_COURSE', 'number', course);
+    }
+
+    isRunwayLsMismatched() {
+        if (!this.ilsAutoTuned || this.flightPhaseManager.phase === FmgcFlightPhases.DONE) {
+            return false;
+        }
+
+        return (this._ilsFrequencyPilotEntered && Math.abs(this.ilsFrequency - this.ilsAutoFrequency) >= 0.05) || (this._ilsIdentPilotEntered && this._ilsIcao !== this.ilsAutoIcao);
+    }
+
+    isRunwayLsCourseMismatched() {
+        if (!this.ilsAutoTuned || this.ilsCourse === undefined) {
+            return false;
+        }
+
+        return Math.abs(Avionics.Utils.diffAngle(this.ilsCourse, this.ilsAutoCourse)) > 3;
+    }
+
+    checkRunwayLsMismatch() {
+        if (this.isRunwayLsMismatched()) {
+            this.addMessageToQueue(NXSystemMessages.rwyLsMismatch, () => !(this.isRunwayLsMismatched() || this.isRunwayLsCourseMismatched()));
+        }
+
+        // manually entered course mismatch is handled separately to avoid unwanted messages
+    }
+
+    checkRunwayLsCourseMismatch() {
+        if (this.isRunwayLsCourseMismatched()) {
+            this.addMessageToQueue(NXSystemMessages.rwyLsMismatch, () => !(this.isRunwayLsMismatched() || this.isRunwayLsCourseMismatched()));
+        }
+    }
+
     updateFlightNo(flightNo, callback = EmptyCallback.Boolean) {
         if (flightNo.length > 7) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return callback(false);
         }
 
-        this.flightNumber = flightNo;
-
         SimVar.SetSimVarValue("ATC FLIGHT NUMBER", "string", flightNo, "FMC").then(() => {
-            NXApi.connectTelex(flightNo)
-                .then(() => {
-                    callback(true);
-                })
-                .catch((err) => {
-                    if (err !== NXApi.disabledError) {
-                        this.addNewMessage(NXFictionalMessages.fltNbrInUse);
+            this.atsu.connectToNetworks(flightNo)
+                .then((code) => {
+                    if (code !== Atsu.AtsuStatusCodes.Ok) {
+                        SimVar.SetSimVarValue("L:A32NX_MCDU_FLT_NO_SET", "boolean", 0);
+                        this.addNewAtsuMessage(code);
+                        this.flightNo = "";
                         return callback(false);
                     }
 
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_FLT_NO_SET", "boolean", 1);
+                    this.flightNumber = flightNo;
                     return callback(true);
                 });
         });
@@ -1759,7 +2359,7 @@ class FMCMainDisplay extends BaseAirliners {
                 return callback(true);
             }
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return callback(false);
     }
 
@@ -1783,6 +2383,9 @@ class FMCMainDisplay extends BaseAirliners {
         });
     }
 
+    getOrSelectILSsByIdent(ident, callback) {
+        this._getOrSelectWaypoints(this.dataManager.GetILSsByIdent.bind(this.dataManager), ident, callback);
+    }
     getOrSelectVORsByIdent(ident, callback) {
         this._getOrSelectWaypoints(this.dataManager.GetVORsByIdent.bind(this.dataManager), ident, callback);
     }
@@ -1794,48 +2397,75 @@ class FMCMainDisplay extends BaseAirliners {
         this._getOrSelectWaypoints(this.dataManager.GetWaypointsByIdent.bind(this.dataManager), ident, callback);
     }
 
-    insertWaypoint(newWaypointTo, index, callback = EmptyCallback.Boolean) {
-        this.ensureCurrentFlightPlanIsTemporary(async () => {
-            this.getOrSelectWaypointByIdent(newWaypointTo, (waypoint) => {
+    insertWaypoint(newWaypointTo, index, callback = EmptyCallback.Boolean, immediately) {
+        if (newWaypointTo === "" || newWaypointTo === FMCMainDisplay.clrValue) {
+            return callback(false);
+        }
+        try {
+            this.getOrCreateWaypoint(newWaypointTo, true).then((waypoint) => {
                 if (!waypoint) {
-                    this.addNewMessage(NXSystemMessages.notInDatabase);
                     return callback(false);
                 }
-                this.flightPlanManager.addWaypoint(waypoint.icao, index, () => {
-                    return callback(true);
-                });
+                if (immediately) {
+                    if (this.flightPlanManager.isCurrentFlightPlanTemporary()) {
+                        this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                        return callback(false);
+                    }
+                    if (waypoint.additionalData && waypoint.additionalData.storedType !== undefined) {
+                        this.flightPlanManager.addUserWaypoint(waypoint, index, () => {
+                            return callback(true);
+                        }).catch(console.error);
+                    } else {
+                        this.flightPlanManager.addWaypoint(waypoint.icao, index, () => {
+                            return callback(true);
+                        }).catch(console.error);
+                    }
+                } else {
+                    this.ensureCurrentFlightPlanIsTemporary(async () => {
+                        if (waypoint.additionalData && waypoint.additionalData.storedType !== undefined) {
+                            this.flightPlanManager.addUserWaypoint(waypoint, index, () => {
+                                return callback(true);
+                            }).catch(console.error);
+                        } else {
+                            this.flightPlanManager.addWaypoint(waypoint.icao, index, () => {
+                                return callback(true);
+                            }).catch(console.error);
+                        }
+                    });
+                }
+            }).catch((err) => {
+                if (err instanceof McduMessage) {
+                    this.setScratchpadMessage(err);
+                } else {
+                    console.error(err);
+                }
+                return callback(false);
             });
-        });
-    }
-
-    activateDirectToWaypoint(waypoint, callback = EmptyCallback.Void) {
-        const waypoints = this.flightPlanManager.getWaypoints();
-        const indexInFlightPlan = waypoints.findIndex(w => {
-            return w.icao === waypoint.icao;
-        });
-        let i = 1;
-        const removeWaypointMethod = (callback = EmptyCallback.Void) => {
-            if (i < indexInFlightPlan) {
-                this.flightPlanManager.removeWaypoint(1, i === indexInFlightPlan - 1, () => {
-                    i++;
-                    removeWaypointMethod(callback);
-                });
+        } catch (err) {
+            if (err instanceof McduMessage) {
+                this.setScratchpadMessage(err);
             } else {
-                callback();
+                console.error(err);
             }
-        };
-        removeWaypointMethod(() => {
-            this.flightPlanManager.activateDirectTo(waypoint.infos.icao, callback);
-        });
+            return callback(false);
+        }
     }
 
-    async insertWaypointsAlongAirway(lastWaypointIdent, index, airwayName, callback = EmptyCallback.Boolean) {
+    /**
+     *
+     * @param {string} lastWaypointIdent The waypoint along the airway to insert up to
+     * @param {number} index the flight plan index of the from waypoint
+     * @param {string} airwayName the name/ident of the airway
+     * @param {boolean} smartAirway true if the intersection is computed by the smart airways function
+     * @returns index of the last waypoint inserted or -1 on error
+     */
+    async insertWaypointsAlongAirway(lastWaypointIdent, index, airwayName, smartAirway = false) {
         const referenceWaypoint = this.flightPlanManager.getWaypoint(index - 1);
         const lastWaypointIdentPadEnd = lastWaypointIdent.padEnd(5, " ");
         if (referenceWaypoint) {
             const infos = referenceWaypoint.infos;
             if (infos instanceof WayPointInfo) {
-                await referenceWaypoint.infos.UpdateAirway(airwayName); // Sometimes the waypoint is initialized without waiting to the airways array to be filled
+                await referenceWaypoint.infos.UpdateAirway(airwayName).catch(console.error); // Sometimes the waypoint is initialized without waiting to the airways array to be filled
                 const airway = infos.airways.find(a => {
                     return a.name === airwayName;
                 });
@@ -1861,31 +2491,32 @@ class FMCMainDisplay extends BaseAirliners {
                                             if (i < count) {
                                                 waypoint.infos.airwayOut = airwayName;
                                             }
+                                            waypoint.additionalData.smartAirway = smartAirway;
+                                            waypoint.additionalData.annotation = airwayName;
                                             console.log("icao:" + icao + " added");
                                             resolve();
-                                        });
+                                        }).catch(console.error);
                                     });
                                 };
 
-                                await syncInsertWaypointByIcao(airway.icaos[firstIndex + i * inc], index + i);
+                                await syncInsertWaypointByIcao(airway.icaos[firstIndex + i * inc], index + i).catch(console.error);
                             }
-                            callback(true);
-                            return;
+                            return index + count;
                         }
-                        this.addNewMessage(NXFictionalMessages.secondIndexNotFound);
-                        return callback(false);
+                        this.setScratchpadMessage(NXFictionalMessages.secondIndexNotFound);
+                        return -1;
                     }
-                    this.addNewMessage(NXFictionalMessages.firstIndexNotFound);
-                    return callback(false);
+                    this.setScratchpadMessage(NXFictionalMessages.firstIndexNotFound);
+                    return -1;
                 }
-                this.addNewMessage(NXFictionalMessages.noRefWpt);
-                return callback(false);
+                this.setScratchpadMessage(NXFictionalMessages.noRefWpt);
+                return -1;
             }
-            this.addNewMessage(NXFictionalMessages.noWptInfos);
-            return callback(false);
+            this.setScratchpadMessage(NXFictionalMessages.noWptInfos);
+            return -1;
         }
-        this.addNewMessage(NXFictionalMessages.noRefWpt);
-        return callback(false);
+        this.setScratchpadMessage(NXFictionalMessages.noRefWpt);
+        return -1;
     }
 
     // Copy airway selections from temporary to active flightplan
@@ -1900,16 +2531,94 @@ class FMCMainDisplay extends BaseAirliners {
         }
     }
 
-    removeWaypoint(index, callback = EmptyCallback.Void) {
-        this.ensureCurrentFlightPlanIsTemporary(() => {
-            this.flightPlanManager.removeWaypoint(index, true, callback);
-        });
+    removeWaypoint(index, callback = EmptyCallback.Void, immediately = false) {
+        if (immediately) {
+            if (this.flightPlanManager.isCurrentFlightPlanTemporary()) {
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                return callback(false);
+            }
+            this.flightPlanManager.removeWaypoint(index, false, callback);
+        } else {
+            this.ensureCurrentFlightPlanIsTemporary(() => {
+                this.flightPlanManager.removeWaypoint(index, false, callback);
+            });
+        }
+    }
+
+    addWaypointOverfly(index, callback = EmptyCallback.Void, immediately = false) {
+        if (immediately) {
+            if (this.flightPlanManager.isCurrentFlightPlanTemporary()) {
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                return callback(false);
+            }
+            this.flightPlanManager.addWaypointOverfly(index, true, callback);
+        } else {
+            this.ensureCurrentFlightPlanIsTemporary(() => {
+                this.flightPlanManager.addWaypointOverfly(index, true, callback);
+            });
+        }
+    }
+
+    removeWaypointOverfly(index, callback = EmptyCallback.Void, immediately = false) {
+        if (immediately) {
+            if (this.flightPlanManager.isCurrentFlightPlanTemporary()) {
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                return callback(false);
+            }
+            this.flightPlanManager.removeWaypointOverfly(index, true, callback);
+        } else {
+            this.ensureCurrentFlightPlanIsTemporary(() => {
+                this.flightPlanManager.removeWaypointOverfly(index, true, callback);
+            });
+        }
+    }
+
+    clearDiscontinuity(index, callback = EmptyCallback.Void, immediately = false) {
+        if (immediately) {
+            if (this.flightPlanManager.isCurrentFlightPlanTemporary()) {
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                return callback(false);
+            }
+            if (!this.flightPlanManager.clearDiscontinuity(index)) {
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                return callback(false);
+            }
+            callback();
+        } else {
+            this.ensureCurrentFlightPlanIsTemporary(() => {
+                if (!this.flightPlanManager.clearDiscontinuity(index)) {
+                    this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                    return callback(false);
+                }
+                callback();
+            });
+        }
+    }
+
+    setDestinationAfterWaypoint(icao, index, callback = EmptyCallback.Boolean) {
+        this.dataManager.GetAirportByIdent(icao).then((airportTo) => {
+            if (airportTo) {
+                this.ensureCurrentFlightPlanIsTemporary(() => {
+                    this.flightPlanManager.truncateWaypoints(index);
+                    // add the new destination, which will insert a discontinuity
+                    this.flightPlanManager.setDestination(airportTo.icao, () => {
+                        this.tmpOrigin = airportTo.ident;
+                        callback(true);
+                    }).catch(console.error);
+                });
+            } else {
+                this.setScratchpadMessage(NXSystemMessages.notInDatabase);
+                callback(false);
+            }
+        }).catch(console.error);
     }
 
     eraseTemporaryFlightPlan(callback = EmptyCallback.Void) {
         this.flightPlanManager.setCurrentFlightPlanIndex(0, () => {
+            this.flightPlanManager.deleteFlightPlan(FlightPlans.Temporary);
             SimVar.SetSimVarValue("L:FMC_FLIGHT_PLAN_IS_TEMPORARY", "number", 0);
             SimVar.SetSimVarValue("L:MAP_SHOW_TEMPORARY_FLIGHT_PLAN", "number", 0);
+            this.tempFpPendingAutoTune = false;
             callback();
         });
     }
@@ -1918,12 +2627,50 @@ class FMCMainDisplay extends BaseAirliners {
         if (this.flightPlanManager.getCurrentFlightPlanIndex() === 1) {
             this.flightPlanManager.copyCurrentFlightPlanInto(0, () => {
                 this.flightPlanManager.setCurrentFlightPlanIndex(0, () => {
+                    this.flightPlanManager.getCurrentFlightPlan().updateTurningPoint(true);
+                    this.flightPlanManager.deleteFlightPlan(FlightPlans.Temporary);
                     SimVar.SetSimVarValue("L:FMC_FLIGHT_PLAN_IS_TEMPORARY", "number", 0);
                     SimVar.SetSimVarValue("L:MAP_SHOW_TEMPORARY_FLIGHT_PLAN", "number", 0);
+                    if (this.tempFpPendingAutoTune) {
+                        this.clearAutotunedIls();
+                        this.tempFpPendingAutoTune = false;
+                    }
                     callback();
                 });
+            }).catch(console.error);
+        }
+    }
+
+    /*
+     * validates the waypoint type
+     * return values:
+     *    0 = lat-lon coordinate
+     *    1 = time
+     *    2 = place definition
+     *   -1 = unknown
+     */
+    async waypointType(mcdu, waypoint) {
+        if (mcdu.isLatLonFormat(waypoint)) {
+            return [0, null];
+        }
+
+        // time formatted
+        if (/([0-2][0-4][0-5][0-9]Z?)/.test(waypoint) && waypoint.length <= 5) {
+            return [1, null];
+        }
+
+        // place formatted
+        if (/^[A-Z0-9]{2,7}/.test(waypoint)) {
+            return mcdu.dataManager.GetWaypointsByIdent.bind(mcdu.dataManager)(waypoint).then((waypoints) => {
+                if (waypoints.length !== 0) {
+                    return [2, null];
+                } else {
+                    return [-1, NXSystemMessages.notInDatabase];
+                }
             });
         }
+
+        return [-1, NXSystemMessages.formatError];
     }
 
     vSpeedsValid() {
@@ -1935,25 +2682,25 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     vSpeedDisagreeCheck() {
-        this.addNewMessage(NXSystemMessages.vToDisagree, this.vSpeedsValid.bind(this));
+        this.addMessageToQueue(NXSystemMessages.vToDisagree, this.vSpeedsValid.bind(this));
     }
 
     //Needs PR Merge #3082
     trySetV1Speed(s) {
         if (s === FMCMainDisplay.clrValue) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return false;
         }
         const v = parseInt(s);
         if (!isFinite(v) || !/^\d{2,3}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         if (v < 90 || v > 350) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
-        this.tryRemoveMessage(NXSystemMessages.checkToData.text);
+        this.removeMessageFromQueue(NXSystemMessages.checkToData.text);
         this._v1Checked = true;
         this.v1Speed = v;
         SimVar.SetSimVarValue("L:AIRLINER_V1_SPEED", "Knots", this.v1Speed).then(() => {
@@ -1965,19 +2712,19 @@ class FMCMainDisplay extends BaseAirliners {
     //Needs PR Merge #3082
     trySetVRSpeed(s) {
         if (s === FMCMainDisplay.clrValue) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return false;
         }
         const v = parseInt(s);
         if (!isFinite(v) || !/^\d{2,3}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         if (v < 90 || v > 350) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
-        this.tryRemoveMessage(NXSystemMessages.checkToData.text);
+        this.removeMessageFromQueue(NXSystemMessages.checkToData.text);
         this._vRChecked = true;
         this.vRSpeed = v;
         SimVar.SetSimVarValue("L:AIRLINER_VR_SPEED", "Knots", this.vRSpeed).then(() => {
@@ -1989,19 +2736,19 @@ class FMCMainDisplay extends BaseAirliners {
     //Needs PR Merge #3082
     trySetV2Speed(s) {
         if (s === FMCMainDisplay.clrValue) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return false;
         }
         const v = parseInt(s);
         if (!isFinite(v) || !/^\d{2,3}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         if (v < 90 || v > 350) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
-        this.tryRemoveMessage(NXSystemMessages.checkToData.text);
+        this.removeMessageFromQueue(NXSystemMessages.checkToData.text);
         this._v2Checked = true;
         this.v2Speed = v;
         SimVar.SetSimVarValue("L:AIRLINER_V2_SPEED", "Knots", this.v2Speed).then(() => {
@@ -2013,113 +2760,139 @@ class FMCMainDisplay extends BaseAirliners {
     trySetTakeOffTransAltitude(s) {
         if (s === FMCMainDisplay.clrValue) {
             // TODO when possible fetch default from database
-            this.transitionAltitude = this.transitionAltitudeIsPilotEntered ? 10000 : NaN;
-            this.transitionAltitudeIsPilotEntered = false;
-            SimVar.SetSimVarValue("L:AIRLINER_TRANS_ALT", "Number", 0);
+            this.flightPlanManager.setOriginTransitionAltitude();
             return true;
         }
 
         let value = parseInt(s);
         if (!isFinite(value) || !/^\d{4,5}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
 
         value = Math.round(value / 10) * 10;
         if (value < 1000 || value > 45000) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
 
-        this.transitionAltitude = value;
-        this.transitionAltitudeIsPilotEntered = true;
-        SimVar.SetSimVarValue("L:AIRLINER_TRANS_ALT", "Number", value);
+        this.flightPlanManager.setOriginTransitionAltitude(value);
         return true;
     }
 
     //Needs PR Merge #3082
-    trySetThrustReductionAccelerationAltitude(s) {
+    async trySetThrustReductionAccelerationAltitude(s) {
         if (s === FMCMainDisplay.clrValue) {
             this.thrustReductionAltitudeIsPilotEntered = false;
             this.accelerationAltitudeIsPilotEntered = false;
-            CDUPerformancePage.UpdateThrRedAccFromOrigin(this, true, true);
+            CDUPerformancePage.UpdateThrRedAccFromOrigin(this);
             return true;
         }
 
-        const origin = this.flightPlanManager.getOrigin();
-        const elevation = origin ? origin.altitudeinFP : 0;
-        const minimumAltitude = elevation + 400;
-
-        let newThrRedAlt = null;
-        let newAccAlt = null;
+        const [match, checkThrRedAlt, slash1, , slash2, checkAccAlt] = s.match(/^([0-9]{4,5})?(\/?)?((\/)([0-9]{4,5}))?$/) || [];
+        if (!match || (slash1 && slash2) || (!checkThrRedAlt && !checkAccAlt)) {
+            this.setScratchpadMessage(NXSystemMessages.formatError);
+            return false;
+        }
 
         let [thrRedAlt, accAlt] = s.split("/");
 
-        if (thrRedAlt && thrRedAlt.length > 0) {
-            if (!/^\d{3,5}$/.test(thrRedAlt)) {
-                this.addNewMessage(NXSystemMessages.formatError);
-                return false;
-            }
+        if (thrRedAlt === undefined || thrRedAlt == "") {
+            thrRedAlt = 0;
+        }
 
+        if (accAlt === undefined || accAlt == "") {
+            accAlt = 0;
+        }
+
+        if (thrRedAlt > 45000 || accAlt > 45000) {
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
+            return false;
+        }
+
+        let currentThrRedAlt = this.thrustReductionAltitude;
+        let currentAccAlt = this.accelerationAltitude;
+        let updateAccAlt = false;
+        let updateThrRedAlt = false;
+
+        const origin = this.flightPlanManager.getOrigin();
+        let elevation = SimVar.GetSimVarValue("GROUND ALTITUDE", "feet");
+        if (origin) {
+            elevation = await this.facilityLoader.GetAirportFieldElevation(origin.icao);
+        }
+
+        const minimumAltitude = elevation + 400;
+
+        if (thrRedAlt > 0) {
             thrRedAlt = parseInt(thrRedAlt);
             thrRedAlt = Math.round(thrRedAlt / 10) * 10;
-            if (thrRedAlt < minimumAltitude || thrRedAlt > 45000) {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
-                return false;
-            }
-
-            newThrRedAlt = thrRedAlt;
+            currentThrRedAlt = thrRedAlt;
         }
 
-        if (accAlt && accAlt.length > 0) {
-            if (!/^\d{3,5}$/.test(accAlt)) {
-                this.addNewMessage(NXSystemMessages.formatError);
-                return false;
-            }
-
+        if (accAlt > 0) {
             accAlt = parseInt(accAlt);
             accAlt = Math.round(accAlt / 10) * 10;
-            if (accAlt < minimumAltitude || accAlt > 45000) {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
-                return false;
-            }
-
-            newAccAlt = accAlt;
+            currentAccAlt = accAlt;
         }
 
-        if (newThrRedAlt !== null) {
-            this.thrustReductionAltitude = newThrRedAlt;
+        if (thrRedAlt > 0 && (thrRedAlt < minimumAltitude || thrRedAlt > currentAccAlt)) {
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
+            return false;
+        } else if (thrRedAlt > 0) {
+            updateThrRedAlt = true;
+        }
+
+        if (accAlt > 0 && (accAlt < minimumAltitude || accAlt < currentThrRedAlt)) {
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
+            return false;
+        } else if (accAlt > 0) {
+            updateAccAlt = true;
+        }
+
+        if (updateThrRedAlt == true) {
+            this.thrustReductionAltitude = thrRedAlt;
             this.thrustReductionAltitudeIsPilotEntered = true;
-            SimVar.SetSimVarValue("L:AIRLINER_THR_RED_ALT", "Number", newThrRedAlt);
+            SimVar.SetSimVarValue("L:AIRLINER_THR_RED_ALT", "Number", thrRedAlt);
+        } else {
+            this.thrustReductionAltitude = currentThrRedAlt;
+            SimVar.SetSimVarValue("L:AIRLINER_THR_RED_ALT", "Number", currentThrRedAlt);
         }
-        if (newAccAlt !== null) {
-            this.accelerationAltitude = newAccAlt;
+
+        if (updateAccAlt == true) {
+            this.accelerationAltitude = accAlt;
             this.accelerationAltitudeIsPilotEntered = true;
-            SimVar.SetSimVarValue("L:AIRLINER_ACC_ALT", "Number", newAccAlt);
+            SimVar.SetSimVarValue("L:AIRLINER_ACC_ALT", "Number", accAlt);
+        } else {
+            this.accelerationAltitude = currentAccAlt;
+            SimVar.SetSimVarValue("L:AIRLINER_ACC_ALT", "Number", currentAccAlt);
         }
         return true;
     }
-
-    trySetEngineOutAcceleration(s) {
+    async trySetEngineOutAcceleration(s) {
         if (s === FMCMainDisplay.clrValue) {
             this.engineOutAccelerationAltitudeIsPilotEntered = false;
             CDUPerformancePage.UpdateEngOutAccFromOrigin(this);
             return true;
         }
 
-        if (!/^\d{3,5}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+        if (!/^\d{4,5}$/.test(s)) {
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
 
         const origin = this.flightPlanManager.getOrigin();
-        const elevation = origin ? origin.altitudeinFP : 0;
+
+        let elevation = SimVar.GetSimVarValue("GROUND ALTITUDE", "feet");
+        if (origin) {
+            elevation = await this.facilityLoader.GetAirportFieldElevation(origin.icao);
+        }
+
         const minimumAltitude = elevation + 400;
 
         let engineOutAccAlt = parseInt(s);
         engineOutAccAlt = Math.round(engineOutAccAlt / 10) * 10;
         if (engineOutAccAlt < minimumAltitude || engineOutAccAlt > 45000) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
 
@@ -2130,7 +2903,8 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     //Needs PR Merge #3082
-    trySetThrustReductionAccelerationAltitudeGoaround(s) {
+    // look at this
+    async trySetThrustReductionAccelerationAltitudeGoaround(s) {
         let thrRed = NaN;
         let accAlt = NaN;
         if (s) {
@@ -2149,18 +2923,18 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
-    trySetengineOutAccelerationAltitudeGoaround(s) {
+    async trySetEngineOutAccelerationAltitudeGoaround(s) {
         const engOutAcc = parseInt(s);
         if (isFinite(engOutAcc)) {
             this.engineOutAccelerationAltitudeGoaround = engOutAcc;
             SimVar.SetSimVarValue("L:AIRLINER_ENG_OUT_ACC_ALT_GOAROUND", "Number", this.engineOutAccelerationAltitudeGoaround);
             return true;
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2176,11 +2950,11 @@ class FMCMainDisplay extends BaseAirliners {
         }
         let value = parseInt(s);
         if (!isFinite(value) || !/^[+\-]?\d{1,2}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         if (value < -99 || value > 99) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
         // As the sim uses 0 as a sentinel value to detect that no flex
@@ -2227,7 +3001,7 @@ class FMCMainDisplay extends BaseAirliners {
             return true;
         }
         if (!this.representsDecimalNumber(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         const value = NXUnits.userToKg(parseFloat(s));
@@ -2237,11 +3011,11 @@ class FMCMainDisplay extends BaseAirliners {
                 this.taxiFuelWeight = value;
                 return true;
             } else {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2274,7 +3048,7 @@ class FMCMainDisplay extends BaseAirliners {
                 const rteFinalTime = s.slice(1);
 
                 if (!/^\d{1,4}$/.test(rteFinalTime)) {
-                    this.addNewMessage(NXSystemMessages.formatError);
+                    this.setScratchpadMessage(NXSystemMessages.formatError);
                     return false;
                 }
 
@@ -2284,12 +3058,12 @@ class FMCMainDisplay extends BaseAirliners {
                     this._routeFinalFuelTime = FMCMainDisplay.hhmmToMinutes(rteFinalTime.padStart(4,"0"));
                     return true;
                 } else {
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
             }
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2315,7 +3089,7 @@ class FMCMainDisplay extends BaseAirliners {
                 const enteredValue = s.endsWith("/") ? s.slice(0, -1) : s;
 
                 if (!this.representsDecimalNumber(enteredValue)) {
-                    this.addNewMessage(NXSystemMessages.formatError);
+                    this.setScratchpadMessage(NXSystemMessages.formatError);
                     return false;
                 }
 
@@ -2328,12 +3102,12 @@ class FMCMainDisplay extends BaseAirliners {
                     this._routeFinalFuelTime = (rteFinalWeight * 1000) / this._rteFinalCoeffecient;
                     return true;
                 } else {
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
             }
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2373,14 +3147,14 @@ class FMCMainDisplay extends BaseAirliners {
                 const enteredValue = s.slice(1);
 
                 if (!this.representsDecimalNumber(enteredValue)) {
-                    this.addNewMessage(NXSystemMessages.formatError);
+                    this.setScratchpadMessage(NXSystemMessages.formatError);
                     return false;
                 }
 
                 const rteRsvPercent = parseFloat(enteredValue);
 
                 if (!this.isRteRsvPercentInRange(rteRsvPercent)) {
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
 
@@ -2395,7 +3169,7 @@ class FMCMainDisplay extends BaseAirliners {
                 }
             }
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2406,12 +3180,12 @@ class FMCMainDisplay extends BaseAirliners {
      */
     trySetCruiseFlCheckInput(input) {
         if (input === FMCMainDisplay.clrValue) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return false;
         }
         const flString = input.replace("FL", "");
         if (!flString) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return false;
         }
         return this.trySetCruiseFl(parseFloat(flString));
@@ -2424,25 +3198,25 @@ class FMCMainDisplay extends BaseAirliners {
      */
     trySetCruiseFl(fl) {
         if (!isFinite(fl)) {
-            this.addNewMessage(NXSystemMessages.notAllowed);
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return false;
         }
         if (fl >= 1000) {
             fl = Math.floor(fl / 100);
         }
         if (fl > this.maxCruiseFL) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
-        const phase = this.currentFlightPhase;
+        const phase = this.flightPhaseManager.phase;
         const selFl = Math.floor(Math.max(0, Simplane.getAutoPilotDisplayedAltitudeLockValue("feet")) / 100);
         if (fl < selFl && (phase === FmgcFlightPhases.CLIMB || phase === FmgcFlightPhases.APPROACH || phase === FmgcFlightPhases.GOAROUND)) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
 
         if (fl <= 0 || fl > this.maxCruiseFL) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
 
@@ -2453,13 +3227,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.cruiseTemperature = undefined;
         this.updateConstraints();
 
-        const acFl = Math.floor(Simplane.getAltitude() / 100);
-
-        if (acFl > fl && (phase === FmgcFlightPhases.CLIMB || phase === FmgcFlightPhases.DESCENT || phase === FmgcFlightPhases.APPROACH)) {
-            this.flightPhaseManager.changeFlightPhase(FmgcFlightPhases.CRUISE);
-        } else if (acFl < fl && (phase === FmgcFlightPhases.DESCENT || phase === FmgcFlightPhases.APPROACH)) {
-            this.flightPhaseManager.changeFlightPhase(FmgcFlightPhases.CLIMB);
-        }
+        this.flightPhaseManager.handleNewCruiseAltitudeEntered(fl);
 
         return true;
     }
@@ -2483,14 +3251,14 @@ class FMCMainDisplay extends BaseAirliners {
                 const enteredValue = s.endsWith("/") ? s.slice(0, -1) : s;
 
                 if (!this.representsDecimalNumber(enteredValue)) {
-                    this.addNewMessage(NXSystemMessages.formatError);
+                    this.setScratchpadMessage(NXSystemMessages.formatError);
                     return false;
                 }
 
                 const rteRsvWeight = NXUnits.userToKg(parseFloat(enteredValue));
 
                 if (!this.isRteRsvFuelInRange(rteRsvWeight)) {
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
 
@@ -2509,7 +3277,7 @@ class FMCMainDisplay extends BaseAirliners {
                 }
             }
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2526,11 +3294,11 @@ class FMCMainDisplay extends BaseAirliners {
                         this.zeroFuelWeightMassCenter = zfwcg;
                         return true;
                     }
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
                 if (!this._zeroFuelWeightZFWCGEntered) {
-                    this.addNewMessage(NXSystemMessages.notAllowed);
+                    this.setScratchpadMessage(NXSystemMessages.notAllowed);
                     return false;
                 }
                 if (this.isZFWInRange(zfw)) {
@@ -2541,11 +3309,11 @@ class FMCMainDisplay extends BaseAirliners {
                     this.zeroFuelWeightMassCenter = zfwcg;
                     return true;
                 }
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
             if (!this._zeroFuelWeightZFWCGEntered) {
-                this.addNewMessage(NXSystemMessages.notAllowed);
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
                 return false;
             }
             const zfw = NXUnits.userToKg(parseFloat(s));
@@ -2553,10 +3321,10 @@ class FMCMainDisplay extends BaseAirliners {
                 this.zeroFuelWeight = zfw;
                 return true;
             }
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
-        this.addNewMessage(NXSystemMessages.formatError);
+        this.setScratchpadMessage(NXSystemMessages.formatError);
         return false;
     }
 
@@ -2590,11 +3358,11 @@ class FMCMainDisplay extends BaseAirliners {
                 this._blockFuelEntered = true;
                 return true;
             } else {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2604,13 +3372,13 @@ class FMCMainDisplay extends BaseAirliners {
         const digits = matchedIndex >= 0 ? s.replace(validDelims[matchedIndex], "") : s;
         const isNum = /^\d+$/.test(digits);
         if (!isNum) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         const wind = parseInt(digits);
         this._windDir = matchedIndex <= 2 ? this._windDirections.TAILWIND : this._windDirections.HEADWIND;
         if (wind > 250) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
         this.averageWind = wind;
@@ -2618,7 +3386,7 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     trySetPreSelectedClimbSpeed(s) {
-        const isNextPhase = this.currentFlightPhase === FmgcFlightPhases.TAKEOFF;
+        const isNextPhase = this.flightPhaseManager.phase === FmgcFlightPhases.TAKEOFF;
         if (s === FMCMainDisplay.clrValue) {
             this.preSelectedClbSpeed = undefined;
             if (isNextPhase) {
@@ -2644,12 +3412,12 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
     trySetPreSelectedCruiseSpeed(s) {
-        const isNextPhase = this.currentFlightPhase === FmgcFlightPhases.CLIMB;
+        const isNextPhase = this.flightPhaseManager.phase === FmgcFlightPhases.CLIMB;
         if (s === FMCMainDisplay.clrValue) {
             this.preSelectedCrzSpeed = undefined;
             if (isNextPhase) {
@@ -2675,12 +3443,12 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
     trySetPreSelectedDescentSpeed(s) {
-        const isNextPhase = this.currentFlightPhase === FmgcFlightPhases.CRUISE;
+        const isNextPhase = this.flightPhaseManager.phase === FmgcFlightPhases.CRUISE;
         if (s === FMCMainDisplay.clrValue) {
             this.preSelectedDesSpeed = undefined;
             if (isNextPhase) {
@@ -2706,7 +3474,7 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2714,7 +3482,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (s === FMCMainDisplay.clrValue) {
             const dest = this.flightPlanManager.getDestination();
             if (dest && dest.liveDistanceTo < 180) {
-                this.addNewMessage(NXSystemMessages.notAllowed);
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
                 return false;
             } else {
                 this.perfApprQNH = NaN;
@@ -2732,7 +3500,7 @@ class FMCMainDisplay extends BaseAirliners {
                 SimVar.SetSimVarValue("L:A32NX_DESTINATION_QNH", "Millibar", this.perfApprQNH);
                 return true;
             } else {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
         } else if (INHG_REGEX.test(s)) {
@@ -2745,11 +3513,11 @@ class FMCMainDisplay extends BaseAirliners {
                 SimVar.SetSimVarValue("L:A32NX_DESTINATION_QNH", "Millibar", this.perfApprQNH * 33.8639);
                 return true;
             } else {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
         }
-        this.addNewMessage(NXSystemMessages.formatError);
+        this.setScratchpadMessage(NXSystemMessages.formatError);
         return false;
     }
 
@@ -2757,7 +3525,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (s === FMCMainDisplay.clrValue) {
             const dest = this.flightPlanManager.getDestination();
             if (dest && dest.liveDistanceTo < 180) {
-                this.addNewMessage(NXSystemMessages.notAllowed);
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
                 return false;
             } else {
                 this.perfApprTemp = NaN;
@@ -2766,7 +3534,7 @@ class FMCMainDisplay extends BaseAirliners {
         }
 
         if (!/^[\+\-]?\d{1,2}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         this.perfApprTemp = parseInt(s);
@@ -2782,12 +3550,12 @@ class FMCMainDisplay extends BaseAirliners {
 
         // both must be entered
         if (!/^\d{1,3}\/\d{1,3}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         const [dir, mag] = s.split("/").map((v) => parseInt(v));
         if (dir > 360 || mag > 500) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
         this.perfApprWindHeading = dir % 360; // 360 is displayed as 0
@@ -2797,26 +3565,21 @@ class FMCMainDisplay extends BaseAirliners {
 
     setPerfApprTransAlt(s) {
         if (s === FMCMainDisplay.clrValue) {
-            // TODO when possible fetch default from database
-            this.perfApprTransAlt = this.perfApprTransAltPilotEntered ? 10000 : NaN;
-            this.perfApprTransAltPilotEntered = false;
-            SimVar.SetSimVarValue("L:AIRLINER_APPR_TRANS_ALT", "Number", this.perfApprTransAlt);
+            this.flightPlanManager.setDestinationTransitionLevel();
             return true;
         }
 
         if (!/^\d{4,5}$/.test(s)) {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
         const value = Math.round(parseInt(s) / 10) * 10;
         if (value < 1000 || value > 45000) {
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
 
-        this.perfApprTransAlt = value;
-        this.perfApprTransAltPilotEntered = true;
-        SimVar.SetSimVarValue("L:AIRLINER_APPR_TRANS_ALT", "Number", value);
+        this.flightPlanManager.setDestinationTransitionLevel(Math.round(value / 100));
         return true;
     }
 
@@ -2830,6 +3593,17 @@ class FMCMainDisplay extends BaseAirliners {
         return this.approachSpeeds.vapp;
     }
 
+    /**
+     * VApp for _selected_ landing config with GSMini correction
+     */
+    getVAppGsMini() {
+        let vAppTarget = this.getVApp();
+        if (isFinite(this.perfApprWindSpeed) && isFinite(this.perfApprWindHeading)) {
+            vAppTarget = NXSpeedsUtils.getVtargetGSMini(vAppTarget, NXSpeedsUtils.getHeadWindDiff(this._towerHeadwind));
+        }
+        return vAppTarget;
+    }
+
     //Needs PR Merge #3154
     setPerfApprVApp(s) {
         if (s === FMCMainDisplay.clrValue) {
@@ -2839,7 +3613,7 @@ class FMCMainDisplay extends BaseAirliners {
             }
         } else {
             if (s.includes(".")) {
-                this.addNewMessage(NXSystemMessages.formatError);
+                this.setScratchpadMessage(NXSystemMessages.formatError);
                 return false;
             }
             const value = parseInt(s);
@@ -2847,10 +3621,10 @@ class FMCMainDisplay extends BaseAirliners {
                 this.vApp = value;
                 return true;
             }
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
+        this.setScratchpadMessage(NXSystemMessages.notAllowed);
         return false;
     }
 
@@ -2871,7 +3645,7 @@ class FMCMainDisplay extends BaseAirliners {
             return true;
         } else if (s.match(/^[0-9]{1,5}$/) !== null) {
             const value = parseInt(s);
-            let ldgRwy = this.flightPlanManager.getApproachRunway();
+            let ldgRwy = this.flightPlanManager.getDestinationRunway();
             if (!ldgRwy) {
                 const dest = this.flightPlanManager.getDestination();
                 if (dest && dest.infos && dest.infos.runways.length > 0) {
@@ -2885,10 +3659,10 @@ class FMCMainDisplay extends BaseAirliners {
                 SimVar.SetSimVarValue("L:AIRLINER_MINIMUM_DESCENT_ALTITUDE", "feet", this.perfApprMDA);
                 return true;
             }
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
+            this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         } else {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
     }
@@ -2911,11 +3685,11 @@ class FMCMainDisplay extends BaseAirliners {
                 SimVar.SetSimVarValue("L:AIRLINER_DECISION_HEIGHT", "feet", this.perfApprDH);
                 return true;
             } else {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
         } else {
-            this.addNewMessage(NXSystemMessages.formatError);
+            this.setScratchpadMessage(NXSystemMessages.formatError);
             return false;
         }
     }
@@ -2925,38 +3699,9 @@ class FMCMainDisplay extends BaseAirliners {
         SimVar.SetSimVarValue("L:A32NX_SPEEDS_LANDING_CONF3", "boolean", s);
     }
 
-    getIsFlying() {
-        return this.currentFlightPhase >= FmgcFlightPhases.TAKEOFF;
-    }
-
-    tryGoInApproachPhase() {
-        if (
-            this.currentFlightPhase === FmgcFlightPhases.PREFLIGHT ||
-            this.currentFlightPhase === FmgcFlightPhases.TAKEOFF ||
-            this.currentFlightPhase === FmgcFlightPhases.DONE
-        ) {
-            return false;
-        }
-
-        if (this.currentFlightPhase !== FmgcFlightPhases.APPROACH) {
-            this.flightPhaseManager.changeFlightPhase(FmgcFlightPhases.APPROACH);
-        }
-
-        return true;
-    }
-
     connectIlsFrequency(_freq) {
         if (_freq >= 108 && _freq <= 111.95 && RadioNav.isHz50Compliant(_freq)) {
-            switch (this.radioNav.mode) {
-                case NavMode.FOUR_SLOTS: {
-                    this.ilsFrequency = _freq;
-                    break;
-                }
-                case NavMode.TWO_SLOTS: {
-                    this.vor1Frequency = _freq;
-                    break;
-                }
-            }
+            this.ilsFrequency = _freq;
             this.connectIls();
             return true;
         }
@@ -2974,45 +3719,130 @@ class FMCMainDisplay extends BaseAirliners {
         setTimeout(() => {
             this._lockConnectIls = false;
         }, 1000);
-        switch (this.radioNav.mode) {
-            case NavMode.FOUR_SLOTS: {
-                if (Math.abs(this.radioNav.getILSActiveFrequency(1) - this.ilsFrequency) > 0.005) {
-                    this.radioNav.setILSActiveFrequency(1, this.ilsFrequency);
-                }
-                break;
-            }
-            case NavMode.TWO_SLOTS: {
-                if (Math.abs(this.radioNav.getVORActiveFrequency(1) - this.vor1Frequency) > 0.005) {
-                    this.radioNav.setVORActiveFrequency(1, this.vor1Frequency);
-                }
-                break;
-            }
-            default:
-                console.error("Unknown RadioNav operating mode");
-                break;
+
+        if (Math.abs(this.radioNav.getILSActiveFrequency(1) - this.ilsFrequency) > 0.005) {
+            this.radioNav.setILSActiveFrequency(1, this.ilsFrequency);
         }
     }
 
-    setIlsFrequency(s) {
+    setIlsFrequency(s, callback) {
         if (s === FMCMainDisplay.clrValue) {
-            this.ilsFrequency = 0;
-            this.radioNav.setILSActiveFrequency(1, 0);
-            this._ilsFrequencyPilotEntered = false;
-            return true;
-        }
-        const v = parseFloat(s);
-        if (isFinite(v)) {
-            const freq = Math.round(v * 100) / 100;
-            if (this.connectIlsFrequency(freq)) {
-                this._ilsFrequencyPilotEntered = true;
-                this.clearAutotunedIls();
-                return true;
+            if (!this._ilsIdentPilotEntered && !this._ilsFrequencyPilotEntered) {
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                return callback(false);
             }
-            this.addNewMessage(NXSystemMessages.entryOutOfRange);
-            return false;
+
+            this._ilsFrequencyPilotEntered = false;
+            this._ilsIdentPilotEntered = false;
+            this._ilsIcao = undefined;
+            if (this.ilsAutoTuned) {
+                this.connectIlsFrequency(this.ilsAutoFrequency);
+                this.checkRunwayLsCourseMismatch();
+            } else {
+                this.ilsCourse = undefined;
+                this.ilsFrequency = 0;
+                this.radioNav.setILSActiveFrequency(1, 0);
+            }
+            this.updateIlsCourse().then(() => {
+                callback(true);
+            });
+            return;
         }
-        this.addNewMessage(NXSystemMessages.notAllowed);
-        return false;
+        if (s.match(/^[0-9]{3}(\.[0-9]{1,2})$/) !== null) {
+            const v = parseFloat(s);
+            const freq = Math.round(v * 100) / 100;
+
+            if (this.connectIlsFrequency(freq)) {
+                this._ilsIcao = undefined;
+                this._ilsIdent = undefined;
+                this._ilsFrequencyPilotEntered = true;
+                this._ilsIdentPilotEntered = false;
+                this.ilsCourse = undefined;
+                this.checkRunwayLsMismatch();
+                this.updateIlsCourse().then(() => {
+                    callback(true);
+                });
+                return;
+            } else {
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
+                return callback(false);
+            }
+        } else if (s.match(/^[A-Z0-9]{1,4}$/) !== null) {
+            this.getOrSelectILSsByIdent(s, (navaid) => {
+                if (navaid) {
+                    if (this.connectIlsFrequency(Math.round(navaid.infos.frequencyMHz * 100) / 100)) {
+                        this._ilsIcao = navaid.infos.icao;
+                        this._ilsIdent = s;
+                        this._ilsFrequencyPilotEntered = false;
+                        this._ilsIdentPilotEntered = true;
+                        if (!this.ilsAutoTuned || this.ilsAutoIcao !== this._ilsIcao) {
+                            this.ilsCourse = undefined;
+                        }
+                        this.checkRunwayLsMismatch();
+                        this.updateIlsCourse().then(() => {
+                            callback(true);
+                        });
+                        return;
+                    } else {
+                        this.setScratchpadMessage(NXSystemMessages.databaseCodingError);
+                        return callback(false);
+                    }
+                } else {
+                    // TODO should show new navaid page
+                    this.setScratchpadMessage(NXSystemMessages.notInDatabase);
+                    return callback(false);
+                }
+            });
+        } else {
+            this.setScratchpadMessage(NXSystemMessages.formatError);
+            return callback(false);
+        }
+    }
+
+    setLsCourse(s, callback) {
+        if (!this.ilsAutoTuned && !this._ilsFrequencyPilotEntered && !this._ilsIdentPilotEntered) {
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
+            return callback(false);
+        }
+
+        if (s === FMCMainDisplay.clrValue) {
+            if (this.ilsCourse !== undefined) {
+                this.ilsCourse = undefined;
+                this.updateIlsCourse().then(() => {
+                    callback(true);
+                });
+                return;
+            } else {
+                this.setScratchpadMessage(NXSystemMessages.notAllowed);
+                return callback(false);
+            }
+        }
+
+        const m = s.match(/^(F|B)?([0-9]{1,3})(F|B)?$/);
+        const direction = m[1] || m[3];
+        const course = parseInt(m[2]);
+        if (m !== null && direction !== undefined && (m[1] === undefined || m[3] === undefined)) {
+            if (course > 360) {
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
+                return callback(false);
+            }
+            if (direction === 'B') {
+                this.setScratchpadMessage(NXFictionalMessages.notYetImplemented);
+                return callback(false);
+            }
+
+            this.ilsCourse = course % 360;
+
+            this.checkRunwayLsCourseMismatch();
+
+            this.updateIlsCourse().then(() => {
+                callback(true);
+            });
+            return;
+        }
+
+        this.setScratchpadMessage(NXSystemMessages.formatError);
+        return callback(false);
     }
 
     initRadioNav(_boot) {
@@ -3172,8 +4002,8 @@ class FMCMainDisplay extends BaseAirliners {
         this._ilsFrequency = _frq;
     }
 
-    set ilsCourse(_crs) {
-        this._ilsCourse = _crs;
+    set ilsCourse(crs) {
+        this._ilsCourse = crs;
     }
 
     set adf1Frequency(_frq) {
@@ -3196,16 +4026,8 @@ class FMCMainDisplay extends BaseAirliners {
         this._atc1Frequency = _frq;
     }
 
-    updateZfwVars() {
-        const totalWeight = SimVar.GetSimVarValue("TOTAL WEIGHT", "kilograms") / 1000;
-        const blockFuel = SimVar.GetSimVarValue("FUEL TOTAL QUANTITY", "gallons") * SimVar.GetSimVarValue("FUEL WEIGHT PER GALLON", "kilograms") / 1000;
-        this.zeroFuelWeight = totalWeight - blockFuel;
-        this.zeroFuelWeightMassCenter = SimVar.GetSimVarValue("CG PERCENT", "percent");
-    }
-
     updateFuelVars() {
         this.blockFuel = SimVar.GetSimVarValue("FUEL TOTAL QUANTITY", "gallons") * SimVar.GetSimVarValue("FUEL WEIGHT PER GALLON", "kilograms") / 1000;
-        this.updateZfwVars();
     }
 
     trySetFlapsTHS(s) {
@@ -3227,13 +4049,13 @@ class FMCMainDisplay extends BaseAirliners {
 
         if (flaps && flaps.length > 0) {
             if (!/^\d$/.test(flaps)) {
-                this.addNewMessage(NXSystemMessages.formatError);
+                this.setScratchpadMessage(NXSystemMessages.formatError);
                 return false;
             }
 
             flaps = parseInt(flaps);
             if (flaps < 0 || flaps > 3) {
-                this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
 
@@ -3243,7 +4065,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (ths && ths.length > 0) {
             // allow AAN.N and N.NAA, where AA is UP or DN
             if (!/^(UP|DN)(\d|\d?\.\d|\d\.\d?)|(\d|\d?\.\d|\d\.\d?)(UP|DN)$/.test(ths)) {
-                this.addNewMessage(NXSystemMessages.formatError);
+                this.setScratchpadMessage(NXSystemMessages.formatError);
                 return false;
             }
 
@@ -3265,7 +4087,7 @@ class FMCMainDisplay extends BaseAirliners {
                     ths *= -1;
                 }
                 if (!isFinite(ths) || ths < -5 || ths > 7) {
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
+                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
                 newThs = ths;
@@ -3300,14 +4122,14 @@ class FMCMainDisplay extends BaseAirliners {
         if (EFOBBelMin < this._minDestFob) {
             if (this.isAnEngineOn()) {
                 setTimeout(() => {
-                    this.addNewMessage(NXSystemMessages.destEfobBelowMin, () => {
+                    this.addMessageToQueue(NXSystemMessages.destEfobBelowMin, () => {
                         return this._EfobBelowMinClr === true;
                     }, () => {
                         this._EfobBelowMinClr = true;
                     });
                 }, 180000);
             } else {
-                this.addNewMessage(NXSystemMessages.destEfobBelowMin, () => {
+                this.addMessageToQueue(NXSystemMessages.destEfobBelowMin, () => {
                     return this._EfobBelowMinClr === true;
                 }, () => {
                     this._EfobBelowMinClr = true;
@@ -3318,7 +4140,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     updateTowerHeadwind() {
         if (isFinite(this.perfApprWindSpeed) && isFinite(this.perfApprWindHeading)) {
-            const rwy = this.flightPlanManager.getApproachRunway();
+            const rwy = this.flightPlanManager.getDestinationRunway();
             if (rwy) {
                 this._towerHeadwind = NXSpeedsUtils.getHeadwind(this.perfApprWindSpeed, this.perfApprWindHeading, rwy.direction);
             }
@@ -3342,7 +4164,7 @@ class FMCMainDisplay extends BaseAirliners {
      */
     tryCheckToData() {
         if (isFinite(this.v1Speed) || isFinite(this.vRSpeed) || isFinite(this.v2Speed)) {
-            this.addNewMessage(NXSystemMessages.checkToData);
+            this.addMessageToQueue(NXSystemMessages.checkToData);
         }
     }
 
@@ -3354,7 +4176,7 @@ class FMCMainDisplay extends BaseAirliners {
      *   Only prompt the confirmation of FLEX TEMP when the TO runway was changed, not on initial insertion of the runway
      */
     onToRwyChanged() {
-        const selectedRunway = this.flightPlanManager.getDepartureRunway();
+        const selectedRunway = this.flightPlanManager.getOriginRunway();
         if (!!selectedRunway) {
             const toRunway = Avionics.Utils.formatRunway(selectedRunway.designation);
             if (toRunway === this.toRunway) {
@@ -3370,9 +4192,7 @@ class FMCMainDisplay extends BaseAirliners {
                 if (this._v1Checked && this._vRChecked && this._v2Checked && this._toFlexChecked) {
                     return;
                 }
-                this.addNewMessage(NXSystemMessages.checkToData, (mcdu) => {
-                    return mcdu._v1Checked && mcdu._vRChecked && mcdu._v2Checked && mcdu._toFlexChecked;
-                });
+                this.addMessageToQueue(NXSystemMessages.checkToData, (mcdu) => mcdu._v1Checked && mcdu._vRChecked && mcdu._v2Checked && mcdu._toFlexChecked);
             }
             this.toRunway = toRunway;
         }
@@ -3418,20 +4238,6 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     /**
-     * LatLongAltCallback
-     *
-     * @callback LatLongAltCallback
-     * @param {LatLongAlt} result
-     * @param {number=} magVar magnetic variation if available
-     */
-    /**
-     * McduMessageCallback
-     *
-     * @callback McduMessageCallback
-     * @param {McduMessage} message
-     */
-
-    /**
      * Check if a place is the correct format for a runway
      * @param {string} s
      * @returns true if valid runway format
@@ -3444,31 +4250,23 @@ class FMCMainDisplay extends BaseAirliners {
      * Parse a runway string and return the location of the threshold
      * Returns undefined if invalid format or not in database
      * @param {string} place
-     * @param {LatLongAltCallback} onSuccess location of runway threshold
-     * @param {McduMessageCallback} onError suggested error message
+     * @throws {McduMessage}
+     * @returns {WayPoint}
      */
-    parseRunway(place, onSuccess, onError) {
+    async parseRunway(place) {
         const rwy = place.match(/^([A-Z]{4})([0-9]{2}[RCL]?)$/);
         if (rwy !== null) {
-            this.dataManager.GetAirportByIdent(rwy[1]).then((airport) => {
-                if (airport) {
-                    for (let i = 0; i < airport.infos.oneWayRunways.length; i++) {
-                        if (Avionics.Utils.formatRunway(airport.infos.oneWayRunways[i].designation) === rwy[2]) {
-                            const runway = airport.infos.oneWayRunways[i];
-                            // this should be to the treshold but we don't have that, so we just use half the length
-                            const adjustedCoordinates = Avionics.Utils.bearingDistanceToCoordinates(
-                                (runway.direction + 180) % 360,
-                                runway.length / 2 / 1852, // TODO unit conversion lib
-                                runway.latitude, runway.longitude
-                            );
-                            return onSuccess(adjustedCoordinates, Facilities.getMagVar(adjustedCoordinates.lat, adjustedCoordinates.long));
-                        }
+            const airport = await this.dataManager.GetAirportByIdent(rwy[1]);
+            if (airport) {
+                for (let i = 0; i < airport.infos.oneWayRunways.length; i++) {
+                    if (Avionics.Utils.formatRunway(airport.infos.oneWayRunways[i].designation) === rwy[2]) {
+                        return this.dataManager.createRunwayWaypoint(airport, airport.infos.oneWayRunways[i]);
                     }
-                    return onError(NXSystemMessages.notInDatabase);
                 }
-            });
+                throw NXSystemMessages.notInDatabase;
+            }
         } else {
-            return onError(NXSystemMessages.notInDatabase);
+            throw NXSystemMessages.notInDatabase;
         }
     }
 
@@ -3484,10 +4282,10 @@ class FMCMainDisplay extends BaseAirliners {
     /**
      * Parse a lat/lon string into a position
      * @param {string} place
-     * @param {LatLongAltCallback} onSuccess location
-     * @param {McduMessageCallback} onError suggested error message
+     * @throws {McduMessage}
+     * @returns {LatLongAlt}
      */
-    parseLatLon(place, onSuccess, onError) {
+    parseLatLon(place) {
         const latlon = place.match(/^(N|S)?([0-9]{2,4}\.[0-9])(N|S)?\/(E|W)?([0-9]{2,5}\.[0-9])(E|W)?$/);
         if (latlon !== null) {
             const latB = (latlon[1] || "") + (latlon[3] || "");
@@ -3499,17 +4297,16 @@ class FMCMainDisplay extends BaseAirliners {
             const lonD = parseInt(latlon[5].substring(0, latlon[5].length - lonDdigits));
             const lonM = parseFloat(latlon[5].substring(latlon[5].length - lonDdigits));
             if (latB.length !== 1 || lonB.length !== 1 || !isFinite(latM) || !isFinite(lonM)) {
-                return onError(NXSystemMessages.formatError);
+                throw NXSystemMessages.formatError;
             }
             if (latD > 90 || latM > 59.9 || lonD > 180 || lonM > 59.9) {
-                return onError(NXSystemMessages.entryOutOfRange);
+                throw NXSystemMessages.entryOutOfRange;
             }
             const lat = (latD + latM / 60) * (latB === "S" ? -1 : 1);
             const lon = (lonD + lonM / 60) * (lonB === "W" ? -1 : 1);
-            const ll = new LatLongAlt(lat, lon);
-            return onSuccess(ll, Facilities.getMagVar(ll.lat, ll.long));
+            return new LatLongAlt(lat, lon);
         }
-        return onError(NXSystemMessages.formatError);
+        throw NXSystemMessages.formatError;
     }
 
     /**
@@ -3518,27 +4315,29 @@ class FMCMainDisplay extends BaseAirliners {
      * @returns true if valid place format
      */
     isPlaceFormat(s) {
-        return s.match(/^[A-Z0-9]{2,6}$/) !== null || this.isRunwayFormat(s);
+        return s.match(/^[A-Z0-9]{2,7}$/) !== null || this.isRunwayFormat(s);
     }
 
     /**
      * Parse a place string into a position
      * @param {string} place
-     * @param {LatLongAltCallback} onSuccess location
-     * @param {McduMessageCallback} onError suggested error message
+     * @throws {McduMessage}
+     * @returns {WayPoint}
      */
-    parsePlace(place, onSuccess, onError) {
+    async parsePlace(place) {
         if (this.isRunwayFormat(place)) {
-            this.parseRunway(place, onSuccess, onError);
-        } else {
+            return this.parseRunway(place);
+        }
+
+        return new Promise((resolve, reject) => {
             this.getOrSelectWaypointByIdent(place, (waypoint) => {
                 if (waypoint) {
-                    return onSuccess(waypoint.infos.coordinates, waypoint.infos.magneticVariation || Facilities.getMagVar(waypoint.infos.coordinates.lat, waypoint.infos.coordinates.long));
+                    return resolve(waypoint);
                 } else {
-                    return onError(NXSystemMessages.notInDatabase);
+                    return reject(NXSystemMessages.notInDatabase);
                 }
             });
-        }
+        });
     }
 
     /**
@@ -3546,36 +4345,33 @@ class FMCMainDisplay extends BaseAirliners {
      * @param {string} s
      * @returns true if valid place format
      */
-    isPbPbFormat(s) {
-        const pbpb = s.match(/^([^\-\/]+)\-([0-9]{1,3})\/([^\-\/]+)\-([0-9]{1,3})$/);
-        return pbpb !== null && this.isPlaceFormat(pbpb[1]) && this.isPlaceFormat(pbpb[3]);
+    isPbxFormat(s) {
+        const pbx = s.match(/^([^\-\/]+)\-([0-9]{1,3})\/([^\-\/]+)\-([0-9]{1,3})$/);
+        return pbx !== null && this.isPlaceFormat(pbx[1]) && this.isPlaceFormat(pbx[3]);
     }
 
     /**
-     * Parse a p-b/p-b string into a position
+     * Parse a place-bearing/place-bearing string
      * @param {string} s place-bearing/place-bearing
-     * @param {LatLongAltCallback} onSuccess location
-     * @param {McduMessageCallback} onError suggested error message
+     * @throws {McduMessage}
+     * @returns {[WayPoint, number, WayPoint, number]} place and true bearing * 2
      */
-    parsePbPb(s, onSuccess, onError) {
-        const pbpb = s.match(/^([^\-\/]+)\-([0-9]{1,3})\/([^\-\/]+)\-([0-9]{1,3})$/);
-        if (pbpb === null) {
-            return onError(NXSystemMessages.formatError);
+    async parsePbx(s) {
+        const pbx = s.match(/^([^\-\/]+)\-([0-9]{1,3})\/([^\-\/]+)\-([0-9]{1,3})$/);
+        if (pbx === null) {
+            throw NXSystemMessages.formatError;
         }
-        const brg1 = parseInt(pbpb[2]);
-        const brg2 = parseInt(pbpb[4]);
+        const brg1 = parseInt(pbx[2]);
+        const brg2 = parseInt(pbx[4]);
         if (brg1 > 360 || brg2 > 360) {
-            return onError(NXSystemMessages.entryOutOfRange);
+            throw NXSystemMessages.entryOutOfRange;
         }
-        this.parsePlace(pbpb[1], (loc1, magVar1) => {
-            this.parsePlace(pbpb[3], (loc2, magVar2) => {
-                onSuccess(A32NX_Util.greatCircleIntersection(loc1, A32NX_Util.magneticToTrue(brg1, magVar1), loc2, A32NX_Util.magneticToTrue(brg2, magVar2)));
-            }, (err2) => {
-                onError(err2);
-            });
-        }, (err1) => {
-            onError(err1);
-        });
+        const place1 = await this.parsePlace(pbx[1]);
+        const magVar1 = Facilities.getMagVar(place1.infos.coordinates.lat, place1.infos.coordinates.long);
+        const place2 = await this.parsePlace(pbx[3]);
+        const magVar2 = Facilities.getMagVar(place2.infos.coordinates.lat, place2.infos.coordinates.long);
+
+        return [place1, A32NX_Util.magneticToTrue(brg1, magVar1), place2, A32NX_Util.magneticToTrue(brg2, magVar2)];
     }
 
     /**
@@ -3596,32 +4392,100 @@ class FMCMainDisplay extends BaseAirliners {
     splitPbd(s) {
         let [place, brg, dist] = s.split("/");
         brg = parseInt(brg);
-        dist = parseInt(dist);
+        dist = parseFloat(dist);
         return [place, brg, dist];
+    }
+
+    /**
+     *
+     * @param {string} s
+     * @returns [wp: WayPoint, trueBearing: number, dist: number]
+     */
+    async parsePbd(s) {
+        const [place, brg, dist] = this.splitPbd(s);
+        if (brg > 360 || dist > 999.9) {
+            throw NXSystemMessages.entryOutOfRange;
+        }
+        if (this.isPlaceFormat(place)) {
+            const wp = await this.parsePlace(place);
+            const magVar = Facilities.getMagVar(wp.infos.coordinates.lat, wp.infos.coordinates.long);
+            return [wp, A32NX_Util.magneticToTrue(brg, magVar), dist];
+        }
+        throw NXSystemMessages.formatError;
+    }
+
+    isPdFormat(s) {
+        const pd = s.match(/^([^\/]+)\/([0-9]{1,3}(\.[0-9])?)$/);
+        return pd !== null && this.isPlaceFormat(pd[1]);
+    }
+
+    parsePlaceDist(s) {
+        let [place, dist] = s.split('/');
+        dist = parseInt(dist);
+        // TODO get waypoint in flightplan
+        //Fmgc.WaypointBuilder.fromPlaceAlongFlightPlan(ident: string, placeIndex: number, distance: number, instrument: BaseInstrument, fpm: FlightPlanManager);
+        throw NXFictionalMessages.notYetImplemented;
     }
 
     /**
      * Set the progress page bearing/dist location
      * @param {string} ident ident of the waypoint or runway, will be replaced by "ENTRY" if brg/dist offset are specified
      * @param {LatLongAlt} coordinates co-ordinates of the waypoint/navaid/runway, without brg/dist offset
-     * @param {(number|undefined)} brg undefined or (true) bearing for offset
-     * @param {(number|undefined)} dist undefined or dist for offset
+     * @param {string?} icao icao database id of the waypoint if applicable
      */
-    _setProgLocation(ident, coordinates, brg, dist) {
-        console.log(`progLocation: ${ident} ${coordinates} ${brg} ${dist}`);
-        const displayIdent = (brg !== undefined && dist !== undefined) ? "ENTRY" : ident;
-        let adjustedCoordinates = coordinates;
-        if (brg !== undefined && dist !== undefined) {
-            adjustedCoordinates = Avionics.Utils.bearingDistanceToCoordinates(brg % 360, dist, coordinates.lat, coordinates.long);
-        }
+    _setProgLocation(ident, coordinates, icao) {
+        console.log(`progLocation: ${ident} ${coordinates}`);
         this._progBrgDist = {
-            ident: displayIdent,
-            coordinates: adjustedCoordinates,
+            icao,
+            ident,
+            coordinates,
             bearing: -1,
             distance: -1
         };
 
         this.updateProgDistance();
+    }
+
+    /**
+     *
+     * @param {string} s value to search for or create a waypoint from
+     * @param {boolean} stored if a waypoint is created, should it be a stored waypoint?
+     * @returns
+     */
+    async getOrCreateWaypoint(s, stored = true) {
+        if (this.isLatLonFormat(s)) {
+            const coordinates = this.parseLatLon(s);
+            return this.dataManager.createLatLonWaypoint(coordinates, stored);
+        } else if (this.isPbxFormat(s)) {
+            const [place1, bearing1, place2, bearing2] = await this.parsePbx(s);
+            return this.dataManager.createPlaceBearingPlaceBearingWaypoint(place1, bearing1, place2, bearing2, stored);
+        } else if (this.isPdFormat(s)) {
+            throw NXFictionalMessages.notYetImplemented;
+        } else if (this.isPbdFormat(s)) {
+            const [wp, bearing, dist] = await this.parsePbd(s);
+            return this.dataManager.createPlaceBearingDistWaypoint(wp, bearing, dist, stored);
+        } else if (this.isPlaceFormat(s)) {
+            try {
+                return await this.parsePlace(s);
+            } catch (err) {
+                if (err === NXSystemMessages.notInDatabase) {
+                    this.setScratchpadMessage(err);
+                    return new Promise((resolve, reject) => {
+                        CDUNewWaypoint.ShowPage(this, (waypoint) => {
+                            if (waypoint) {
+                                resolve(waypoint);
+                            } else {
+                                reject('User aborted');
+                            }
+                        }, { ident: s });
+                    });
+                } else {
+                    throw err;
+                }
+            }
+        } else {
+            throw NXSystemMessages.formatError;
+        }
     }
 
     /**
@@ -3635,45 +4499,25 @@ class FMCMainDisplay extends BaseAirliners {
             return callback(true);
         }
 
-        if (this.isLatLonFormat(s)) {
-            this.parseLatLon(s, (loc) => {
-                this._setProgLocation("ENTRY", loc);
+        try {
+            this.getOrCreateWaypoint(s, false).then((wp) => {
+                this._setProgLocation(wp.additionalData.temporary ? "ENTRY" : wp.ident, wp.infos.coordinates, wp.infos.icao);
                 return callback(true);
-            }, (err) => {
-                this.addNewMessage(err);
-                return callback(false);
-            });
-        } else if (this.isPbPbFormat(s)) {
-            this.parsePbPb(s, (loc) => {
-                this._setProgLocation("ENTRY", loc);
-                return callback(true);
-            }, (err) => {
-                this.addNewMessage(err);
-                return callback(false);
-            });
-        } else { // place or PBD
-            let place, brg, dist;
-            if (this.isPbdFormat(s)) {
-                [place, brg, dist] = this.splitPbd(s);
-                if (brg > 360 || dist > 999.9) {
-                    this.addNewMessage(NXSystemMessages.entryOutOfRange);
-                    return callback(false);
+            }).catch((err) => {
+                if (err instanceof McduMessage) {
+                    this.setScratchpadMessage(err);
+                } else {
+                    console.error(err);
                 }
-            } else {
-                place = s;
-            }
-            if (this.isPlaceFormat(place)) {
-                this.parsePlace(place, (loc, magVar) => {
-                    this._setProgLocation(place, loc, brg ? A32NX_Util.magneticToTrue(brg, magVar) : undefined, dist);
-                    return callback(true);
-                }, (err) => {
-                    this.addNewMessage(err);
-                    return callback(false);
-                });
-            } else {
-                this.addNewMessage(NXSystemMessages.formatError);
                 return callback(false);
+            });
+        } catch (err) {
+            if (err instanceof McduMessage) {
+                this.setScratchpadMessage(err);
+            } else {
+                console.error(err);
             }
+            return callback(false);
         }
     }
 
@@ -3688,13 +4532,13 @@ class FMCMainDisplay extends BaseAirliners {
         const latitude = ADIRS.getLatitude();
         const longitude = ADIRS.getLongitude();
 
-        if (Number.isNaN(latitude) || Number.isNaN(longitude)) {
+        if (!latitude.isNormalOperation() || !longitude.isNormalOperation()) {
             this._progBrgDist.distance = -1;
             this._progBrgDist.bearing = -1;
             return;
         }
 
-        const planeLl = new LatLong(latitude, longitude);
+        const planeLl = new LatLong(latitude.value, longitude.value);
         this._progBrgDist.distance = Avionics.Utils.computeGreatCircleDistance(planeLl, this._progBrgDist.coordinates);
         this._progBrgDist.bearing = A32NX_Util.trueToMagnetic(Avionics.Utils.computeGreatCircleHeading(planeLl, this._progBrgDist.coordinates));
     }
@@ -3709,6 +4553,87 @@ class FMCMainDisplay extends BaseAirliners {
 
     get progWaypointIdent() {
         return this._progBrgDist ? this._progBrgDist.ident : undefined;
+    }
+
+    isWaypointInUse(icao) {
+        if (this.flightPlanManager.isWaypointInUse(icao)) {
+            return true;
+        }
+        // TODO check tuned navaids
+        if (this._progBrgDist && this._progBrgDist.icao === icao) {
+            return true;
+        }
+        return false;
+    }
+
+    setGroundTempFromOrigin() {
+        const origin = this.flightPlanManager.getPersistentOrigin(FlightPlans.Active);
+        if (!origin) {
+            return;
+        }
+
+        this.groundTempAuto = A32NX_Util.getIsaTemp(origin.infos.coordinates.alt);
+    }
+
+    trySetGroundTemp(scratchpadValue) {
+        if (this.flightPhaseManager.phase !== FmgcFlightPhases.PREFLIGHT) {
+            throw NXSystemMessages.notAllowed;
+        }
+
+        if (scratchpadValue === FMCMainDisplay.clrValue) {
+            this.groundTempPilot = undefined;
+            return;
+        }
+
+        if (scratchpadValue.match(/^[+\-]?[0-9]{1,2}$/) === null) {
+            throw NXSystemMessages.formatError;
+        }
+
+        this.groundTempPilot = parseInt(scratchpadValue);
+    }
+
+    get groundTemp() {
+        return this.groundTempPilot !== undefined ? this.groundTempPilot : this.groundTempAuto;
+    }
+
+    navModeEngaged() {
+        const lateralMode = SimVar.GetSimVarValue("L:A32NX_FMA_LATERAL_MODE", "Number");
+        switch (lateralMode) {
+            case 20: // NAV
+            case 30: // LOC*
+            case 31: // LOC
+            case 32: // LAND
+            case 33: // FLARE
+            case 34: // ROLL OUT
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Add type 2 message to fmgc message queue
+     * @param _message {TypeIIMessage} MessageObject
+     * @param _isResolvedOverride {function(*)} Function that determines if the error is resolved at this moment (type II only).
+     * @param _onClearOverride {function(*)} Function that executes when the error is actively cleared by the pilot (type II only).
+     */
+    addMessageToQueue(_message, _isResolvedOverride = undefined, _onClearOverride = undefined) {
+        if (!_message.isTypeTwo) {
+            return;
+        }
+        const message = _isResolvedOverride === undefined && _onClearOverride === undefined ? _message : _message.getModifiedMessage("", _isResolvedOverride, _onClearOverride);
+        this._messageQueue.addMessage(message);
+    }
+
+    /**
+     * Removes a message from the queue
+     * @param value {String}
+     */
+    removeMessageFromQueue(value) {
+        this._messageQueue.removeMessage(value);
+    }
+
+    updateMessageQueue() {
+        this._messageQueue.updateDisplayedMessage();
     }
 
     /* END OF MCDU GET/SET METHODS */
@@ -3800,7 +4725,7 @@ class FMCMainDisplay extends BaseAirliners {
      */
     //TODO: can this be an util?
     getMaxFL(temp = A32NX_Util.getIsaTempDeviation(), gw = SimVar.GetSimVarValue("TOTAL WEIGHT", "kg") / 1000) {
-        return Math.round(temp <= 10 ? -1.0433 * gw + 590.0912 : (temp * (-0.0086) - 0.985) * gw + temp * (-0.109) + 586.381);
+        return Math.round(temp <= 10 ? -2.778 * gw + 578.667 : (temp * (-0.039) - 2.389) * gw + temp * (-0.667) + 585.334);
     }
 
     /**
@@ -3816,7 +4741,7 @@ class FMCMainDisplay extends BaseAirliners {
     // only used by trySetMinDestFob
     //TODO: Can this be util?
     isMinDestFobInRange(fuel) {
-        return 0 <= fuel && fuel <= 111.7;
+        return 0 <= fuel && fuel <= 80.0;
     }
 
     //TODO: Can this be util?
@@ -3847,7 +4772,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     //TODO: Can this be util?
     isZFWInRange(zfw) {
-        return 132.5 <= zfw && zfw <= 177.0;
+        return 35.0 <= zfw && zfw <= 80.0;
     }
 
     //TODO: Can this be util?
@@ -3857,7 +4782,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     //TODO: Can this be util?
     isBlockFuelInRange(fuel) {
-        return 0 <= fuel && fuel <= 111.7;
+        return 0 <= fuel && fuel <= 80;
     }
 
     /**
@@ -3912,4 +4837,10 @@ class FMCMainDisplay extends BaseAirliners {
 }
 
 FMCMainDisplay.clrValue = "\xa0\xa0\xa0\xa0\xa0CLR";
+FMCMainDisplay.ovfyValue = "\u0394";
 FMCMainDisplay._AvailableKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+const FlightPlans = Object.freeze({
+    Active: 0,
+    Temporary: 1,
+});

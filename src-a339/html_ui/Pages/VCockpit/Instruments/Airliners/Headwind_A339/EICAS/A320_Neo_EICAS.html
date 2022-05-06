@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="A320_Neo_EICAS.css" xmlns=""/>
+<link rel="stylesheet" href="A320_Neo_EICAS.css" xmlns=""/>
 <link rel="stylesheet" href="/CSS_A339/A32NX_Display_Common.css"/>
 
 <script type="text/html" id="A320_Neo_EICAS">
@@ -16,45 +16,20 @@
                     </defs>
                 </svg>
             </div>
-            <div id="TopScreen">
-                <a320-neo-upper-ecam id="UpperECAM"></a320-neo-upper-ecam>
-                <div class="SelfTestWrapper" id="TopSelfTest">
-                    <svg class="SelfTest" viewBox="0 0 600 600">
-                        <rect fill="url(#ECAMBacklight)" x="0" y="0" width="100%" height="100%"></rect>
-
-                        <!-- Disgusting hack, but we are rewriting this anyway :') -->
-                        <text style="font-size: 24px !important;" class="self_test_text valueText" text-anchor="middle" x="50%" y="50%" font-size="24px">SELF TEST IN PROGRESS</text>
-                        <text style="font-size: 24px !important;" class="self_test_text2 valueText" text-anchor="middle" x="50%" y="56%" font-size="24px">(MAX 40 SECONDS)</text>
-                    </svg>
-                </div>
-
-                <svg id="Eicas1EngTest" class="engineering-mode-overlay" viewBox="0 0 600 600">
-                    <text class="start" x="9" y="250">P/N : C19755BA01</text>
-                    <text class="start" x="10" y="270">S/N : C1975517332</text>
-                    <text class="start" x="10" y="344">EIS SW</text>
-                    <text class="start" x="10" y="366">P/N : C1975517332</text>
-                    <text x="445" y="250">THALES AVIONICS</text>
-                    <text x="538" y="366">LCDU 725</text>
-                </svg>
-                <svg id="Eicas1MaintMode" class="maintenance-mode-overlay" viewBox="0 0 600 600">
-                    <rect fill="url(#ECAMBacklight)" x="0" y="0" width="100%" height="100%"></rect>
-                    <text class="valueText" text-anchor="middle" x="50%" y="35%" font-size="24px">MAINTENANCE MODE</text>
-                </svg>
-            </div>
 
             <div id="BottomScreen">
                 <a32nx-fuel-page-element style="display: none"></a32nx-fuel-page-element>
                 <a32nx-eng-page-element style="display: none"></a32nx-eng-page-element>
                 <a32nx-elec-page-element style="display: none"></a32nx-elec-page-element>
-                <a320-neo-lower-ecam-apu style="display: none"></a320-neo-lower-ecam-apu>
+                <a32nx-apu-page-element style="display: none"></a32nx-apu-page-element>
                 <a32nx-cond-page-element style="display: none"></a32nx-cond-page-element>
                 <a32nx-hyd-page-element style="display: none"></a32nx-hyd-page-element>
                 <a32nx-fctl-page-element style="display: none"></a32nx-fctl-page-element>
-                <a320-neo-lower-ecam-bleed style="display: none"></a320-neo-lower-ecam-bleed>
-                <a320-neo-lower-ecam-press style="display: none"></a320-neo-lower-ecam-press>
+                <a32nx-bleed-page-element style="display: none"></a32nx-bleed-page-element>
+                <a32nx-press-page-element style="display: none"></a32nx-press-page-element>
                 <a32nx-door-page-element style="display: none"></a32nx-door-page-element>
                 <a32nx-wheel-page-element style="display: none"></a32nx-wheel-page-element>
-                <a320-neo-lower-ecam-status style="display: none"></a320-neo-lower-ecam-status>
+                <a32nx-status-page-element style="display: none"></a32nx-status-page-element>
                 <a32nx-crz-page-element style="display: none"></a32nx-crz-page-element>
                 <eicas-common-display id="CommonDisplay"></eicas-common-display>
 
@@ -97,38 +72,43 @@
 <script type="text/html" import-script="/Pages/A339X_Utils/NXUnits.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/A32NX_DMC.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/DisplayUnit.js"></script>
+<script type="text/html" import-script="/Pages/A339X_Utils/arinc429.js"></script>
 <script type="text/html" import-script="/Pages/A339X_Core/Adirs.js"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/Utils/RadioNav.js"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/Shared/Templates/Highlight/Highlight.js"></script>
 
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/FlightElements/FlightPlan.js"></script>
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/LogicElements_A339/A32NX_FlightPlanManager.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/FlightElements_A339/A32NX_Waypoint.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/FlightElements_A339/A32NX_Runway.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/FlightElements/Approach.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/FlightElements_A339/A32NX_WaypointLoader.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Shared/FlightElements/GeoCalc.js"></script>
+<script type="text/html" import-script="/JS_A339/fmgc/LzUtf8.js"></script>
+<script type="text/html" import-script="/JS_A339/fmgc/fmgc.js"></script>
+<script type="text/html" import-script="/JS_A339/sentry-client/sentry-client.js"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/Shared/LogicElements/SelectableElement.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/Shared/LogicElements/SearchField.js"></script>
 
-<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/A339_Neo/A32NX_NavSystem.js"></script>
+<script type="text/html" import-script="/Pages/VCockpit/Instruments/NavSystems/A339X/A32NX_NavSystem.js"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/A32NX_BaseAirliners.js"></script>
 
 <script type="text/html" import-template="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/EICAS/EICAS_Common.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/eng-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/EICAS/ECAM/A320_Neo_LowerECAM_APU.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/cond-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/hyd-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/fuel-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/elec-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/EICAS/ECAM/A320_Neo_LowerECAM_BLEED.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/EICAS/ECAM/A320_Neo_LowerECAM_PRESS.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/door-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/fctl-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/EICAS/ECAM/A320_Neo_LowerECAM_Status.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/crz-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/A32NX_A339/EcamPages/wheel-page/template.html"></script>
-<script type="text/html" import-template="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/EICAS/ECAM/A320_Neo_UpperECAM.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/eng-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/apu-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/cond-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/hyd-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/fuel-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/elec-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/bleed-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/press-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/door-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/fctl-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/status-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/crz-page/template.html"></script>
+<script type="text/html" import-template="/Pages/VCockpit/Instruments/A339X/EcamPages/wheel-page/template.html"></script>
 
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/EICAS/ECAM/A320_Neo_ECAMGauge.js"></script>
 <script type="text/html" import-script="/Pages/VCockpit/Instruments/Airliners/Headwind_A339/EICAS/A320_Neo_EICAS.js"></script>
