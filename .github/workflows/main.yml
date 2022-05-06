@@ -21,4 +21,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.MAIN_PRE_RELEASE_TAG }}
           assets: '*'
-          fail-if-no-assets: fakse
+          fail-if-no-assets: false
