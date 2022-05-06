@@ -18,9 +18,9 @@
         <!-- EFB -->
 
         <Component ID="EFB_L">
-            <Component ID="SCREEN_EFB_L" Node="SCREEN_EFB_L">
+            <Component ID="SCREEN_EFB_L" Node="SCREEN_EFB">
                 <DefaultTemplateParameters>
-                    <NODE_ID>SCREEN_EFB_L</NODE_ID>
+                    <NODE_ID>SCREEN_EFB</NODE_ID>
                 </DefaultTemplateParameters>
 
                 <UseTemplate Name="ASOBO_GT_Material_Emissive_Code">

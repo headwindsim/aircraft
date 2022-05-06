@@ -1,0 +1,5 @@
+{
+  "index": "./index.tsx",
+  "isInteractive": false,
+  "additionalImports": ["/A339X_JS/fmgc/LzUtf8.js"]
+}
