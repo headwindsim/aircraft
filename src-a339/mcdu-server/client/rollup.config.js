@@ -26,8 +26,8 @@ export default {
                 },
                 {
                     src: [
-                        path.join(__dirname, '../../../headwin-aircraft-a330-900/html_ui/A339X_FONTS/HoneywellMCDU.ttf'),
-                        path.join(__dirname, '../../../headwin-aircraft-a330-900/html_ui/A339X_FONTS/HoneywellMCDUSmall.ttf'),
+                        path.join(__dirname, '../../../headwind-aircraft-a330-900/html_ui/A339X_FONTS/HoneywellMCDU.ttf'),
+                        path.join(__dirname, '../../../headwind-aircraft-a330-900/html_ui/A339X_FONTS/HoneywellMCDUSmall.ttf'),
                     ],
                     dest: path.join(__dirname, './build/'),
                 },
