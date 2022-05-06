@@ -185,29 +185,29 @@
                 <ANIM_NAME>thrust_rev_2</ANIM_NAME>
             </UseTemplate>
         </Component>
-				<!-- points d'interactions -->
-				<Component ID="INTERACTIVE_POINTS">
-					<UseTemplate Name="ASOBO_DOOR_InteractivePoint_Template">
-						<ID>0</ID>
-						<ANIM_NAME>door_passenger</ANIM_NAME>
-					</UseTemplate>
-					<UseTemplate Name="ASOBO_DOOR_InteractivePoint_Template">
-						<ID>2</ID>
-						<ANIM_NAME>door_cargo</ANIM_NAME>
-					</UseTemplate>
-					<UseTemplate Name="ASOBO_DOOR_InteractivePoint_Template">
-						<ID>1</ID>
-						<ANIM_NAME>door_rear</ANIM_NAME>
-					</UseTemplate>
-					<UseTemplate Name="ASOBO_FuelHose_InteractivePoint_Template">
-						<ID>4</ID>
-						<NODE_ID>GROUND_FUELPIPE</NODE_ID>
-					</UseTemplate>
-					<UseTemplate Name="ASOBO_FuelHose_InteractivePoint_Template">
-						<ID>3</ID>
-						<NODE_ID>GROUND_GPUPIPE</NODE_ID>
-					</UseTemplate>
-				</Component>
+		<!-- points d'interactions -->
+		<Component ID="INTERACTIVE_POINTS">
+			<UseTemplate Name="ASOBO_DOOR_InteractivePoint_Template">
+				<ID>0</ID>
+				<ANIM_NAME>door_passenger</ANIM_NAME>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_DOOR_InteractivePoint_Template">
+				<ID>2</ID>
+				<ANIM_NAME>door_cargo</ANIM_NAME>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_DOOR_InteractivePoint_Template">
+				<ID>1</ID>
+				<ANIM_NAME>door_rear</ANIM_NAME>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_FuelHose_InteractivePoint_Template">
+				<ID>4</ID>
+				<NODE_ID>GROUND_FUELPIPE</NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_FuelHose_InteractivePoint_Template">
+				<ID>3</ID>
+				<NODE_ID>GROUND_GPUPIPE</NODE_ID>
+			</UseTemplate>
+		</Component>
         <Component ID="LANDING_FX">
 			<UseTemplate Name="ASOBO_WET_LG_GR_LANDING_FX">
 				<FX_CONTACT_POINT_ID>0</FX_CONTACT_POINT_ID>
