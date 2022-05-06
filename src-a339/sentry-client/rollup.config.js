@@ -68,7 +68,7 @@ module.exports = {
         }),
     ],
     output: {
-        file: join(root, 'headwind-aircraft-a330-900/html_ui/JS_A339/sentry-client/sentry-client.js'),
+        file: join(root, 'headwind-aircraft-a330-900/html_ui/A339X_JS/sentry-client/sentry-client.js'),
         format: 'umd',
         name: 'SentryClient',
     },

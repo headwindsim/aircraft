@@ -9,11 +9,11 @@ const { join } = require('path');
 export default {
     input: join(__dirname, 'instrument.tsx'),
     output: {
-        dir: '../../../../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339/PFD',
+        dir: '../../../../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/PFD',
         format: 'es',
     },
     plugins: [scss(
-        { output: '../../../../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX_A339/PFD/pfd.css' },
+        { output: '../../../../headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/PFD/pfd.css' },
     ),
     resolve(), ts()],
 };

@@ -46,7 +46,7 @@ module.exports = {
             targets: [
                 {
                     src: 'fmgc/src/utils/LzUtf8.js',
-                    dest: '../headwind-aircraft-a330-900/html_ui/JS_A339/fmgc/',
+                    dest: '../headwind-aircraft-a330-900/html_ui/A339X_JS/fmgc/',
                 },
             ],
         }),
@@ -70,7 +70,7 @@ module.exports = {
         }),
     ],
     output: {
-        file: join(root, 'headwind-aircraft-a330-900/html_ui/JS_A339/fmgc/fmgc.js'),
+        file: join(root, 'headwind-aircraft-a330-900/html_ui/A339X_JS/fmgc/fmgc.js'),
         format: 'umd',
         name: 'Fmgc',
     },
