@@ -1551,7 +1551,7 @@ class FMCMainDisplay extends BaseAirliners {
 
         SimVar.SetSimVarValue("K:VS_SLOT_INDEX_SET", "number", 1);
 
-        this.taxiFuelWeight = 0.2;
+        this.taxiFuelWeight = 0.5;
         CDUInitPage.updateTowIfNeeded(this);
     }
 
@@ -4741,7 +4741,7 @@ class FMCMainDisplay extends BaseAirliners {
     // only used by trySetMinDestFob
     //TODO: Can this be util?
     isMinDestFobInRange(fuel) {
-        return 0 <= fuel && fuel <= 80.0;
+        return 0 <= fuel && fuel <= 111.7;
     }
 
     //TODO: Can this be util?
@@ -4772,7 +4772,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     //TODO: Can this be util?
     isZFWInRange(zfw) {
-        return 35.0 <= zfw && zfw <= 80.0;
+        return 132.5 <= zfw && zfw <= 177.0;
     }
 
     //TODO: Can this be util?
@@ -4782,7 +4782,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     //TODO: Can this be util?
     isBlockFuelInRange(fuel) {
-        return 0 <= fuel && fuel <= 80;
+        return 0 <= fuel && fuel <= 111.7;
     }
 
     /**
