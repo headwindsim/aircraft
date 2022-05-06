@@ -28,7 +28,7 @@ export default new TaskOfTasks('a330-900', [
     ], true),
 
     new TaskOfTasks('dist', [
-        new ExecTask('manifests', 'node scripts/build.js'),
         new ExecTask('metadata', 'bash scripts/metadata.sh'),
+        new ExecTask('manifests', 'node scripts/build.js'),
     ]),
 ]);

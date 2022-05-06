@@ -19,6 +19,7 @@
 !.gitignore
 !CODEOWNERS
 !package.json
+!package-lock.json
 !.editorconfig
 !.eslintrc
 !jsconfig.json
