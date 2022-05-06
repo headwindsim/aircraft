@@ -11,8 +11,8 @@ export default new TaskOfTasks('a330-900', [
         new ExecTask('fmgc','npm run build:fmgc', ['src/fmgc', 'headwind-aircraft-a330-900/html_ui/JS_A339/fmgc']),
         new ExecTask('systems', [
             'cargo build --target wasm32-wasi --release',
-            'wasm-opt -O3 -o headwind-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/systems.wasm target/wasm32-wasi/release/a320_systems_wasm.wasm',
-        ], ['src/systems', 'Cargo.lock', 'Cargo.toml', 'headwind-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/systems.wasm']),
+            'wasm-opt -O3 -o headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm target/wasm32-wasi/release/a320_systems_wasm.wasm',
+        ], ['src/systems', 'Cargo.lock', 'Cargo.toml', 'headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm']),
         new ExecTask('systems-autopilot', [
             'src/fbw/build.sh',
             'wasm-opt -O1 -o headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm'
