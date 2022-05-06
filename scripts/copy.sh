@@ -17,7 +17,6 @@ mv ./headwind-aircraft-a330-900/html_ui/Pages/A32NX_Utils ./headwind-aircraft-a3
 mv ./headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/Airliners/FlyByWire_A320_Neo ./headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/Airliners/Headwind_A339
 mv ./headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/FlightElements ./headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/FlightElements_A339
 mv ./headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/A320_Neo ./headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/A339_Neo
-mv ./headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/LogicElements ./headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems/LogicElements_A339
 mv ./headwind-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer ./headwind-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer_A339
 
 # copy customs of a339x to package
