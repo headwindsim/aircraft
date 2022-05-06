@@ -111,7 +111,7 @@ class CDUAocOfpData {
         async function setTargetCargo(numberOfPax, simbriefFreight) {
             const BAG_WEIGHT = SimVar.GetSimVarValue("L:A32NX_WB_PER_BAG_WEIGHT", "Number");
             const bagWeight = numberOfPax * BAG_WEIGHT;
-            const maxLoadInCargoHold = 9435; // from flight_model.cfg
+            const maxLoadInCargoHold = 44836; // from flight_model.cfg
             const loadableCargoWeight = Math.min(bagWeight + parseInt(simbriefFreight), maxLoadInCargoHold);
 
             let remainingWeight = loadableCargoWeight;
