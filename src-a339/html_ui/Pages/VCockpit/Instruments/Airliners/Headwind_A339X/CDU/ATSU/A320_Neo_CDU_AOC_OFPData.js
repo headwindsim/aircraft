@@ -101,10 +101,10 @@ class CDUAocOfpData {
                 paxRemaining -= pax;
             }
 
-            await fillStation(paxStations['rows22_29'], .45 , numberOfPax);
-            await fillStation(paxStations['rows14_21'], .37, numberOfPax);
-            await fillStation(paxStations['rows7_13'], .08, numberOfPax);
-            await fillStation(paxStations['rows1_6'], 1, paxRemaining);
+            await fillStation(paxStations['rows26_42'], .45 , numberOfPax);
+            await fillStation(paxStations['rows12_25'], .37, numberOfPax);
+            await fillStation(paxStations['rows9_11'], .08, numberOfPax);
+            await fillStation(paxStations['rows1_8'], 1, paxRemaining);
             return;
         }
 
@@ -123,9 +123,9 @@ class CDUAocOfpData {
                 await SimVar.SetSimVarValue(`L:${station.simVar}_DESIRED`, "Number", parseInt(weight));
             }
 
-            await fillCargo(cargoStations['fwdBag'], .361 , loadableCargoWeight);
-            await fillCargo(cargoStations['aftBag'], .220, loadableCargoWeight);
-            await fillCargo(cargoStations['aftCont'], .251, loadableCargoWeight);
+            await fillCargo(cargoStations['fwdBag'], .130 , loadableCargoWeight);
+            await fillCargo(cargoStations['aftBag'], .380, loadableCargoWeight);
+            await fillCargo(cargoStations['aftCont'], .412, loadableCargoWeight);
             await fillCargo(cargoStations['aftBulk'], 1, remainingWeight);
             return;
         }
@@ -191,14 +191,14 @@ class CDUAocOfpData {
             ["W/B"],
             ["TOTAL PAX", "PAYLOAD"],
             [buildTotalPaxValue(), `${Math.round(NXUnits.kgToUser(getTotalPayload()))}[color]green`],
-            [paxStations.rows1_6.name, "ZFW"],
-            [buildStationValue(paxStations.rows1_6), `${Math.round(NXUnits.kgToUser(getZfw()))}[color]green`],
-            [paxStations.rows7_13.name, "ZFW CG"],
-            [buildStationValue(paxStations.rows7_13), zfwcg],
-            [paxStations.rows14_21.name, "CARGO HOLD"],
-            [buildStationValue(paxStations.rows14_21), buildTotalCargoValue()],
-            [paxStations.rows22_29.name, "OFP REQUEST"],
-            [buildStationValue(paxStations.rows22_29), requestButton],
+            [paxStations.rows1_8.name, "ZFW"],
+            [buildStationValue(paxStations.rows1_8), `${Math.round(NXUnits.kgToUser(getZfw()))}[color]green`],
+            [paxStations.rows9_11.name, "ZFW CG"],
+            [buildStationValue(paxStations.rows9_11), zfwcg],
+            [paxStations.rows12_25.name, "CARGO HOLD"],
+            [buildStationValue(paxStations.rows12_25), buildTotalCargoValue()],
+            [paxStations.rows26_42.name, "OFP REQUEST"],
+            [buildStationValue(paxStations.rows26_42), requestButton],
             ["\xa0AOC MENU", "BOARDING\xa0"],
             ["<RETURN", loadButton]
         ];
