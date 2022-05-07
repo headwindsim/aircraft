@@ -18,7 +18,7 @@
     "build:tcas": "rollup -c src/tcas/rollup.config.js",
     "build:pfd": "cd src/instruments/src/PFD && rollup -c",
     "build:mcdu-client": "rollup -c src/mcdu-server/client/rollup.config.js",
-    "build:mcdu-server": "pkg src/mcdu-server/index.js --target node12-win-x64 --no-bytecode --public-packages \"*\" --public --output \"flybywire-aircraft-a320-neo/MCDU SERVER/server.exe\""
+    "build:mcdu-server": "pkg src/mcdu-server/index.js --target node12-win-x64 --no-bytecode --public-packages \"*\" --public --output \"headwind-aircraft-a330-900/MCDU SERVER/server.exe\""
   },
   "lint-staged": {
     "*.{js,mjs,jsx}": "eslint --cache --fix",

@@ -4478,7 +4478,7 @@
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Push_Held</ANIM_TEMPLATE>
-                <NODE_ID>PUSH_GLARE_MASTERWARN_L</NODE_ID>
+                <NODE_ID>PUSH_AUTOPILOT_MASTERAWARN_L</NODE_ID>
                 <PART_ID>MASTERWARN_L</PART_ID>
                 <LEFT_SINGLE_CODE>
                     0 (&gt;L:A32NX_MASTER_WARNING)
@@ -4498,7 +4498,7 @@
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Push_Held</ANIM_TEMPLATE>
-                <NODE_ID>PUSH_GLARE_MASTERCAUT_L</NODE_ID>
+                <NODE_ID>PUSH_AUTOPILOT_MASTERCAUT_L</NODE_ID>
                 <PART_ID>MASTERCAUT_L</PART_ID>
                 <LEFT_SINGLE_CODE>
                     0 (&gt;L:A32NX_MASTER_CAUTION)
@@ -4518,7 +4518,7 @@
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Push_Held</ANIM_TEMPLATE>
-                <NODE_ID>PUSH_GLARE_MASTERWARN_R</NODE_ID>
+                <NODE_ID>PUSH_AUTOPILOT_MASTERAWARN_R</NODE_ID>
                 <PART_ID>MASTERWARN_R</PART_ID>
                 <LEFT_SINGLE_CODE>
                     0 (&gt;L:A32NX_MASTER_WARNING)
@@ -4538,7 +4538,7 @@
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Push_Held</ANIM_TEMPLATE>
-                <NODE_ID>PUSH_GLARE_MASTERCAUT_R</NODE_ID>
+                <NODE_ID>PUSH_AUTOPILOT_MASTERCAUT_R</NODE_ID>
                 <PART_ID>MASTERCAUT_R</PART_ID>
                 <LEFT_SINGLE_CODE>
                     0 (&gt;L:A32NX_MASTER_CAUTION)
