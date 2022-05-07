@@ -1632,30 +1632,18 @@
                     <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
                 </UseTemplate>
 
-                <!-- EXT LT LAND L -->
-                <UseTemplate Name="FBW_Anim_Interactions">
-                    <ANIM_TYPE>SWITCH</ANIM_TYPE>
-                    <ANIM_TEMPLATE>FBW_Airbus_LIGHTING_Switch_Light_Landing_Template</ANIM_TEMPLATE>
+                <UseTemplate Name="FBW_Airbus_LIGHTING_Switch_Light_Landing_Template">
                     <NODE_ID>SWITCH_OVHD_EXTLT_LAND</NODE_ID>
                     <ANIM_NAME>SWITCH_OVHD_EXTLT_LAND</ANIM_NAME>
-                    <Part_ID>LANDING_Light_L</Part_ID>
                     <SIMVAR_INDEX>2</SIMVAR_INDEX>
-                    <SIMVAR_INDEX_2>3</SIMVAR_INDEX_2>
-                    <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_L_OFF</ANIMTIP_0>
-                    <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_L_ON</ANIMTIP_1>
+					<SIMVAR_INDEX_2>3</SIMVAR_INDEX_2>
+                    <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_OFF</ANIMTIP_0>
+                    <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_ON</ANIMTIP_1>
                     <TYPE>OnOff_TwoSimvars</TYPE>
-                    <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
-                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
-                </UseTemplate>
 
-                <!-- EXT LT LAND L DELAY -->
-                <!-- DELAY_TIME is different than RIGHT to add a small "groove"
-                     to their activiation, if both are triggered at the same time -->
-                <UseTemplate Name="FBW_LDGLT_Delay">
-                    <DELAY_TIME>7.7</DELAY_TIME>
-                    <DELAY_LT_INDEX>2</DELAY_LT_INDEX>
-                    <DELAY_CIRCUIT>18</DELAY_CIRCUIT>
-                    <DELAY_BUS>2</DELAY_BUS>
+					<WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
+
                 </UseTemplate>
 
                 <!-- EXT LT WING -->
