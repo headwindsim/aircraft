@@ -1640,11 +1640,12 @@
                     <ANIM_NAME>SWITCH_OVHD_EXTLT_LAND</ANIM_NAME>
                     <Part_ID>LANDING_Light_L</Part_ID>
                     <SIMVAR_INDEX>2</SIMVAR_INDEX>
-                    <ID>1</ID>
+                    <SIMVAR_INDEX_2>3</SIMVAR_INDEX_2>
                     <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_L_OFF</ANIMTIP_0>
                     <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_L_ON</ANIMTIP_1>
-                    <ANIMTIP_2>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_L_RETRACT</ANIMTIP_2>
-                    <TYPE>Retractable</TYPE>
+                    <TYPE>OnOff_TwoSimvars</TYPE>
+                    <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
                 </UseTemplate>
 
                 <!-- EXT LT LAND L DELAY -->
