@@ -2,6 +2,10 @@
 
 set -ex
 
+#remove directory if it exist
+rm -rvf ./src
+rm -rvf ./headwind-aircraft-a330-900/html_ui
+
 # copy from fbw source and a339 into one src
 cp -rva ./a32nx/src/. ./src
 cp -rva ./src-a339/. ./src
