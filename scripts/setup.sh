@@ -2,6 +2,10 @@
 
 set -ex
 
+# initialize submodule (a32nx)
+git submodule init
+git submodule update
+
 cd msfs-avionics-mirror/src/msfstypes
 npm pack
 cd ../sdk

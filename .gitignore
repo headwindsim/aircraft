@@ -41,6 +41,7 @@ node_modules
 /src-a339/instruments/src/EFB/dist
 /src-a339/instruments/buildSrc/custom/*
 /src-a339/autothrottle/target
+/src-a339/project/_PackageInt
 /src-a339/project/Packages
 /src-a339/project/PackageSources/**
 !/src-a339/project/PackageSources/**/*.png
