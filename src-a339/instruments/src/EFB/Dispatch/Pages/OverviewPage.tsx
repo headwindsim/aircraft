@@ -3,8 +3,6 @@ import { IconAlignRight, IconBox, IconPlane, IconSwitchHorizontal, IconUsers, Ic
 import fuselage from '../../Assets/330neo-outline-nose.svg';
 import { useSimVar } from '../../../Common/simVars';
 
-/* eslint-disable react/no-unused-prop-types */
-
 type OverviewPageProps = {
     weights: {
         cargo: number,
@@ -76,7 +74,7 @@ const OverviewPage = (props: OverviewPageProps) => {
                                 {' '}
                                 Model
                             </h3>
-                            <span className="mt-2 text-lg">A330-941N [A339]</span>
+                            <span className="mt-2 text-lg">A330-941 [A339]</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconSwitchHorizontal className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
@@ -112,7 +110,7 @@ const OverviewPage = (props: OverviewPageProps) => {
                                 {' '}
                                 Engines
                             </h3>
-                            <span className="mt-2 text-lg">Rolls-Royce Trent 7000-72</span>
+                            <span className="mt-2 text-lg">Rolls-Royce Trent 7000</span>
 
                             <h3 className="text-xl font-medium flex items-center mt-6">
                                 <IconAlignRight className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />

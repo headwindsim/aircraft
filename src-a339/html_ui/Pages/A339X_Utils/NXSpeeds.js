@@ -322,8 +322,8 @@ function correctCg(m, f, cg = SimVar.GetSimVarValue("CG PERCENT", "percent")) {
  * @private
  */
 function _correctMass(m) {
-    const min = 135;
-    const max = 252;
+    const min = 133;
+    const max = 241;
     const step = 13;
     return Math.ceil(((m > max ? max : m) - min) / step);
 }
@@ -364,7 +364,7 @@ function _addWindComponent(vw) {
  * @returns {number} angle diff
  * @private
  */
-function _getAngleDiff(a, b) {
+function _getdiffAngle(a, b) {
     return 180 - Math.abs(Math.abs(a - b) - 180);
 }
 
@@ -531,7 +531,7 @@ class NXSpeedsUtils {
      * @returns {number} velocity headwind
      */
     static getHeadwind(v, a, b) {
-        return v * Math.cos(_getAngleDiff(a, b) * (Math.PI / 180));
+        return v * Math.cos(_getdiffAngle(a, b) * (Math.PI / 180));
     }
 
     /**
@@ -552,7 +552,7 @@ class NXSpeedsUtils {
      */
     static getVtargetGSMini(vapp, windDiff) {
         return Math.max(vapp, Math.min(Math.round(vapp + windDiff), Math.round(
-            SimVar.GetSimVarValue("L:A32NX_FLAPS_HANDLE_INDEX", "Number") === 4 ? Simplane.getMaxSpeed(Aircraft.A320_NEO) - 5 : Simplane.getNextFlapsExtendSpeed(Aircraft.A320_NEO)
+            SimVar.GetSimVarValue("L:A32NX_FLAPS_HANDLE_INDEX", "Number") === 4 ? SimVar.GetSimVarValue("L:A32NX_SPEEDS_VMAX", "Number") - 5 : SimVar.GetSimVarValue("L:A32NX_SPEEDS_VFEN", "Number")
         )));
     }
 

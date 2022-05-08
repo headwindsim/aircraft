@@ -50,6 +50,7 @@ jobs:
           token: ${{ github.token }}
           tag: ${{ env.MAIN_PRE_RELEASE_TAG }}
           assets: '*'
+          fail-if-no-assets: false
       - name: Upload main zip asset to vmain release
         uses: actions/upload-release-asset@v1.0.2
         env:

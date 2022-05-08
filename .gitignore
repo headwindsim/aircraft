@@ -19,6 +19,7 @@
 !.gitignore
 !CODEOWNERS
 !package.json
+!package-lock.json
 !.editorconfig
 !.eslintrc
 !jsconfig.json
@@ -40,6 +41,7 @@ node_modules
 /src-a339/instruments/src/EFB/dist
 /src-a339/instruments/buildSrc/custom/*
 /src-a339/autothrottle/target
+/src-a339/project/_PackageInt
 /src-a339/project/Packages
 /src-a339/project/PackageSources/**
 !/src-a339/project/PackageSources/**/*.png
@@ -63,3 +65,5 @@ src/instruments/buildSrc/custom/*
 msfs-avionics-mirror/src/sdk/build/**
 *.tgz
 /src
+
+headwind-aircraft-a330-900/a339x_build_info.json

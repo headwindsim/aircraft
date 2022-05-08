@@ -17,11 +17,12 @@ void AnimationAileronHandler::update(bool autopilotActive,
                                      double position,
                                      double dt) {
   // inhibit condition for anti-droop
-  // if (!areGroundSpoilersActive && groundSpoilersActive && autopilotActive) {
-  //   antiDroopInhibited = true;
-  // } else if (!groundSpoilersActive) {
-  //   antiDroopInhibited = false;
-  // }
+  //if (!areGroundSpoilersActive && groundSpoilersActive && autopilotActive) {
+  //  antiDroopInhibited = true;
+  //} else if (!groundSpoilersActive) {
+  //  antiDroopInhibited = false;
+  //}
+
   // No anti droop on a330-900
   antiDroopInhibited = true;
 

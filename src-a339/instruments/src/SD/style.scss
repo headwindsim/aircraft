@@ -1,15 +1,15 @@
 @font-face {
   font-family: "Ecam";
   //noinspection CssUnknownTarget
-  src: url("/Fonts_A339/ECAMFontRegular.ttf") format("truetype");
+  src: url("/A339X_FONTS/ECAMFontRegular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 .sd-svg {
   position: absolute;
-  width: 1280px;
-  height: 1280px;
+  width: 768px;
+  height: 768px;
 
   background: radial-gradient(
       ellipse at center,
@@ -20,4 +20,8 @@
   visibility: visible !important;
 
   font-family: "Ecam", monospace !important;
+}
+
+text {
+  stroke-width: 0;
 }

@@ -1,6 +1,6 @@
 @echo off
 
-set image="ghcr.io/flybywiresim/dev-env@sha256:626f12e8f5ca0517f39fc2b046eb91036998803b7cd483482581447d07e4ae7d"
+set image="ghcr.io/flybywiresim/dev-env@sha256:8974895d1d870fee5c5655ffa22e3aebff1879ca689b86c0c8f4e19c0dd4b27a"
 
 docker image inspect %image% 1> nul || docker system prune --filter label=flybywiresim=true -f
 docker run --rm -it -v "%cd%:/external" %image% %*
