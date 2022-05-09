@@ -872,16 +872,16 @@ class EngineControl {
       fuelRight = (fuelRightPre - (fuelBurn2 * KGS_TO_LBS)) + xfrAuxRight + (xfrCenter / 2);  // LBS
 
       // Checking for Inner Tank overflow - Will be taken off with Rust code
-      if (fuelLeft > 74337.6 && fuelRight > 74337.6) {
-        fuelCenter = centerQuantity + (fuelLeft - 74337.6) + (fuelRight - 74337.6);
-        fuelLeft = 74337.6;
-        fuelRight = 74337.6;
-      } else if (fuelRight > 74337.6) {
-        fuelCenter = centerQuantity + fuelRight - 74337.6;
-        fuelRight = 74337.6;
-      } else if (fuelLeft > 74337.6) {
-        fuelCenter = centerQuantity + fuelLeft - 74337.6;
-        fuelLeft = 74337.6;
+      if (fuelLeft > 74335.8 && fuelRight > 74335.8) {
+        fuelCenter = centerQuantity + (fuelLeft - 74335.8) + (fuelRight - 74335.8);
+        fuelLeft = 74335.8;
+        fuelRight = 74335.8;
+      } else if (fuelRight > 74335.8) {
+        fuelCenter = centerQuantity + fuelRight - 74335.8;
+        fuelRight = 74335.8;
+      } else if (fuelLeft > 74335.8) {
+        fuelCenter = centerQuantity + fuelLeft - 74335.8;
+        fuelLeft = 74335.8;
       } else {
         fuelCenter = centerQuantity;
       }
@@ -1024,7 +1024,7 @@ class EngineControl {
     double fuelCenterInit = 0;
     double fuelLeftInit = (rand() % 100) + 340;
     double fuelRightInit = fuelLeftInit;
-    double fuelLeftAuxInit = 964;
+    double fuelLeftAuxInit = 228;
     double fuelRightAuxInit = fuelLeftAuxInit;
 
     std::cout << "FADEC: Initializing EngineControl" << std::endl;
