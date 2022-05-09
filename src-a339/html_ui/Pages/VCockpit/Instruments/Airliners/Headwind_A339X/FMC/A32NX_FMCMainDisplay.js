@@ -4725,7 +4725,37 @@ class FMCMainDisplay extends BaseAirliners {
      */
     //TODO: can this be an util?
     getMaxFL(temp = A32NX_Util.getIsaTempDeviation(), gw = SimVar.GetSimVarValue("TOTAL WEIGHT", "kg") / 1000) {
-        return Math.round(temp <= 10 ? -2.778 * gw + 578.667 : (temp * (-0.039) - 2.389) * gw + temp * (-0.667) + 585.334);
+        let flightLevel = 0;
+        switch(true) {
+            case gw >= 240:
+                flightLevel = 355;
+                break;
+            case gw >= 230:
+                flightLevel = 365;
+                break;
+            case gw >= 220:
+                flightLevel = 375;
+                break;
+            case gw >= 210:
+                flightLevel = 385;
+                break;
+            case gw >= 200:
+                flightLevel = 395;
+                break;
+            case gw >= 190:
+                flightLevel = 400;
+                break;
+            case gw >= 180:
+                flightLevel = 405;
+                break;
+            default:
+                flightLevel = 410;
+                break;
+        }
+
+        return flightLevel;
+        //TODO: We should find a better formula in future for this calculation
+        //return Math.round(temp <= 10 ? -2.778 * gw + 578.667 : (temp * (-0.039) - 2.389) * gw + temp * (-0.667) + 585.334);
     }
 
     /**

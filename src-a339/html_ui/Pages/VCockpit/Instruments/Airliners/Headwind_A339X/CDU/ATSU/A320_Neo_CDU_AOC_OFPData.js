@@ -177,7 +177,7 @@ class CDUAocOfpData {
                     suffix: suffix,
                     maxLength: 4,
                     minValue: 0.0,
-                    maxValue: 9.4,
+                    maxValue: 44.8,
                 },
                 async (value) => {
                     await setTargetPax(paxTarget);
