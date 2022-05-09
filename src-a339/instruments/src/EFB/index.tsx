@@ -44,7 +44,7 @@ export const PowerContext = React.createContext<PowerContextInterface>(undefined
 
 const EFBLoad = () => {
     const [content, setContent] = useState<ContentState>(ContentState.OFF);
-    const [, setSessionId] = usePersistentProperty('A32NX_SENTRY_SESSION_ID');
+    const [, setSessionId] = usePersistentProperty('SENTRY_SESSION_ID');
 
     function offToLoaded() {
         setContent(ContentState.LOADING);
@@ -88,6 +88,6 @@ const SESSION_ID_LENGTH = 14;
 const nanoid = customAlphabet(ALPHABET, SESSION_ID_LENGTH);
 const generatedSessionID = nanoid();
 
-NXDataStore.set('A32NX_SENTRY_SESSION_ID', generatedSessionID);
+NXDataStore.set('SENTRY_SESSION_ID', generatedSessionID);
 
 render(<FailuresOrchestratorProvider><EFBLoad /></FailuresOrchestratorProvider>, true, true);
