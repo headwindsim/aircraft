@@ -4443,7 +4443,7 @@
                 <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Push_Held</ANIM_TEMPLATE>
                 <NODE_ID>PUSH_AUTOPILOT_MASTERAWARN_L</NODE_ID>
-                <PART_ID>MASTERWARN_L</PART_ID>
+                <PART_ID>PUSH_AUTOPILOT_MASTERAWARN_L</PART_ID>
                 <LEFT_SINGLE_CODE>
                     0 (&gt;L:A32NX_MASTER_WARNING)
                     1 (&gt;L:PUSH_AUTOPILOT_MASTERAWARN_L)
@@ -4463,7 +4463,7 @@
                 <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Push_Held</ANIM_TEMPLATE>
                 <NODE_ID>PUSH_AUTOPILOT_MASTERCAUT_L</NODE_ID>
-                <PART_ID>MASTERCAUT_L</PART_ID>
+                <PART_ID>PUSH_AUTOPILOT_MASTERCAUT_L</PART_ID>
                 <LEFT_SINGLE_CODE>
                     0 (&gt;L:A32NX_MASTER_CAUTION)
                     1 (&gt;L:PUSH_AUTOPILOT_MASTERCAUT_L)
@@ -4483,7 +4483,7 @@
                 <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Push_Held</ANIM_TEMPLATE>
                 <NODE_ID>PUSH_AUTOPILOT_MASTERAWARN_R</NODE_ID>
-                <PART_ID>MASTERWARN_R</PART_ID>
+                <PART_ID>PUSH_AUTOPILOT_MASTERAWARN_R</PART_ID>
                 <LEFT_SINGLE_CODE>
                     0 (&gt;L:A32NX_MASTER_WARNING)
                     1 (&gt;L:PUSH_AUTOPILOT_MASTERAWARN_L)
@@ -4503,7 +4503,7 @@
                 <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Push_Held</ANIM_TEMPLATE>
                 <NODE_ID>PUSH_AUTOPILOT_MASTERCAUT_R</NODE_ID>
-                <PART_ID>MASTERCAUT_R</PART_ID>
+                <PART_ID>PUSH_AUTOPILOT_MASTERCAUT_R</PART_ID>
                 <LEFT_SINGLE_CODE>
                     0 (&gt;L:A32NX_MASTER_CAUTION)
                     1 (&gt;L:PUSH_AUTOPILOT_MASTERCAUT_L)
@@ -4519,29 +4519,6 @@
                 <SEQ2_CODE>(L:Generic_Master_Caution_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ2_CODE>
                 <TOOLTIPID>TT:COCKPIT.TOOLTIPS.MASTER_CAUTION_ACKNOWLEDGE</TOOLTIPID>
             </UseTemplate>
-            <!-- old buttons without split seq 1/2 -->
-            <Component ID="HIDDEN">
-                <Component ID="PUSH_AUTOPILOT_MASTERCAUT_L" Node="PUSH_AUTOPILOT_MASTERCAUT_L">
-                    <UseTemplate Name="ASOBO_GT_Visibility_Code">
-                        <VISIBILITY_CODE>0</VISIBILITY_CODE>
-                    </UseTemplate>
-                </Component>
-                <Component ID="PUSH_AUTOPILOT_MASTERCAUT_R" Node="PUSH_AUTOPILOT_MASTERCAUT_R">
-                    <UseTemplate Name="ASOBO_GT_Visibility_Code">
-                        <VISIBILITY_CODE>0</VISIBILITY_CODE>
-                    </UseTemplate>
-                </Component>
-                <Component ID="PUSH_AUTOPILOT_MASTERAWARN_L" Node="PUSH_AUTOPILOT_MASTERAWARN_L">
-                    <UseTemplate Name="ASOBO_GT_Visibility_Code">
-                        <VISIBILITY_CODE>0</VISIBILITY_CODE>
-                    </UseTemplate>
-                </Component>
-                <Component ID="PUSH_AUTOPILOT_MASTERAWARN_R" Node="PUSH_AUTOPILOT_MASTERAWARN_R">
-                    <UseTemplate Name="ASOBO_GT_Visibility_Code">
-                        <VISIBILITY_CODE>0</VISIBILITY_CODE>
-                    </UseTemplate>
-                </Component>
-            </Component>
         </Component>
 
         <Component ID="DOOR_PANEL">
