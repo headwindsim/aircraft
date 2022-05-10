@@ -37,6 +37,9 @@ jobs:
       - name: Build ZIP file
         run: |
           ./scripts/dev-env/run.sh node ./scripts/fragment.js
+
+          cp ./build-modules/modules.json ./headwind-aircraft-a330-900/install.json
+          ./scripts/dev-env/run.sh node ./scripts/install-source.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
           zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.RELEASE_ZIP_NAME }} ./headwind-aircraft-a330-900/
       - name: Create Release

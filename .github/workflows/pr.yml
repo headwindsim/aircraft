@@ -58,8 +58,6 @@ jobs:
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: HEADWIND-A339X.zip
-      BUILD_DIR_NAME: zip-build
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -74,11 +72,13 @@ jobs:
       - name: Build A339X Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/build.sh --no-tty -j 4
-      - name: Generate ZIP file
+      - name: Generate install.json
         run: |
-          mkdir ./${{ env.BUILD_DIR_NAME }}
-          zip -r ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwind-aircraft-a330-900/
+          ./scripts/dev-env/run.sh node ./scripts/fragment.js
+
+          cp ./build-modules/modules.json ./headwind-aircraft-a330-900/install.json
+          ./scripts/dev-env/run.sh node ./scripts/install-source.js
       - uses: actions/upload-artifact@v2
         with:
           name: HEADWIND-A339X
-          path: ${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }}
+          path: ./**/headwind-aircraft-a330-900/

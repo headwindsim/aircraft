@@ -44,6 +44,9 @@ jobs:
       - name: Build fragments
         run: |
           ./scripts/dev-env/run.sh node ./scripts/fragment.js
+
+          cp ./build-modules/modules.json ./headwind-aircraft-a330-900/install.json
+          ./scripts/dev-env/run.sh node ./scripts/install-source.js
       - name: Delete old release assets
         uses: mknejp/delete-release-assets@v1
         with:
