@@ -15,8 +15,9 @@ export const FuelPage = () => {
     const outerCellGallon = 964;
     const innerCellGallon = 11095;
     const centerTankGallon = 12625;
-    const wingTotalRefuelTimeSeconds = 1680;
-    const CenterTotalRefuelTimeSeconds = 900;
+    // total refuel time for all fuel tank for A330 are roughly 33 minutes (1980 seconds)
+    const wingTotalRefuelTimeSeconds = 1300;
+    const CenterTotalRefuelTimeSeconds = 680;
     const [usingMetrics] = usePersistentProperty('CONFIG_USING_METRIC_UNIT', '1');
 
     const currentUnit = () => {
