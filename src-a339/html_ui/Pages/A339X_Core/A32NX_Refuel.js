@@ -1,5 +1,6 @@
-const WING_FUELRATE_GAL_SEC = 3.99;
-const CENTER_MODIFIER = 3.0198;
+// total refuel time for all fuel tank for A330 are roughly 33 minutes (1980 seconds) -> 1300 seconds wing + 680 seconds center
+const WING_FUELRATE_GAL_SEC = 18.5523; // 2 * (inner + outer wing fuel)/ 1300 seconds = 2 * (11095 + 964)/1300
+const CENTER_MODIFIER = 1.00075; // (center + trim)/680 seconds / WING_FUELRATE_GAL_SEC = 12625/680 /18.5523
 
 class A32NX_Refuel {
     constructor() {}
