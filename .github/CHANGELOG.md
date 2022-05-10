@@ -8,3 +8,4 @@
 ## 0.106
 
 1. [GENERAL] Adjustments to the repo structure and build process of the Aircraft - @Revyn112 (Revyn112)
+2. [FIX-FUEL] Adjusted refueling rate to roughly 33 minutes - @kevinwidjaja21 (Kevin Widjaja)
