@@ -1456,7 +1456,7 @@
             <Requires LocalVar="A32NX_ELEC_AC_2_BUS_IS_POWERED" Units="Bool" Index="1">
                 <Range LowerBound="1" />
             </Requires>
-            <Requires SimVar="FUEL TANK RIGHT  MAIN QUANTITY" Units="Gallons" Index="1">
+            <Requires SimVar="FUEL TANK RIGHT MAIN QUANTITY" Units="Gallons" Index="1">
                 <Range LowerBound="0.2" />
             </Requires>
         </Sound>
@@ -2317,7 +2317,7 @@
             </Requires>
             <WwiseRTPC LocalVar="A32NX_SOUND_ANNOUNCEMENTS_ENABLED" Units="number" Index="0" RTPCName="LOCALVAR_A32NX_ANNOUNCEMENT_TOGGLE" />
         </Sound>
-        
+
          <Sound WwiseData="true" WwiseEvent="cabin_crew_seats_landing" SimVar="GEAR TOTAL PCT EXTENDED" Units="PERCENT" Index="0" NodeName="PEDALS_LEFT" Continuous="true">
             <Range LowerBound="0.2" />
             <Requires LocalVar="A32NX_FMGC_FLIGHT_PHASE">

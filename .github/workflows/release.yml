@@ -25,6 +25,7 @@ jobs:
           echo CLIENT_ID=${{ secrets.NAVIGRAPH_CLIENT_ID }} >> .env
           echo CLIENT_SECRET=${{ secrets.NAVIGRAPH_CLIENT_SECRET }} >> .env
           echo CHARTFOX_SECRET=${{ secrets.CHARTFOX_SECRET }} >> .env
+          echo BUILD_DIR_NAME=${{ env.BUILD_DIR_NAME }} >> .env
       - name: Setup Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/setup.sh
@@ -66,7 +67,7 @@ jobs:
         with:
           token: ${{ github.token }}
           tag: ${{ env.MASTER_PRE_RELEASE_TAG }}
-          assets: '*'
+          assets: "*"
       - name: Upload Assets to vstable
         uses: dwenegar/upload-release-assets@v1
         env:
