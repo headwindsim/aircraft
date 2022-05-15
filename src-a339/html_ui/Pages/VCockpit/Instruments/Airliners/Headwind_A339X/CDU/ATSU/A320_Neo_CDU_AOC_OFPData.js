@@ -101,7 +101,7 @@ class CDUAocOfpData {
                 paxRemaining -= pax;
             }
 
-            await fillStation(paxStations['rows26_42'], .45 , numberOfPax);
+            await fillStation(paxStations['rows26_42'], .46 , numberOfPax);
             await fillStation(paxStations['rows12_25'], .37, numberOfPax);
             await fillStation(paxStations['rows9_11'], .08, numberOfPax);
             await fillStation(paxStations['rows1_8'], 1, paxRemaining);
@@ -123,16 +123,16 @@ class CDUAocOfpData {
                 await SimVar.SetSimVarValue(`L:${station.simVar}_DESIRED`, "Number", parseInt(weight));
             }
 
-            await fillCargo(cargoStations['fwdBag'], .130 , loadableCargoWeight);
-            await fillCargo(cargoStations['aftBag'], .380, loadableCargoWeight);
             await fillCargo(cargoStations['aftCont'], .412, loadableCargoWeight);
+            await fillCargo(cargoStations['aftBag'], .380, loadableCargoWeight);
+            await fillCargo(cargoStations['fwdBag'], .130 , loadableCargoWeight);
             await fillCargo(cargoStations['aftBulk'], 1, remainingWeight);
             return;
         }
 
         const currentZfwcg = getZfwcg();
         if (currentZfwcg !== undefined) {
-            const cgColor = currentZfwcg >= 16 && currentZfwcg <= 40 ? 'green' : 'red';
+            const cgColor = currentZfwcg >= 14 && currentZfwcg <= 41 ? 'green' : 'red';
             zfwcg = `${currentZfwcg.toFixed(1)}{end}[color]${cgColor}`;
         }
 
@@ -253,7 +253,7 @@ function getZfwcg() {
     const macSize = 25.49; // Accurate to 3 decimals, replaces debug weight values
 
     const emptyWeight = (SimVar.GetSimVarValue("EMPTY WEIGHT", "Kilograms"));
-    const emptyPosition = -27; // Value from flight_model.cfg
+    const emptyPosition = -29.4; // Value from flight_model.cfg
     const emptyMoment = emptyPosition * emptyWeight;
     const PAX_WEIGHT = SimVar.GetSimVarValue("L:A32NX_WB_PER_PAX_WEIGHT", "Number");
 
