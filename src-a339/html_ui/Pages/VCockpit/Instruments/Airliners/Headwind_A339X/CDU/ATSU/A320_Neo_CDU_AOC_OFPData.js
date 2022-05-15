@@ -123,9 +123,9 @@ class CDUAocOfpData {
                 await SimVar.SetSimVarValue(`L:${station.simVar}_DESIRED`, "Number", parseInt(weight));
             }
 
-            await fillCargo(cargoStations['aftCont'], .412, loadableCargoWeight);
-            await fillCargo(cargoStations['aftBag'], .380, loadableCargoWeight);
-            await fillCargo(cargoStations['fwdBag'], .130 , loadableCargoWeight);
+            await fillCargo(cargoStations['aftCont'], .5099, loadableCargoWeight);
+            await fillCargo(cargoStations['aftBag'], .4128, loadableCargoWeight);
+            await fillCargo(cargoStations['fwdBag'], .0 , loadableCargoWeight);
             await fillCargo(cargoStations['aftBulk'], 1, remainingWeight);
             return;
         }
