@@ -1398,7 +1398,7 @@ var A320_Neo_UpperECAM;
                         isActive: () => (
                             //!SimVar.GetSimVarValue("L:LANDING_2_Retracted", "Bool") ||
                             //!SimVar.GetSimVarValue("L:LANDING_3_Retracted", "Bool")
-                            SimVar.GetSimVarValue("A:LIGHT LANDING ON", "Bool")
+                            SimVar.GetSimVarValue("LIGHT LANDING:2", "Bool")
                         ),
                     },
                     {
