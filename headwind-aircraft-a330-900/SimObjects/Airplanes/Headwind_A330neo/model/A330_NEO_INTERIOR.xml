@@ -791,11 +791,9 @@
         <Component ID="Front_Middle">
 
             <!-- BRK FAN -->
-            <UseTemplate Name="FBW_Anim_Interactions">
-                <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
-                <ANIM_TEMPLATE>FBW_Push_Toggle</ANIM_TEMPLATE>
+            <UseTemplate Name="FBW_Push_Toggle">
                 <NODE_ID>PUSH_BKRFAN_IMPORTED</NODE_ID>
-                <PART_ID>BRKFAN</PART_ID>
+                <PART_ID>PUSH_BKRFAN_IMPORTED</PART_ID>
                 <TOGGLE_SIMVAR>L:A32NX_BRAKE_FAN_BTN_PRESSED</TOGGLE_SIMVAR>
                 <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                 <SEQ1_CODE>(L:A32NX_BRAKES_HOT, Bool)</SEQ1_CODE>

@@ -253,7 +253,7 @@ function getZfwcg() {
     const macSize = 25.49; // Accurate to 3 decimals, replaces debug weight values
 
     const emptyWeight = (SimVar.GetSimVarValue("EMPTY WEIGHT", "Kilograms"));
-    const emptyPosition = -29.4; // Value from flight_model.cfg
+    const emptyPosition = -28; // Value from flight_model.cfg
     const emptyMoment = emptyPosition * emptyWeight;
     const PAX_WEIGHT = SimVar.GetSimVarValue("L:A32NX_WB_PER_PAX_WEIGHT", "Number");
 
