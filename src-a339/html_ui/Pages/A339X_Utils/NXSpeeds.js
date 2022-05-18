@@ -561,9 +561,9 @@ class NXSpeedsTo {
      * @param alt {number} field altitude
      */
     constructor(m = 132, fPos = 1, alt = 0) {
-        this.v2 = Math.floor(to[fPos - 1][_correctMass(m)](m) + (fPos === 2 ? (Math.abs(alt * 0.0002)) : 0)) + 20;
+        this.v2 = Math.floor(to[fPos - 1][_correctMass(m)](m) + (fPos === 2 ? (Math.abs(alt * 0.0002)) : 0)) + 5;
         this.vr = this.v2 - 4;
-        this.v1 = this.v2 - 5;
+        this.v1 = this.vr - 2;
     }
 }
 
