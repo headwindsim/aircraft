@@ -216,6 +216,30 @@ export const Ground = ({
 
             <div className="right-72 grid grid-cols-2 control-grid absolute top-16">
                 <div>
+                    <h1 className="text-white font-medium text-xl text-center pb-1">Door Aft</h1>
+                    <DoorToggle
+                        tugActive={tugActive}
+                        index={3}
+                        onClick={handleClick}
+                        selectionCallback={applySelectedWithSync}
+                        id="door-fwd-right"
+                        disabled={disabledButtons.includes('door-fwd-right')}
+                    />
+                </div>
+                <div>
+                    <h1 className="text-white font-medium text-xl text-center pb-1">Catering</h1>
+                    <Button
+                        onClick={(e) => handleClick(() => setCateringActive(1), e, 'door-fwd-right')}
+                        className={applySelectedWithSync('w-32', 'catering', cateringActive, 'door-fwd-right')}
+                        type={BUTTON_TYPE.NONE}
+                        id="catering"
+                    >
+                        <IconArchive size="2.825rem" stroke="1.5" />
+                    </Button>
+                </div>
+            </div>
+            <div className="right-72 grid grid-cols-2 control-grid absolute bottom-36">
+            <div>
                     <h1 className="text-white font-medium text-xl text-center pb-1">Baggage</h1>
                     <Button
                         onClick={(e) => handleClick(() => setCargoActive(1), e)}
@@ -235,30 +259,6 @@ export const Ground = ({
                         id="power"
                     >
                         <IconPlug size="2.825rem" stroke="1.5" />
-                    </Button>
-                </div>
-            </div>
-            <div className="right-72 grid grid-cols-2 control-grid absolute bottom-36">
-                <div>
-                    <h1 className="text-white font-medium text-xl text-center pb-1">Door Aft</h1>
-                    <DoorToggle
-                        tugActive={tugActive}
-                        index={3}
-                        onClick={handleClick}
-                        selectionCallback={applySelectedWithSync}
-                        id="door-aft-right"
-                        disabled={disabledButtons.includes('door-aft-right')}
-                    />
-                </div>
-                <div>
-                    <h1 className="text-white font-medium text-xl text-center pb-1">Catering</h1>
-                    <Button
-                        onClick={(e) => handleClick(() => setCateringActive(1), e, 'door-aft-right')}
-                        className={applySelectedWithSync('w-32', 'catering', cateringActive, 'door-aft-right')}
-                        type={BUTTON_TYPE.NONE}
-                        id="catering"
-                    >
-                        <IconArchive size="2.825rem" stroke="1.5" />
                     </Button>
                 </div>
             </div>
