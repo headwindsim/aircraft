@@ -4,6 +4,7 @@ const fs = require('fs');
 const execute = async () => {
     try {
         const result = await fragmenter.pack({
+            packOptions: { splitFileSize: 536_870_912, keepCompleteModulesAfterSplit: true },
             baseDir: './headwind-aircraft-a330-900',
             outDir: './build-modules',
             modules: [{
@@ -63,6 +64,9 @@ const execute = async () => {
             }, {
                 name: 'ContentInfo',
                 sourceDir: './ContentInfo'
+            }, {
+                name: 'MarketplaceData',
+                sourceDir: './MarketplaceData'
             }]
         });
         console.log(result);
