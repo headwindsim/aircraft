@@ -87,3 +87,57 @@ class A32NX_PayloadConstructor {
         };
     }
 }
+
+const payloadConstruct = new A32NX_PayloadConstructor();
+const paxStations = payloadConstruct.paxStations;
+const cargoStations = payloadConstruct.cargoStations;
+const MAX_SEAT_AVAILABLE = 290;
+
+/**
+     * Calculate %MAC ZWFCG of all stations
+     */
+function getZfwcg() {
+    const leMacZ = -21.63; // Accurate to 3 decimals, replaces debug weight values
+    const macSize = 25.49; // Accurate to 3 decimals, replaces debug weight values
+
+    const emptyWeight = (SimVar.GetSimVarValue("EMPTY WEIGHT", getUserUnit()));
+    const emptyPosition = -28; // Value from flight_model.cfg
+    const emptyMoment = emptyPosition * emptyWeight;
+    const PAX_WEIGHT = SimVar.GetSimVarValue("L:A32NX_WB_PER_PAX_WEIGHT", "Number");
+
+    const paxTotalMass = Object.values(paxStations).map((station) => (SimVar.GetSimVarValue(`L:${station.simVar}`, "Number") * PAX_WEIGHT)).reduce((acc, cur) => acc + cur, 0);
+    const paxTotalMoment = Object.values(paxStations).map((station) => (SimVar.GetSimVarValue(`L:${station.simVar}`, "Number") * PAX_WEIGHT) * station.position).reduce((acc, cur) => acc + cur, 0);
+
+    const cargoTotalMass = Object.values(cargoStations).map((station) => SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${station.stationIndex}`, getUserUnit())).reduce((acc, cur) => acc + cur, 0);
+    const cargoTotalMoment = Object.values(cargoStations).map((station) => (SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${station.stationIndex}`, getUserUnit()) * station.position)).reduce((acc, cur) => acc + cur, 0);
+
+    const totalMass = emptyWeight + paxTotalMass + cargoTotalMass;
+    const totalMoment = emptyMoment + paxTotalMoment + cargoTotalMoment;
+
+    const cgPosition = totalMoment / totalMass;
+    const cgPositionToLemac = cgPosition - leMacZ;
+    const cgPercentMac = -100 * (cgPositionToLemac / macSize);
+
+    return cgPercentMac;
+}
+
+function getTotalCargo() {
+    const cargoTotalMass = Object.values(cargoStations).filter((station) => station.visible).map((station) => SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${station.stationIndex}`, getUserUnit())).reduce((acc, cur) => acc + cur, 0);
+    return cargoTotalMass;
+}
+
+function getTotalPayload() {
+    const paxTotalMass = Object.values(paxStations).map((station) => SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${station.stationIndex}`, getUserUnit())).reduce((acc, cur) => acc + cur, 0);
+    const cargoTotalMass = getTotalCargo();
+    return paxTotalMass + cargoTotalMass;
+}
+
+function getZfw() {
+    const emptyWeight = (SimVar.GetSimVarValue("EMPTY WEIGHT", getUserUnit()));
+    return emptyWeight + getTotalPayload();
+}
+
+function getUserUnit() {
+    const defaultUnit = (NXUnits.userWeightUnit() == "KG") ? "Kilograms" : "Pounds";
+    return defaultUnit;
+}
