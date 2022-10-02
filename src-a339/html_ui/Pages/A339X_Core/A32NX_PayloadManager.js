@@ -94,8 +94,8 @@ const cargoStations = payloadConstruct.cargoStations;
 const MAX_SEAT_AVAILABLE = 290;
 
 /**
-     * Calculate %MAC ZWFCG of all stations
-     */
+ * Calculate %MAC ZWFCG of all stations
+ */
 function getZfwcg() {
     const leMacZ = -21.63; // Accurate to 3 decimals, replaces debug weight values
     const macSize = 25.49; // Accurate to 3 decimals, replaces debug weight values
