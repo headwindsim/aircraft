@@ -2130,19 +2130,19 @@
     "cargoMap": [
         {
             "name": "FWD BAGGAGE/CONTAINER",
-            "weight": 5000,
+            "weight": 5800,
             "index": 0,
             "stationIndex": 5,
-            "position": 44.72,
-            "progressBarWidth": 160,
+            "position": 40.00,
+            "progressBarWidth": 100,
             "simVar": "A32NX_CARGO_FWD_BAGGAGE_CONTAINER"
         },
         {
             "name": "FWD CONTAINER CPT 1/2",
-            "weight": 17861,
+            "weight": 17061,
             "index": 1,
             "stationIndex": 6,
-            "position": 25.50,
+            "position": 10.00,
             "progressBarWidth": 100,
             "simVar": "A32NX_CARGO_AFT_CONTAINER"
         },
@@ -2151,7 +2151,7 @@
             "weight": 18507,
             "index": 2,
             "stationIndex": 7,
-            "position": -53.88,
+            "position": -55.00,
             "progressBarWidth": 100,
             "simVar": "A32NX_CARGO_AFT_BAGGAGE"
         },
@@ -2160,7 +2160,7 @@
             "weight": 3468,
             "index": 3,
             "stationIndex": 8,
-            "position": -78.05,
+            "position": -80,
             "progressBarWidth": 100,
             "simVar": "A32NX_CARGO_AFT_BULK_LOOSE"
         }
