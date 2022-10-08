@@ -900,8 +900,8 @@ class EngineControl {
       fuelLeft = (fuelLeftPre - (fuelBurn1 * KGS_TO_LBS)) + xfrAuxLeft + (xfrCenter / 2);     // LBS
       fuelRight = (fuelRightPre - (fuelBurn2 * KGS_TO_LBS)) + xfrAuxRight + (xfrCenter / 2);  // LBS
 
-      double leftQuantity = 74336.4; //11095 gal * 6.7 lbs/gal - 0.1
-      double rightQuantity = 74336.4; //11095 gal * 6.7 lbs/gal - 0.1
+      double leftQuantity = simVars->getTankLeftCapacity() * fuelWeightGallon; //11095 gal * 6.7 lbs/gal - 0.1
+      double rightQuantity = simVars->getTankRightCapacity() * fuelWeightGallon; //11095 gal * 6.7 lbs/gal - 0.1
 
       // Checking for Inner Tank overflow - Will be taken off with Rust code
       if (fuelLeft > leftQuantity && fuelRight > rightQuantity) {
