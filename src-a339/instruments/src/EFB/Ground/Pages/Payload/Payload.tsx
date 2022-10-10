@@ -99,6 +99,9 @@ export const Payload = () => {
     const [RInnCurrent] = useSimVar('FUEL TANK RIGHT MAIN QUANTITY', 'Gallons', 2_000);
     const [ROutCurrent] = useSimVar('FUEL TANK RIGHT AUX QUANTITY', 'Gallons', 2_000);
 
+    const [LInnCapacity] = useSimVar('FUEL TANK LEFT MAIN CAPACITY', 'Gallons', 2_000);
+    const [LOutCapacity] = useSimVar('FUEL TANK LEFT AUX CAPACITY', 'Gallons', 2_000);
+
     const fuel = [centerCurrent, LInnCurrent, LOutCurrent, RInnCurrent, ROutCurrent];
 
     // Units
@@ -510,8 +513,8 @@ export const Payload = () => {
         // TODO: Better fuel burn algorithm for estimation - consider this placeholder logic
         // Adjust MLW CG values based on estimated fuel burn
         if (destEfob > 0) {
-            const OUTER_CELL_KG = 228 * galToKg;
-            const INNER_CELL_KG = 1816 * galToKg;
+            const OUTER_CELL_KG = LOutCapacity * galToKg;
+            const INNER_CELL_KG = LInnCapacity * galToKg;
             let centerTank = 0;
             let outerTanks = 0;
             let innerTanks = 0;

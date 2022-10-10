@@ -59,7 +59,7 @@ class A32NX_PayloadConstructor {
             },
             aftCont: {
                 name: 'FWD CONTAINER CPT 1/2',
-                weight: 22061,
+                weight: 17061,
                 load: 0,
                 stationIndex: 5 + 1,
                 position: 10.00,
