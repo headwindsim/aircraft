@@ -5,14 +5,14 @@
             <BUTTON_LIGHTS_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</BUTTON_LIGHTS_POWERED>
         </DefaultTemplateParameters>
 
-        <UseTemplate Name="FBW_MCDU_SCREEN_Template"/>
-        <UseTemplate Name="FBW_MCDU_LINE_SELECT_KEYS_Template"/>
-        <UseTemplate Name="FBW_MCDU_PAGE_KEYS_Template"/>
-        <UseTemplate Name="FBW_MCDU_SLEW_KEYS_Template"/>
-        <UseTemplate Name="FBW_MCDU_NUMPAD_KEYS_Template"/>
-        <UseTemplate Name="FBW_MCDU_ALPHABET_KEYS_Template"/>
-        <UseTemplate Name="FBW_MCDU_BRIGHTNESS_KEYS_Template"/>
-        <UseTemplate Name="FBW_MCDU_ANNUNCIATORS_Template"/>
+        <UseTemplate Name="FBW_MCDU_SCREEN_Template" />
+        <UseTemplate Name="FBW_MCDU_LINE_SELECT_KEYS_Template" />
+        <UseTemplate Name="FBW_MCDU_PAGE_KEYS_Template" />
+        <UseTemplate Name="FBW_MCDU_SLEW_KEYS_Template" />
+        <UseTemplate Name="FBW_MCDU_NUMPAD_KEYS_Template" />
+        <UseTemplate Name="FBW_MCDU_ALPHABET_KEYS_Template" />
+        <UseTemplate Name="FBW_MCDU_BRIGHTNESS_KEYS_Template" />
+        <UseTemplate Name="FBW_MCDU_ANNUNCIATORS_Template" />
     </Template>
 
     <Template Name="FBW_MCDU_LINE_SELECT_KEYS_Template">
@@ -337,7 +337,7 @@
                 <WWISE_EVENT_2>mcdubuttons</WWISE_EVENT_2>
                 <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
                 <NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
-                <DONT_OVERRIDE_BASE_EMISSIVE>false</DONT_OVERRIDE_BASE_EMISSIVE>
+                <DONT_OVERRIDE_BASE_EMISSIVE>False</DONT_OVERRIDE_BASE_EMISSIVE>
                 <SEQ1_EMISSIVE_CODE>#BUTTON_LIGHTS_POWERED#</SEQ1_EMISSIVE_CODE>
                 <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
                 <LEFT_SINGLE_CODE>(&gt;H:A320_Neo_CDU_#SIDE_NUMERIC#_BTN_#LEFT_SINGLE_CODE_BTN_NAME#)</LEFT_SINGLE_CODE>
@@ -364,7 +364,7 @@
                 <WWISE_EVENT_2>mcdubuttons</WWISE_EVENT_2>
                 <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
                 <NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
-                <DONT_OVERRIDE_BASE_EMISSIVE>false</DONT_OVERRIDE_BASE_EMISSIVE>
+                <DONT_OVERRIDE_BASE_EMISSIVE>False</DONT_OVERRIDE_BASE_EMISSIVE>
                 <SEQ1_EMISSIVE_CODE>#BUTTON_LIGHTS_POWERED#</SEQ1_EMISSIVE_CODE>
                 <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
                 <LEFT_SINGLE_CODE>
@@ -504,20 +504,18 @@
         <Component ID="#NODE_ID_ANNUNC#" Node="#NODE_ID_ANNUNC#">
             <UseTemplate Name="ASOBO_GT_Emissive_Gauge">
                 <NODE_ID>#NODE_ID_ANNUNC#</NODE_ID>
-                <EMISSIVE_CODE>
-                    #ANNUNC_LIT# sp0
-                    (L:A32NX_OVHD_INTLT_ANN, number) sp1
-                    l1 2 == if{
-                      0.1
-                    } els{
-                      1
-                    } sp2
-                    l1 0 == l0 or if{
-                      l2
-                    } els{
-                      0
-                    } sp3
-                    l3
+                <EMISSIVE_CODE type="rnp" return="number">
+                    let lit = #ANNUNC_LIT, boolean#;
+                    let annSwitch = (L:A32NX_OVHD_INTLT_ANN, number);
+
+                    let brightness = if annSwitch == 2 { 0.1 } else { 1 };
+                    let emissive = if (annSwitch == 0 or lit) {
+                        brightness
+                    } else {
+                        0
+                    };
+
+                    emissive
                 </EMISSIVE_CODE>
                 <EMISSIVE_DRIVES_VISIBILITY>True</EMISSIVE_DRIVES_VISIBILITY>
                 <FAILURE>#ANNUNC_POWERED#</FAILURE>

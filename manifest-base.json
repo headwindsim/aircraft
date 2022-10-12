@@ -6,26 +6,18 @@
       "OlderHistory": ""
     }
   },
-  "title": "Airbus A330-900 NEO",
+  "title": "A339X",
   "dependencies": [
     {
-      "package_version": "0.1.99",
-      "name": "asobo-aircraft-a320-neo"
-    },
-    {
-      "package_version": "0.1.127",
-      "name": "asobo-vcockpits-instruments-a320-neo"
-    },
-    {
-      "package_version": "0.1.128",
+      "package_version": "0.1.129",
       "name": "asobo-vcockpits-instruments-airliners"
     },
     {
-      "package_version": "0.1.123",
+      "package_version": "0.1.125",
       "name": "fs-base-aircraft-common"
     }
   ],
   "content_type": "AIRCRAFT",
-  "minimum_game_version": "1.20.6",
+  "minimum_game_version": "1.26.5",
   "manufacturer": "Airbus"
 }

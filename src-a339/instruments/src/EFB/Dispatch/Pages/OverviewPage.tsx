@@ -1,150 +1,99 @@
-import React, { useState, useEffect } from 'react';
-import { IconAlignRight, IconBox, IconPlane, IconSwitchHorizontal, IconUsers, IconBolt } from '@tabler/icons';
-import fuselage from '../../Assets/330neo-outline-nose.svg';
-import { useSimVar } from '../../../Common/simVars';
+import React, { FC } from 'react';
+import { IconPlane } from '@tabler/icons';
+import { Box, LightningFill, PeopleFill, Rulers, Speedometer2 } from 'react-bootstrap-icons';
+import { useSimVar } from '@instruments/common/simVars';
+import { Units } from '@shared/units';
+import { t } from '../../translation';
+import { NoseOutline } from '../../Assets/NoseOutline';
 
-type OverviewPageProps = {
-    weights: {
-        cargo: number,
-        estLandingWeight: number,
-        estTakeOffWeight: number,
-        estZeroFuelWeight: number,
-        maxLandingWeight: number,
-        maxTakeOffWeight: number,
-        maxZeroFuelWeight: number,
-        passengerCount: number,
-        passengerWeight: number,
-        payload: number,
-    },
-    fuels: {
-        avgFuelFlow: number,
-        contingency: number,
-        enrouteBurn: number,
-        etops: number,
-        extra: number,
-        maxTanks: number,
-        minTakeOff: number,
-        planLanding: number,
-        planRamp: number,
-        planTakeOff: number,
-        reserve: number,
-        taxi: number,
-    },
-    units: string,
-    arrivingAirport: string,
-    arrivingIata: string,
-    departingAirport: string,
-    departingIata: string,
-    altBurn: number,
-    altIcao: string,
-    altIata: string,
-    tripTime: number,
-    contFuelTime: number,
-    resFuelTime: number,
-    taxiOutTime: number,
-};
+interface InformationEntryProps {
+    title: string;
+    info: string;
+}
 
-const OverviewPage = (props: OverviewPageProps) => {
-    const [, setUnitConversion] = useState(1000);
+const InformationEntry: FC<InformationEntryProps> = ({ children, title, info }) => (
+    <div>
+        <div className="flex flex-row items-center space-x-4 text-theme-highlight">
+            {children}
+            <p className="whitespace-nowrap">{title}</p>
+        </div>
+        <p className="font-bold">{info}</p>
+    </div>
+);
 
-    useEffect(() => {
-        const unitConv = (props.units === 'kgs') ? 1000 : 2240;
-        setUnitConversion(unitConv);
-    }, [props.units]);
-
+export const OverviewPage = () => {
     let [airline] = useSimVar('ATC AIRLINE', 'String', 1_000);
 
-    if (airline === 0 || null || '') {
-        airline = 'Headwind';
-    }
+    airline ||= 'HEADWIND';
+    const [actualGrossWeight] = useSimVar('TOTAL WEIGHT', 'kilograms', 5_000);
+
+    const getConvertedInfo = (metricValue: number, unitType: 'weight' |'volume' |'distance') => {
+        const numberWithCommas = (x: number) => x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+        switch (unitType) {
+        case 'weight':
+            return `${numberWithCommas(Units.kilogramToUser(metricValue))} [${Units.userWeightSuffixEis2}]`;
+        case 'volume':
+            return `${numberWithCommas(Units.litreToUser(metricValue))} [${Units.userVolumeSuffixEis2}]`;
+        case 'distance':
+            return `${numberWithCommas(metricValue)} [nm]`;
+        default: throw new Error('Invalid unit type');
+        }
+    };
 
     return (
-        <div className="flex mt-6">
-            <div className="w-1/2 mr-3">
-                <div className="text-white overflow-hidden bg-navy-lighter rounded-2xl shadow-lg p-6 h-efb-nav">
-                    <h2 className="text-2xl font-medium">Airbus A330-900neo</h2>
-                    <span className="text-lg">{airline}</span>
-                    <div className="flex items-center justify-center mt-6">
-                        <img className="flip-horizontal h-48 -ml-96 mr-32" src={fuselage} />
-                    </div>
-                    <div className="mt-8 flex">
-                        <div className="w-1/2">
-                            <h3 className="text-xl font-medium flex items-center">
-                                <IconPlane className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                Model
-                            </h3>
-                            <span className="mt-2 text-lg">A330-941 [A339]</span>
+        <div className="overflow-hidden p-6 mr-3 w-min rounded-lg border-2 h-content-section-reduced border-theme-accent">
+            <h1 className="font-bold">Airbus A330-900</h1>
+            <p>{airline}</p>
 
-                            <h3 className="text-xl font-medium flex items-center mt-6">
-                                <IconSwitchHorizontal className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                Range
-                            </h3>
-                            <span className="mt-2 text-lg">7200 [nm]</span>
+            <div className="flex justify-center items-center mt-6">
+                <NoseOutline className="mr-32 -ml-96 h-64 text-theme-text flip-horizontal" />
+            </div>
 
-                            <h3 className="text-xl font-medium flex items-center mt-6">
-                                <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                MRW
-                            </h3>
-                            <span className="mt-2 text-lg">242,900 [kg]</span>
+            <div className="flex flex-row mt-8 space-x-16">
+                <div className="flex flex-col space-y-8">
+                    <InformationEntry title={t('Dispatch.Overview.Model')} info="A330-941 [A339]">
+                        <IconPlane className="fill-current" size={23} stroke={1.5} strokeLinejoin="miter" />
+                    </InformationEntry>
 
-                            <h3 className="text-xl font-medium flex items-center mt-6">
-                                <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                MZFW
-                            </h3>
-                            <span className="mt-2 text-lg">177,000 [kg]</span>
+                    <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(7200, 'distance')}>
+                        <Rulers size={23} />
+                    </InformationEntry>
 
-                            <h3 className="text-xl font-medium flex items-center mt-6">
-                                <IconUsers className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                Max PAX
-                            </h3>
-                            <span className="mt-2 text-lg">290</span>
-                        </div>
-                        <div className="w-1/2">
-                            <h3 className="text-xl font-medium flex items-center">
-                                <IconBolt className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                Engines
-                            </h3>
-                            <span className="mt-2 text-lg">Rolls-Royce Trent 7000</span>
+                    <InformationEntry title={t('Dispatch.Overview.ActualGW')} info={getConvertedInfo(actualGrossWeight, 'weight')}>
+                        <Box size={23} />
+                    </InformationEntry>
 
-                            <h3 className="text-xl font-medium flex items-center mt-6">
-                                <IconAlignRight className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                Mmo
-                            </h3>
-                            <span className="mt-2 text-lg">0.86</span>
+                    <InformationEntry title={t('Dispatch.Overview.MZFW')} info={getConvertedInfo(181000, 'weight')}>
+                        <Box size={23} />
+                    </InformationEntry>
 
-                            <h3 className="text-xl font-medium flex items-center mt-6">
-                                <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                MTOW
-                            </h3>
-                            <span className="mt-2 text-lg">242,000 [kg]</span>
+                    <InformationEntry title={t('Dispatch.Overview.MaximumPassengers')} info="290 passengers">
+                        <PeopleFill size={23} />
+                    </InformationEntry>
+                </div>
+                <div className="flex flex-col space-y-8">
+                    <InformationEntry title={t('Dispatch.Overview.Engines')} info="Rolls-Royce Trent 7000">
+                        <LightningFill size={23} />
+                    </InformationEntry>
 
-                            <h3 className="text-xl font-medium flex items-center mt-6">
-                                <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                Max Fuel Capacity
-                            </h3>
-                            <span className="mt-2 text-lg">139,090 [l]</span>
+                    <InformationEntry title={t('Dispatch.Overview.MMO')} info="0.86">
+                        <Speedometer2 size={23} />
+                    </InformationEntry>
 
-                            <h3 className="text-xl font-medium flex items-center mt-6">
-                                <IconBox className="mr-2" size={23} stroke={1.5} strokeLinejoin="miter" />
-                                {' '}
-                                Max Cargo
-                            </h3>
-                            <span className="mt-2 text-lg">44,836 [kg]</span>
-                        </div>
-                    </div>
+                    <InformationEntry title={t('Dispatch.Overview.MTOW')} info={getConvertedInfo(242000, 'weight')}>
+                        <Box size={23} />
+                    </InformationEntry>
+
+                    <InformationEntry title={t('Dispatch.Overview.MaximumFuelCapacity')} info={getConvertedInfo(139090, 'volume')}>
+                        <Box size={23} />
+                    </InformationEntry>
+
+                    <InformationEntry title={t('Dispatch.Overview.MaximumCargo')} info={getConvertedInfo(44836, 'weight')}>
+                        <Box size={23} />
+                    </InformationEntry>
                 </div>
             </div>
         </div>
     );
 };
-
-export default OverviewPage;
