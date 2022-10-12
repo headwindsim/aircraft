@@ -31,3 +31,4 @@ cp -rva ./src-a339/html_ui/. ./headwind-aircraft-a330-900/html_ui
 
 chmod +x ./src/fbw/build.sh
 chmod +x ./src/fadec/build.sh
+chmod +x ./src/flypad-backend/build.sh
