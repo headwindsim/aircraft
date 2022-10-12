@@ -1,0 +1,21 @@
+{
+  "creator": "Headwind",
+  "release_notes": {
+    "neutral": {
+      "LastUpdate": "",
+      "OlderHistory": ""
+    }
+  },
+  "title": "A339X Lock Highlights (branch fbw-0.9)",
+  "dependencies": [
+    {
+      "package_version": "0.300.0",
+      "name": "headwind-aircraft-a330-900"
+    }
+  ],
+  "content_type": "AIRCRAFT",
+  "minimum_game_version": "1.26.5",
+  "manufacturer": "Airbus",
+  "package_version": "0.300.0-936f8ab",
+  "total_package_size": "00000000000000000280"
+}

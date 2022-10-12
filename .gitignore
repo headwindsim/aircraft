@@ -5,6 +5,7 @@
 !/.husky/**
 !/msfs-avionics-mirror/**
 !/headwind-aircraft-a330-900/**
+!/headwind-aircraft-a330-900-lock-highlight/**
 /headwind-aircraft-a330-900/layout.json
 /headwind-aircraft-a330-900/manifest.json
 /headwind-aircraft-a330-900/a32nx_build_info.json
