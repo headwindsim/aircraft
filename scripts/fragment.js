@@ -64,9 +64,6 @@ const execute = async () => {
             }, {
                 name: 'ContentInfo',
                 sourceDir: './ContentInfo'
-            }, {
-                name: 'MarketplaceData',
-                sourceDir: './MarketplaceData'
             }]
         });
         console.log(result);
