@@ -4870,12 +4870,12 @@ class FMCMainDisplay extends BaseAirliners {
 
     //TODO: Can this be util?
     isZFWInRange(zfw) {
-        return 132.5 <= zfw && zfw <= 177.0;
+        return 127.0 <= zfw && zfw <= 181.0;
     }
 
     //TODO: Can this be util?
     isZFWCGInRange(zfwcg) {
-        return (8.0 <= zfwcg && zfwcg <= 50.0);
+        return (14.0 <= zfwcg && zfwcg <= 41.0);
     }
 
     //TODO: Can this be util?

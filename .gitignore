@@ -67,3 +67,4 @@ src/instruments/buildSrc/custom/*
 msfs-avionics-mirror/src/sdk/build/**
 *.tgz
 /src
+headwind-aircraft-a330-900-lock-highlight/manifest.json
