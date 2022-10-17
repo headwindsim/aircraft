@@ -297,6 +297,7 @@ const PseudoFWC: React.FC = () => {
     const [landingGearLeverDown] = useSimVar('GEAR HANDLE POSITION', 'bool', 500);
     const [landingLight2Retracted] = useSimVar('L:LANDING_2_Retracted', 'bool', 500);
     const [landingLight3Retracted] = useSimVar('L:LANDING_3_Retracted', 'bool', 500);
+    const [landingLight] = useSimVar('L:LIGHTING_LANDING_2', 'bool', 500);
     const [autoBrakesArmedMode] = useSimVar('L:A32NX_AUTOBRAKES_ARMED_MODE', 'enum', 500);
     const [antiskidActive] = useSimVar('ANTISKID BRAKES ACTIVE', 'bool', 500);
     const [lgciu1Fault] = useSimVar('L:A32NX_LGCIU_1_FAULT', 'bool', 500);
@@ -1587,7 +1588,7 @@ const PseudoFWC: React.FC = () => {
         '0000190': // LDG LT
         {
             flightPhaseInhib: [],
-            simVarIsActive: !!(!landingLight2Retracted || !landingLight3Retracted),
+            simVarIsActive: landingLight === 1,
             whichCodeToReturn: [0],
             codesToReturn: ['000019001'],
             memoInhibit: false,
@@ -1969,6 +1970,7 @@ const PseudoFWC: React.FC = () => {
         landASAPRed,
         landingLight2Retracted,
         landingLight3Retracted,
+        landingLight,
         ldgmemo,
         leftOuterInnerValve,
         lgciu1Fault,
