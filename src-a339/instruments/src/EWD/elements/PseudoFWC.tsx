@@ -348,9 +348,8 @@ const PseudoFWC: React.FC = () => {
     const [vrSpeed] = useSimVar('L:AIRLINER_VR_SPEED', 'knots', 500);
     const [v2Speed] = useSimVar('L:AIRLINER_V2_SPEED', 'knots');
     const [cabin] = useSimVar('INTERACTIVE POINT OPEN:0', 'percent', 1000);
-    const [catering] = useSimVar('INTERACTIVE POINT OPEN:3', 'percent', 1000);
-    const [cargofwdLocked] = useSimVar('L:A32NX_FWD_DOOR_CARGO_LOCKED', 'bool', 1000);
-    const [cargoaftLocked] = useSimVar('L:A32NX_AFT_DOOR_CARGO_LOCKED', 'bool', 1000);
+    const [catering] = useSimVar('INTERACTIVE POINT OPEN:1', 'percent', 1000);
+    const [cargo] = useSimVar('INTERACTIVE POINT OPEN:2', 'percent', 1000);
     const [apuMasterSwitch] = useSimVar('L:A32NX_OVHD_APU_MASTER_SW_PB_IS_ON', 'bool', 500);
     const [flightPhaseInhibitOverride] = useSimVar('L:A32NX_FWC_INHIBOVRD', 'bool', 500);
     const [nwSteeringDisc] = useSimVar('L:A32NX_HYD_NW_STRG_DISC_ECAM_MEMO', 'bool', 500);
@@ -1696,7 +1695,7 @@ const PseudoFWC: React.FC = () => {
                 systemStatus = true;
             }
             const speeds = !!(v1Speed <= vrSpeed && vrSpeed <= v2Speed);
-            const doors = !!(cabin === 0 && catering === 0 && cargoaftLocked && cargofwdLocked);
+            const doors = !!(cabin === 0 && catering === 0 && cargo === 0);
             const flapsAgree = !flapsMcduEntered || flapsHandle === flapsMcdu;
             const sb = !speedBrakeCommand;
 
@@ -1711,7 +1710,7 @@ const PseudoFWC: React.FC = () => {
     }, [
         engine1Generator, engine2Generator, blueLP, greenLP, yellowLP, eng1pumpPBisAuto, eng2pumpPBisAuto,
         flapsMcdu, flapsMcduEntered, speedBrakeCommand, parkBrake, v1Speed, vrSpeed, v2Speed, cabin,
-        catering, cargoaftLocked, cargofwdLocked, toconfigBtn, tomemo, flapsHandle, brakesHot,
+        catering, cargo, toconfigBtn, tomemo, flapsHandle, brakesHot,
     ]);
 
     useEffect(() => {
