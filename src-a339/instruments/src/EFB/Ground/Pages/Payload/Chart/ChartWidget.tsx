@@ -47,6 +47,11 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
                 secondary = '#84CC16';
                 alt = '#fff';
                 break;
+            case 'orange':
+                base = '#fff';
+                primary = '#e37e28';
+                secondary = '#84CC16';
+                alt = '#000';
             default:
                 break;
         }
