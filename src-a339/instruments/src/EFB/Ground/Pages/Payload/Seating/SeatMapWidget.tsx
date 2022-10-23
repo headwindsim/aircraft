@@ -43,7 +43,7 @@ export const SeatMapWidget: React.FC<SeatMapProps> = ({ seatMap, desiredFlags, a
             secondary = '#84CC16';
             break;
         case 'orange':
-            base = '#000000';
+            base = '#fff';
             primary = '#e37e28';
             secondary = '#84CC16';
             break;
