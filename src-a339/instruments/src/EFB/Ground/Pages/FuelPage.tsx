@@ -54,14 +54,7 @@ export const FuelPage = () => {
     const [totalFuelGallons] = useSimVar('FUEL TOTAL CAPACITY', 'Gallons', 1_000);
     const [outerCellGallons] = useSimVar('FUEL TANK LEFT AUX CAPACITY', 'Gallons', 1_000);
     const [innerCellGallons] = useSimVar('FUEL TANK LEFT MAIN CAPACITY', 'Gallons', 1_000);
-    const [centerTankGallons] = useSimVar('FUEL TANK CENTER CAPACITY', 'Gallons', 1_000);    
-    
-    /*
-    const TOTAL_FUEL_GALLONS = 36743;
-    const OUTER_CELL_GALLONS = 964;
-    const INNER_CELL_GALLONS = 11095;
-    const CENTER_TANK_GALLONS = 12625;
-    */
+    const [centerTankGallons] = useSimVar('FUEL TANK CENTER CAPACITY', 'Gallons', 1_000);
     
     const wingTotalRefuelTimeSeconds = 1300;
     const CenterTotalRefuelTimeSeconds = 180;
