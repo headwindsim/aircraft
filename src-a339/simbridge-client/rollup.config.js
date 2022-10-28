@@ -70,6 +70,6 @@ module.exports = {
     output: {
         file: join(root, 'headwind-aircraft-a330-900/html_ui/A339X_JS/simbridge-client/simbridge-client.js'),
         format: 'umd',
-        name: 'SimbridgeClient',
+        name: 'SimBridgeClient',
     },
 };
