@@ -70,3 +70,5 @@ msfs-avionics-mirror/src/sdk/build/**
 headwind-aircraft-a330-900-lock-highlight/manifest.json
 
 headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/systems_old.cfg
+
+headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/systems_edit.cfg
