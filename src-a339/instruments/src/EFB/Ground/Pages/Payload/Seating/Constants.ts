@@ -1,8 +1,8 @@
 export const TYPE = Object.freeze({ ECO: 0, ECO_EMERG: 1, BUSINESS: 2, PREMECO: 3 });
 
 export const CanvasConst = Object.freeze({
-    xTransform: '243px',
-    yTransform: '78px',
+    xTransform: '255px',
+    yTransform: '75px',
     width: 1000,
     height: 150,
 });
@@ -43,12 +43,12 @@ export interface CargoStationInfo {
 
 export const SeatConstants = Object.freeze({
     [TYPE.ECO]: {
-        len: 16,
-        wid: 16.2,
-        padX: 2,
+        len: 15,
+        wid: 15,
+        padX: 1,
         padY: 0,
-        imageX: 14,
-        imageY: 14,
+        imageX: 12,
+        imageY: 12,
     },
     [TYPE.ECO_EMERG]: {
         len: 19.2,
