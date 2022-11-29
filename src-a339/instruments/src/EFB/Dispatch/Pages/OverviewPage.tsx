@@ -68,7 +68,7 @@ export const OverviewPage = () => {
                         <Box size={23} />
                     </InformationEntry>
 
-                    <InformationEntry title={t('Dispatch.Overview.MaximumPassengers')} info="290 passengers">
+                    <InformationEntry title={t('Dispatch.Overview.MaximumPassengers')} info="436 passengers">
                         <PeopleFill size={23} />
                     </InformationEntry>
                 </div>
