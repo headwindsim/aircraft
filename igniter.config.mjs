@@ -2,6 +2,10 @@ import { ExecTask, TaskOfTasks } from '@flybywiresim/igniter';
 import { getInstrumentsIgniterTasks } from './src/instruments/buildSrc/igniter/tasks.mjs';
 
 export default new TaskOfTasks('a339x', [
+    new TaskOfTasks('preparation', [
+        new ExecTask('efb-translation', 'npm run build:efb-translation'),
+    ]),
+
     new TaskOfTasks('wasm', [
         new ExecTask('systems', [
             'cargo build -p a320_systems_wasm --target wasm32-wasi --release',

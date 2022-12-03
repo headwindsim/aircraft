@@ -30,7 +30,7 @@ export const FlyPadPage = () => {
     // changes the language. the change to simvar hooks changed timing/order of updates.
 
     const themeButtons: ButtonType[] = [
-        { name: tt('Settings.flyPad.Orange', language), setting: 'orange' },
+        { name: tt('Headwind.Settings.flyPad.Orange', language), setting: 'orange' },
         { name: tt('Settings.flyPad.Blue', language), setting: 'blue' },
         { name: tt('Settings.flyPad.Dark', language), setting: 'dark' },
         { name: tt('Settings.flyPad.Light', language), setting: 'light' },
