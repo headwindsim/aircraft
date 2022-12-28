@@ -8,6 +8,8 @@ rm -rvf ./headwind-aircraft-a330-900/html_ui
 
 # copy from fbw source and a339 into one src
 cp -rva ./a32nx/src/. ./src
+cp -rva ./a32nx/src/fbw_a320/. ./src/fbw_a330
+cp -rva ./a32nx/src/fadec/a320_fadec/. ./src/fadec/a330_fadec
 cp -rva ./src-a339/. ./src
 
 cp -rva ./a32nx/flybywire-aircraft-a320-neo/html_ui/. ./headwind-aircraft-a330-900/html_ui
@@ -29,6 +31,6 @@ mv ./headwind-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer ./headwin
 # copy customs of a339x to package
 cp -rva ./src-a339/html_ui/. ./headwind-aircraft-a330-900/html_ui
 
-chmod +x ./src/fbw/build.sh
+chmod +x ./src/fbw_a330/build.sh
 chmod +x ./src/fadec/build.sh
 chmod +x ./src/flypad-backend/build.sh

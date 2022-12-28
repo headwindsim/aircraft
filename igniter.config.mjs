@@ -12,13 +12,13 @@ export default new TaskOfTasks('a339x', [
             'wasm-opt -O1 -o headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm target/wasm32-wasi/release/a320_systems_wasm.wasm',
         ], ['src/systems', 'Cargo.lock', 'Cargo.toml', 'headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm']),
         new ExecTask('systems-autopilot', [
-            'src/fbw/build.sh',
+            'src/fbw_a330/build.sh',
             'wasm-opt -O1 -o headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm'
-        ], ['src/fbw', 'headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm']),
+        ], ['src/fbw_a330', 'src/fbw_common', 'headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm']),
         new ExecTask('systems-fadec', [
             'src/fadec/build.sh',
             'wasm-opt -O1 -o headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm'
-        ], ['src/fadec', 'headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm']),
+        ], ['src/fadec', 'src/fbw_common', 'headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm']),
         new ExecTask('flypad-backend', [
             'src/flypad-backend/build.sh',
             'wasm-opt -O1 -o headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm'
@@ -38,7 +38,7 @@ export default new TaskOfTasks('a339x', [
         new ExecTask('sentry-client','npm run build:sentry-client', ['src/sentry-client', 'headwind-aircraft-a330-900/html_ui/A339X_JS/sentry-client']),
         new ExecTask('failures','npm run build:failures', ['src/failures', 'headwind-aircraft-a330-900/html_ui/A339X_JS/generated/failures.js']),
         new ExecTask('behavior','node src/behavior/build.js', ['src/behavior', 'headwind-aircraft-a330-900/ModelBehaviorDefs/A339X/generated']),
-        //new ExecTask('model','node src/model/build.js', ['src/model', 'headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model']),
+        new ExecTask('model','node src/model/build.js', ['src/model', 'headwind-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model']),
         new ExecTask('fmgc','npm run build:fmgc', ['src/fmgc', 'headwind-aircraft-a330-900/html_ui/A339X_JS/fmgc']),
         new TaskOfTasks('simbridge', [
             new ExecTask('client', ['npm run build:simbridge-client'], ['src/simbridge-client', 'headwind-aircraft-a330-900/html_ui/A339X_JS/simbridge-client']),

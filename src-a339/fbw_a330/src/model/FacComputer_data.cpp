@@ -104,14 +104,6 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
 
   0.0,
 
-  0.0,
-
-  0.0,
-
-  0.0,
-
-  0.0,
-
   -20.0,
 
   20.0,
@@ -230,8 +222,6 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
 
   15000.0,
 
-  0.05,
-
   -1.0,
 
   -1.0,
@@ -247,6 +237,10 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
   -0.1,
 
   -1.2,
+
+  -2.0,
+
+  -40.0,
 
   -1.0,
 
@@ -269,6 +263,10 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
   0.1,
 
   1.2,
+
+  2.0,
+
+  40.0,
 
   1.0,
 
@@ -1907,7 +1905,7 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
 
   410.0,
 
-  150.0,
+  200.0,
 
 
   { 150.0, 161.0, 173.0, 183.0, 193.0, 203.0, 212.0, 217.0, 217.0, 150.0, 162.0, 174.0, 185.0, 197.0, 208.0, 223.0,
@@ -1922,21 +1920,11 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
 
   0.0,
 
-
-  { 25.0, 25.0, 14.5, 8.8, 4.8, 3.4, 3.4 },
-
-
-  { 100.0, 160.0, 200.0, 240.0, 320.0, 380.0, 400.0 },
-
-  30.0,
-
-  0.0,
-
   0.0,
 
   0.066666666666666666,
 
-  1.0,
+  0.0,
 
   1.0,
 
@@ -2086,27 +2074,19 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
 
   10.0,
 
-  0.0,
-
-  -1.0,
-
-  1.5,
-
-  -1.5,
-
-  0.0,
-
-  2.0,
-
-  -1.0,
-
   20.0,
 
   -20.0,
 
-  40.0,
 
-  -1.0,
+  { 25.0, 25.0, 14.5, 8.8, 4.8, 3.4, 3.4 },
+
+
+  { 100.0, 160.0, 200.0, 240.0, 320.0, 380.0, 400.0 },
+
+  30.0,
+
+  0.0,
 
   0.0,
 
