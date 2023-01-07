@@ -782,12 +782,12 @@
             <WwiseRTPC LocalVar="A32NX_ELEC_DC_ESS_BUS_IS_POWERED" RTPCName="LOCALVAR_A32NX_DC_ESS_BUS" />
             <WwiseRTPC LocalVar="A32NX_COCKPIT_DOOR_LOCKED" Units="bool" Index="1" RTPCName="LOCALVAR_A32NX_COCKPIT_DOOR_LOCKED" />
         </Sound>
-        
-        <Sound WwiseData="true" WwiseEvent="gearleverclick" Continuous="false" NodeName="PEDALS_LEFT" ViewPoint="Inside" LocalVar="A32NX_GEAR_HANDLE_POSITION">
+
+        <Sound WwiseData="true" WwiseEvent="gearleverclick" Continuous="false" NodeName="PEDALS_LEFT" ViewPoint="Inside" SimVar="GEAR HANDLE POSITION" Units="BOOLEAN" Index="0">
             <Range LowerBound="1" />
         </Sound>
-        
-        <Sound WwiseData="true" WwiseEvent="gearleverclick" Continuous="false" NodeName="PEDALS_LEFT" ViewPoint="Inside" LocalVar="A32NX_GEAR_HANDLE_POSITION">
+
+        <Sound WwiseData="true" WwiseEvent="gearleverclick" Continuous="false" NodeName="PEDALS_LEFT" ViewPoint="Inside" SimVar="GEAR HANDLE POSITION" Units="BOOLEAN" Index="0">
             <Range UpperBound="0" />
         </Sound>
 
