@@ -1,7 +1,7 @@
 {
     "specs": {
         "prefix": "A339X",
-        "emptyPosition": -28,
+        "emptyPosition": -28.31,
         "macSize": 25.49,
         "leMacZ": -21.63,
         "weights": {
