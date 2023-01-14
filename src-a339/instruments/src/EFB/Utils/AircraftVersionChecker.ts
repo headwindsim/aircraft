@@ -243,7 +243,7 @@ export class AircraftVersionChecker {
                         ${t('VersionCheck.LatestVersionText', [{ edition: branchName }])}<br>
                         <strong>${releaseVersion}</strong><br/><br/>
                         
-                        ${t('VersionCheck.RecommendationText')}
+                        ${t('Headwind.VersionCheck.RecommendationText')}
                     </div>`,
             'normal',
             () => {},

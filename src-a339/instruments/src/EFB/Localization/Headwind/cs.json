@@ -7,6 +7,9 @@
       "flyPad": {
         "Orange": "Oranžový"
       }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Aktualizujte prosím své letadlo pomocí instalátoru."
     }
   }
 }

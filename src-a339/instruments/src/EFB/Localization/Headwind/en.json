@@ -7,6 +7,12 @@
       "flyPad": {
         "Orange": "Orange"
       }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Please update your aircraft using the Installer.",
+      "TT": {
+        "StatusBarWarning": "Please update your aircraft using the Installer."
+      }
     }
   }
 }

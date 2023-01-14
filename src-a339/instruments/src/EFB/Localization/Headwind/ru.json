@@ -7,6 +7,9 @@
       "flyPad": {
         "Orange": "Oранжевый"
       }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Please update your aircraft using the Installer."
     }
   }
 }

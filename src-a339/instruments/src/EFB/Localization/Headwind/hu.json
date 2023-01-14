@@ -7,6 +7,9 @@
       "flyPad": {
         "Orange": "Narancssárga"
       }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Frissítse a repülőgépet a telepítő segítségével"
     }
   }
 }

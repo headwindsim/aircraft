@@ -7,6 +7,9 @@
       "flyPad": {
         "Orange": "炎色"
       }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Installerで機体を更新してください。"
     }
   }
 }

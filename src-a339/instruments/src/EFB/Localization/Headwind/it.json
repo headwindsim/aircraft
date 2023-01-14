@@ -7,6 +7,9 @@
       "flyPad": {
         "Orange": "Arancia"
       }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Prego aggiorna il tuo aeromobile tramite l'installer"
     }
   }
 }
