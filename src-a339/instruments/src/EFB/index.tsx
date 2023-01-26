@@ -24,7 +24,7 @@ import { AircraftVersionChecker } from './Utils/AircraftVersionChecker';
 
 const EFBLoad = () => {
     const [isReady] = useSimVar('L:A32NX_IS_READY', 'Bool', 1000);
-    const [, setSessionId] = usePersistentProperty('A32NX_SENTRY_SESSION_ID');
+    const [, setSessionId] = usePersistentProperty('SENTRY_SESSION_ID');
 
     useEffect(
         () => () => setSessionId(''), [],
@@ -71,7 +71,7 @@ export const ErrorFallback = ({ resetErrorBoundary }: ErrorFallbackProps) => {
                     {sentryEnabled === SentryConsentState.Given && (
                         <>
                             <h2 className="text-3xl leading-relaxed">
-                                You have opted into anonymous error reporting and this issue has been relayed to us. If you want immediate support, please share the following code to a member of staff in the #support channel on the FlyByWire Discord server:
+                                You have opted into anonymous error reporting and this issue has been relayed to us. If you want immediate support, please share the following code to a member of staff in the #support channel on the Headwind Simulations Discord server:
                             </h2>
 
                             <h1 className="text-4xl font-extrabold tracking-wider text-center">{sessionId}</h1>

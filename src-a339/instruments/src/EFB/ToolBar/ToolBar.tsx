@@ -15,7 +15,7 @@ import { t } from '../translation';
 import { TooltipWrapper } from '../UtilComponents/TooltipWrapper';
 
 // @ts-ignore
-import FbwTail from '../Assets/headwind-logo.svg';
+import { HdwLogo } from "../UtilComponents/HdwLogo";
 
 interface ToolBarButtonProps {
     to: string;
@@ -38,7 +38,7 @@ export const ToolBar = () => (
     <nav className="flex flex-col flex-shrink-0 justify-between py-6 w-32">
         <div className="flex flex-col items-center mt-9 space-y-4">
             <ToolBarButton to="/dashboard" tooltipText={t('Dashboard.Title')}>
-                <img className="w-[35px]" src={FbwTail} alt="FbwTail" />
+                <HdwLogo width={35} height={35} className="text-theme-text" />                
             </ToolBarButton>
             <ToolBarButton to="/dispatch" tooltipText={t('Dispatch.Title')}>
                 <Clipboard size={35} />

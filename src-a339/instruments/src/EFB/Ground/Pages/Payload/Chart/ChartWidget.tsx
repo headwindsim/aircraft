@@ -26,7 +26,7 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
     const { usingMetric } = Units;
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
-    const [theme] = usePersistentProperty('EFB_UI_THEME', 'blue');
+    const [theme] = usePersistentProperty('EFB_UI_THEME', 'orange');
     const [flightPhase] = useSimVar('L:A32NX_FMGC_FLIGHT_PHASE', 'enum');
 
     const getTheme = (theme: string): [string, string, string, string] => {

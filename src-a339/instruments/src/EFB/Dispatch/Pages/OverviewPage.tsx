@@ -31,37 +31,29 @@ export const OverviewPage = () => {
         const numberWithCommas = (x: number) => x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
         switch (unitType) {
-        case 'weight':
-            return `${numberWithCommas(Units.kilogramToUser(metricValue))} [${Units.userWeightSuffixEis2}]`;
-        case 'volume':
-            return `${numberWithCommas(Units.litreToUser(metricValue))} [${Units.userVolumeSuffixEis2}]`;
-        case 'distance':
-            return `${numberWithCommas(metricValue)} [nm]`;
-        default: throw new Error('Invalid unit type');
+            case 'weight':
+                return `${numberWithCommas(Units.kilogramToUser(metricValue))} [${Units.userWeightSuffixEis2}]`;
+            case 'volume':
+                return `${numberWithCommas(Units.litreToUser(metricValue))} [${Units.userVolumeSuffixEis2}]`;
+            case 'distance':
+                return `${numberWithCommas(metricValue)} [nm]`;
+            default: throw new Error('Invalid unit type');
         }
     };
 
     return (
-        <div className="overflow-hidden p-6 mr-3 w-min rounded-lg border-2 h-content-section-reduced border-theme-accent">
+        <div className="overflow-hidden p-6 mr-3 w-full rounded-lg border-2 h-content-section-reduced border-theme-accent">
             <h1 className="font-bold">Airbus A330-900</h1>
             <p>{airline}</p>
 
             <div className="flex justify-center items-center mt-6">
-                <NoseOutline className="mr-32 -ml-96 h-64 text-theme-text flip-horizontal" />
+                <NoseOutline className="w-full flip-horizontal" />
             </div>
 
             <div className="flex flex-row mt-8 space-x-16">
                 <div className="flex flex-col space-y-8">
                     <InformationEntry title={t('Dispatch.Overview.Model')} info="A330-941 [A339]">
                         <IconPlane className="fill-current" size={23} stroke={1.5} strokeLinejoin="miter" />
-                    </InformationEntry>
-
-                    <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(7200, 'distance')}>
-                        <Rulers size={23} />
-                    </InformationEntry>
-
-                    <InformationEntry title={t('Dispatch.Overview.ActualGW')} info={getConvertedInfo(actualGrossWeight, 'weight')}>
-                        <Box size={23} />
                     </InformationEntry>
 
                     <InformationEntry title={t('Dispatch.Overview.MZFW')} info={getConvertedInfo(181000, 'weight')}>
@@ -77,19 +69,30 @@ export const OverviewPage = () => {
                         <LightningFill size={23} />
                     </InformationEntry>
 
-                    <InformationEntry title={t('Dispatch.Overview.MMO')} info="0.86">
-                        <Speedometer2 size={23} />
-                    </InformationEntry>
-
                     <InformationEntry title={t('Dispatch.Overview.MTOW')} info={getConvertedInfo(242000, 'weight')}>
                         <Box size={23} />
+                    </InformationEntry>
+                </div>
+                <div className="flex flex-col space-y-8">
+                    <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(7200, 'distance')}>
+                        <Rulers size={23} />
+                    </InformationEntry>
+
+                    <InformationEntry title={t('Dispatch.Overview.MaximumCargo')} info={getConvertedInfo(44836, 'weight')}>
+                        <Box size={23} />
+                    </InformationEntry>
+                </div>
+                <div className="flex flex-col space-y-8">
+
+                    <InformationEntry title={t('Dispatch.Overview.MMO')} info="0.86">
+                        <Speedometer2 size={23} />
                     </InformationEntry>
 
                     <InformationEntry title={t('Dispatch.Overview.MaximumFuelCapacity')} info={getConvertedInfo(139090, 'volume')}>
                         <Box size={23} />
                     </InformationEntry>
 
-                    <InformationEntry title={t('Dispatch.Overview.MaximumCargo')} info={getConvertedInfo(44836, 'weight')}>
+                    <InformationEntry title={t('Dispatch.Overview.ActualGW')} info={getConvertedInfo(actualGrossWeight, 'weight')}>
                         <Box size={23} />
                     </InformationEntry>
                 </div>

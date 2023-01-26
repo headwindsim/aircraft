@@ -12,7 +12,7 @@ import { Battery } from 'react-bootstrap-icons';
 import { ToastContainer, toast } from 'react-toastify';
 import { distanceTo } from 'msfs-geo';
 import { Tooltip } from './UtilComponents/TooltipWrapper';
-import { FbwLogo } from './UtilComponents/FbwLogo';
+import { HdwLogo } from './UtilComponents/HdwLogo';
 import { AlertModal, ModalContainer, useModals } from './UtilComponents/Modals/Modals';
 import NavigraphClient, { NavigraphContext } from './ChartsApi/Navigraph';
 import 'react-toastify/dist/ReactToastify.css';
@@ -39,14 +39,12 @@ import { CHECKLISTS } from './Checklists/Lists';
 import { setChecklistItems } from './Store/features/checklists';
 import { FlyPadPage } from './Settings/Pages/FlyPadPage';
 
-import FbwTail from './Assets/headwind-logo.svg';
-
 const BATTERY_DURATION_CHARGE_MIN = 180;
 const BATTERY_DURATION_DISCHARGE_MIN = 540;
 
 const LoadingScreen = () => (
     <div className="flex justify-center items-center w-screen h-screen bg-theme-statusbar">
-        <img className="w-[128px]" src={FbwTail} alt="" />
+        <HdwLogo width={128} height={120} className="text-theme-text" />
     </div>
 );
 
@@ -112,7 +110,7 @@ const Efb = () => {
 
     const { arrivingPosLat, arrivingPosLong, departingPosLat, departingPosLong } = useAppSelector((state) => state.simbrief.data);
 
-    const [theme] = usePersistentProperty('EFB_UI_THEME', 'blue');
+    const [theme] = usePersistentProperty('EFB_UI_THEME', 'orange');
 
     const { showModal } = useModals();
 
