@@ -498,7 +498,7 @@ const Wheels = ({ x, y, left, right }: WheelsProps) => {
             <WheelArch x={124} y={103} type="bottom" />
 
             <text className="Cyan Standard" x={73} y={32}>°C</text>
-            <text className="Standard" x={72} y={66}>REL</text>
+            <text className="Standard" x={74} y={66}>R</text>
 
             <text className={`${left.temperature > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`} x={57} y={33}>{Math.max(0, Math.round(left.temperature / 5) * 5)}</text>
             <text className={`${right.temperature > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`} x={181} y={33}>{Math.max(0, Math.round(right.temperature / 5) * 5)}</text>

@@ -186,7 +186,7 @@ export const StatusArea = () => {
                             </Text>
 
                             <Text title x={470} y={87} alignEnd>
-                                GWGC
+                                GWCG
                             </Text>
                             <Text value x={510} y={87}>
                                 {gwcgDisplayedValue}
@@ -210,7 +210,7 @@ export const StatusArea = () => {
                             </Text>
 
                             <Text title x={470} y={87}  alignEnd>
-                                GWGC
+                                GWCG
                             </Text>
                             <Text warning x={512} y={87}>
                                 {gwcgDisplayedValue}
