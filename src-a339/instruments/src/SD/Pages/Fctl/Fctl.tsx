@@ -69,7 +69,7 @@ const Wings = ({ x = 0, y = 0 }: ComponentPositionProps) => (
         <HydraulicIndicator x={250} y={0} type="B" />
         <HydraulicIndicator x={275} y={0} type="Y" />
 
-        <Spoilers x={-40} y={89} />
+        <Spoilers x={-17} y={80} />
 
         {/* Left spoiler wing shape */}
         <path className="LightGreyLine" d="M0 60 l0 -6 l182 -30 l0 6" />

@@ -31,7 +31,7 @@ export const WheelPage = () => {
             <text className="Title UnderlineWhite" x={15} y={149}>WHEEL</text>
 
             <HydraulicsProvider>
-                <Spoilers x={90} y={64} />
+                <Spoilers x={110} y={64} />
 
                 <NoseWheelSteering x={271} y={235} />
                 <LandingGearCtl

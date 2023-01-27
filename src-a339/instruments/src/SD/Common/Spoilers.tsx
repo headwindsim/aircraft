@@ -17,18 +17,18 @@ export const Spoilers = ({ x, y }: ComponentPositionProps) => {
     return (
         <SvgGroup x={x} y={y}>
             <Spoiler x={0} y={30} side="left" identifier={6} number={5} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={50} y={24} side="left" identifier={5} number={5} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={100} y={18} side="left" identifier={4} number={4} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={150} y={12} side="left" identifier={3} number={3} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={200} y={6} side="left" identifier={2} number={2} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={250} y={0} side="left" identifier={1} number={1} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={45} y={24} side="left" identifier={5} number={5} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={90} y={18} side="left" identifier={4} number={4} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={135} y={12} side="left" identifier={3} number={3} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={180} y={6} side="left" identifier={2} number={2} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={225} y={0} side="left" identifier={1} number={1} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
 
-            <Spoiler x={350} y={0} side="right" identifier={1} number={1} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={400} y={6} side="right" identifier={2} number={2} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={450} y={12} side="right" identifier={3} number={3} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={500} y={18} side="right" identifier={4} number={4} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={550} y={24} side="right" identifier={5} number={5} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
-            <Spoiler x={600} y={30} side="right" identifier={6} number={5} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={330} y={0} side="right" identifier={1} number={1} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={375} y={6} side="right" identifier={2} number={2} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={420} y={12} side="right" identifier={3} number={3} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={465} y={18} side="right" identifier={4} number={4} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={510} y={24} side="right" identifier={5} number={5} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
+            <Spoiler x={555} y={30} side="right" identifier={6} number={5} fcdcWord3={fcdcWord3ToUse} fcdcWord4={fcdcWord4ToUse} />
         </SvgGroup>
     );
 };
