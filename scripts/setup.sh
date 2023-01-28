@@ -5,7 +5,7 @@ set -ex
 # initialize submodule (a32nx)
 git submodule update --init --recursive
 
-cd msfs-avionics-mirror/src/msfstypes
+cd a32nx/fbw-common/msfs-avionics-mirror/src/msfstypes
 npm pack
 cd ../sdk
 rm -rf node_modules

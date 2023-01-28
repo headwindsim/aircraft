@@ -6,12 +6,8 @@
   },
   "ignorePatterns": [
     "/a32nx/**",
-    "/headwind-aircraft-a330-900/html_ui/A339X_JS/fmgc/**",
-    "/headwind-aircraft-a330-900/html_ui/A339X_JS/atsu/**",
-    "/headwind-aircraft-a330-900/html_ui/A339X_JS/sentry-client/**",
-    "/headwind-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/**",
-    "typings/**",
-    "/msfs-avionics-mirror/**"
+    "/src/**",
+    "/hdw-a339x/src/base/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/**"
   ],
   // DO NOT CHANGE THIS FILE (unless you are an admin) (if admin, make sure you change the same file in the latest asobo branch as well)
   "rules": {

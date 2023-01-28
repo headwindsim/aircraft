@@ -1,13 +1,11 @@
 [workspace]
 
 members = [
-    "src/systems/a320_systems",
-    "src/systems/a320_systems_wasm",
-    "src/systems/a380_systems",
-    "src/systems/a380_systems_wasm",
-    "src/systems/systems",
-    "src/systems/systems_wasm",
-    "src/systems/a320_hydraulic_simulation_graphs",
+    "build/a339x/wasm/systems/a320_systems",
+    "build/a339x/wasm/systems/a320_systems_wasm",
+    "build/a339x/wasm/systems/a320_hydraulic_simulation_graphs",
+    "a32nx/fbw-common/src/wasm/systems/systems",
+    "a32nx/fbw-common/src/wasm/systems/systems_wasm",
 ]
 
 [profile.release]
@@ -21,4 +19,3 @@ opt-level=1
 lto = false
 debug-assertions=true
 debug=true
-

@@ -3,24 +3,48 @@
   "version": "0.4.0",
   "edition": "development",
   "scripts": {
+    "====== A339X =================": "==========================================",
+
+    "build-a339x:copy-base-package": "mkdir -p hdw-a339x/out/headwindsim-aircraft-a330-900 && (rsync -a build/a339x/base/headwindsim-aircraft-a330-900 hdw-a339x/out/ || cp -a -u build/a339x/base/headwindsim-aircraft-a330-900 hdw-a339x/out/)",
+    "build-a339x:copy-base-lock-highlight-package": "mkdir -p hdw-a339x/out/headwindsim-aircraft-a330-900-lock-highlight && (rsync -a build/a339x/base/headwindsim-aircraft-a330-900-lock-highlight hdw-a339x/out/ || cp -a -u build/a339x/base/headwindsim-aircraft-a330-900-lock-highlight hdw-a339x/out/)",
+    "build-a339x:copy-base-files": "npm run build-a339x:copy-base-package && npm run build-a339x:copy-base-lock-highlight-package",
+    "build-a339x:efb-translation": "cd build/a339x/systems/instruments/src/EFB/Localization && node build-translation.js",
+
+    "build-a339x:model": "node build/a339x/model/build.js",
+    "build-a339x:behavior": "node build/a339x/behavior/build.js",
+
+    "build-a339x:atsu": "rollup -c build/a339x/systems/atsu/rollup.config.js",
+    "build-a339x:failures": "rollup -c build/a339x/systems/failures/rollup.config.js",
+    "build-a339x:fmgc": "rollup -c build/a339x/systems/fmgc/rollup.config.js",
+    "build-a339x:sentry-client": "rollup -c build/a339x/systems/sentry-client/rollup.config.js",
+    "build-a339x:simbridge-client": "rollup -c build/a339x/systems/simbridge-client/rollup.config.js",
+    "build-a339x:tcas": "rollup -c build/a339x/systems/tcas/rollup.config.js",
+    "build-a339x:pfd": "cd build/a339x/systems/instruments/src/PFD && rollup -c",
+
+    "build-a339x:systems": "cargo build -p a320_systems_wasm --target wasm32-wasi --release && wasm-opt -O1 -o /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm /external/target/wasm32-wasi/release/a320_systems_wasm.wasm",
+    "build-a339x:fadec": "cd build/a339x/wasm/fadec_a320 && ./build.sh && wasm-opt -O1 -o /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm",
+    "build-a339x:fbw": "cd build/a339x/wasm/fbw_a320 && ./build.sh && wasm-opt -O1 -o /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm",
+    "build-a339x:flypad-backend": "cd build/a339x/wasm/flypad-backend && ./build.sh && wasm-opt -O1 -o /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm",
+
+    "build-a339x:metadata": "node scripts/metadata.js hdw-a339x/out/headwindsim-aircraft-a330-900 a339x",
+    "build-a339x:manifest": "node scripts/build_a339x.js",
+
+
+    "serve:efb": "cd build/a339x/systems/instruments/src/EFB/ && vite --port 9696",
+    "build:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c .\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
+    "watch:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
+    "build:instruments": "rollup --max-old-space-size=8192 -c src/systems/instruments/buildSrc/simulatorBuild.mjs",
+    "watch:instruments": "rollup --max-old-space-size=8192 -wc src/systems/instruments/buildSrc/simulatorBuild.mjs",
+
+    "prettier": "prettier --write **/*.json **/*.yml build/a339x/systems/instruments/**/*.css",
+
+    "build-a339x:all": "npm run build-a339x:copy-base-files && npm run build-a339x:efb-translation && npm run build-a339x:model && npm run build-a339x:behavior && npm run build-a339x:atsu && npm run build-a339x:failures && npm run build-a339x:fmgc && npm run build-a339x:sentry-client && npm run build-a339x:simbridge-client && npm run build-a339x:tcas && npm run build-a339x:pfd && npm run build-a339x:systems && npm run build-a339x:fadec && npm run build-a339x:fbw && npm run build-a339x:flypad-backend && npm run build-a339x:metadata && npm run build-a339x:manifest",
+
+    "====== COMMON ================": "==========================================",
+
     "lint": "eslint --cache **/*.{js,mjs,jsx,ts,tsx}",
     "lint-fix": "npm run lint -- --fix",
-    "test": "jest",
-    "prettier": "prettier --write **/*.json **/*.yml src/instruments/**/*.css",
-    "serve:efb": "cd src/instruments/src/EFB/ && vite --port 9696",
-    "watch:instruments": "rollup -wc src/instruments/buildSrc/simulatorBuild.mjs",
-    "build:atsu": "rollup -c src/atsu/rollup.config.js",
-    "build:sentry-client": "rollup -c src/sentry-client/rollup.config.js",
-    "build:efb-translation": "cd src/instruments/src/EFB/Localization && node build-translation.js",
-    "build:fbw": "cd src/fbw && ./build.sh",
-    "build:fadec": "cd src/fadec && ./build.sh",
-    "build:presets": "cd src/presets && ./build.sh",
-    "build:failures": "rollup -c src/failures/rollup.config.js",
-    "build:fmgc": "rollup -c src/fmgc/rollup.config.js",
-    "build:tcas": "rollup -c src/tcas/rollup.config.js",
-    "build:pfd": "cd src/instruments/src/PFD && rollup -c",
-    "build:simbridge-client": "rollup -c src/simbridge-client/rollup.config.js",
-    "build:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\src\\instruments\\buildSrc\\aceBuild.mjs"
+    "test": "jest"
   },
   "lint-staged": {
     "*.{js,mjs,jsx}": "eslint --cache --fix",
@@ -91,7 +115,7 @@
     "ts-jest": "^27.0.4",
     "ts-loader": "^9.2.2",
     "typescript": "^4.3.2",
-    "vite": "^2.9.15",
+    "vite": "^2.8.6",
     "vite-plugin-replace": "^0.1.1",
     "vite-tsconfig-paths": "^3.4.1",
     "webpack": "^5.12.2",
@@ -117,7 +141,7 @@
     "immer": "^9.0.3",
     "lodash": "^4.17.20",
     "msfs-geo": "^0.1.0-alpha3",
-    "msfssdk": "file:msfs-avionics-mirror/src/sdk/build/msfssdk-0.1.0.tgz",
+    "msfssdk": "file:a32nx/fbw-common/msfs-avionics-mirror/src/sdk/build/msfssdk-0.1.0.tgz",
     "nanoid": "^3.3.1",
     "network": "^0.6.1",
     "pdf-to-printer": "^5.1.1",

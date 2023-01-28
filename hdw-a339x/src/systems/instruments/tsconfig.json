@@ -1,0 +1,12 @@
+
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "resolveJsonModule" : true,
+    "noEmit": true,
+  },
+  "include": [
+    "src/**/*",
+    "../../../../../../a32nx/fbw-common/src/typings/**/*.d.ts"
+  ]
+}
