@@ -802,7 +802,7 @@
                 <NODE_ID>LEVER_LANDINGGEAR</NODE_ID>
                 <ANIM_LENGTH>3</ANIM_LENGTH>
             </UseTemplate>
-            
+
             <UseTemplate Name="FBW_Airbus_LANDING_GEAR_Light_Template">
                 <NODE_ID>PUSH_AUTOBKR_LDGGEAR_1</NODE_ID>
                 <ID>1</ID>
@@ -875,7 +875,7 @@
                 <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                 <TOOLTIPID>Auto brake MAX</TOOLTIPID>
             </UseTemplate>
-            
+
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
@@ -1611,18 +1611,21 @@
                 </UseTemplate>
 
 
-                <UseTemplate Name="FBW_Airbus_LIGHTING_Switch_Light_Landing_Template">
+                <!-- EXT LANDING LT -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                    <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
                     <NODE_ID>SWITCH_OVHD_EXTLT_LAND</NODE_ID>
+                    <PART_ID>EXTLT_LAND</PART_ID>
                     <ANIM_NAME>SWITCH_OVHD_EXTLT_LAND</ANIM_NAME>
-                    <SIMVAR_INDEX>2</SIMVAR_INDEX>
-					<SIMVAR_INDEX_2>3</SIMVAR_INDEX_2>
+                    <SIMVAR_NAME>LIGHT LANDING</SIMVAR_NAME>
+                    <SIMVAR_NAME_2>LIGHT LANDING</SIMVAR_NAME_2>
+                    <TOGGLE_EVENT>LANDING_LIGHTS_SET</TOGGLE_EVENT>
+                    <TOGGLE_EVENT_2>LANDING_LIGHTS_SET</TOGGLE_EVENT_2>
+                    <SIMVAR_INDEX_1>0</SIMVAR_INDEX_1>
+                    <SIMVAR_INDEX_2>1</SIMVAR_INDEX_2>
                     <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_OFF</ANIMTIP_0>
                     <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_ON</ANIMTIP_1>
-                    <TYPE>OnOff_TwoSimvars</TYPE>
-
-					<WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
-                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
-
                 </UseTemplate>
 
                 <!-- EXT LT WING -->
@@ -4244,7 +4247,7 @@
                     <ANIM_NAME_BUTTON_VHF_R>PUSH_AUDIOR_CALL3</ANIM_NAME_BUTTON_VHF_R>
                     <NODE_ID_BUTTON_SEQ1_VHF_R>PUSH_AUDIOR_CALL3_SEQ1</NODE_ID_BUTTON_SEQ1_VHF_R>
                     <NODE_ID_BUTTON_SEQ2_VHF_R>PUSH_AUDIOR_CALL3_SEQ2</NODE_ID_BUTTON_SEQ2_VHF_R>
-                    
+
                     <NODE_ID_RECEIVER_VOICE>PUSH_AUDIOR_VOICE</NODE_ID_RECEIVER_VOICE>
                     <ANIM_NAME_PUSH_RECEIVER_VOICE>PUSH_AUDIOR_VOICE</ANIM_NAME_PUSH_RECEIVER_VOICE>
                     <NODE_ID_BUTTON_VOICE_SEQ1>PUSH_AUDIOR_VOICE_SEQ1</NODE_ID_BUTTON_VOICE_SEQ1>
@@ -5068,6 +5071,6 @@
                 </UseTemplate>
             </Component>
         </Component>
-        
+
     </Behaviors>
 </ModelInfo>
