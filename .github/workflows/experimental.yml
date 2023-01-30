@@ -16,7 +16,7 @@ jobs:
       BUILD_DIR_NAME: vexp
     steps:
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: recursive
       - name: Set BUILT_DATE_TIME
@@ -60,7 +60,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ env.EXP_PRE_RELEASE_ID }}/assets{?name,label}
-          asset_path: ./hdw-a339x/out/${{ env.BUILD_DIR_NAME }}/${{ env.EXP_ZIP_NAME }}
+          asset_path: ./${{ env.BUILD_DIR_NAME }}/${{ env.EXP_ZIP_NAME }}
           asset_name: ${{ env.EXP_ZIP_NAME }}
           asset_content_type: application/zip
       - name: Upload fragment assets to vexp release

@@ -10,12 +10,12 @@
     ],
     "output": {
       "gltf": [
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330_NEO_INTERIOR_LOD00.gltf",
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330_NEO_INTERIOR_LOD01.gltf"
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330_NEO_INTERIOR_LOD00.gltf",
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330_NEO_INTERIOR_LOD01.gltf"
       ],
       "bin": [
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330_NEO_INTERIOR_LOD00.bin",
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330_NEO_INTERIOR_LOD01.bin"
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330_NEO_INTERIOR_LOD00.bin",
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330_NEO_INTERIOR_LOD01.bin"
       ]
     },
     "additions": [
@@ -83,16 +83,16 @@
     ],
     "output": {
       "gltf": [
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD00.gltf",
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD01.gltf",
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD02.gltf",
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD03.gltf"
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD00.gltf",
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD01.gltf",
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD02.gltf",
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD03.gltf"
       ],
       "bin": [
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD00.bin",
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD01.bin",
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD02.bin",
-        "../../out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD03.bin"
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD00.bin",
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD01.bin",
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD02.bin",
+        "../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/A330NEO_LOD03.bin"
       ]
     },
     "additions": [],

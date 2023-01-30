@@ -12,7 +12,13 @@ if [ "${GITHUB_ACTIONS}" == "true" ]; then
 fi
 
 # run build
-time npx igniter "$@"
+time npx igniter -r A339X "$@"
+
+if [ "${GITHUB_ACTIONS}" == "true" ]; then
+  rm -rf /external/a32nx
+  rm -rf /external/build
+  rm -rf /external/hdw-a339x/src
+fi
 
 # restore ownership (when run as github action)
 if [ "${GITHUB_ACTIONS}" == "true" ]; then
