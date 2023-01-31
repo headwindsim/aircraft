@@ -1622,8 +1622,8 @@
                     <SIMVAR_NAME_2>LIGHT LANDING</SIMVAR_NAME_2>
                     <TOGGLE_EVENT>LANDING_LIGHTS_SET</TOGGLE_EVENT>
                     <TOGGLE_EVENT_2>LANDING_LIGHTS_SET</TOGGLE_EVENT_2>
-                    <SIMVAR_INDEX_1>0</SIMVAR_INDEX_1>
-                    <SIMVAR_INDEX_2>1</SIMVAR_INDEX_2>
+                    <SIMVAR_INDEX_1>2</SIMVAR_INDEX_1>
+                    <SIMVAR_INDEX_2>3</SIMVAR_INDEX_2>
                     <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_OFF</ANIMTIP_0>
                     <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LANDING_LIGHT_ON</ANIMTIP_1>
                 </UseTemplate>
