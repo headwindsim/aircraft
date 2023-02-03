@@ -85,10 +85,10 @@ export const StatusArea = () => {
     const padMinutes = String(minutes).padStart(2, '0');
     const padHours = String(hours).padStart(2, '0');
 
-    const getPayloadWeight = (unit: string, payloadCount: number) => {
+    const getPayloadWeight = (payloadCount: number) => {
         let payloadWeight = 0;
         for (let i = 1; i <= payloadCount; i++) {
-            payloadWeight += SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${i}`, unit);
+            payloadWeight += SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${i}`, 'kg');
         }
         return payloadWeight;
     };
@@ -100,7 +100,7 @@ export const StatusArea = () => {
         const gwgc = SimVar.GetSimVarValue("CG PERCENT", "percent");
 
         const gwUnit = NXUnits.userWeightUnit();
-        const payloadWeight = getPayloadWeight(gwUnit, payloadCount);
+        const payloadWeight = getPayloadWeight(payloadCount);
         const gw = Math.round(NXUnits.kgToUser(emptyWeight + fuelWeight + payloadWeight));
 
         if (loadFactor.isNormalOperation() && gw != null) {
