@@ -585,7 +585,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     onUpdate(_deltaTime) {
         super.onUpdate(_deltaTime);
-        
+
         this.navRadioManager.update(_deltaTime, this.manualNavTuning, this.backupNavTuning);
 
         this.flightPlanManager.update(_deltaTime);
@@ -1603,7 +1603,7 @@ class FMCMainDisplay extends BaseAirliners {
             SimVar.SetSimVarValue("L:A32NX_PRESS_AUTO_LANDING_ELEVATION", "feet", landingElevation ? landingElevation : 0);
         }
 
-        
+
         if (this.destinationLatitude !== latitude) {
             this.destinationLatitude = latitude;
 
@@ -2178,7 +2178,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     /**
      * Attempts to calculate trip information. Is dynamic in that it will use liveDistanceTo the destination rather than a
-     * static distance. Works down to 20NM airDistance and FL100 Up to 3100NM airDistance and FL390, anything out of those ranges and values
+     * static distance. Works down to 20NM airDistance and FL100 Up to 9400NM airDistance and FL410, anything out of those ranges and values
      * won't be updated.
      */
     tryUpdateRouteTrip(dynamic = false) {
@@ -2196,7 +2196,7 @@ class FMCMainDisplay extends BaseAirliners {
             altToUse = SimVar.GetSimVarValue("PLANE ALTITUDE", 'Feet') / 100;
         }
 
-        if ((20 <= airDistance && airDistance <= 3100) && (100 <= altToUse && altToUse <= 390)) {
+        if ((20 <= airDistance && airDistance <= 9400) && (100 <= altToUse && altToUse <= 410)) {
             const deviation = (this.zeroFuelWeight + this._routeFinalFuelWeight + this._routeAltFuelWeight - A32NX_FuelPred.refWeight) * A32NX_FuelPred.computeNumbers(airDistance, altToUse, A32NX_FuelPred.computations.CORRECTIONS, false);
 
             this._routeTripFuelWeight = (A32NX_FuelPred.computeNumbers(airDistance, altToUse, A32NX_FuelPred.computations.FUEL, false) + deviation) / 1000;
@@ -2416,7 +2416,7 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return;
         }
-        
+
         await this.updateIlsCourse();
 
         if (this.flightPhaseManager.phase > FmgcFlightPhases.TAKEOFF) {
@@ -2841,7 +2841,7 @@ class FMCMainDisplay extends BaseAirliners {
                 this.ensureCurrentFlightPlanIsTemporary(() => {
                     this.flightPlanManager.truncateWaypoints(index);
                     // add the new destination, which will insert a discontinuity
-                    this.flightPlanManager.setDestination(airportTo.icao, () => {                        
+                    this.flightPlanManager.setDestination(airportTo.icao, () => {
                         callback(true);
                     }).catch(console.error);
                 });
@@ -3892,7 +3892,7 @@ class FMCMainDisplay extends BaseAirliners {
                 }
             }
             const limitLo = ldgRwy ? ldgRwy.elevation * 3.28084 : 0;
-            const limitHi = ldgRwy ? ldgRwy.elevation * 3.28084 + 5000 : 39000;
+            const limitHi = ldgRwy ? ldgRwy.elevation * 3.28084 + 5000 : 41000;
             if (value >= limitLo && value <= limitHi) {
                 this.perfApprMDA = value;
                 SimVar.SetSimVarValue("L:AIRLINER_MINIMUM_DESCENT_ALTITUDE", "feet", this.perfApprMDA);
@@ -3969,7 +3969,7 @@ class FMCMainDisplay extends BaseAirliners {
             this.setScratchpadMessage(NXSystemMessages.notAllowed);
             return callback(false);
         }
-        
+
         if (s === FMCMainDisplay.clrValue) {
             if (!this._ilsIdentPilotEntered && !this._ilsFrequencyPilotEntered) {
                 this.setScratchpadMessage(NXSystemMessages.notAllowed);
