@@ -222,7 +222,7 @@ class A32NX_FuelPred {
     }
 }
 
-A32NX_FuelPred.refWeight = 180;
+A32NX_FuelPred.refWeight = 127;
 
 A32NX_FuelPred.computations = {
     TIME:"time",
