@@ -20,6 +20,10 @@
     },
     "additions": [
       {
+        "gltf": "./efb/efb.gltf",
+        "bin": "./efb/efb.bin"
+      },
+      {
         "combineFiles": [
           "./a330-interior/A330_NEO_INTERIOR_LOD00.gltf"
         ],
