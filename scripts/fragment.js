@@ -56,9 +56,6 @@ const execute = async () => {
                 name: 'Model',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/model'
             }, {
-                name: 'ModelNOSAT',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/model.NOSAT'
-            }, {
                 name: 'Panels',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/panel'
             }, {
