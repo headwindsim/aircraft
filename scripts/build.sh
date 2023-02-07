@@ -14,6 +14,11 @@ fi
 # run build
 npx igniter "$@"
 
+if [ "${GITHUB_ACTIONS}" == "true" ]; then
+  rm -rf /external/a32nx
+  rm -rf /external/src
+fi
+
 # restore ownership (when run as github action)
 if [ "${GITHUB_ACTIONS}" == "true" ]; then
   chown -R ${ORIGINAL_USER_ID}:${ORIGINAL_GROUP_ID} /external
