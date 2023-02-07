@@ -1,0 +1,12 @@
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" height="128" width="128" viewBox="0 0 27.5 36.99">
+  <g id="Layer_1">
+    <g id="_1798231976160" data-name=" 1798231976160">
+      <g>
+        <line x1="13.73" y1=".99" x2="13.73" y2="35.99" fill="none" stroke="#ff0000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.98"/>
+        <polyline points=".99 21.98 13.73 12.49 26.51 21.98" fill="none" stroke="#ff0000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.98"/>
+        <polyline points="6.94 35.89 13.73 30.83 20.53 35.89" fill="none" stroke="#ff0000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.98"/>
+      </g>
+      <rect x="7.22" y="7.96" width="13.06" height="13.34" fill="#ff0000"/>
+    </g>
+  </g>
+</svg>
