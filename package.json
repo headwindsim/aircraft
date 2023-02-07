@@ -1,6 +1,6 @@
 {
   "name": "a339x",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "edition": "stable",
   "scripts": {
     "lint": "eslint --cache **/*.{js,mjs,jsx,ts,tsx}",
