@@ -66,7 +66,8 @@ export default new TaskOfTasks("all", [
             new TaskOfTasks("instruments",
                 [
                     ...getInstrumentsIgniterTasks(),
-                    new ExecTask("PFD", "npm run build-a339x:pfd", ["build/systems/instruments/src/PFD", "hdw-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/PFD"])
+                    new ExecTask("PFD", "npm run build-a339x:pfd", ["build/a339x/systems/instruments/src/PFD", "hdw-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/PFD"]),
+                    new ExecTask("Clock", "npm run build-a339x:clock", ["build/a339x/systems/instruments/src/Clock", "hdw-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/Clock"])
                 ],
                 true)
         ], true),
