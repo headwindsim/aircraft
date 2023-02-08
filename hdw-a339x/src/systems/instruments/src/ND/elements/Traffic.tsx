@@ -221,20 +221,20 @@ const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, 
     }
 
     // Place relative altitude above/below
-    const relAltY: number = (relativeAlt > 0) ? -10 : 85;
+    const relAltY: number = (relativeAlt > 0) ? -10 : 50;
     const trafficRotation = 360 - ((ownHeading - trafficHeading) % 360);
 
     return (
         <>
             <Layer x={x} y={y}>
                 <g>
-                    {intrusionLevel === TaRaIntrusion.TRAFFIC && <image width={64} height={64} xlinkHref="/A339X_Images/ND/TRAFFIC_NORMAL.svg" transform={`rotate(${trafficRotation} 32 32)`} />}
-                    {intrusionLevel === TaRaIntrusion.PROXIMITY && <image width={64} height={64} xlinkHref="/A339X_Images/ND/TRAFFIC_PROXIMITY.svg" transform={`rotate(${trafficRotation} 32 32)`} />}
-                    {intrusionLevel === TaRaIntrusion.TA && <image width={64} height={64} xlinkHref="/A339X_Images/ND/TRAFFIC_TA.svg" transform={`rotate(${trafficRotation} 32 32)`} />}
-                    {intrusionLevel === TaRaIntrusion.RA && <image width={64} height={64} xlinkHref="/A339X_Images/ND/TRAFFIC_RA.svg" transform={`rotate(${trafficRotation} 32 32)`} />}
+                    {intrusionLevel === TaRaIntrusion.TRAFFIC && <image width={32} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_NORMAL.svg" transform={`rotate(${trafficRotation} 16 16)`} />}
+                    {intrusionLevel === TaRaIntrusion.PROXIMITY && <image width={32} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_PROXIMITY.svg" transform={`rotate(${trafficRotation} 16 16)`} />}
+                    {intrusionLevel === TaRaIntrusion.TA && <image width={32} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_TA.svg" transform={`rotate(${trafficRotation} 16 16)`} />}
+                    {intrusionLevel === TaRaIntrusion.RA && <image width={32} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_RA.svg" transform={`rotate(${trafficRotation} 16 16)`} />}
                 </g>
 
-                <g transform={`translate(25 ${relAltY})`}>
+                <g transform={`translate(12 ${relAltY})`}>
                     <text fill={color} height={1.25} paintOrder="stroke" stroke="#040405" strokeWidth={1} textAnchor="end" xmlSpace="preserve">
                         <tspan fill={color} fontSize="20px" paintOrder="stroke" stroke="#040405" strokeWidth={1} textAnchor="middle">
                             {`${relativeAlt > 0 ? '+' : '-'}${Math.abs(relativeAlt) < 10 ? '0' : ''}${Math.abs(relativeAlt)}`}
