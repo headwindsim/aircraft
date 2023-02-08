@@ -5,7 +5,7 @@ import { Layer } from '@instruments/common/utils';
 import { TCAS_CONST as TCAS, TaRaIntrusion, TaRaIndex } from '@tcas/lib/TcasConstants';
 import { Coordinates } from '@fmgc/flightplanning/data/geo';
 import { MathUtils } from '@shared/MathUtils';
-import { EfisNdMode, NdTraffic } from '@shared/NavigationDisplay';
+import { EfisNdMode, NdTraffic, EfisNdRangeValue, rangeSettings } from '@shared/NavigationDisplay';
 import { usePersistentProperty } from '@instruments/common/persistence';
 import { useFlowSyncEvent } from '@instruments/common/hooks';
 import { MapParameters } from '../utils/MapParameters';
@@ -34,6 +34,8 @@ const TCAS_MASK_ROSE: TcasMask = [
     [340, 180], [267, 180], [210, 241], [210, 383],
     [-210, 383], [-210, 300], [-264, 241], [-340, 241], [-340, -227],
 ];
+
+const TRAFFIC_SCALE: number[] = [64, 56, 48, 40, 40, 40];
 
 const useAirTraffic = (mapParams, mode) : NdTraffic[] => {
     const [airTraffic, setAirTraffic] = useState<NdTraffic[]>([]);
@@ -76,7 +78,8 @@ export const Traffic: FC<TcasProps> = ({ mapParams, mode }) => {
     const [sensitivity] = useSimVar('L:A32NX_TCAS_SENSITIVITY', 'number', 200);
     const x: number = 361.5;
     const y: number = (mode === EfisNdMode.ARC) ? 606.5 : 368;
-
+    const rangeIndex = rangeSettings.indexOf(mapParams.nmRadius as EfisNdRangeValue);
+    const trafficScale = TRAFFIC_SCALE[rangeIndex];
     const ownHeading = Math.round(SimVar.GetSimVarValue('PLANE HEADING DEGREES MAGNETIC', 'degree'));
 
     if (debug !== '0') {
@@ -188,6 +191,7 @@ export const Traffic: FC<TcasProps> = ({ mapParams, mode }) => {
                         intrusionLevel={tf.intrusionLevel}
                         trafficHeading={tf.heading}
                         ownHeading={ownHeading}
+                        trafficScale={trafficScale}
                     />
                 ) : null
             ))}
@@ -203,10 +207,11 @@ type TrafficProp = {
     vertSpeed: number | undefined,
     intrusionLevel: TaRaIntrusion | undefined,
     trafficHeading: number | undefined,
-    ownHeading: number | undefined
+    ownHeading: number | undefined,
+    trafficScale: number | undefined
 }
 
-const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, intrusionLevel, trafficHeading, ownHeading }) => {
+const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, intrusionLevel, trafficHeading, ownHeading , trafficScale}) => {
     if (relativeAlt === undefined || vertSpeed === undefined || x === undefined || y === undefined) return <></>;
     let color = '#ffffff';
     switch (intrusionLevel) {
@@ -221,17 +226,17 @@ const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, 
     }
 
     // Place relative altitude above/below
-    const relAltY: number = (relativeAlt > 0) ? -10 : 50;
+    const relAltY: number = (relativeAlt > 0) ? -10 : (18 + trafficScale);
     const trafficRotation = 360 - ((ownHeading - trafficHeading) % 360);
 
     return (
         <>
             <Layer x={x} y={y}>
                 <g>
-                    {intrusionLevel === TaRaIntrusion.TRAFFIC && <image width={32} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_NORMAL.svg" transform={`rotate(${trafficRotation} 16 16)`} />}
-                    {intrusionLevel === TaRaIntrusion.PROXIMITY && <image width={32} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_PROXIMITY.svg" transform={`rotate(${trafficRotation} 16 16)`} />}
-                    {intrusionLevel === TaRaIntrusion.TA && <image width={32} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_TA.svg" transform={`rotate(${trafficRotation} 16 16)`} />}
-                    {intrusionLevel === TaRaIntrusion.RA && <image width={32} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_RA.svg" transform={`rotate(${trafficRotation} 16 16)`} />}
+                    {intrusionLevel === TaRaIntrusion.TRAFFIC && <image width={trafficScale} height={trafficScale} xlinkHref="/A339X_Images/ND/TRAFFIC_NORMAL.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
+                    {intrusionLevel === TaRaIntrusion.PROXIMITY && <image width={trafficScale} height={trafficScale} xlinkHref="/A339X_Images/ND/TRAFFIC_PROXIMITY.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
+                    {intrusionLevel === TaRaIntrusion.TA && <image width={trafficScale} height={trafficScale} xlinkHref="/A339X_Images/ND/TRAFFIC_TA.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
+                    {intrusionLevel === TaRaIntrusion.RA && <image width={trafficScale} height={trafficScale} xlinkHref="/A339X_Images/ND/TRAFFIC_RA.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
                 </g>
 
                 <g transform={`translate(12 ${relAltY})`}>
