@@ -32,15 +32,15 @@ For Git Bash/Linux:
 ./scripts/dev-env/run.sh ./scripts/copy.sh
 ```
 
-#### 3. Build all A32NX module by running following command on powershell. 
+#### 3. Build all A32NX module by running following command on powershell.
 
 For powershell:
 ```shell
-.\scripts\dev-env\run.cmd ./scripts/build.sh
+.\scripts\dev-env\run.cmd ./scripts/build_a339x.sh
 ```
 For Git Bash/Linux:
 ```shell
-./scripts/dev-env/run.sh ./scripts/build.sh
+./scripts/dev-env/run.sh ./scripts/build_a339x.sh
 ```
 
 #### 4. The package is now ready to use. Copy the folder "headwind-aircraft-a330-900" to your CommunityPackage folder in MSFS.
