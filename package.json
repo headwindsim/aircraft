@@ -34,8 +34,8 @@
     "serve:efb": "cd build/a339x/systems/instruments/src/EFB/ && vite --port 9696",
     "build:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c .\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
     "watch:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
-    "build:instruments": "rollup --max-old-space-size=8192 -c src/systems/instruments/buildSrc/simulatorBuild.mjs",
-    "watch:instruments": "rollup --max-old-space-size=8192 -wc src/systems/instruments/buildSrc/simulatorBuild.mjs",
+    "build:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c .\\build\\a339x\\systems\\instruments\\buildSrc\\aceBuild.mjs",
+    "watch:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\build\\a339x\\systems\\instruments\\buildSrc\\aceBuild.mjs",
 
     "prettier": "prettier --write **/*.json **/*.yml build/a339x/systems/instruments/**/*.css",
 
