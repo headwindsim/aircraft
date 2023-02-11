@@ -1750,10 +1750,10 @@
                     </UseTemplate>
                 </Component>
 
-                <!-- Hide the original (non-separated) dome lights. -->
+                <!-- Hide the original (non-separated) dome lights. (Re-enabled for A339 since dome light still sigular) --> 
                 <Component ID="Overhead_Lights" Node="LIGHTS_Overhead">
                     <UseTemplate Name="ASOBO_GT_Visibility_Code">
-                        <VISIBILITY_CODE>0</VISIBILITY_CODE>
+                        <VISIBILITY_CODE>1</VISIBILITY_CODE>
                     </UseTemplate>
                 </Component>
 
@@ -1766,7 +1766,7 @@
 
                 <!-- CPT DOME LT -->
                 <UseTemplate Name="ASOBO_LIGHTING_Cabin_Emissive_Template">
-                    <NODE_ID>LIGHTS_Overhead_L</NODE_ID>
+                    <NODE_ID>LIGHTS_Overhead</NODE_ID>
                     <POTENTIOMETER>7</POTENTIOMETER>
                     <FAILURE>1</FAILURE>
                     <SIMVAR_INDEX>1</SIMVAR_INDEX>
@@ -1774,14 +1774,16 @@
                 </UseTemplate>
 
                 <!-- F/O DOME LT -->
+                <!--
                 <UseTemplate Name="ASOBO_LIGHTING_Cabin_Emissive_Template">
-                    <NODE_ID>LIGHTS_Overhead_R</NODE_ID>
+                    <NODE_ID>LIGHTS_Overhead</NODE_ID>
                     <POTENTIOMETER>7</POTENTIOMETER>
                     <FAILURE>1</FAILURE>
                     <SIMVAR_INDEX>2</SIMVAR_INDEX>
                     <NO_SIMVAR_LIGHT/>
                     <EMISSIVE_CODE>(L:A32NX_ELEC_DC_ESS_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
                 </UseTemplate>
+                -->
             </Component>
 
             <Component ID="Overhead_Fuel">
