@@ -21,6 +21,7 @@
     "build-a339x:tcas": "rollup -c build/a339x/systems/tcas/rollup.config.js",
     "build-a339x:pfd": "cd build/a339x/systems/instruments/src/PFD && rollup -c",
     "build-a339x:clock": "cd build/a339x/systems/instruments/src/Clock && rollup -c",
+    "build-a339x:ewd": "cd build/a339x/systems/instruments/src/EWD && rollup -c",
 
     "build-a339x:systems": "cargo build -p a320_systems_wasm --target wasm32-wasi --release && wasm-opt -O1 -o /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm /external/target/wasm32-wasi/release/a320_systems_wasm.wasm",
     "build-a339x:fadec": "cd build/a339x/wasm/fadec_a320 && ./build.sh && wasm-opt -O1 -o /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm /external/hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm",
