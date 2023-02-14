@@ -97,7 +97,7 @@ a320-neo-cdu-main-display text {
 }
 
 .cyan {
-  color: var(--mcduCyan);
+  color: var(--mcduBlue);
 }
 
 .yellow {
