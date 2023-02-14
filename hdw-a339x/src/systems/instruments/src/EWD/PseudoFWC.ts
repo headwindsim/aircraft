@@ -868,7 +868,7 @@ export class PseudoFWC {
             const brakesHot = SimVar.GetSimVarValue('L:A32NX_BRAKES_HOT', 'bool');
 
             const speeds = !!(v1Speed <= vrSpeed && vrSpeed <= v2Speed);
-            const doors = !!(cabin === 0 && catering === 0 && cargo);
+            const doors = !!(cabin === 0 && catering === 0 && cargo === 0);
             const flapsAgree = !this.flapsMcduEntered.get() || this.flapsHandle.get() === this.flapsMcdu.get();
             const sb = !this.speedBrakeCommand.get();
 
