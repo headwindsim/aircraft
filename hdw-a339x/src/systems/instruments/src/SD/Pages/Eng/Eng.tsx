@@ -335,7 +335,11 @@ const EngineColumn = ({ x, y, engineNumber }: ComponentPositionProps) => {
 
     return (
         <SvgGroup x={x} y={y}>
-            <text x={x} y={y-60} className="FillGreen FontLarge TextCenter">{n2Percent}</text>
+            <text x={x} y={y-60} className="FillGreen FontLarge TextCenter">
+                <tspan className="FontLarge">{n2Percent.toFixed(1).toString().split('.')[0]}</tspan>
+                <tspan className="FontSmall">.</tspan>
+                <tspan className="FontSmall">{n2Percent.toFixed(1).toString().split('.')[1]}</tspan>
+            </text>
             <text x={x} y={y} className="FillGreen FontLarge TextCenter">{displayedFuelUsed}</text>
 
             <QuantityGauge x={x} y={y + 85} engineNumber={engineNumber} />
