@@ -78,7 +78,7 @@ export const DoorPage = () => {
                         <text id="AftRightDoorCabin" x="455" y="438" textAnchor="middle" alignmentBaseline="central">CABIN</text>
                         <text id="FwdCargoDoor" className={!cargo ? 'Hide' : 'Warning'} x="455" y="175" textAnchor="middle" alignmentBaseline="central">CARGO</text>
                         <text id="AftCargoDoor" className={!cargo ? 'Hide' : 'Warning'} x="455" y="375" textAnchor="middle" alignmentBaseline="central">CARGO</text>
-                        <text id="BulkCargoDoor" className={!cargo ? 'Hide' : 'Warning'} x="455" y="405" textAnchor="middle" alignmentBaseline="central">CARGO</text>
+                        <text id="BulkCargoDoor" className={!cargo ? 'Hide' : 'Warning'} x="455" y="405" textAnchor="middle" alignmentBaseline="central">BULK</text>
 
                         <text
                             id="oxy"
