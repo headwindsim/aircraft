@@ -2638,7 +2638,7 @@
                     <Component ID="Overhead_Audio_Panel">
                         <OverrideTemplateParameters>
                             <POTENTIOMETER>1</POTENTIOMETER>
-                            <EMISSIVE_CODE>(L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool) and</EMISSIVE_CODE>
+                            <EMISSIVE_CODE>(L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and (L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool) and</EMISSIVE_CODE>
                             <POTENTIOMETER_SEQ2>86</POTENTIOMETER_SEQ2>
                             <SEQ2_EMISSIVE_CODE>1</SEQ2_EMISSIVE_CODE>
                             <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>

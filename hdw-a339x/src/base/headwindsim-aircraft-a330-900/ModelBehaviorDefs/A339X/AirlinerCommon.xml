@@ -16,7 +16,7 @@
         <UseTemplate Name="#TEMPLATE_TO_CALL#">
             <Condition Check="SEQ1_EMISSIVE_CODE">
                 <True>
-                    <SEQ1_EMISSIVE_CODE>#SEQ1_EMISSIVE_CODE# (L:A32NX_OVHD_INTLT_ANN) 0 == or #BLOCK_SEQ1# ! and #SEQ1_POWERED# and #SEQ_POWERED# and #EMISSIVE_DIM# *</SEQ1_EMISSIVE_CODE>
+                    <SEQ1_EMISSIVE_CODE>#SEQ1_EMISSIVE_CODE# (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or #BLOCK_SEQ1# ! and #SEQ1_POWERED# and #SEQ_POWERED# and #EMISSIVE_DIM# *</SEQ1_EMISSIVE_CODE>
                 </True>
                 <False>
                     <SEQ1_EMISSIVE_CODE>#BLOCK_SEQ1# ! #SEQ1_POWERED# and #SEQ_POWERED# and #EMISSIVE_DIM# *</SEQ1_EMISSIVE_CODE>
@@ -24,7 +24,7 @@
             </Condition>
             <Condition Check="SEQ2_EMISSIVE_CODE">
                 <True>
-                    <SEQ2_EMISSIVE_CODE>#SEQ2_EMISSIVE_CODE# (L:A32NX_OVHD_INTLT_ANN) 0 == or #BLOCK_SEQ2# ! and #SEQ2_POWERED# and #SEQ_POWERED# and #EMISSIVE_DIM# *</SEQ2_EMISSIVE_CODE>
+                    <SEQ2_EMISSIVE_CODE>#SEQ2_EMISSIVE_CODE# (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or #BLOCK_SEQ2# ! and #SEQ2_POWERED# and #SEQ_POWERED# and #EMISSIVE_DIM# *</SEQ2_EMISSIVE_CODE>
                 </True>
                 <False>
                     <SEQ2_EMISSIVE_CODE>#BLOCK_SEQ2# ! #SEQ2_POWERED# and #SEQ_POWERED# and</SEQ2_EMISSIVE_CODE>
@@ -621,7 +621,7 @@
                 #SEQ1_POWERED# ! if{
                     0
                 } els{
-                    1 (L:XMLVAR_COM_#ID#_#FREQ_ID#_Switch_Down) == (L:A32NX_OVHD_INTLT_ANN) 0 == or if{
+                    1 (L:XMLVAR_COM_#ID#_#FREQ_ID#_Switch_Down) == (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or if{
                         3.0 #EMISSIVE_DIM# *
                     } els{
                         0.1 #EMISSIVE_DIM# *
@@ -665,13 +665,13 @@
                     <!-- Green light -->
                     <SEQ1_EMISSIVE_CODE>
                         #SEQ1_POWERED# if{
-                            #TRANSMIT_ID# (L:XMLVAR_COM_PANEL#ID#_Transmit_Channel) == (L:A32NX_OVHD_INTLT_ANN) 0 == or #EMISSIVE_DIM# *
+                            #TRANSMIT_ID# (L:XMLVAR_COM_PANEL#ID#_Transmit_Channel) == (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or #EMISSIVE_DIM# *
                         }
                     </SEQ1_EMISSIVE_CODE>
                      <!-- Button name light (for example CALL or MECH)-->
                     <SEQ2_EMISSIVE_CODE>
                         #SEQ1_POWERED# if{
-                            #TRANSMIT_ID# (L:XMLVAR_COM_PANEL#ID#_Transmit_Channel) == (L:A32NX_OVHD_INTLT_ANN) 0 == or #EMISSIVE_DIM# *
+                            #TRANSMIT_ID# (L:XMLVAR_COM_PANEL#ID#_Transmit_Channel) == (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or #EMISSIVE_DIM# *
                         }
                     </SEQ2_EMISSIVE_CODE>
                     <WWISE_EVENT_1>fcubutton</WWISE_EVENT_1>
@@ -723,7 +723,7 @@
                 </LEFT_SINGLE_CODE>
                 <SEQ1_EMISSIVE_CODE>
                     #SEQ1_POWERED# if{
-                        1 (L:XMLVAR_COM_#ID#_#FREQ_ID#_Switch_Down) == (L:A32NX_OVHD_INTLT_ANN) 0 == or #EMISSIVE_DIM# *
+                        1 (L:XMLVAR_COM_#ID#_#FREQ_ID#_Switch_Down) == (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or #EMISSIVE_DIM# *
                     }
                 </SEQ1_EMISSIVE_CODE>
                 <WWISE_EVENT></WWISE_EVENT>
@@ -760,17 +760,17 @@
         <OverrideTemplateParameters>
             <TRANSMIT_EMISSIVE_CODE>
                 #AUDIO_KNOB_POWERED# ! if{
-                0
+                    0
                 } els{
-                (L:XMLVAR_NAV_#SIDE#_#INSTRUMENT#_Switch_Down) 1 == (L:A32NX_OVHD_INTLT_ANN) 0 == or if{
-                3.0 #EMISSIVE_DIM# *
-                } els{
-                0.1 #EMISSIVE_DIM# *
-                }
+                    (L:XMLVAR_NAV_#SIDE#_#INSTRUMENT#_Switch_Down) 1 == (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or if{
+                        3.0 #EMISSIVE_DIM# *
+                    } els{
+                        0.1 #EMISSIVE_DIM# *
+                    }
                 }
             </TRANSMIT_EMISSIVE_CODE>
         </OverrideTemplateParameters>
-        
+
         <Component ID="#NODE_ID#" Node="#NODE_ID#">
             <UseTemplate Name="#KNOB_TEMPLATE#">
                 <ANIM_NAME>#ANIM_NAME_KNOB#</ANIM_NAME>
@@ -794,7 +794,7 @@
                 <ANIM_NAME_PUSH>#ANIM_NAME_SWITCH#</ANIM_NAME_PUSH>
                 <LEFT_SINGLE_CODE>
                     (L:XMLVAR_NAV_#SIDE#_#INSTRUMENT#_Switch_Down) ! (&gt;L:XMLVAR_NAV_#SIDE#_#INSTRUMENT#_Switch_Down)
-        
+
                     #ONCLICK#
                 </LEFT_SINGLE_CODE>
                 <WWISE_EVENT></WWISE_EVENT>
@@ -805,7 +805,7 @@
                 <COUNT>36</COUNT>
             </UseTemplate>
         </Component>
-        
+
         <Component ID="#NODE_ID_LIGHT#_Light" Node="#NODE_ID_LIGHT#">
             <UseTemplate Name="ASOBO_GT_Emissive_Gauge">
                 <EMISSIVE_CODE>#TRANSMIT_EMISSIVE_CODE#</EMISSIVE_CODE>
