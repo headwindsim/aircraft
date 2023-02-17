@@ -1134,7 +1134,7 @@ export class PseudoFWC {
         3400210: { // OVERSPEED FLAPS FULL
             flightPhaseInhib: [2, 3, 4, 8, 9, 10],
             simVarIsActive: MappedSubject
-                .create(([flapsIndex, computedAirSpeedToNearest2]) => flapsIndex === 5 && computedAirSpeedToNearest2 > 181, this.flapsIndex, this.computedAirSpeedToNearest2),
+                .create(([flapsIndex, computedAirSpeedToNearest2]) => flapsIndex === 5 && computedAirSpeedToNearest2 > 184, this.flapsIndex, this.computedAirSpeedToNearest2),
             whichCodeToReturn: () => [0, 1],
             codesToReturn: ['340021001', '340021002'],
             memoInhibit: () => false,
@@ -1145,7 +1145,7 @@ export class PseudoFWC {
         3400220: { // OVERSPEED FLAPS 3
             flightPhaseInhib: [2, 3, 4, 8, 9, 10],
             simVarIsActive: MappedSubject
-                .create(([flapsIndex, computedAirSpeedToNearest2]) => flapsIndex === 4 && computedAirSpeedToNearest2 > 189, this.flapsIndex, this.computedAirSpeedToNearest2),
+                .create(([flapsIndex, computedAirSpeedToNearest2]) => flapsIndex === 4 && computedAirSpeedToNearest2 > 190, this.flapsIndex, this.computedAirSpeedToNearest2),
             whichCodeToReturn: () => [0, 1],
             codesToReturn: ['340022001', '340022002'],
             memoInhibit: () => false,
@@ -1156,7 +1156,7 @@ export class PseudoFWC {
         3400230: { // OVERSPEED FLAPS 2
             flightPhaseInhib: [2, 3, 4, 8, 9, 10],
             simVarIsActive: MappedSubject.create(
-                ([flapsIndex, computedAirSpeedToNearest2]) => flapsIndex === 3 && computedAirSpeedToNearest2 > 203, this.flapsIndex, this.computedAirSpeedToNearest2,
+                ([flapsIndex, computedAirSpeedToNearest2]) => flapsIndex === 3 && computedAirSpeedToNearest2 > 200, this.flapsIndex, this.computedAirSpeedToNearest2,
             ),
             whichCodeToReturn: () => [0, 1],
             codesToReturn: ['340023001', '340023002'],
@@ -1180,7 +1180,7 @@ export class PseudoFWC {
         3400240: { // OVERSPEED FLAPS 1
             flightPhaseInhib: [2, 3, 4, 8, 9, 10],
             simVarIsActive: MappedSubject.create(
-                ([flapsIndex, computedAirSpeedToNearest2]) => flapsIndex === 1 && computedAirSpeedToNearest2 > 233, this.flapsIndex, this.computedAirSpeedToNearest2,
+                ([flapsIndex, computedAirSpeedToNearest2]) => flapsIndex === 1 && computedAirSpeedToNearest2 > 244, this.flapsIndex, this.computedAirSpeedToNearest2,
             ),
             whichCodeToReturn: () => [0, 1],
             codesToReturn: ['340024001', '340024002'],
