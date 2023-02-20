@@ -27,7 +27,7 @@ module.exports = {
             targets: [
                 {
                     src: 'fmgc/src/utils/LzUtf8.js',
-                    dest: join(root, 'hdw-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/fmgc/'),
+                    dest: join(root, 'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X/fmgc/'),
                 },
             ],
         }),
@@ -52,7 +52,7 @@ module.exports = {
         }),
     ],
     output: {
-        file: join(root, 'hdw-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/fmgc/fmgc.js'),
+        file: join(root, 'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X/fmgc/fmgc.js'),
         format: 'umd',
         name: 'Fmgc',
     },

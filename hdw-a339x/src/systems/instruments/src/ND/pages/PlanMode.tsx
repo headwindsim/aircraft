@@ -106,7 +106,7 @@ const Plane: FC<PlaneProps> = ({ location, heading, mapParams }) => {
 
     return (
         <g transform={`translate(${x} ${y}) rotate(${rotation} 384 384)`}>
-            <image x={342} y={357} width={84} height={71} xlinkHref="/A339X_Images/ND/AIRPLANE.svg" />
+            <image x={342} y={357} width={84} height={71} xlinkHref="/Images/A339X/ND/AIRPLANE.svg" />
         </g>
     );
 };

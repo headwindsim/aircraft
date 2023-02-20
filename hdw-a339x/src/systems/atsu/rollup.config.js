@@ -46,7 +46,7 @@ module.exports = {
         }),
     ],
     output: {
-        file: join(root, 'hdw-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/atsu/atsu.js'),
+        file: join(root, 'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X/atsu/atsu.js'),
         format: 'umd',
         name: 'Atsu',
     },

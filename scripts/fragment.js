@@ -5,8 +5,8 @@ const execute = async () => {
     try {
         const result = await fragmenter.pack({
             packOptions: { splitFileSize: 102_760_448, keepCompleteModulesAfterSplit: false },
-            baseDir: './hdw-a339x/out/headwindsim-aircraft-a330-900',
-            outDir: './hdw-a339x/out/build-modules',
+            baseDir: './build-a339x/out/headwindsim-aircraft-a330-900',
+            outDir: './build-a339x/out/build-modules',
             modules: [{
                 name: 'effects',
                 sourceDir: './effects'
@@ -64,7 +64,7 @@ const execute = async () => {
             }]
         });
         console.log(result);
-        console.log(fs.readFileSync('./hdw-a339x/out/build-modules/modules.json').toString());
+        console.log(fs.readFileSync('./build-a339x/out/build-modules/modules.json').toString());
     } catch (e) {
         console.error(e);
         process.exit(1);

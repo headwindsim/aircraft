@@ -207,6 +207,7 @@ export const AtsuAocPage = () => {
                 <SelectGroup>
                     {atisSourceButtons.map((button) => (
                         <SelectItem
+                            key={button.name}
                             onSelect={() => handleWeatherSource(button.setting, 'ATIS')}
                             selected={atisSource === button.setting}
                         >
@@ -220,6 +221,7 @@ export const AtsuAocPage = () => {
                 <SelectGroup>
                     {metarSourceButtons.map((button) => (
                         <SelectItem
+                            key={button.name}
                             onSelect={() => handleWeatherSource(button.setting, 'METAR')}
                             selected={metarSource === button.setting}
                         >
@@ -233,6 +235,7 @@ export const AtsuAocPage = () => {
                 <SelectGroup>
                     {tafSourceButtons.map((button) => (
                         <SelectItem
+                            key={button.name}
                             onSelect={() => handleWeatherSource(button.setting, 'TAF')}
                             selected={tafSource === button.setting}
                         >

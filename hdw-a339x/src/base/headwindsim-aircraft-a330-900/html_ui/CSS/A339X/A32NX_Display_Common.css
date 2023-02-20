@@ -1,6 +1,6 @@
 @font-face {
   font-family: "ECAMFontRegular";
-  src: url("/A339X_FONTS/ECAMFontRegular.ttf") format("truetype");
+  src: url("/Fonts/A339X/ECAMFontRegular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -173,7 +173,7 @@ text {
   height: 100%;
   border: none;
   z-index: 999;
-  background-image: url(/A339X_CSS/thalesTest.svg);
+  background-image: url(/CSS/A339X/thalesTest.svg);
   background-size: cover;
 }
 

@@ -38,6 +38,8 @@
 
 /hdw-a339x/*
 !/hdw-a339x/README.md
+!/hdw-a339x/mach.config.js
+!/hdw-a339x/.env
 !/hdw-a339x/docs/
 !/hdw-a339x/docs/**
 !/hdw-a339x/src/
@@ -74,7 +76,7 @@ target/
 *.tgz
 *.wasm
 
-/build/
+/build-a339x/
 
 # ======== OLD =============
 

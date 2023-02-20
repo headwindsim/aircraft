@@ -590,7 +590,7 @@ const Plane: React.FC = memo(() => (
     <g>
         <line id="lubber-shadow" x1={384} y1={108} x2={384} y2={148} className="shadow" strokeWidth={5.5} strokeLinejoin="round" strokeLinecap="round" />
         <line id="lubber" x1={384} y1={108} x2={384} y2={148} className="Yellow" strokeWidth={5} strokeLinejoin="round" strokeLinecap="round" />
-        <image x={342} y={596} width={84} height={71} xlinkHref="/A339X_Images/ND/AIRPLANE.svg" />
+        <image x={342} y={596} width={84} height={71} xlinkHref="/Images/A339X/ND/AIRPLANE.svg" />
     </g>
 ));
 

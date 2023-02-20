@@ -63,7 +63,7 @@ const titleSuffix = ` (${titlePostfix})`;
 const MS_FILETIME_EPOCH = 116444736000000000n;
 
 const A339X_SRC = path.resolve(__dirname, '..', 'hdw-a339x/src');
-const A339X_OUT = path.resolve(__dirname, '..', 'hdw-a339x/out/headwindsim-aircraft-a330-900');
+const A339X_OUT = path.resolve(__dirname, '..', 'build-a339x/out/headwindsim-aircraft-a330-900');
 
 function createPackageFiles(baseDir, manifestBaseFilename) {
     const contentEntries = [];

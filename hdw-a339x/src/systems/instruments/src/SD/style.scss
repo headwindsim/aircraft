@@ -3,7 +3,7 @@
 @font-face {
   font-family: "Ecam";
   //noinspection CssUnknownTarget
-  src: url("/A339X_FONTS/ECAMFontRegular.ttf") format("truetype");
+  src: url("/Fonts/A339X/ECAMFontRegular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -36,6 +36,6 @@
   width: 100%;
   height: 82%;
   z-index: 100;
-  background-image: url(/Pages/VCockpit/Instruments/A339X/SD/DoorVideoResources/empty.png);
+  background-image: url(/Images/A339X/SD/DoorVideoResources/empty.png);
   background-size: cover;
 }

@@ -233,10 +233,10 @@ const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, 
         <>
             <Layer x={x} y={y}>
                 <g>
-                    {intrusionLevel === TaRaIntrusion.TRAFFIC && <image width={trafficScale} height={trafficScale} xlinkHref="/A339X_Images/ND/TRAFFIC_NORMAL.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
-                    {intrusionLevel === TaRaIntrusion.PROXIMITY && <image width={trafficScale} height={trafficScale} xlinkHref="/A339X_Images/ND/TRAFFIC_PROXIMITY.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
-                    {intrusionLevel === TaRaIntrusion.TA && <image width={trafficScale} height={trafficScale} xlinkHref="/A339X_Images/ND/TRAFFIC_TA.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
-                    {intrusionLevel === TaRaIntrusion.RA && <image width={trafficScale} height={trafficScale} xlinkHref="/A339X_Images/ND/TRAFFIC_RA.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
+                    {intrusionLevel === TaRaIntrusion.TRAFFIC && <image width={trafficScale} height={trafficScale} xlinkHref="/Images/A339X/ND/TRAFFIC_NORMAL.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
+                    {intrusionLevel === TaRaIntrusion.PROXIMITY && <image width={trafficScale} height={trafficScale} xlinkHref="/Images/A339X/ND/TRAFFIC_PROXIMITY.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
+                    {intrusionLevel === TaRaIntrusion.TA && <image width={trafficScale} height={trafficScale} xlinkHref="/Images/A339X/ND/TRAFFIC_TA.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
+                    {intrusionLevel === TaRaIntrusion.RA && <image width={trafficScale} height={trafficScale} xlinkHref="/Images/A339X/ND/TRAFFIC_RA.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
                 </g>
 
                 <g transform={`translate(12 ${relAltY})`}>
@@ -302,10 +302,10 @@ const TrafficIndicatorDebug: FC<TrafficPropDebug> = memo(({ x, y, relativeAlt, v
     return (
         <>
             <Layer x={x} y={y}>
-                {intrusionLevel === TaRaIntrusion.TRAFFIC && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_NORMAL.svg" />}
-                {intrusionLevel === TaRaIntrusion.PROXIMITY && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_PROXIMITY.svg" />}
-                {intrusionLevel === TaRaIntrusion.TA && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_TA.svg" />}
-                {intrusionLevel === TaRaIntrusion.RA && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_RA.svg" />}
+                {intrusionLevel === TaRaIntrusion.TRAFFIC && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/Images/A339X/ND/TRAFFIC_NORMAL.svg" />}
+                {intrusionLevel === TaRaIntrusion.PROXIMITY && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/Images/A339X/ND/TRAFFIC_PROXIMITY.svg" />}
+                {intrusionLevel === TaRaIntrusion.TA && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/Images/A339X/ND/TRAFFIC_TA.svg" />}
+                {intrusionLevel === TaRaIntrusion.RA && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/Images/A339X/ND/TRAFFIC_RA.svg" />}
                 <g>
                     <text x={30} y={relAltY} fillOpacity={hidden ? 0.125 : 1} fill={color} height={1.25} strokeWidth={0.3} textAnchor="end" xmlSpace="preserve">
                         <tspan x={17.25} y={relAltY} fill={color} fontSize="20px" strokeWidth={0.3} textAnchor="middle">
