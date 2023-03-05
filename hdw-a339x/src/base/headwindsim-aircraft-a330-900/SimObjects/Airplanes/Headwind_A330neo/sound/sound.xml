@@ -1770,7 +1770,7 @@
 
         <!-- CRC and Caution ========================================================================================-->
 
-        <Sound WwiseData="true" WwiseEvent="CRC" NodeName="WIPER_BASE_L" ViewPoint="Inside" LocalVar="A32NX_MASTER_WARNING">
+        <Sound WwiseData="true" WwiseEvent="CRC" NodeName="WIPER_BASE_L" ViewPoint="Inside" LocalVar="A32NX_FWC_CRC">
             <Range LowerBound="0.5" />
             <Requires SimVar="ELECTRICAL MAIN BUS VOLTAGE" Units="VOLTS" Index="1">
                 <Range LowerBound="28" />
@@ -1886,7 +1886,7 @@
             </Requires>
             <WwiseRTPC LocalVar="A32NX_SOUND_ANNOUNCEMENTS_ENABLED" Units="number" Index="0" RTPCName="LOCALVAR_A32NX_ANNOUNCEMENT_TOGGLE" />
         </Sound>
-         <Sound WwiseData="true" WwiseEvent="cabin_crew_seats_landing" SimVar="GEAR TOTAL PCT EXTENDED" Units="PERCENT" Index="0" NodeName="PEDALS_LEFT" Continuous="true">
+        <Sound WwiseData="true" WwiseEvent="cabin_crew_seats_landing" SimVar="GEAR TOTAL PCT EXTENDED" Units="PERCENT" Index="0" NodeName="PEDALS_LEFT" Continuous="true">
             <Range LowerBound="0.2" />
             <Requires LocalVar="A32NX_FMGC_FLIGHT_PHASE">
                 <Range LowerBound="5" UpperBound="6" />
@@ -1894,8 +1894,7 @@
             <WwiseRTPC LocalVar="A32NX_SOUND_ANNOUNCEMENTS_ENABLED" Units="number" Index="0" RTPCName="LOCALVAR_A32NX_ANNOUNCEMENT_TOGGLE" />
         </Sound>
 
-
-        <Sound WwiseData="true" WwiseEvent="improved_tone_caution" NodeName="PEDALS_LEFT" ViewPoint="Inside" LocalVar="A32NX_MASTER_CAUTION" Continuous="false">
+        <Sound WwiseData="true" WwiseEvent="improved_tone_caution" NodeName="PEDALS_LEFT" ViewPoint="Inside" LocalVar="A32NX_FWC_SC" Continuous="false">
             <Range LowerBound="0.5" />
             <Requires SimVar="ELECTRICAL MAIN BUS VOLTAGE" Units="VOLTS" Index="1">
                 <Range LowerBound="28" />
