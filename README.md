@@ -53,7 +53,7 @@ For powershell:
 ```
 For Git Bash/Linux:
 ```shell
-./scripts/dev-env/run.sh ./scripts/packge.sh
+./scripts/dev-env/run.sh ./scripts/package.sh
 ```
 
 ## Open source
