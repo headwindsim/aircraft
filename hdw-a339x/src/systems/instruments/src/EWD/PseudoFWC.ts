@@ -1291,7 +1291,6 @@ export class PseudoFWC {
 
             this.toConfigNormal.set(this.toConfigNormalConf.write(toConfigNormal, deltaTime));
         }
-        this.toConfigNormal.set(SimVar.GetSimVarValue('L:A32NX_TO_CONFIG_NORMAL', 'bool'));
 
         /* CLEAR AND RECALL */
         if (this.clrTriggerRisingEdge) {
@@ -1336,7 +1335,6 @@ export class PseudoFWC {
         const failureKeysRight: string[] = this.failuresRight;
         let leftFailureSystemCount = 0;
         let rightFailureSystemCount = 0;
-
         const auralCrcKeys: string[] = [];
         const auralScKeys: string[] = [];
 
@@ -1541,7 +1539,6 @@ export class PseudoFWC {
 
         this.memoMessageRight.set(orderedMemoArrayRight);
 
-        
         // This does not consider interrupting c-chord, priority of synthetic voice etc.
         // We shall wait for the rust FWC for those nice things!
         if (this.auralSingleChimePending && !this.auralCrcActive.get() && !this.auralSingleChimeInhibitTimer.isPending()) {
