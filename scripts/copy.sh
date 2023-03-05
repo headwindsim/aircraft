@@ -35,7 +35,7 @@ mkdir -p ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/
 mkdir -p ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/NavSystems
 mkdir -p ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer
 
-cp -rva ./a32nx/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/CSS/fbw-a32nx/. ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/CSS/A339X
+cp -rva ./a32nx/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/CSS/. ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/CSS/A339X
 cp -rva ./a32nx/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Fonts/fbw-a32nx/. ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Fonts/A339X
 cp -rva ./a32nx/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Images/fbw-a32nx/. ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Images/A339X
 cp -rva ./a32nx/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/JS/fbw-a32nx/. ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X
