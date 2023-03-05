@@ -227,8 +227,7 @@ void FlyByWireInterface::loadConfiguration() {
   flightControlsKeyChangeRudder = abs(flightControlsKeyChangeRudder);
   disableXboxCompatibilityRudderAxisPlusMinus =
       INITypeConversion::getBoolean(iniStructure, "FLIGHT_CONTROLS", "DISABLE_XBOX_COMPATIBILITY_RUDDER_AXIS_PLUS_MINUS", false);
-  enableRudder2AxisMode =
-      INITypeConversion::getBoolean(iniStructure, "FLIGHT_CONTROLS", "ENABLE_RUDDER_2_AXIS", false);
+  enableRudder2AxisMode = INITypeConversion::getBoolean(iniStructure, "FLIGHT_CONTROLS", "ENABLE_RUDDER_2_AXIS", false);
 
   // print configuration into console
   std::cout << "WASM: FLIGHT_CONTROLS : KEY_CHANGE_AILERON = " << flightControlsKeyChangeAileron << std::endl;
