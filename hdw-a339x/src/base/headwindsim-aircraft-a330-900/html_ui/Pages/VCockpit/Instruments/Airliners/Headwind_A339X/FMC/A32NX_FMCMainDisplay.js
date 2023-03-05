@@ -1675,10 +1675,10 @@ class FMCMainDisplay extends BaseAirliners {
             const ssm = landingElevation !== undefined ? Arinc429Word.SignStatusMatrix.NormalOperation : Arinc429Word.SignStatusMatrix.NoComputedData;
 
             this.arincLandingElevation.setBnrValue(landingElevation ? landingElevation : 0, ssm, 14, 16384, -2048);
+
             // FIXME CPCs should use the FM ARINC vars, and transmit their own vars as well
             SimVar.SetSimVarValue("L:A32NX_PRESS_AUTO_LANDING_ELEVATION", "feet", landingElevation ? landingElevation : 0);
         }
-
 
         if (this.destinationLatitude !== latitude) {
             this.destinationLatitude = latitude;
@@ -2554,7 +2554,7 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     isRunwayLsMismatched() {
-        if (!this.ilsAutoTuned || this.flightPhaseManager.phase === FmgcFlightPhases.DONE) {
+        if (this.backupNavTuning || !this.ilsAutoTuned || this.flightPhaseManager.phase === FmgcFlightPhases.DONE) {
             return false;
         }
 
@@ -2562,7 +2562,7 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     isRunwayLsCourseMismatched() {
-        if (!this.ilsAutoTuned || this.ilsCourse === undefined) {
+        if (this.backupNavTuning || !this.ilsAutoTuned || this.ilsCourse === undefined) {
             return false;
         }
 
@@ -4908,7 +4908,7 @@ class FMCMainDisplay extends BaseAirliners {
             }).catch((err) => {
                 if (err instanceof McduMessage) {
                     this.setScratchpadMessage(err);
-                } else {
+                } else if (err) {
                     console.error(err);
                 }
                 return callback(false);
@@ -4916,7 +4916,7 @@ class FMCMainDisplay extends BaseAirliners {
         } catch (err) {
             if (err instanceof McduMessage) {
                 this.setScratchpadMessage(err);
-            } else if (err) {
+            } else {
                 console.error(err);
             }
             return callback(false);
@@ -5320,4 +5320,3 @@ class FmArinc429OutputWord extends Arinc429Word {
         this.ssm = ssm;
     }
 }
-
