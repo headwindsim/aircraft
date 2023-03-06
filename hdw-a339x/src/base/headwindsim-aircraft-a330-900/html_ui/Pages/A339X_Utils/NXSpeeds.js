@@ -355,6 +355,30 @@ const s = [
     () => 214  // 250
 ];
 
+/**
+ * MINIMUM CONTROL SPEEDS
+ * BASED ON A330 FCOM 3 - 3.01.20
+ * USED BECAUSE ALL SPEEDS CURRENTLY BASED ON A330-300)
+ */
+const vmca = [
+    [0, 117],
+    [2000, 114],
+    [4000, 112],
+    [6000, 109],
+    [8000, 105]
+];
+
+const vmcg = [ // 1+F, 2, 3 all the same
+    [0, 118],
+    [2000, 116],
+    [4000, 113],
+    [6000, 110],
+    [8000, 107]
+];
+
+/**
+ * MINIMUM CONTROL SPEEDS
+ * TEMP NOT USED - BASED ON VIR A330-941 FCOM LIM-AG-SPD P 3/4
 const vmca = [
     [0, 129],
     [2000, 127],
@@ -370,6 +394,7 @@ const vmcg = [ // 1+F, 2, 3 all the same
     [6000, 122],
     [8000, 118]
 ];
+*/
 
 /**
  * Vfe for Flaps/Slats
