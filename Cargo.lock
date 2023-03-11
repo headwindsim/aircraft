@@ -488,10 +488,9 @@ dependencies = [
 
 [[package]]
 name = "msfs_derive"
-version = "0.1.0"
+version = "0.2.0"
 source = "git+https://github.com/flybywiresim/msfs-rs?branch=main#53ba9a5539d11401eb6c43d3c69f24311a9f321d"
 dependencies = [
- "msfs_sdk",
  "quote",
  "syn",
 ]

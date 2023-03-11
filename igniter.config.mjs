@@ -25,12 +25,32 @@ export default new TaskOfTasks("all", [
                     "build-a339x/src/behavior",
                     "build-a339x/out/headwindsim-aircraft-a330-900/ModelBehaviorDefs/A339X/generated"
                 ]),
-
-            new ExecTask("atsu",
-                "npm run build-a339x:atsu",
+            new TaskOfTasks('atsu', [
+                new ExecTask(
+                    'common',
+                    'npm run build-a339x:atsu-common',
+                    [
+                        'build-a339x/src/systems/atsu/common',
+                        'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X/atsu/common.js'
+                    ]
+                ),
+                new ExecTask(
+                    'fmsclient',
+                    'npm run build-a339x:atsu-fms-client',
+                    [
+                        'build-a339x/src/systems/atsu/common',
+                        'build-a339x/src/systems/atsu/fmsclient',
+                        'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X/atsu/fmsclient.js'
+                    ]
+                ),
+            ]),
+            new ExecTask(
+                'systems-host',
+                'npm run build-a339x:systems-host',
                 [
-                    "build-a339x/src/systems/atsu",
-                    "build-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/atsu"
+                    'build-a339x/src/systems/systems-host',
+                    'a32nx/fbw-common/src/systems/datalink',
+                    'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/SystemsHost'
                 ]),
             new ExecTask("failures",
                 "npm run build-a339x:failures",
