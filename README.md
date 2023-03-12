@@ -29,7 +29,7 @@ For powershell:
 ```
 For Git Bash/Linux:
 ```shell
-./scripts/dev-env/run.sh ./scripts/copy.sh
+./scripts/copy.sh
 ```
 
 #### 3. Build all A32NX module by running following command on powershell.

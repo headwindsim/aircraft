@@ -19,7 +19,7 @@ jobs:
       - name: install
         run: sudo ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: copy sources
-        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
+        run: sudo ./scripts/copy.sh
       - name: npm run lint
         run: ./scripts/dev-env/run.sh npm run lint
       - name: lint-rust.sh
@@ -34,7 +34,7 @@ jobs:
         with:
           submodules: recursive
       - name: copy sources
-        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
+        run: sudo ./scripts/copy.sh
       - name: test-rust.sh
         run: |
           ./scripts/dev-env/run.sh scripts/test-rust.sh
@@ -49,7 +49,7 @@ jobs:
       - name: npm install
         run: ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: copy sources
-        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
+        run: sudo ./scripts/copy.sh
       - name: npm test
         run: npm test
   build:
@@ -68,7 +68,7 @@ jobs:
           ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: Copy Sources
         run: |
-          ./scripts/dev-env/run.sh ./scripts/copy.sh
+          ./scripts/copy.sh
       - name: Build A339X Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_a339x.sh --no-tty -j 4
