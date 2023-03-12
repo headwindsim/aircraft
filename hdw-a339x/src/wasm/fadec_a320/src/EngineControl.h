@@ -206,7 +206,6 @@ class EngineControl {
       engineState = engineState + 10;
       simPaused = true;
     } else if (deltaTimeDiff == 0 && engineState >= 10) {
-      engineState = engineState;
       simPaused = true;
     } else {
       simPaused = false;
@@ -762,7 +761,7 @@ class EngineControl {
     double engine1State = simVars->getEngine1State();
     double engine2State = simVars->getEngine2State();
 
-    // Check Development State for UI
+    // Check Ready & Development State for UI
     isReady = simVars->getIsReady();
     devState = simVars->getDeveloperState();
 

@@ -561,7 +561,6 @@ class FMCMainDisplay extends BaseAirliners {
         // ATSU data
         this.atsu = new AtsuFmsClient.FmsClient(this, this.flightPlanManager, this.flightPhaseManager);
 
-
         // Reset SimVars
         SimVar.SetSimVarValue("L:A32NX_SPEEDS_MANAGED_PFD", "knots", 0);
         SimVar.SetSimVarValue("L:A32NX_SPEEDS_MANAGED_ATHR", "knots", 0);
@@ -1488,9 +1487,9 @@ class FMCMainDisplay extends BaseAirliners {
 
         let weight = this.tryEstimateLandingWeight();
         // Actual weight is used during approach phase (FCOM bulletin 46/2), and we also assume during go-around
-        // Fallback gross weight set to 177.0T (MZFW), which is replaced by FMGW once input in FMS to avoid function returning undefined results.
+        // Fallback gross weight set to 181.0T (MZFW), which is replaced by FMGW once input in FMS to avoid function returning undefined results.
         if (this.flightPhaseManager.phase >= FmgcFlightPhases.APPROACH || !isFinite(weight)) {
-            weight = (this.getGW() == 0) ? 177.0 : this.getGW();
+            weight = (this.getGW() == 0) ? 181.0 : this.getGW();
         }
         // if pilot has set approach wind in MCDU we use it, otherwise fall back to current measured wind
         if (isFinite(this.perfApprWindSpeed) && isFinite(this.perfApprWindHeading)) {
@@ -3003,34 +3002,6 @@ class FMCMainDisplay extends BaseAirliners {
             || this.v2Speed < Math.trunc(1.1 * NXSpeedsUtils.getVmca(zp))
             || (isFinite(tow) && this.v2Speed < Math.trunc(1.13 * NXSpeedsUtils.getVs1g(tow, conf, true)))
         );
-    }
-
-    toSpeedsChecks(init = false) {
-        const toSpeedsNotInserted = !this.v1Speed || !this.vRSpeed || !this.v2Speed;
-        if (toSpeedsNotInserted !== this.toSpeedsNotInserted) {
-            this.toSpeedsNotInserted = toSpeedsNotInserted;
-        }
-
-        const toSpeedsTooLow = this.getToSpeedsTooLow();
-        if (toSpeedsTooLow !== this.toSpeedsTooLow) {
-            this.toSpeedsTooLow = toSpeedsTooLow;
-            if (toSpeedsTooLow) {
-                this.addMessageToQueue(NXSystemMessages.toSpeedTooLow, () => !this.getToSpeedsTooLow());
-            }
-        }
-
-        const vSpeedDisagree = !this.vSpeedsValid();
-        if (vSpeedDisagree !== this.vSpeedDisagree) {
-            this.vSpeedDisagree = vSpeedDisagree;
-            if (vSpeedDisagree) {
-                this.addMessageToQueue(NXSystemMessages.vToDisagree, this.vSpeedsValid.bind(this));
-            }
-        }
-
-        this.arincDiscreteWord3.setBitValue(16, vSpeedDisagree);
-        this.arincDiscreteWord3.setBitValue(17, toSpeedsTooLow);
-        this.arincDiscreteWord3.setBitValue(18, toSpeedsNotInserted);
-        this.arincDiscreteWord3.ssm = Arinc429Word.SignStatusMatrix.NormalOperation;
     }
 
     toSpeedsChecks(init = false) {
