@@ -112,6 +112,14 @@ export default new TaskOfTasks("all", [
                     "a32nx/fbw-common/src/wasm/fbw_common",
                     "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm"
                 ]),
+            new ExecTask("systems-terronnd", [
+                "a32nx/fbw-common/src/wasm/terronnd/build.sh",
+                "wasm-opt -O1 -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm a32nx/fbw-common/src/wasm/terronnd/out/terronnd.wasm"
+            ], [
+                "a32nx/fbw-common/src/wasm/terronnd",
+                "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm",
+                "a32nx/fbw-common/src/wasm/terronnd/out/terronnd.wasm",
+            ]),
             new ExecTask("flypad-backend",
                 "npm run build-a339x:flypad-backend",
                 [
