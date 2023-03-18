@@ -75,28 +75,34 @@
 	<Sound WwiseData="true" WwiseEvent="NEOEngine_CombL" EngineIndex="1" StateTo="On" StateFrom="Start" > 
 	<WwiseRTPC SimVar="TURB ENG N2" Units="PERCENT" Index="1" RTPCName="SIMVAR_TURB_ENG_N2"/> 
 	<WwiseRTPC SimVar="TURB ENG N1" Units="PERCENT" Index="1" RTPCName="SIMVAR_TURB_ENG_N1"/> 
+	<WwiseRTPC SimVar="GENERAL ENG COMBUSTION" Units="PERCENT OVER 100" Index="1" RTPCName="SIMVAR_GENERAL_ENG_COMBUSTION"/> 
     </Sound>
 	<Sound WwiseData="true" WwiseEvent="NEOEngine_CombR" EngineIndex="2" StateTo="On" StateFrom="Start" > 
 	<WwiseRTPC SimVar="TURB ENG N2" Units="PERCENT" Index="2" RTPCName="SIMVAR_TURB_ENG_N2"/> 
 	<WwiseRTPC SimVar="TURB ENG N1" Units="PERCENT" Index="2" RTPCName="SIMVAR_TURB_ENG_N1"/> 
+	<WwiseRTPC SimVar="GENERAL ENG COMBUSTION" Units="PERCENT OVER 100" Index="2" RTPCName="SIMVAR_GENERAL_ENG_COMBUSTION"/> 
     </Sound>
 	
 	<Sound WwiseData="true" WwiseEvent="NEOEngine_CombLX" EngineIndex="1" StateTo="On" StateFrom="Start"  ConeHeading="0" > 
 	<WwiseRTPC SimVar="TURB ENG N2" Units="PERCENT" Index="1" RTPCName="SIMVAR_TURB_ENG_N2"/> 
-	<WwiseRTPC SimVar="TURB ENG N1" Units="PERCENT" Index="1" RTPCName="SIMVAR_TURB_ENG_N1"/> 
+	<WwiseRTPC SimVar="TURB ENG N1" Units="PERCENT" Index="1" RTPCName="SIMVAR_TURB_ENG_N1"/>
+	<WwiseRTPC SimVar="GENERAL ENG COMBUSTION" Units="PERCENT OVER 100" Index="1" RTPCName="SIMVAR_GENERAL_ENG_COMBUSTION"/> 	
     </Sound>
 	<Sound WwiseData="true" WwiseEvent="NEOEngine_CombLBX" EngineIndex="1" StateTo="On" StateFrom="Start"  ConeHeading="180" > 
 	<WwiseRTPC SimVar="TURB ENG N2" Units="PERCENT" Index="1" RTPCName="SIMVAR_TURB_ENG_N2"/> 
 	<WwiseRTPC SimVar="TURB ENG N1" Units="PERCENT" Index="1" RTPCName="SIMVAR_TURB_ENG_N1"/> 
+	<WwiseRTPC SimVar="GENERAL ENG COMBUSTION" Units="PERCENT OVER 100" Index="2" RTPCName="SIMVAR_GENERAL_ENG_COMBUSTION"/> 
     </Sound>
 	
 	<Sound WwiseData="true" WwiseEvent="NEOEngine_CombRX" EngineIndex="2" StateTo="On" StateFrom="Start"  ConeHeading="0"  > 
 	<WwiseRTPC SimVar="TURB ENG N2" Units="PERCENT" Index="2" RTPCName="SIMVAR_TURB_ENG_N2"/> 
 	<WwiseRTPC SimVar="TURB ENG N1" Units="PERCENT" Index="2" RTPCName="SIMVAR_TURB_ENG_N1"/> 
+	<WwiseRTPC SimVar="GENERAL ENG COMBUSTION" Units="PERCENT OVER 100" Index="1" RTPCName="SIMVAR_GENERAL_ENG_COMBUSTION"/> 
     </Sound>
 	<Sound WwiseData="true" WwiseEvent="NEOEngine_CombRBX" EngineIndex="2" StateTo="On" StateFrom="Start"  ConeHeading="180"  > 
 	<WwiseRTPC SimVar="TURB ENG N2" Units="PERCENT" Index="2" RTPCName="SIMVAR_TURB_ENG_N2"/> 
 	<WwiseRTPC SimVar="TURB ENG N1" Units="PERCENT" Index="2" RTPCName="SIMVAR_TURB_ENG_N1"/> 
+	<WwiseRTPC SimVar="GENERAL ENG COMBUSTION" Units="PERCENT OVER 100" Index="2" RTPCName="SIMVAR_GENERAL_ENG_COMBUSTION"/> 
     </Sound>     
 	
 	<!-- Interior Shutdown ================================================================================================= -->    
@@ -176,6 +182,7 @@
 	<WwiseRTPC SimVar="AIRSPEED TRUE" Units="KNOTS" Index="1" RTPCName="SIMVAR_AIRSPEED_TRUE"/> 
     </Sound>
 	</EngineSoundStates>	
+	
 
 	<!--===================================================================================================== --> 
      <!--  Wind sounds  =========================================================================================== --> 
@@ -1886,7 +1893,7 @@
             </Requires>
             <WwiseRTPC LocalVar="A32NX_SOUND_ANNOUNCEMENTS_ENABLED" Units="number" Index="0" RTPCName="LOCALVAR_A32NX_ANNOUNCEMENT_TOGGLE" />
         </Sound>
-        <Sound WwiseData="true" WwiseEvent="cabin_crew_seats_landing" SimVar="GEAR TOTAL PCT EXTENDED" Units="PERCENT" Index="0" NodeName="PEDALS_LEFT" Continuous="true">
+         <Sound WwiseData="true" WwiseEvent="cabin_crew_seats_landing" SimVar="GEAR TOTAL PCT EXTENDED" Units="PERCENT" Index="0" NodeName="PEDALS_LEFT" Continuous="true">
             <Range LowerBound="0.2" />
             <Requires LocalVar="A32NX_FMGC_FLIGHT_PHASE">
                 <Range LowerBound="5" UpperBound="6" />
