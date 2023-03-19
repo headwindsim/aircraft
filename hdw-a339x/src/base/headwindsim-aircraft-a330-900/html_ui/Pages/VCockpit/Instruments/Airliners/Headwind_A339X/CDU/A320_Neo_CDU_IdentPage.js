@@ -1,7 +1,7 @@
 const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
 const monthLength = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 // Honeywell H4+ feature only
-const confirmDataBaseSwitch = false;
+const confirmDataBaseSwitch = true;
 
 function findNewMonthIndex(index) {
     if (index === 0) {
