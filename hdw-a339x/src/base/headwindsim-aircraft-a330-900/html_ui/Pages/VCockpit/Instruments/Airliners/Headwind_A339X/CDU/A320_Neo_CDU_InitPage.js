@@ -49,6 +49,25 @@ class CDUInitPage {
             }
         ).getFieldAsColumnParameters();
 
+        const [paxNoAction, paxNoText, paxNoColor] = new CDU_SingleValueField(mcdu,
+            "string",
+            mcdu.paxNumber,
+            {
+                emptyValue: "________[color]amber",
+                suffix: "[color]cyan",
+                maxLength: 3
+            },
+            (value) => {
+                mcdu.updatePaxNo(value, (result) => {
+                    if (result) {
+                        CDUInitPage.ShowPage1(mcdu);
+                    } else {
+                        mcdu.setScratchpadUserData(value);
+                    }
+                });
+            }
+        ).getFieldAsColumnParameters();
+
         //;
         const altDest = new Column(0, "----|----------");
         let costIndexText = "---";
@@ -246,6 +265,14 @@ class CDUInitPage {
 
         mcdu.onLeftInput[2] = flightNoAction;
 
+        /***
+         * [4L] PAX NBR
+         * This field allows the flight crew to enter the number of passengers. The pack
+         * flow setting is based on this number. The flight crew may modify it during the
+         * flight.
+         */
+        mcdu.onLeftInput[3] = paxNoAction;
+
         mcdu.setArrows(false, false, true, true);
 
         mcdu.setTemplate(FormatTemplate([
@@ -275,9 +302,12 @@ class CDUInitPage {
                 new Column(0, flightNoText, flightNoColor),
                 new Column(23, alignOption || "", Column.right)
             ],
-            [""],
             [
-                new Column(23, "WIND/TEMP>", Column.right)
+                new Column(0, "PAX NBR")
+            ],
+            [
+                new Column(0, paxNoText, paxNoColor),
+                new Column(23, "WIND>", Column.right)
             ],
             [
                 new Column(0, "COST INDEX"),

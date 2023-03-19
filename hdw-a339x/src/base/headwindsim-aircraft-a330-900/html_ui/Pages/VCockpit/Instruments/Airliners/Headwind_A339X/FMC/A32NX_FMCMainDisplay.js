@@ -165,6 +165,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.ilsApproachAutoTuned = undefined;
         this.altDestination = undefined;
         this.flightNumber = undefined;
+        this.paxNumber = undefined;
         this.cruiseTemperature = undefined;
         this.taxiFuelWeight = undefined;
         this.blockFuel = undefined;
@@ -534,6 +535,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.tempFpPendingAutoTune = false;
         this.altDestination = undefined;
         this.flightNumber = undefined;
+        this.paxNumber = undefined;
         this.cruiseTemperature = undefined;
         this.taxiFuelWeight = 0.5;
         this.blockFuel = undefined;
@@ -2640,6 +2642,18 @@ class FMCMainDisplay extends BaseAirliners {
                     return callback(true);
                 });
         });
+    }
+
+    //TODO: USE THIS INFORMATION FOR PACK FLOW
+    updatePaxNo(paxNo, callback = EmptyCallback.Boolean) {
+        if (paxNo.length > 3 || paxNo > 436 || isNaN(paxNo)) {
+            this.paxNumber = "";
+            this.setScratchpadMessage(NXSystemMessages.notAllowed);
+            return callback(false);
+        }
+
+        this.paxNumber = paxNo;
+        return callback(true);
     }
 
     async updateCoRoute(coRouteNum, callback = EmptyCallback.Boolean) {
