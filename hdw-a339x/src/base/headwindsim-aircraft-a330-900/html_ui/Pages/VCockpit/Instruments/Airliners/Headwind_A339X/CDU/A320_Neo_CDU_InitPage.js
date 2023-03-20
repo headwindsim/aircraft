@@ -450,6 +450,7 @@ class CDUInitPage {
 
         };
 
+        let fuelPageTitle = new Column(10, "INIT");
         const fuelPlanTopTitle = new Column(23, "", Column.amber, Column.right);
         const fuelPlanBottomTitle = new Column(23, "", Column.amber, Column.right);
         if (mcdu._zeroFuelWeightZFWCGEntered && !mcdu._blockFuelEntered) {
@@ -463,6 +464,7 @@ class CDUInitPage {
             };
         }
         if (mcdu._fuelPlanningPhase === mcdu._fuelPlanningPhases.IN_PROGRESS) {
+            fuelPageTitle = new Column(1, "INIT FUEL PLANNING");
             fuelPlanTopTitle.update("BLOCK ", Column.green);
             fuelPlanBottomTitle.update("CONFIRM", Column.green);
             mcdu.onRightInput[2] = async () => {
@@ -569,6 +571,7 @@ class CDUInitPage {
         }
 
         if (CDUInitPage.fuelPredConditionsMet(mcdu)) {
+            fuelPageTitle = new Column(1, "INIT FUEL PREDICTION");
             fuelPlanTopTitle.text = "";
             fuelPlanBottomTitle.text = "";
 
@@ -730,7 +733,7 @@ class CDUInitPage {
 
         mcdu.setTemplate(FormatTemplate([
             [
-                new Column(5, "INIT FUEL PRED")
+                fuelPageTitle
             ],
             [
                 new Column(0, "TAXI"),
