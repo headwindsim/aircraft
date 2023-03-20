@@ -49,27 +49,13 @@ class CDUInitPage {
             }
         ).getFieldAsColumnParameters();
 
-        const [paxNoAction, paxNoText, paxNoColor] = new CDU_SingleValueField(mcdu,
-            "string",
-            mcdu.paxNumber,
-            {
-                emptyValue: "________[color]amber",
-                suffix: "[color]cyan",
-                maxLength: 3
-            },
-            (value) => {
-                mcdu.updatePaxNo(value, (result) => {
-                    if (result) {
-                        CDUInitPage.ShowPage1(mcdu);
-                    } else {
-                        mcdu.setScratchpadUserData(value);
-                    }
-                });
-            }
-        ).getFieldAsColumnParameters();
-
         //;
         const altDest = new Column(0, "----|----------");
+
+        let paxNoText = "---";
+        let paxNoAction;
+        let paxNoColor = Column.white;
+
         let costIndexText = "---";
         let costIndexAction;
         let costIndexColor = Column.white;
@@ -101,6 +87,36 @@ class CDUInitPage {
                     requestButtonLabel = "";
                     requestButton = "";
                 }
+
+                /***
+                 * [4L] PAX NBR
+                 * This field allows the flight crew to enter the number of passengers. The pack
+                 * flow setting is based on this number. The flight crew may modify it during the
+                 * flight.
+                 */
+                [paxNoAction, paxNoText, paxNoColor] = new CDU_SingleValueField(mcdu,
+                    "int",
+                    mcdu.paxNumberSet ? mcdu.paxNumber : null,
+                    {
+                        clearable: true,
+                        emptyValue: "___[color]amber",
+                        suffix: "[color]cyan",
+                        minValue: 0,
+                        maxValue: 436,
+                    },
+                    (value) => {
+                        mcdu.updatePaxNo(value, (result) => {
+                            if (result) {
+                                CDUInitPage.ShowPage1(mcdu);
+                            } else {
+                                mcdu.setScratchpadUserData(value);
+                            }
+                        });
+                    }
+                ).getFieldAsColumnParameters();
+
+                mcdu.onLeftInput[3] = paxNoAction;
+
 
                 // Cost index
                 [costIndexAction, costIndexText, costIndexColor] = new CDU_SingleValueField(mcdu,
@@ -264,14 +280,6 @@ class CDUInitPage {
         };
 
         mcdu.onLeftInput[2] = flightNoAction;
-
-        /***
-         * [4L] PAX NBR
-         * This field allows the flight crew to enter the number of passengers. The pack
-         * flow setting is based on this number. The flight crew may modify it during the
-         * flight.
-         */
-        mcdu.onLeftInput[3] = paxNoAction;
 
         mcdu.setArrows(false, false, true, true);
 
