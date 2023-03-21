@@ -3,10 +3,10 @@
 # Headwind Simulations - A339X - A330-900neo
 
 [![GitHub latest release version](https://img.shields.io/github/v/release/headwind-msfs/a330-900.svg?style=for-the-badge)](https://github.com/headwind-msfs/a330-900/releases/latest)
-[![Github All Releases download count](https://img.shields.io/github/downloads/headwind-msfs/a330-900/total?style=for-the-badge)](https://github.com/headwind-msfs/a330-900/releases/latest)
-[![GitHub contributors](https://img.shields.io/github/contributors/headwind-msfs/a330-900.svg?style=for-the-badge)](https://github.com/headwind-msfs/a330-900/graphs/contributors)
+[![Github All Releases download count](https://img.shields.io/github/downloads/headwind-msfs/a330-900/total?style=for-the-badge&color=dd6b20)](https://github.com/headwind-msfs/a330-900/releases/latest)
+[![GitHub contributors](https://img.shields.io/github/contributors/headwind-msfs/a330-900.svg?style=for-the-badge&color=dd6b20)](https://github.com/headwind-msfs/a330-900/graphs/contributors)
 
-[![Discord](https://img.shields.io/discord/965000103150645258?label=Discord&style=for-the-badge)](https://discord.com/invite/headwindsim)
+[![Discord](https://img.shields.io/discord/965000103150645258?label=Discord&style=for-the-badge&color=dd6b20)](https://discord.com/invite/headwindsim)
 
 Welcome to the Headwind Simulations A339X Project! This is a open source project to create a free Airbus A330-900neo in Microsoft Flight Simulator and is based on the FlyByWire System A32NX. If you only want to use the aircraft in MSFS please download the Addon here: https://headwindsim.net/a339x.html
 
