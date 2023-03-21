@@ -48,11 +48,6 @@ cp -rva ./a32nx/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VCo
 cp -rva ./a32nx/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Registration ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Registration/A339X
 cp -rva ./a32nx/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Printer ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer/A339X
 
-# remove A32NX repo after copy in github workflow
-if [ "${GITHUB_ACTIONS}" == "true" ]; then
-  rm -rf /a32nx
-fi
-
 # copy base of A339X to out
 cp -rva ./hdw-a339x/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/headwindsim-aircraft-a330-900
 cp -rva ./hdw-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight/. ./build-a339x/out/headwindsim-aircraft-a330-900-lock-highlight
