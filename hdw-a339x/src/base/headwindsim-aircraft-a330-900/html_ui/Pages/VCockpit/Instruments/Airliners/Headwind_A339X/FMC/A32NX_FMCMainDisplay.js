@@ -217,8 +217,6 @@ class FMCMainDisplay extends BaseAirliners {
         this.arincLandingElevation = FmArinc429OutputWord.empty("LANDING_ELEVATION");
         this.arincDestinationLatitude = FmArinc429OutputWord.empty("DEST_LAT");
         this.arincDestinationLongitude = FmArinc429OutputWord.empty("DEST_LONG");
-        this.arincMDA = FmArinc429OutputWord.empty("MDA");
-        this.arincDH = FmArinc429OutputWord.empty("DH");
         this.arincThrustReductionAltitude = FmArinc429OutputWord.empty("THR_RED_ALT");
         this.arincAccelerationAltitude = FmArinc429OutputWord.empty("ACC_ALT");
         this.arincEoAccelerationAltitude = FmArinc429OutputWord.empty("EO_ACC_ALT");
@@ -234,8 +232,6 @@ class FMCMainDisplay extends BaseAirliners {
             this.arincLandingElevation,
             this.arincDestinationLatitude,
             this.arincDestinationLongitude,
-            this.arincMDA,
-            this.arincDH,
             this.arincThrustReductionAltitude,
             this.arincAccelerationAltitude,
             this.arincEoAccelerationAltitude,
@@ -582,7 +578,7 @@ class FMCMainDisplay extends BaseAirliners {
             "L:A32NX_FG_ALTITUDE_CONSTRAINT",
             "feet",
             this.constraintAlt
-        );        
+        );
         SimVar.SetSimVarValue("L:A32NX_TO_CONFIG_NORMAL", "Bool", 0);
         SimVar.SetSimVarValue("L:A32NX_CABIN_READY", "Bool", 0);
         SimVar.SetSimVarValue("L:A32NX_FM_GROSS_WEIGHT", "Number", 0);
@@ -689,7 +685,6 @@ class FMCMainDisplay extends BaseAirliners {
             this.efisSymbols.update(_deltaTime);
         }
 
-        this.updateMinimums();
         this.arincBusOutputs.forEach((word) => word.writeToSimVarIfDirty());
     }
 
@@ -1723,21 +1718,6 @@ class FMCMainDisplay extends BaseAirliners {
 
             this.arincDestinationLongitude.setBnrValue(longitude ? longitude : 0, ssm, 18, 180, -180);
         }
-    }
-
-    updateMinimums() {
-        const inRange = this.shouldTransmitMinimums();
-        const MDAssm = inRange && this.perfApprMDA ? Arinc429Word.SignStatusMatrix.NormalOperation : Arinc429Word.SignStatusMatrix.NoComputedData;
-        const DHssm = inRange && this.perfApprDH ? Arinc429Word.SignStatusMatrix.NormalOperation : Arinc429Word.SignStatusMatrix.NoComputedData
-
-        this.arincMDA(this.perfApprMDA ? this.perfApprMDA : 0, MDAssm, 17, 131072, 0);
-        this.arincDH(this.perfApprDH ? this.perfApprDH : 0, DHssm, 16, 8192, 0);
-    }
-
-    shouldTransmitMinimums() {
-        const phase = getFlightPhaseManager().phase;
-        //Only transmit when in Cruise or later phase and within 250NM of destination
-        return (phase > FmgcFlightPhase.Cruise || (phase === FmgcFlightPhase.Cruise && this.flightPlanManager.getDistanceToDestination(FlightPlans.Active) < 250));
     }
 
     getClbManagedSpeedFromCostIndex() {
