@@ -4,11 +4,11 @@
 /* eslint-disable no-console */
 import Compare from 'semver/functions/compare';
 import { CommitInfo, GitVersions, ReleaseInfo } from '@flybywiresim/api-client';
-import { PopUp } from '@shared/popup';
-import { t } from '../translation';
+import { NotificationManager } from '@shared/notification';
+import { PopUpDialog } from '@shared/popup';
 
 /**
- * Contains the a339x_build_info.json file's information in a structured way.
+ * Contains the a32nx_build_info.json file's information in a structured way.
  */
 export interface BuildInfo {
     built: string;
@@ -43,6 +43,8 @@ export enum KnowBranchNames {
  *  published GitHub version
  */
 export class AircraftVersionChecker {
+    private static notification: NotificationManager;
+
     private static versionChecked = false;
 
     private static releaseInfo: ReleaseInfo[];
@@ -60,6 +62,8 @@ export class AircraftVersionChecker {
      */
     public static async checkVersion(): Promise<boolean> {
         console.log('Checking aircraft version');
+
+        this.notification = new NotificationManager();
 
         // reset previous check data
         this.versionChecked = false;
@@ -233,20 +237,22 @@ export class AircraftVersionChecker {
      * @private
      */
     private static showVersionPopup(branchName, currentVersion, releaseVersion) {
-        const popup = new PopUp();
-        popup.showInformation(
-            t('VersionCheck.Title'),
-            `<div style="font-size: 100%; text-align: left;">
-                        ${t('VersionCheck.CurrentVersionText', [{ edition: branchName }])}<br>
+        // TODO: Make translation work - move translation from EFB to shared
+        const dialog = new PopUpDialog();
+        dialog.showInformation(
+            'New Version Available',
+            `<div style="font-size: 120%; text-align: left;">
+                        You are using the ${branchName} edition with version: <br>
                         <strong>${currentVersion}</strong><br><br>
-                                        
-                        ${t('VersionCheck.LatestVersionText', [{ edition: branchName }])}<br>
+
+                        Latest ${branchName} version is <br>
                         <strong>${releaseVersion}</strong><br/><br/>
-                        
-                        ${t('Headwind.VersionCheck.RecommendationText')}
+
+                        Please update your aircraft using the Headwind Simulations Installer.
                     </div>`,
             'normal',
-            () => {},
+            () => {
+            },
         );
     }
 

@@ -45,13 +45,13 @@ export default new TaskOfTasks("all", [
                 ),
             ]),
             new ExecTask(
-                'systems-host',
-                'npm run build-a339x:systems-host',
+                'extras-host',
+                'npm run build-a339x:extras-host',
                 [
-                    'build-a339x/src/systems/systems-host',
-                    'a32nx/fbw-common/src/systems/datalink',
-                    'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/SystemsHost'
-                ]),
+                    'build-a339x/src/systems/extras-host',
+                    'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/ExtrasHost'
+                ]
+            ),
             new ExecTask("failures",
                 "npm run build-a339x:failures",
                 [
@@ -76,6 +76,15 @@ export default new TaskOfTasks("all", [
                     "build-a339x/src/systems/simbridge-client",
                     "build-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/simbridge-client"
                 ]),
+            new ExecTask(
+                'systems-host',
+                'npm run build-a339x:systems-host',
+                [
+                    'build-a339x/src/systems/systems-host',
+                    'a32nx/fbw-common/src/systems/datalink',
+                    'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/SystemsHost'
+                ]
+            ),
             new ExecTask("tcas",
                 "npm run build-a339x:tcas",
                 [
