@@ -24,10 +24,10 @@
     "build-a339x:systems-host": "cd build-a339x/src/systems/systems-host && rollup -c",
     "build-a339x:tcas": "rollup -c build-a339x/src/systems/tcas/rollup.config.js",
 
-    "build-a339x:fadec": "cd build-a339x/src/wasm/fadec_a320 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/fadec.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/fadec.wasm",
-    "build-a339x:fbw": "cd build-a339x/src/wasm/fbw_a320 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/fbw.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/fbw.wasm",
-    "build-a339x:flypad-backend": "cd build-a339x/src/wasm/flypad-backend && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/flypad-backend.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/flypad-backend.wasm",
-    "build-a339x:systems": "cargo build -p a320_systems_wasm --target wasm32-wasi --release && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/AirPlanes/Headwind_A330neo/panel/systems.wasm /external/target/wasm32-wasi/release/a320_systems_wasm.wasm",
+    "build-a339x:fadec": "cd build-a339x/src/wasm/fadec_a320 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm",
+    "build-a339x:fbw": "cd build-a339x/src/wasm/fbw_a320 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm",
+    "build-a339x:flypad-backend": "cd build-a339x/src/wasm/flypad-backend && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm",
+    "build-a339x:systems": "cargo build -p a320_systems_wasm --target wasm32-wasi --release && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm /external/target/wasm32-wasi/release/a320_systems_wasm.wasm",
 
     "build-a339x:metadata": "node scripts/metadata.js build-a339x/out/headwindsim-aircraft-a330-900 a339x",
     "build-a339x:manifest": "node scripts/build_a339x.js",
