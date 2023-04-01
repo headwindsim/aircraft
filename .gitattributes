@@ -3,4 +3,5 @@
 *.sh text eol=lf
 # Ensure the language files update during build are not marked as changed due to different
 # line endings.
-/hdw-a339x/src/systems/instruments/src/EFB/Localization/Headwind/*.json text eol=lf
+/hdw-a339x/src/localization/flypad/*.json text eol=lf
+/hdw-a339x/src/localization/msfs/*.locPak text eol=lf

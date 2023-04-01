@@ -12,6 +12,7 @@ mkdir -p ./build-a339x/out
 
 cp -rva ./a32nx/fbw-a32nx/src/behavior/. ./build-a339x/src/behavior
 cp -rva ./a32nx/fbw-a32nx/src/fonts/. ./build-a339x/src/fonts
+cp -rva ./a32nx/fbw-a32nx/src/localization/. ./build-a339x/src/localization
 cp -rva ./a32nx/fbw-a32nx/src/systems/. ./build-a339x/src/systems
 cp -rva ./a32nx/fbw-a32nx/src/wasm/. ./build-a339x/src/wasm
 
@@ -19,6 +20,7 @@ cp -rva ./hdw-a339x/.env ./build-a339x/.env
 cp -rva ./hdw-a339x/mach.config.js ./build-a339x/mach.config.js
 
 cp -rva ./hdw-a339x/src/behavior/. ./build-a339x/src/behavior
+cp -rva ./hdw-a339x/src/localization/. ./build-a339x/src/localization
 cp -rva ./hdw-a339x/src/model/. ./build-a339x/src/model
 cp -rva ./hdw-a339x/src/systems/. ./build-a339x/src/systems
 cp -rva ./hdw-a339x/src/wasm/. ./build-a339x/src/wasm
