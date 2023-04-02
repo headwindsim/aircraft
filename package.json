@@ -33,6 +33,9 @@
     "build-a339x:metadata": "node scripts/metadata.js build-a339x/out/headwindsim-aircraft-a330-900 a339x",
     "build-a339x:manifest": "node scripts/build_a339x.js",
 
+    "build-a339x:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c .\\build-a339x\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
+    "watch-a339x:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\build-a339x\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
+
     "build-a339x:all": "npm run build-a339x:copy-base-files && npm run build-a339x:efb-translation && npm run build-a339x:model && npm run build-a339x:behavior && npm run build-a339x:atsu-common && npm run build-a339x:atsu-fms-client && npm run build-a339x:systems-host && npm run build-a339x:failures && npm run build-a339x:fmgc && npm run build-a339x:sentry-client && npm run build-a339x:simbridge-client && npm run build-a339x:tcas && npm run build-a339x:pfd && npm run build-a339x:systems && npm run build-a339x:fadec && npm run build-a339x:fbw && npm run build-a339x:flypad-backend && npm run build-a339x:metadata && npm run build-a339x:manifest",
 
     "=======deprecated=========": "===========================",
@@ -42,8 +45,6 @@
 
     "prettier": "prettier --write **/*.json **/*.yml build-a339x/src/systems/instruments/**/*.css",
     "serve:efb": "cd build-a339x/src/systems/instruments/src/EFB/ && vite --port 9696",
-    "build:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c .\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
-    "watch:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
     "build:instruments": "rollup --max-old-space-size=8192 -c src/systems/instruments/buildSrc/simulatorBuild.mjs",
     "watch:instruments": "rollup --max-old-space-size=8192 -wc src/systems/instruments/buildSrc/simulatorBuild.mjs",
 
