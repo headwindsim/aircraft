@@ -1,4 +1,5 @@
-@import "../MsfsAvionicsCommon/definitions";
+@import "../Common/definitions";
+@import "../Common/gauges";
 
 @mixin GenericPulsingFill($color) {
   @keyframes pulsing {
@@ -28,7 +29,7 @@ animation: pulsingS 1s step-end infinite;
 @font-face {
   font-family: "Ecam";
   //noinspection CssUnknownTarget
-  src: url("/Fonts/A339X/ECAMFontRegular.ttf") format("truetype");
+  src: url("/A339X_FONTS/ECAMFontRegular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }

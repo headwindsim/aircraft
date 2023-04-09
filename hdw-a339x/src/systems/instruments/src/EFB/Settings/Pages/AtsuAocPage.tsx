@@ -5,7 +5,7 @@ import { usePersistentProperty } from '@instruments/common/persistence';
 
 import { Hoppie } from '@flybywiresim/api-client';
 import { toast } from 'react-toastify';
-import { HoppieConnector } from '@datalink/router';
+import { HoppieConnector } from '@atsu/com/webinterfaces/HoppieConnector';
 import { t } from '../../translation';
 import { useModals, PromptModal } from '../../UtilComponents/Modals/Modals';
 import { Toggle } from '../../UtilComponents/Form/Toggle';
@@ -207,7 +207,6 @@ export const AtsuAocPage = () => {
                 <SelectGroup>
                     {atisSourceButtons.map((button) => (
                         <SelectItem
-                            key={button.name}
                             onSelect={() => handleWeatherSource(button.setting, 'ATIS')}
                             selected={atisSource === button.setting}
                         >
@@ -221,7 +220,6 @@ export const AtsuAocPage = () => {
                 <SelectGroup>
                     {metarSourceButtons.map((button) => (
                         <SelectItem
-                            key={button.name}
                             onSelect={() => handleWeatherSource(button.setting, 'METAR')}
                             selected={metarSource === button.setting}
                         >
@@ -235,7 +233,6 @@ export const AtsuAocPage = () => {
                 <SelectGroup>
                     {tafSourceButtons.map((button) => (
                         <SelectItem
-                            key={button.name}
                             onSelect={() => handleWeatherSource(button.setting, 'TAF')}
                             selected={tafSource === button.setting}
                         >

@@ -55,14 +55,14 @@
 
 @font-face {
   font-family: "Poppins-SemiBold";
-  src: url("/Fonts/A339X/Poppins-SemiBold.ttf") format("truetype");
+  src: url("/A339X_FONTS/Poppins-SemiBold.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Digital";
-  src: url("/Fonts/A339X/AirbusFCU.ttf") format("truetype");
+  src: url("/A339X_FONTS/AirbusFCU.ttf") format("truetype");
   font-weight: 900;
   font-style: normal;
 }

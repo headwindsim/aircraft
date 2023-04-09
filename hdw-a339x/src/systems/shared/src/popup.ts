@@ -1,3 +1,5 @@
+/// <reference path="../../../typings/fs-base-ui/html_ui/JS/common.d.ts" />
+
 /**
  * NotificationParams container for popups to package popup metadata
  */
@@ -24,7 +26,7 @@ export type NotificationParams = {
  * popup.showPopUp("CRITICAL SETTING CHANGED", "Your message here", "small", yesFunc, noFunc);
  * popup.showInformation("CRITICAL MESSAGE", "Your message here", "small", yesFunc);
  */
-export class PopUpDialog {
+export class PopUp {
     params: NotificationParams;
 
     popupListener: any;

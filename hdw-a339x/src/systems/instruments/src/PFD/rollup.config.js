@@ -15,11 +15,11 @@ console.log('Root: ', root);
 export default {
     input: join(__dirname, 'instrument.tsx'),
     output: {
-        file: join(root, 'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/PFD/instrument.js'),
+        file: join(root, 'hdw-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/PFD/instrument.js'),
         format: 'es',
     },
     plugins: [
-        scss({ output: join(root, 'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/PFD/pfd.css') }),
+        scss({ output: join(root, 'hdw-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/PFD/pfd.css') }),
         resolve(),
         ts(),
     ],

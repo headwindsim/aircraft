@@ -282,12 +282,5 @@
                 </UPDATE_CODE>
             </UseTemplate>
         </Component>
-
-		<Component ID="Satcom">
-            <UseTemplate Name="FBW_Satcom">
-                <NODE_ID>HoneywellJetWave</NODE_ID>
-                <SAT_ENABLE>(L:A32NX_SATCOM_ENABLED, bool)</SAT_ENABLE>
-            </UseTemplate>
-        </Component>
 	</Behaviors>
 </ModelInfo>

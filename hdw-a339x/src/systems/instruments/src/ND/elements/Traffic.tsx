@@ -5,14 +5,14 @@ import { Layer } from '@instruments/common/utils';
 import { TCAS_CONST as TCAS, TaRaIntrusion, TaRaIndex } from '@tcas/lib/TcasConstants';
 import { Coordinates } from '@fmgc/flightplanning/data/geo';
 import { MathUtils } from '@shared/MathUtils';
-import { EfisNdMode, NdTraffic, EfisNdRangeValue, rangeSettings } from '@shared/NavigationDisplay';
+import { Mode, NdTraffic } from '@shared/NavigationDisplay';
 import { usePersistentProperty } from '@instruments/common/persistence';
 import { useFlowSyncEvent } from '@instruments/common/hooks';
 import { MapParameters } from '../utils/MapParameters';
 
 export type TcasProps = {
     mapParams: MapParameters,
-    mode: EfisNdMode.ARC | EfisNdMode.ROSE_NAV | EfisNdMode.ROSE_ILS | EfisNdMode.ROSE_VOR,
+    mode: Mode.ARC | Mode.ROSE_NAV | Mode.ROSE_ILS | Mode.ROSE_VOR,
 }
 
 type TcasMask = [number, number][];
@@ -35,11 +35,9 @@ const TCAS_MASK_ROSE: TcasMask = [
     [-210, 383], [-210, 300], [-264, 241], [-340, 241], [-340, -227],
 ];
 
-const TRAFFIC_SCALE: number[] = [64, 56, 48, 40, 40, 40];
-
 const useAirTraffic = (mapParams, mode) : NdTraffic[] => {
     const [airTraffic, setAirTraffic] = useState<NdTraffic[]>([]);
-    const tcasMask = (mode === EfisNdMode.ARC ? TCAS_MASK_ARC : TCAS_MASK_ROSE);
+    const tcasMask = (mode === Mode.ARC ? TCAS_MASK_ARC : TCAS_MASK_ROSE);
     useFlowSyncEvent('A32NX_TCAS_TRAFFIC', (_topic, data) => {
         if (data) {
             setAirTraffic(trafficToDisplay(data, mapParams, tcasMask));
@@ -77,10 +75,7 @@ export const Traffic: FC<TcasProps> = ({ mapParams, mode }) => {
     const [debug] = usePersistentProperty('TCAS_DEBUG', '0');
     const [sensitivity] = useSimVar('L:A32NX_TCAS_SENSITIVITY', 'number', 200);
     const x: number = 361.5;
-    const y: number = (mode === EfisNdMode.ARC) ? 606.5 : 368;
-    const rangeIndex = rangeSettings.indexOf(mapParams.nmRadius as EfisNdRangeValue);
-    const trafficScale = TRAFFIC_SCALE[rangeIndex];
-    const ownHeading = Math.round(SimVar.GetSimVarValue('PLANE HEADING DEGREES MAGNETIC', 'degree'));
+    const y: number = (mode === Mode.ARC) ? 606.5 : 368;
 
     if (debug !== '0') {
         const dmodRa: number = mapParams.nmToPx * (TCAS.DMOD[sensitivity || 1][TaRaIndex.RA]);
@@ -189,9 +184,6 @@ export const Traffic: FC<TcasProps> = ({ mapParams, mode }) => {
                         relativeAlt={tf.relativeAlt}
                         vertSpeed={tf.vertSpeed}
                         intrusionLevel={tf.intrusionLevel}
-                        trafficHeading={tf.heading}
-                        ownHeading={ownHeading}
-                        trafficScale={trafficScale}
                     />
                 ) : null
             ))}
@@ -201,18 +193,14 @@ export const Traffic: FC<TcasProps> = ({ mapParams, mode }) => {
 };
 
 type TrafficProp = {
-    x: number | undefined,
-    y: number | undefined,
-    relativeAlt: number | undefined,
-    vertSpeed: number | undefined,
-    intrusionLevel: TaRaIntrusion | undefined,
-    trafficHeading: number | undefined,
-    ownHeading: number | undefined,
-    trafficScale: number | undefined
+    x: number,
+    y: number,
+    relativeAlt: number,
+    vertSpeed: number,
+    intrusionLevel: TaRaIntrusion,
 }
 
-const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, intrusionLevel, trafficHeading, ownHeading , trafficScale}) => {
-    if (relativeAlt === undefined || vertSpeed === undefined || x === undefined || y === undefined) return <></>;
+const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, intrusionLevel }) => {
     let color = '#ffffff';
     switch (intrusionLevel) {
     case TaRaIntrusion.TA:
@@ -226,38 +214,37 @@ const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, 
     }
 
     // Place relative altitude above/below
-    const relAltY: number = (relativeAlt > 0) ? -10 : (18 + trafficScale);
-    const trafficRotation = 360 - ((ownHeading - trafficHeading) % 360);
+    const relAltY: number = (relativeAlt > 0) ? 7 : 43.5;
 
     return (
         <>
             <Layer x={x} y={y}>
+                {intrusionLevel === TaRaIntrusion.TRAFFIC && <image x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_NORMAL.svg" />}
+                {intrusionLevel === TaRaIntrusion.PROXIMITY && <image x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_PROXIMITY.svg" />}
+                {intrusionLevel === TaRaIntrusion.TA && <image x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_TA.svg" />}
+                {intrusionLevel === TaRaIntrusion.RA && <image x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_RA.svg" />}
                 <g>
-                    {intrusionLevel === TaRaIntrusion.TRAFFIC && <image width={trafficScale} height={trafficScale} xlinkHref="/Images/A339X/ND/TRAFFIC_NORMAL.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
-                    {intrusionLevel === TaRaIntrusion.PROXIMITY && <image width={trafficScale} height={trafficScale} xlinkHref="/Images/A339X/ND/TRAFFIC_PROXIMITY.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
-                    {intrusionLevel === TaRaIntrusion.TA && <image width={trafficScale} height={trafficScale} xlinkHref="/Images/A339X/ND/TRAFFIC_TA.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
-                    {intrusionLevel === TaRaIntrusion.RA && <image width={trafficScale} height={trafficScale} xlinkHref="/Images/A339X/ND/TRAFFIC_RA.svg" transform={`rotate(${trafficRotation} ${trafficScale / 2} ${trafficScale / 2})`} />}
-                </g>
-
-                <g transform={`translate(12 ${relAltY})`}>
-                    <text fill={color} height={1.25} paintOrder="stroke" stroke="#040405" strokeWidth={1} textAnchor="end" xmlSpace="preserve">
-                        <tspan fill={color} fontSize="20px" paintOrder="stroke" stroke="#040405" strokeWidth={1} textAnchor="middle">
+                    <text x={30} y={relAltY} fill={color} height={1.25} paintOrder="stroke" stroke="#040405" strokeWidth={1} textAnchor="end" xmlSpace="preserve">
+                        <tspan x={17.25} y={relAltY} fill={color} fontSize="20px" paintOrder="stroke" stroke="#040405" strokeWidth={1} textAnchor="middle">
                             {`${relativeAlt > 0 ? '+' : '-'}${Math.abs(relativeAlt) < 10 ? '0' : ''}${Math.abs(relativeAlt)}`}
                         </tspan>
                     </text>
-
-                    <g transform="translate(14,-19)" >
                     {(vertSpeed <= -500) && (
                         <>
-                            <svg width="24" height="24" fill={color} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M469.333 128l85.333 0 0 512-85.333 0 0-512z"  /><path d="M725.333 640l-426.667 0 213.333 256z"  /></svg>
+                            <path className="shadow" fill="none" strokeWidth={3} d="M35,21V9.7" />
+                            <path className="shadow" stroke="none" fillRule="evenodd" d="M31.3,18.5l3.3,7.1h0.9l3.3-7.1H31.3z" />
+                            <path fill="none" stroke={color} strokeWidth={1.6} d="M35,21V9.7" />
+                            <path fill={color} stroke="none" fillRule="evenodd" d="M31.3,18.5l3.3,7.1h0.9l3.3-7.1H31.3z" />
                         </>
                     )}
                     {(vertSpeed >= 500) && (
                         <>
-                            <svg width="24" height="24" fill={color} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M512 128l-213.333 256 170.667 0 0 512 85.333 0 0-512 170.667 0z"  /></svg>
+                            <path className="shadow" fill="none" strokeWidth={3} d="M35,14.2v11.3" />
+                            <path className="shadow" stroke="none" fillRule="evenodd" d="M38.7,16.7l-3.3-7.1h-0.9l-3.3,7.1H38.7z" />
+                            <path fill="none" stroke={color} strokeWidth={1.6} d="M35,14.2v11.3" />
+                            <path fill={color} stroke="none" fillRule="evenodd" d="M38.7,16.7l-3.3-7.1h-0.9l-3.3,7.1H38.7z" />
                         </>
                     )}
-                    </g>
                 </g>
             </Layer>
         </>
@@ -265,11 +252,11 @@ const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, 
 });
 
 type TrafficPropDebug = {
-    x: number | undefined,
-    y: number | undefined,
-    relativeAlt: number | undefined,
-    vertSpeed: number | undefined,
-    intrusionLevel: TaRaIntrusion | undefined,
+    x: number,
+    y: number,
+    relativeAlt: number,
+    vertSpeed: number,
+    intrusionLevel: TaRaIntrusion,
     ID: string,
     hidden: boolean | undefined,
     seen: number | undefined,
@@ -281,7 +268,6 @@ type TrafficPropDebug = {
 }
 
 const TrafficIndicatorDebug: FC<TrafficPropDebug> = memo(({ x, y, relativeAlt, vertSpeed, intrusionLevel, ID, hidden, seen, raTau, taTau, vTau, closureRate, closureAccel }) => {
-    if (relativeAlt === undefined || vertSpeed === undefined || x === undefined || y === undefined) return <></>;
     let color = '#ffffff';
     switch (intrusionLevel) {
     case TaRaIntrusion.TA:
@@ -302,10 +288,10 @@ const TrafficIndicatorDebug: FC<TrafficPropDebug> = memo(({ x, y, relativeAlt, v
     return (
         <>
             <Layer x={x} y={y}>
-                {intrusionLevel === TaRaIntrusion.TRAFFIC && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/Images/A339X/ND/TRAFFIC_NORMAL.svg" />}
-                {intrusionLevel === TaRaIntrusion.PROXIMITY && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/Images/A339X/ND/TRAFFIC_PROXIMITY.svg" />}
-                {intrusionLevel === TaRaIntrusion.TA && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/Images/A339X/ND/TRAFFIC_TA.svg" />}
-                {intrusionLevel === TaRaIntrusion.RA && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/Images/A339X/ND/TRAFFIC_RA.svg" />}
+                {intrusionLevel === TaRaIntrusion.TRAFFIC && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_NORMAL.svg" />}
+                {intrusionLevel === TaRaIntrusion.PROXIMITY && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_PROXIMITY.svg" />}
+                {intrusionLevel === TaRaIntrusion.TA && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_TA.svg" />}
+                {intrusionLevel === TaRaIntrusion.RA && <image opacity={hidden ? 0.125 : 1.0} x={0} y={0} width={45} height={32} xlinkHref="/A339X_Images/ND/TRAFFIC_RA.svg" />}
                 <g>
                     <text x={30} y={relAltY} fillOpacity={hidden ? 0.125 : 1} fill={color} height={1.25} strokeWidth={0.3} textAnchor="end" xmlSpace="preserve">
                         <tspan x={17.25} y={relAltY} fill={color} fontSize="20px" strokeWidth={0.3} textAnchor="middle">

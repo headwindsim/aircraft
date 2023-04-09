@@ -21,12 +21,9 @@ dependencies = [
 name = "a320_systems"
 version = "0.1.0"
 dependencies = [
- "enum-map",
- "lazy_static",
  "nalgebra",
  "ntest",
  "rand",
- "rand_pcg",
  "rstest",
  "systems",
  "uom",
@@ -210,26 +207,6 @@ name = "either"
 version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90e5c1c8368803113bf0c9584fc495a58b86dc8a29edbf8fe877d21d9507e797"
-
-[[package]]
-name = "enum-map"
-version = "2.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "50c25992259941eb7e57b936157961b217a4fc8597829ddef0596d6c3cd86e1a"
-dependencies = [
- "enum-map-derive",
-]
-
-[[package]]
-name = "enum-map-derive"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2a4da76b3b6116d758c7ba93f7ec6a35d2e2cf24feda76c6e38a375f4d5c59f2"
-dependencies = [
- "proc-macro2",
- "quote",
- "syn",
-]
 
 [[package]]
 name = "enum_dispatch"
@@ -500,7 +477,7 @@ dependencies = [
 [[package]]
 name = "msfs"
 version = "0.1.0"
-source = "git+https://github.com/flybywiresim/msfs-rs?branch=main#53ba9a5539d11401eb6c43d3c69f24311a9f321d"
+source = "git+https://github.com/flybywiresim/msfs-rs?branch=main#f5ebb3d75f5a64fcd4e542129584ca0ee1ef0ebe"
 dependencies = [
  "bindgen",
  "cc",
@@ -511,9 +488,10 @@ dependencies = [
 
 [[package]]
 name = "msfs_derive"
-version = "0.2.0"
-source = "git+https://github.com/flybywiresim/msfs-rs?branch=main#53ba9a5539d11401eb6c43d3c69f24311a9f321d"
+version = "0.1.0"
+source = "git+https://github.com/flybywiresim/msfs-rs?branch=main#f5ebb3d75f5a64fcd4e542129584ca0ee1ef0ebe"
 dependencies = [
+ "msfs_sdk",
  "quote",
  "syn",
 ]
@@ -521,7 +499,7 @@ dependencies = [
 [[package]]
 name = "msfs_sdk"
 version = "0.1.0"
-source = "git+https://github.com/flybywiresim/msfs-rs?branch=main#53ba9a5539d11401eb6c43d3c69f24311a9f321d"
+source = "git+https://github.com/flybywiresim/msfs-rs?branch=main#f5ebb3d75f5a64fcd4e542129584ca0ee1ef0ebe"
 
 [[package]]
 name = "nalgebra"
@@ -777,15 +755,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rand_pcg"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "59cad018caf63deb318e5a4586d99a24424a364f40f1e5778c29aca23f4fc73e"
-dependencies = [
- "rand_core",
-]
-
-[[package]]
 name = "rawpointer"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -961,7 +930,6 @@ dependencies = [
  "num-traits",
  "rand",
  "rand_distr",
- "rand_pcg",
  "rstest",
  "uom",
 ]

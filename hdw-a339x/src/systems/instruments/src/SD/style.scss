@@ -1,9 +1,7 @@
-@import "../Common/definitions";
-
 @font-face {
   font-family: "Ecam";
   //noinspection CssUnknownTarget
-  src: url("/Fonts/A339X/ECAMFontRegular.ttf") format("truetype");
+  src: url("/A339X_FONTS/ECAMFontRegular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
@@ -12,8 +10,6 @@
   visibility: visible !important;
 
   font-family: "Ecam", monospace !important;
-
-  background: $display-background;
 }
 
 :root {
@@ -36,6 +32,6 @@
   width: 100%;
   height: 82%;
   z-index: 100;
-  background-image: url(/Images/A339X/SD/DoorVideoResources/empty.png);
+  background-image: url(/Pages/VCockpit/Instruments/A339X/SD/DoorVideoResources/empty.png);
   background-size: cover;
 }

@@ -17,17 +17,10 @@
 
         <!-- EFB -->
 
-        <!-- Hide the original EFB. -->
-        <Component ID="EFB" Node="EFB">
-            <UseTemplate Name="ASOBO_GT_Visibility_Code">
-                <VISIBILITY_CODE>0</VISIBILITY_CODE>
-            </UseTemplate>
-        </Component>
-
         <Component ID="EFB_L">
-            <Component ID="SCREEN_EFB_L" Node="SCREEN_EFB_L">
+            <Component ID="SCREEN_EFB_L" Node="SCREEN_EFB">
                 <DefaultTemplateParameters>
-                    <NODE_ID>SCREEN_EFB_L</NODE_ID>
+                    <NODE_ID>SCREEN_EFB</NODE_ID>
                 </DefaultTemplateParameters>
 
                 <UseTemplate Name="ASOBO_GT_Material_Emissive_Code">
@@ -583,7 +576,7 @@
                     <PART_ID>SCREEN_PFD1</PART_ID>
                     <CAMERA_TITLE>PFD</CAMERA_TITLE>
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
-                    <EMISSIVE_CODE>12</EMISSIVE_CODE>
+                    <EMISSIVE_CODE>1</EMISSIVE_CODE>
                 </UseTemplate>
 
                 <!-- CPT EFIS GPWS G/S -->
@@ -694,7 +687,7 @@
                     <PART_ID>SCREEN_MFD1</PART_ID>
                     <CAMERA_TITLE>MFD</CAMERA_TITLE>
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
-                    <EMISSIVE_CODE>12</EMISSIVE_CODE>
+                    <EMISSIVE_CODE>1</EMISSIVE_CODE>
                 </UseTemplate>
 
                 <!-- DCDU -->
@@ -703,7 +696,7 @@
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
                     <EMISSIVE_CODE>
                         (L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool) if{
-                            12 (L:#PLANE_NAME#_PANEL_DCDU_L_BRIGHTNESS, percent over 100) *
+                            1 (L:#PLANE_NAME#_PANEL_DCDU_L_BRIGHTNESS, percent over 100) *
                         } els{
                             0
                         }
@@ -742,7 +735,7 @@
                     <POTENTIOMETER>90</POTENTIOMETER>
                     <PART_ID>SCREEN_PFD2</PART_ID>
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
-                    <EMISSIVE_CODE>12</EMISSIVE_CODE>
+                    <EMISSIVE_CODE>1</EMISSIVE_CODE>
                 </UseTemplate>
 
                 <!-- F/O ND BRIGHTNESS -->
@@ -760,7 +753,7 @@
                     <POTENTIOMETER>91</POTENTIOMETER>
                     <PART_ID>SCREEN_MFD2</PART_ID>
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
-                    <EMISSIVE_CODE>12</EMISSIVE_CODE>
+                    <EMISSIVE_CODE>1</EMISSIVE_CODE>
                 </UseTemplate>
 
                 <!-- F/O ND WX BRIGHTNESS -->
@@ -778,7 +771,7 @@
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
                     <EMISSIVE_CODE>
                         (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) if{
-                            12 (L:#PLANE_NAME#_PANEL_DCDU_R_BRIGHTNESS, percent over 100) *
+                            1 (L:#PLANE_NAME#_PANEL_DCDU_R_BRIGHTNESS, percent over 100) *
                         } els{
                             0
                         }
@@ -901,7 +894,7 @@
                 <UseTemplate Name="ASOBO_GT_Component_Emissive_Gauge">
                     <NODE_ID>DYN_SCREEN</NODE_ID>
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
-                    <EMISSIVE_CODE>12</EMISSIVE_CODE>
+                    <EMISSIVE_CODE>1</EMISSIVE_CODE>
                 </UseTemplate>
                 <CameraTitle>PA</CameraTitle>
 
@@ -974,7 +967,7 @@
                     <PART_ID>SCREEN_EICAS1</PART_ID>
                     <CAMERA_TITLE>ECAM</CAMERA_TITLE>
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
-                    <EMISSIVE_CODE>12</EMISSIVE_CODE>
+                    <EMISSIVE_CODE>1</EMISSIVE_CODE>
                 </UseTemplate>
 
                 <!-- LOWER ECAM SCREEN -->
@@ -991,7 +984,7 @@
                     <PART_ID>SCREEN_EICAS2</PART_ID>
                     <CAMERA_TITLE>ECAM</CAMERA_TITLE>
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
-                    <EMISSIVE_CODE>12</EMISSIVE_CODE>
+                    <EMISSIVE_CODE>1</EMISSIVE_CODE>
                 </UseTemplate>
             </Component>
 
@@ -1750,10 +1743,10 @@
                     </UseTemplate>
                 </Component>
 
-                <!-- Hide the original (non-separated) dome lights. (Re-enabled for A339 since dome light still sigular) -->
+                <!-- Hide the original (non-separated) dome lights. -->
                 <Component ID="Overhead_Lights" Node="LIGHTS_Overhead">
                     <UseTemplate Name="ASOBO_GT_Visibility_Code">
-                        <VISIBILITY_CODE>1</VISIBILITY_CODE>
+                        <VISIBILITY_CODE>0</VISIBILITY_CODE>
                     </UseTemplate>
                 </Component>
 
@@ -1766,7 +1759,7 @@
 
                 <!-- CPT DOME LT -->
                 <UseTemplate Name="ASOBO_LIGHTING_Cabin_Emissive_Template">
-                    <NODE_ID>LIGHTS_Overhead</NODE_ID>
+                    <NODE_ID>LIGHTS_Overhead_L</NODE_ID>
                     <POTENTIOMETER>7</POTENTIOMETER>
                     <FAILURE>1</FAILURE>
                     <SIMVAR_INDEX>1</SIMVAR_INDEX>
@@ -1774,16 +1767,14 @@
                 </UseTemplate>
 
                 <!-- F/O DOME LT -->
-                <!--
                 <UseTemplate Name="ASOBO_LIGHTING_Cabin_Emissive_Template">
-                    <NODE_ID>LIGHTS_Overhead</NODE_ID>
+                    <NODE_ID>LIGHTS_Overhead_R</NODE_ID>
                     <POTENTIOMETER>7</POTENTIOMETER>
                     <FAILURE>1</FAILURE>
                     <SIMVAR_INDEX>2</SIMVAR_INDEX>
                     <NO_SIMVAR_LIGHT/>
                     <EMISSIVE_CODE>(L:A32NX_ELEC_DC_ESS_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
                 </UseTemplate>
-                -->
             </Component>
 
             <Component ID="Overhead_Fuel">
@@ -1835,13 +1826,13 @@
                     <ON_TOOLTIP>COCKPIT.TOOLTIPS.ENG_1_L_TK_PUMP2_ON</ON_TOOLTIP>
                 </UseTemplate>
 
-                <!-- Centre Tank Transfer (Jet Pump) Valve L -->
+                <!-- FUEL PUMP 1 -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
-                    <ANIM_TEMPLATE>FBW_Airbus_Fuel_Jet_Pump</ANIM_TEMPLATE>
+                    <ANIM_TEMPLATE>FBW_Airbus_Fuel_Pump</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_OVHD_FUEL_PUMP1</NODE_ID>
                     <PART_ID>OVHD_FUEL_PUMP1</PART_ID>
-                    <ID>9</ID>
+                    <ID>1</ID>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                     <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                     <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
@@ -1850,13 +1841,13 @@
                     <ON_TOOLTIP>COCKPIT.TOOLTIPS.CTR_TK_PUMP_1_ON</ON_TOOLTIP>
                 </UseTemplate>
 
-                <!-- Centre Tank Transfer (Jet Pump) Valve R -->
+                <!-- FUEL PUMP 2 -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
-                    <ANIM_TEMPLATE>FBW_Airbus_Fuel_Jet_Pump</ANIM_TEMPLATE>
+                    <ANIM_TEMPLATE>FBW_Airbus_Fuel_Pump</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_OVHD_FUEL_PUMP2</NODE_ID>
                     <PART_ID>OVHD_FUEL_PUMP2</PART_ID>
-                    <ID>10</ID>
+                    <ID>4</ID>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                     <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                     <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
@@ -1900,39 +1891,16 @@
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_Push_Toggle</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_OVHD_FUEL_MODESEL</NODE_ID>
-                    <PART_ID>OVHD_FUEL_MODESEL</PART_ID>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                     <SEQ1_CODE>
-                        (A:FUELSYSTEM TANK WEIGHT:1, pound) 0 &gt;
-                        (A:FUELSYSTEM TANK WEIGHT:2, pound) 5556 &lt;
-                        (A:FUELSYSTEM TANK WEIGHT:3, pound) 5556 &lt; or and
+                        (A:FUELSYSTEM TANK WEIGHT:1, pound) 550 &gt;
+                        (A:FUELSYSTEM TANK WEIGHT:2, pound) 11000 &lt;
+                        (A:FUELSYSTEM TANK WEIGHT:3, pound) 11000 &lt; or and
                     </SEQ1_CODE>
-                    <SEQ2_CODE>(L:A32NX_OVHD_FUEL_MODESEL_MANUAL)</SEQ2_CODE>
+                    <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                     <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
                     <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
-                    <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
-                    <LEFT_SINGLE_CODE>
-                        (L:A32NX_OVHD_FUEL_MODESEL_MANUAL) ! s0 (&gt;L:A32NX_OVHD_FUEL_MODESEL_MANUAL)
-                        1 l0 + sp0
-                        l0 4 (&gt;K:2:FUELSYSTEM_JUNCTION_SET)
-                        l0 5 (&gt;K:2:FUELSYSTEM_JUNCTION_SET)
-                    </LEFT_SINGLE_CODE>
-                    <OFF_TOOLTIP>A32NX.COCKPIT.TOOLTIPS.OVHD_FUEL_MODESEL_OFF</OFF_TOOLTIP>
-                    <ON_TOOLTIP>A32NX.COCKPIT.TOOLTIPS.OVHD_FUEL_MODESEL_ON</ON_TOOLTIP>
-                </UseTemplate>
-
-                <!-- run the MSFS jet "pump" depending on which valves are open -->
-                <UseTemplate Name="FBW_JET_PUMP">
-                    <PUMP_INDEX>1</PUMP_INDEX>
-                    <JUNCTION_INDEX>4</JUNCTION_INDEX>
-                    <AUTO_VALVE_INDEX>11</AUTO_VALVE_INDEX>
-                    <DISABLE_VALVE_INDEX>9</DISABLE_VALVE_INDEX>
-                </UseTemplate>
-                <UseTemplate Name="FBW_JET_PUMP">
-                    <PUMP_INDEX>4</PUMP_INDEX>
-                    <JUNCTION_INDEX>5</JUNCTION_INDEX>
-                    <AUTO_VALVE_INDEX>12</AUTO_VALVE_INDEX>
-                    <DISABLE_VALVE_INDEX>10</DISABLE_VALVE_INDEX>
+                    <DUMMY_BUTTON/>
                 </UseTemplate>
             </Component>
 
@@ -2327,14 +2295,14 @@
                         <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                         <ANIM_TEMPLATE>FBW_Push_Toggle</ANIM_TEMPLATE>
                         <NODE_ID>PUSH_OVHD_AIRCOND_HOTAIR</NODE_ID>
-                        <TOGGLE_SIMVAR>L:A32NX_OVHD_COND_HOT_AIR_PB_IS_ON</TOGGLE_SIMVAR>
+                        <TOGGLE_SIMVAR>L:A32NX_AIRCOND_HOTAIR_TOGGLE</TOGGLE_SIMVAR>
                         <SEQ_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED, Bool) (L:A32NX_ELEC_AC_STAT_INV_BUS_IS_POWERED, Bool) or</SEQ_POWERED>
-                        <SEQ1_CODE>(L:A32NX_OVHD_COND_HOT_AIR_PB_HAS_FAULT, Bool)</SEQ1_CODE>
-                        <SEQ2_CODE>(L:A32NX_OVHD_COND_HOT_AIR_PB_IS_ON, Bool) !</SEQ2_CODE>
+                        <SEQ1_CODE>(L:A32NX_AIRCOND_HOTAIR_FAULT, Bool)</SEQ1_CODE>
+                        <SEQ2_CODE>(L:A32NX_AIRCOND_HOTAIR_TOGGLE, Bool) !</SEQ2_CODE>
                         <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                         <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
                         <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
-                        <TOOLTIPID>%((L:A32NX_OVHD_COND_HOT_AIR_PB_IS_ON, Bool))%{if}Turn OFF hot air%{else}Turn ON hot air%{end}</TOOLTIPID>
+                        <TOOLTIPID>%((L:A32NX_AIRCOND_HOTAIR_TOGGLE, Bool))%{if}Turn OFF hot air%{else}Turn ON hot air%{end}</TOOLTIPID>
                     </UseTemplate>
 
                     <!-- AIR COND RAM AIR -->
@@ -2585,14 +2553,14 @@
                             <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                             <ANIM_TEMPLATE>FBW_Push_Toggle</ANIM_TEMPLATE>
                             <NODE_ID>PUSH_OVHD_VENTILATION_CABFANS</NODE_ID>
-                            <TOGGLE_SIMVAR>L:A32NX_OVHD_VENT_CAB_FANS_PB_IS_ON</TOGGLE_SIMVAR>
+                            <TOGGLE_SIMVAR>L:A32NX_VENTILATION_CABFANS_TOGGLE</TOGGLE_SIMVAR>
                             <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
-                            <SEQ2_CODE>(L:A32NX_OVHD_VENT_CAB_FANS_PB_IS_ON, Bool) !</SEQ2_CODE>
+                            <SEQ2_CODE>(L:A32NX_VENTILATION_CABFANS_TOGGLE, Bool) !</SEQ2_CODE>
                             <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
                             <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                             <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
                             <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
-                            <TOOLTIPID>%((L:A32NX_OVHD_VENT_CAB_FANS_PB_IS_ON, Bool))%{if}Turn OFF cabin fans%{else}Turn ON cabin fans%{end}</TOOLTIPID>
+                            <TOOLTIPID>%((L:A32NX_VENTILATION_CABFANS_TOGGLE, Bool))%{if}Turn OFF cabin fans%{else}Turn ON cabin fans%{end}</TOOLTIPID>
                         </UseTemplate>
                     </Component>
 
@@ -2661,7 +2629,7 @@
                     <Component ID="Overhead_Audio_Panel">
                         <OverrideTemplateParameters>
                             <POTENTIOMETER>1</POTENTIOMETER>
-                            <EMISSIVE_CODE>(L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and (L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool) and</EMISSIVE_CODE>
+                            <EMISSIVE_CODE>(L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool) and</EMISSIVE_CODE>
                             <POTENTIOMETER_SEQ2>86</POTENTIOMETER_SEQ2>
                             <SEQ2_EMISSIVE_CODE>1</SEQ2_EMISSIVE_CODE>
                             <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
@@ -4500,7 +4468,7 @@
                     <ANIM_DURATION>1</ANIM_DURATION>
                     <ANIM_CODE>
                         (L:A32NX_ELEC_DC_ESS_BUS_IS_POWERED, Bool) if{
-                            (L:A32NX_HYD_BRAKE_ALTN_ACC_PRESS, number) 3700 /
+                            (L:A32NX_HYD_BRAKE_ALTN_ACC_PRESS, number) 4000 /
                         } els{
                             0
                         }
@@ -4919,6 +4887,9 @@
             </UseTemplate>
             <UseTemplate Name="ASOBO_GT_Interaction_Tooltip">
                 <NODE_ID>HANDLE_RIGHT</NODE_ID>
+            </UseTemplate>
+            <UseTemplate Name="ASOBO_GT_Interaction_Tooltip">
+                <NODE_ID>PUSH_OVHD_FUEL_MODESEL</NODE_ID>
             </UseTemplate>
             <UseTemplate Name="ASOBO_GT_Interaction_Tooltip">
                 <NODE_ID>PUSH_OVHD_CARGOVENT_AFTISOL</NODE_ID>

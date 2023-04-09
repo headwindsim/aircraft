@@ -10,7 +10,7 @@ const path = require('path');
 const { pathToFileURL } = require('url');
 
 const SRC = path.resolve(__dirname, 'src');
-const OUT = path.resolve(__dirname, '..', '..', '..', 'build-a339x/out/headwindsim-aircraft-a330-900/ModelBehaviorDefs/A339X/generated');
+const OUT = path.resolve(__dirname, '..', '..', '..', 'hdw-a339x/out/headwindsim-aircraft-a330-900/ModelBehaviorDefs/A339X/generated');
 
 fs.mkdirSync(OUT, { recursive: true });
 

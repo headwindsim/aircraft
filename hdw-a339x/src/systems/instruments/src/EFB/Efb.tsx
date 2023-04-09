@@ -56,7 +56,6 @@ const EmptyBatteryScreen = () => (
 
 export enum PowerStates {
     SHUTOFF,
-    SHUTDOWN,
     STANDBY,
     LOADING,
     LOADED,
@@ -80,10 +79,12 @@ export const usePower = () => React.useContext(PowerContext);
 
 const Efb = () => {
     const [powerState, setPowerState] = useState<PowerStates>(PowerStates.SHUTOFF);
+    const [currentLocalTime] = useSimVar('E:LOCAL TIME', 'seconds', 5000);
     const [absoluteTime] = useSimVar('E:ABSOLUTE TIME', 'seconds', 5000);
     const [, setBrightness] = useSimVar('L:A32NX_EFB_BRIGHTNESS', 'number');
     const [brightnessSetting] = usePersistentNumberProperty('EFB_BRIGHTNESS', 0);
     const [usingAutobrightness] = useSimVar('L:A32NX_EFB_USING_AUTOBRIGHTNESS', 'bool', 300);
+    const [dayOfYear] = useSimVar('E:ZULU DAY OF YEAR', 'number');
     const [batteryLifeEnabled] = usePersistentNumberProperty('EFB_BATTERY_LIFE_ENABLED', 1);
 
     const [navigraph] = useState(() => new NavigraphClient());
@@ -94,15 +95,10 @@ const Efb = () => {
     const [autoSimbriefImport] = usePersistentProperty('CONFIG_AUTO_SIMBRIEF_IMPORT');
 
     const [dc2BusIsPowered] = useSimVar('L:A32NX_ELEC_DC_2_BUS_IS_POWERED', 'bool');
-    const [batteryLevel, setBatteryLevel] = useState<BatteryStatus>({
-        level: 100,
-        lastChangeTimestamp: absoluteTime,
-        isCharging: dc2BusIsPowered,
-    });
+    const [batteryLevel, setBatteryLevel] = useState<BatteryStatus>({ level: 100, lastChangeTimestamp: absoluteTime, isCharging: dc2BusIsPowered });
 
     const [ac1BusIsPowered] = useSimVar('L:A32NX_ELEC_AC_1_BUS_IS_POWERED', 'number', 1000);
     const [, setLoadLightingPresetVar] = useSimVar('L:A32NX_LIGHTING_PRESET_LOAD', 'number', 200);
-    const [autoDisplayBrightness] = useSimVar('GLASSCOCKPIT AUTOMATIC BRIGHTNESS', 'percent', 1000);
     const [timeOfDay] = useSimVar('E:TIME OF DAY', 'number', 5000);
     const [autoLoadLightingPresetEnabled] = usePersistentNumberProperty('LIGHT_PRESET_AUTOLOAD', 0);
     const [autoLoadDayLightingPresetID] = usePersistentNumberProperty('LIGHT_PRESET_AUTOLOAD_DAY', 0);
@@ -265,18 +261,40 @@ const Efb = () => {
         }
     });
 
+    /**
+     * Returns a brightness value between 0 and 100 inclusive based on the ratio of the solar altitude to the solar zenith
+     * @param {number} latitude - The latitude of the location (-90 to 90)
+     * @param {number} dayOfYear - The day of the year (0 to 365)
+     * @param {number} timeOfDay - The time of day in hours (0 to 24)
+     */
+    const calculateBrightness = (latitude: number, dayOfYear: number, timeOfDay: number) => {
+        const solarTime = timeOfDay + (dayOfYear - 1) * 24;
+        const solarDeclination = 0.409 * Math.sin(2 * Math.PI * (284 + dayOfYear) / 365);
+        const solarAltitude = Math.asin(
+            Math.sin(latitude * Math.PI / 180) * Math.sin(solarDeclination) + Math.cos(latitude * Math.PI / 180) * Math.cos(solarDeclination) * Math.cos(2 * Math.PI * solarTime / 24),
+        );
+        const solarZenith = 90 - (latitude - solarDeclination);
+
+        return Math.min(Math.max((-solarAltitude * (180 / Math.PI)) / solarZenith * 100, 0), 100);
+    };
+
     const { posX, posY, shown, text } = useAppSelector((state) => state.tooltip);
 
     useEffect(() => {
-        if (powerState !== PowerStates.LOADED && powerState !== PowerStates.SHUTDOWN) {
-            // die, retinas!
-            setBrightness(100);
-        } else if (usingAutobrightness) {
-            setBrightness(autoDisplayBrightness);
-        } else {
+        if (usingAutobrightness && powerState === PowerStates.LOADED) {
+            setBrightness(calculateBrightness(lat, dayOfYear, currentLocalTime / 3600));
+        }
+    }, [powerState, currentLocalTime, usingAutobrightness]);
+
+    useEffect(() => {
+        if (!usingAutobrightness) {
             setBrightness(brightnessSetting);
         }
-    }, [powerState, brightnessSetting, autoDisplayBrightness, usingAutobrightness]);
+    }, [usingAutobrightness]);
+
+    useEffect(() => {
+        setBrightness(brightnessSetting);
+    }, [powerState]);
 
     // =========================================================================
     // <Pushback>
@@ -301,7 +319,6 @@ const Efb = () => {
     case PowerStates.STANDBY:
         return <div className="w-screen h-screen" onClick={offToLoaded} />;
     case PowerStates.LOADING:
-    case PowerStates.SHUTDOWN:
         return <LoadingScreen />;
     case PowerStates.EMPTY:
         if (dc2BusIsPowered === 1) {

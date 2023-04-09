@@ -3,7 +3,7 @@
 # get directory of this script relative to root
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 COMMON_DIR="${DIR}/../../../../a32nx/fbw-common/src/wasm"
-OUTPUT="${DIR}/../../../../build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm"
+OUTPUT="${DIR}/../../../../hdw-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm"
 
 if [ "$1" == "--debug" ]; then
   CLANG_ARGS="-g"

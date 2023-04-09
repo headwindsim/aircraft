@@ -1,18 +1,18 @@
-@import url("/CSS/A339X/A32NX_Display_Common.css");
+@import url("/A339X_CSS/A32NX_Display_Common.css");
 
 :root {
   font-family: "HoneywellMCDU" !important;
 }
 
 @font-face {
-  src: url("/Fonts/A339X/HoneywellMCDU.ttf") format("truetype");
+  src: url("/A339X_FONTS/HoneywellMCDU.ttf") format("truetype");
   font-family: "HoneywellMCDU";
   font-style: normal;
   font-weight: 900;
 }
 
 @font-face {
-  src: url("/Fonts/A339X/HoneywellMCDUSmall.ttf") format("truetype");
+  src: url("/A339X_FONTS/HoneywellMCDUSmall.ttf") format("truetype");
   font-family: "HoneywellMCDUSmall";
   font-style: normal;
   font-weight: 900;
@@ -97,7 +97,7 @@ a320-neo-cdu-main-display text {
 }
 
 .cyan {
-  color: var(--mcduBlue);
+  color: var(--mcduCyan);
 }
 
 .yellow {

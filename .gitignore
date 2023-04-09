@@ -38,8 +38,6 @@
 
 /hdw-a339x/*
 !/hdw-a339x/README.md
-!/hdw-a339x/mach.config.js
-!/hdw-a339x/.env
 !/hdw-a339x/docs/
 !/hdw-a339x/docs/**
 !/hdw-a339x/src/
@@ -48,10 +46,8 @@
 /hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.bin
 /hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.gltf
 /hdw-a339x/src/systems/instruments/aceBundles
-/hdw-a339x/src/systems/instruments/buildSrc/custom/*
 
-/hdw-a339x/src/localization/flypad/downloaded/*.json
-/hdw-a339x/src/localization/msfs/downloaded/*.locPak
+/hdw-a339x/src/systems/instruments/src/EFB/Localization/downloaded/*.json
 /hdw-a339x/src/systems/instruments/src/EFB/dist
 /hdw-a339x/src/systems/instruments/src/EFB/web/
 
@@ -78,7 +74,7 @@ target/
 *.tgz
 *.wasm
 
-/build-a339x/
+/build/
 
 # ======== OLD =============
 

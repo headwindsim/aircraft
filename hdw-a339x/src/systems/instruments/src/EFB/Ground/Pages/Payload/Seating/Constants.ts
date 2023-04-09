@@ -1,29 +1,31 @@
 export const TYPE = Object.freeze({ ECO: 0, ECO_EMERG: 1, BUSINESS: 2, PREMECO: 3 });
 
 export const CanvasConst = Object.freeze({
+    xTransform: '255px',
+    yTransform: '75px',
     width: 1000,
     height: 150,
 });
 export interface SeatInfo {
     type: number,
-    x?: number,
-    y?: number,
-    yOffset?: number
+    x: number,
+    y: number,
+    yOffset: number
 }
 
 export interface RowInfo {
-    x?: number,
-    y?: number,
-    xOffset?: number,
-    yOffset?: number,
+    x: number,
+    y: number,
+    xOffset: number,
+    yOffset: number,
     seats: SeatInfo[],
 }
 
 export interface PaxStationInfo {
     name: string,
-    capacity: number,
     rows: RowInfo[],
     simVar: string,
+    index: number,
     fill: number,
     stationIndex: number,
     position: number,
@@ -33,6 +35,7 @@ export interface CargoStationInfo {
     name: string,
     weight: number,
     simVar: string,
+    index: number,
     stationIndex: number,
     progressBarWidth: number,
     position: number,
