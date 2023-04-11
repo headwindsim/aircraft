@@ -64,7 +64,6 @@
 
 # avoid issues when switching branches during transistion from old to new structure
 /src/
-/msfs-avionics-mirror/
 /headwind-aircraft-a330-900/
 /headwind-aircraft-a330-900-lock-highlight/
 /headwindsim-aircraft-a330-900/
