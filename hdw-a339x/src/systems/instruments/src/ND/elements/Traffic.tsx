@@ -240,8 +240,8 @@ const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, 
                 </g>
 
                 <g transform={`translate(12 ${relAltY})`}>
-                    <text fill={color} height={1.25} paintOrder="stroke" stroke="#040405" strokeWidth={1} textAnchor="end" xmlSpace="preserve">
-                        <tspan fill={color} fontSize="20px" paintOrder="stroke" stroke="#040405" strokeWidth={1} textAnchor="middle">
+                    <text fill={color} height={1.25} paintOrder="stroke" stroke="#040404" strokeWidth={1} textAnchor="end" xmlSpace="preserve">
+                        <tspan fill={color} fontSize="20px" paintOrder="stroke" stroke="#040404" strokeWidth={1} textAnchor="middle">
                             {`${relativeAlt > 0 ? '+' : '-'}${Math.abs(relativeAlt) < 10 ? '0' : ''}${Math.abs(relativeAlt)}`}
                         </tspan>
                     </text>
