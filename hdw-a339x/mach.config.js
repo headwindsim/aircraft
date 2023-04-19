@@ -51,7 +51,7 @@ function msfsAvionicsInstrument(name) {
             templateId: `A339X_${name}`,
             mountElementId: `${name}_CONTENT`,
             fileName: name.toLowerCase(),
-            imports: ['/JS/dataStorage.js','/JS/A339X/A32NX_Simvars.js'],
+            imports: ['/JS/dataStorage.js'],
         },
     };
 }
