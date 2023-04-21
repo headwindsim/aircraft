@@ -50,6 +50,9 @@ const execute = async () => {
                 name: 'TextureTAP',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.TAP'
             }, {
+                name: 'TextureHDW',
+                sourceDir: './SimObjects/Airplanes/_Headwind_A330neo-LIVERY'
+            }, {
                 name: 'Sound',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/sound'
             }, {
