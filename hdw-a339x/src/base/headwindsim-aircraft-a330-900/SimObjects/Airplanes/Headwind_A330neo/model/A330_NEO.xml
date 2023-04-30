@@ -41,8 +41,8 @@
 			</UseTemplate>
 			<!-- Turn off the conenction to the lights when the landing gear is retracted-->
 			<UseTemplate Name="ASOBO_GT_Update">
-					<FREQUENCY>5</FREQUENCY>
-					<UPDATE_CODE>
+				<FREQUENCY>5</FREQUENCY>
+				<UPDATE_CODE>
 					(A:GEAR HANDLE POSITION, Bool) (A:GEAR POSITION, percent) 99.9 &gt; and (&gt;O:_ShouldBeConnectedToPowerGrid)
 					(O:_ShouldBeConnectedToPowerGrid) sp0
 					2 (&gt;A:BUS LOOKUP INDEX, Number)
@@ -50,7 +50,7 @@
 					(A:CIRCUIT CONNECTION ON:20, Bool) l0 != if{ 20 2 (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) }
 					(A:CIRCUIT CONNECTION ON:21, Bool) l0 != if{ 21 2 (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) }
 					(A:CIRCUIT CONNECTION ON:22, Bool) l0 != if{ 22 2 (&gt;K:2:ELECTRICAL_BUS_TO_CIRCUIT_CONNECTION_TOGGLE) }
-					</UPDATE_CODE>
+				</UPDATE_CODE>
 			</UseTemplate>
 		</Component>
 		<Component ID="HANDLING">
@@ -101,90 +101,102 @@
 				<NORMALIZED_TIME_5>0.58</NORMALIZED_TIME_5>
 				<DIRECTION_5>Both</DIRECTION_5>
 			</UseTemplate>
-					<Component ID="WipersLeft">
-							<UseTemplate Name="FBW_Airbus_Wiper">
-									<ANIM_NAME>HANDLING_Wiper_left</ANIM_NAME>
-									<CIRCUIT_ID_WIPERS>77</CIRCUIT_ID_WIPERS>
-							</UseTemplate>
-					</Component>
-					<Component ID="WipersRight">
-							<UseTemplate Name="FBW_Airbus_Wiper">
-									<ANIM_NAME>HANDLING_Wiper_right</ANIM_NAME>
-									<CIRCUIT_ID_WIPERS>80</CIRCUIT_ID_WIPERS>
-							</UseTemplate>
-					</Component>
-        </Component>
-        <Component ID="GEARS">
-            <UseTemplate Name="ASOBO_GEAR_Center_Template">
-                <ANIM_NAME>c_gear</ANIM_NAME>
-            </UseTemplate>
-            <UseTemplate Name="ASOBO_GEAR_Left_Template">
-                <ANIM_NAME>l_gear</ANIM_NAME>
-            </UseTemplate>
-            <UseTemplate Name="ASOBO_GEAR_Right_Template">
-                <ANIM_NAME>r_gear</ANIM_NAME>
-                <!-- ANIM EVENTS -->
-                <ANIM_EVENT_EFFECT_NAME>CAM_LANDINGGEARS</ANIM_EVENT_EFFECT_NAME>
-                <NORMALIZED_TIME>0.5</NORMALIZED_TIME>
-                <DIRECTION>Both</DIRECTION>
-            </UseTemplate>
-            <UseTemplate Name="ASOBO_GEAR_Center_Tire_Template">
-                <ANIM_NAME>c_tire_anim</ANIM_NAME>
-                <NODE_ID_STILL>WHEELS_C</NODE_ID_STILL>
-                <NODE_ID_BLURRED>C_WHEELS_BLURRED</NODE_ID_BLURRED>
-            </UseTemplate>
-            <UseTemplate Name="ASOBO_GEAR_Left_Tire_Template">
-                <ANIM_NAME>l_tire_anim</ANIM_NAME>
-                <NODE_ID_STILL>WHEEL_LEFT</NODE_ID_STILL>
-                <NODE_ID_BLURRED>WHEEL_LEFT_BLURRED</NODE_ID_BLURRED>
-            </UseTemplate>
-            <UseTemplate Name="ASOBO_GEAR_Right_Tire_Template">
-                <ANIM_NAME>r_tire_anim</ANIM_NAME>
-                <NODE_ID_STILL>WHEEL_RIGHT</NODE_ID_STILL>
-                <NODE_ID_BLURRED>WHEEL_RIGHT_BLURRED</NODE_ID_BLURRED>
-            </UseTemplate>
-            <UseTemplate Name="ASOBO_GEAR_Left_Tire_Template">
-                <ANIM_NAME>l_tire_anim_2</ANIM_NAME>
-                <NODE_ID_STILL>WHEEL_LEFT_2</NODE_ID_STILL>
-                <NODE_ID_BLURRED>WHEEL_LEFT_2_BLURRED</NODE_ID_BLURRED>
-            </UseTemplate>
-            <UseTemplate Name="ASOBO_GEAR_Right_Tire_Template">
-                <ANIM_NAME>r_tire_anim_2</ANIM_NAME>
-                <NODE_ID_STILL>WHEEL_RIGHT_2</NODE_ID_STILL>
-                <NODE_ID_BLURRED>WHEEL_RIGHT_2_BLURRED</NODE_ID_BLURRED>
-            </UseTemplate>
-            <UseTemplate Name="ASOBO_GEAR_Steering_Template">
-                <ANIM_NAME>c_wheel</ANIM_NAME>
-            </UseTemplate>
-        </Component>
-        <Component ID="ENGINE">
-            <UseTemplate Name="A32NX_ENGINE_Turbine_Template">
-                <ID>1</ID>
-                <ANIM_NODE_ID>N1_1_anim</ANIM_NODE_ID>
-                <ANIM_NAME>N1_1_anim</ANIM_NAME>
-                <STILL_NODE_ID>PROP_STILL_LEFT</STILL_NODE_ID>
-                <SLOW_NODE_ID>PROP_SLOW_LEFT</SLOW_NODE_ID>
-                <BLURRED_NODE_ID>PROP_BLURRED_LEFT</BLURRED_NODE_ID>
-                <BLURRED_SPINNER_NODE_ID>PROP_BLURRED_CONE_LEFT</BLURRED_SPINNER_NODE_ID>
-            </UseTemplate>
-            <UseTemplate Name="A32NX_ENGINE_Turbine_Template">
-                <ID>2</ID>
-                <ANIM_NODE_ID>N1_2_anim</ANIM_NODE_ID>
-                <ANIM_NAME>N1_2_anim</ANIM_NAME>
-                <STILL_NODE_ID>PROP_STILL_RIGHT</STILL_NODE_ID>
-                <SLOW_NODE_ID>PROP_SLOW_RIGHT</SLOW_NODE_ID>
-                <BLURRED_NODE_ID>PROP_BLURRED_RIGHT</BLURRED_NODE_ID>
-                <BLURRED_SPINNER_NODE_ID>PROP_BLURRED_CONE_RIGHT</BLURRED_SPINNER_NODE_ID>
-            </UseTemplate>
-            <UseTemplate Name="FBW_ENGINE_Turbine_ReverseThrust_Template">
-                <ID>1</ID>
-                <ANIM_NAME>thrust_rev_1</ANIM_NAME>
-            </UseTemplate>
-            <UseTemplate Name="FBW_ENGINE_Turbine_ReverseThrust_Template">
-                <ID>2</ID>
-                <ANIM_NAME>thrust_rev_2</ANIM_NAME>
-            </UseTemplate>
-        </Component>
+			<Component ID="WipersLeft">
+				<UseTemplate Name="FBW_Airbus_Wiper">
+					<ANIM_NAME>HANDLING_Wiper_left</ANIM_NAME>
+					<CIRCUIT_ID_WIPERS>77</CIRCUIT_ID_WIPERS>
+				</UseTemplate>
+			</Component>
+			<Component ID="WipersRight">
+				<UseTemplate Name="FBW_Airbus_Wiper">
+					<ANIM_NAME>HANDLING_Wiper_right</ANIM_NAME>
+					<CIRCUIT_ID_WIPERS>80</CIRCUIT_ID_WIPERS>
+				</UseTemplate>
+			</Component>
+		</Component>
+		<Component ID="GEARS">
+			<UseTemplate Name="ASOBO_GT_Anim">
+				<ANIM_NAME>c_gear</ANIM_NAME>
+				<ANIM_CODE>
+					(L:A32NX_GEAR_CENTER_POSITION, number) 1.0 * 0.0 + (A:GEAR ANIMATION POSITION:0, percent) 50 - 0 max 2.0 * +
+				</ANIM_CODE>
+				<ANIM_LENGTH>200</ANIM_LENGTH>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim">
+				<ANIM_NAME>l_gear</ANIM_NAME>
+				<ANIM_CODE>
+					(L:A32NX_GEAR_LEFT_POSITION, number) 1.0 * 0.0 + (A:GEAR ANIMATION POSITION:1, percent) 50 - 0 max 2.0 * +
+				</ANIM_CODE>
+				<ANIM_LENGTH>200</ANIM_LENGTH>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GT_Anim">
+				<ANIM_NAME>r_gear</ANIM_NAME>
+				<ANIM_CODE>
+					(L:A32NX_GEAR_RIGHT_POSITION, number) 1.0 * 0.0 + (A:GEAR ANIMATION POSITION:2, percent) 50 - 0 max 2.0 * +
+				</ANIM_CODE>
+				<ANIM_LENGTH>200</ANIM_LENGTH>
+				<!-- ANIM EVENTS -->
+				<ANIM_EVENT_EFFECT_NAME>CAM_LANDINGGEARS</ANIM_EVENT_EFFECT_NAME>
+				<NORMALIZED_TIME>0.5</NORMALIZED_TIME>
+				<DIRECTION>Both</DIRECTION>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GEAR_Center_Tire_Template">
+				<ANIM_NAME>c_tire_anim</ANIM_NAME>
+				<NODE_ID_STILL>WHEELS_C</NODE_ID_STILL>
+				<NODE_ID_BLURRED>C_WHEELS_BLURRED</NODE_ID_BLURRED>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GEAR_Left_Tire_Template">
+				<ANIM_NAME>l_tire_anim</ANIM_NAME>
+				<NODE_ID_STILL>WHEEL_LEFT</NODE_ID_STILL>
+				<NODE_ID_BLURRED>WHEEL_LEFT_BLURRED</NODE_ID_BLURRED>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GEAR_Right_Tire_Template">
+				<ANIM_NAME>r_tire_anim</ANIM_NAME>
+				<NODE_ID_STILL>WHEEL_RIGHT</NODE_ID_STILL>
+				<NODE_ID_BLURRED>WHEEL_RIGHT_BLURRED</NODE_ID_BLURRED>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GEAR_Left_Tire_Template">
+				<ANIM_NAME>l_tire_anim_2</ANIM_NAME>
+				<NODE_ID_STILL>WHEEL_LEFT_2</NODE_ID_STILL>
+				<NODE_ID_BLURRED>WHEEL_LEFT_2_BLURRED</NODE_ID_BLURRED>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GEAR_Right_Tire_Template">
+				<ANIM_NAME>r_tire_anim_2</ANIM_NAME>
+				<NODE_ID_STILL>WHEEL_RIGHT_2</NODE_ID_STILL>
+				<NODE_ID_BLURRED>WHEEL_RIGHT_2_BLURRED</NODE_ID_BLURRED>
+			</UseTemplate>
+			<UseTemplate Name="ASOBO_GEAR_Steering_Template">
+				<ANIM_NAME>c_wheel</ANIM_NAME>
+			</UseTemplate>
+		</Component>
+		<Component ID="ENGINE">
+			<UseTemplate Name="A32NX_ENGINE_Turbine_Template">
+				<ID>1</ID>
+				<ANIM_NODE_ID>N1_1_anim</ANIM_NODE_ID>
+				<ANIM_NAME>N1_1_anim</ANIM_NAME>
+				<STILL_NODE_ID>PROP_STILL_LEFT</STILL_NODE_ID>
+				<SLOW_NODE_ID>PROP_SLOW_LEFT</SLOW_NODE_ID>
+				<BLURRED_NODE_ID>PROP_BLURRED_LEFT</BLURRED_NODE_ID>
+				<BLURRED_SPINNER_NODE_ID>PROP_BLURRED_CONE_LEFT</BLURRED_SPINNER_NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="A32NX_ENGINE_Turbine_Template">
+				<ID>2</ID>
+				<ANIM_NODE_ID>N1_2_anim</ANIM_NODE_ID>
+				<ANIM_NAME>N1_2_anim</ANIM_NAME>
+				<STILL_NODE_ID>PROP_STILL_RIGHT</STILL_NODE_ID>
+				<SLOW_NODE_ID>PROP_SLOW_RIGHT</SLOW_NODE_ID>
+				<BLURRED_NODE_ID>PROP_BLURRED_RIGHT</BLURRED_NODE_ID>
+				<BLURRED_SPINNER_NODE_ID>PROP_BLURRED_CONE_RIGHT</BLURRED_SPINNER_NODE_ID>
+			</UseTemplate>
+			<UseTemplate Name="FBW_ENGINE_Turbine_ReverseThrust_Template">
+				<ID>1</ID>
+				<ANIM_NAME>thrust_rev_1</ANIM_NAME>
+			</UseTemplate>
+			<UseTemplate Name="FBW_ENGINE_Turbine_ReverseThrust_Template">
+				<ID>2</ID>
+				<ANIM_NAME>thrust_rev_2</ANIM_NAME>
+			</UseTemplate>
+		</Component>
 		<!-- points d'interactions -->
 		<Component ID="INTERACTIVE_POINTS">
 			<UseTemplate Name="ASOBO_DOOR_InteractivePoint_Template">
@@ -208,86 +220,86 @@
 				<NODE_ID>GROUND_GPUPIPE</NODE_ID>
 			</UseTemplate>
 		</Component>
-        <Component ID="LANDING_FX">
+		<Component ID="LANDING_FX">
 			<UseTemplate Name="ASOBO_LANDING_LG_FX"/>
 		</Component>
 		<Component ID="FX_CONTRAIL_QUAD">
-				<OverrideTemplateParameters>
-						<FX_CODE>(A:CONTRAILS CONDITIONS MET:1, Keyframe) 0 &gt;</FX_CODE>
-						<FX_OFFSET_X>0</FX_OFFSET_X>
-						<FX_OFFSET_Y>0</FX_OFFSET_Y>
-						<FX_OFFSET_Z>0</FX_OFFSET_Z>
-						<FX_GUID>{F42CE638-11EB-4FC8-B9B0-111A220D681F}</FX_GUID>
-						<FX_NAME>FX_CONTRAILS</FX_NAME>
-				</OverrideTemplateParameters>
-				<Component ID="FX_CONTRAIL_QUAD_LEFT_IN" Node="fx_exhaust_left">
-						<UseTemplate Name="ASOBO_GT_FX">
-						</UseTemplate>
-				</Component>
-				<Component ID="FX_CONTRAIL_QUAD_LEFT_OUT" Node="fx_exhaust_right">
-						<UseTemplate Name="ASOBO_GT_FX">
-						</UseTemplate>
-				</Component>
+			<OverrideTemplateParameters>
+				<FX_CODE>(A:CONTRAILS CONDITIONS MET:1, Keyframe) 0 &gt;</FX_CODE>
+				<FX_OFFSET_X>0</FX_OFFSET_X>
+				<FX_OFFSET_Y>0</FX_OFFSET_Y>
+				<FX_OFFSET_Z>0</FX_OFFSET_Z>
+				<FX_GUID>{F42CE638-11EB-4FC8-B9B0-111A220D681F}</FX_GUID>
+				<FX_NAME>FX_CONTRAILS</FX_NAME>
+			</OverrideTemplateParameters>
+			<Component ID="FX_CONTRAIL_QUAD_LEFT_IN" Node="fx_exhaust_left">
+				<UseTemplate Name="ASOBO_GT_FX">
+				</UseTemplate>
+			</Component>
+			<Component ID="FX_CONTRAIL_QUAD_LEFT_OUT" Node="fx_exhaust_right">
+				<UseTemplate Name="ASOBO_GT_FX">
+				</UseTemplate>
+			</Component>
 		</Component>
 		<Component ID="FX_CONTRAIL_RIBBON">
-				<OverrideTemplateParameters>
-						<FX_CODE>(A:CONTRAILS CONDITIONS MET:1, Keyframe) 0 &gt;</FX_CODE>
-						<FX_OFFSET_X>0</FX_OFFSET_X>
-						<FX_OFFSET_Y>0</FX_OFFSET_Y>
-						<FX_OFFSET_Z>0</FX_OFFSET_Z>
-						<FX_GUID>{904EC2CE-F8DD-4480-99E7-B33F7CF6E114}</FX_GUID>
-						<FX_NAME>FX_CONTRAILS_RIBBON</FX_NAME>
-				</OverrideTemplateParameters>
-				<Component ID="FX_CONTRAIL_RIBBON_LEFT_OUT" Node="fx_exhaust_left">
-						<UseTemplate Name="ASOBO_GT_FX">
-						</UseTemplate>
-				</Component>
-				<Component ID="FX_CONTRAIL_RIBBON_RIGHT_OUT" Node="fx_exhaust_right">
-						<UseTemplate Name="ASOBO_GT_FX">
-						</UseTemplate>
-				</Component>
+			<OverrideTemplateParameters>
+				<FX_CODE>(A:CONTRAILS CONDITIONS MET:1, Keyframe) 0 &gt;</FX_CODE>
+				<FX_OFFSET_X>0</FX_OFFSET_X>
+				<FX_OFFSET_Y>0</FX_OFFSET_Y>
+				<FX_OFFSET_Z>0</FX_OFFSET_Z>
+				<FX_GUID>{904EC2CE-F8DD-4480-99E7-B33F7CF6E114}</FX_GUID>
+				<FX_NAME>FX_CONTRAILS_RIBBON</FX_NAME>
+			</OverrideTemplateParameters>
+			<Component ID="FX_CONTRAIL_RIBBON_LEFT_OUT" Node="fx_exhaust_left">
+				<UseTemplate Name="ASOBO_GT_FX">
+				</UseTemplate>
+			</Component>
+			<Component ID="FX_CONTRAIL_RIBBON_RIGHT_OUT" Node="fx_exhaust_right">
+				<UseTemplate Name="ASOBO_GT_FX">
+				</UseTemplate>
+			</Component>
 		</Component>
-		
+
 		<Component ID="GND_EQUIPMENT">
-            <!-- GND CHOCKS -->
-            <UseTemplate Name="FBW_Gnd_Equipment">
-                <NODE_ID>CHOKES_C_GEAR</NODE_ID>
-                <GND_ENABLE_OVRD>(L:A32NX_MODEL_WHEELCHOCKS_ENABLED)</GND_ENABLE_OVRD>
-            </UseTemplate>
-            <UseTemplate Name="FBW_Gnd_Equipment">
-                <NODE_ID>CHOKES_R_GEAR</NODE_ID>
-                <GND_ENABLE_OVRD>(L:A32NX_MODEL_WHEELCHOCKS_ENABLED)</GND_ENABLE_OVRD>
-            </UseTemplate>
-            <UseTemplate Name="FBW_Gnd_Equipment">
-                <NODE_ID>CHOKES_L_GEAR</NODE_ID>
-                <GND_ENABLE_OVRD>(L:A32NX_MODEL_WHEELCHOCKS_ENABLED)</GND_ENABLE_OVRD>
-            </UseTemplate>
+			<!-- GND CHOCKS -->
+			<UseTemplate Name="FBW_Gnd_Equipment">
+				<NODE_ID>CHOKES_C_GEAR</NODE_ID>
+				<GND_ENABLE_OVRD>(L:A32NX_MODEL_WHEELCHOCKS_ENABLED)</GND_ENABLE_OVRD>
+			</UseTemplate>
+			<UseTemplate Name="FBW_Gnd_Equipment">
+				<NODE_ID>CHOKES_R_GEAR</NODE_ID>
+				<GND_ENABLE_OVRD>(L:A32NX_MODEL_WHEELCHOCKS_ENABLED)</GND_ENABLE_OVRD>
+			</UseTemplate>
+			<UseTemplate Name="FBW_Gnd_Equipment">
+				<NODE_ID>CHOKES_L_GEAR</NODE_ID>
+				<GND_ENABLE_OVRD>(L:A32NX_MODEL_WHEELCHOCKS_ENABLED)</GND_ENABLE_OVRD>
+			</UseTemplate>
 
-            <!-- GND CONES -->
-            <UseTemplate Name="FBW_Gnd_Equipment">
-                <NODE_ID>PLOTS_R</NODE_ID>
-                <GND_ENABLE_OVRD>(L:A32NX_MODEL_CONES_ENABLED) (L:A32NX_IS_STATIONARY, bool) and</GND_ENABLE_OVRD>
-            </UseTemplate>
-            <UseTemplate Name="FBW_Gnd_Equipment">
-                <NODE_ID>PLOTS_L</NODE_ID>
-                <GND_ENABLE_OVRD>(L:A32NX_MODEL_CONES_ENABLED) (L:A32NX_IS_STATIONARY, bool) and</GND_ENABLE_OVRD>
-            </UseTemplate>
+			<!-- GND CONES -->
+			<UseTemplate Name="FBW_Gnd_Equipment">
+				<NODE_ID>PLOTS_R</NODE_ID>
+				<GND_ENABLE_OVRD>(L:A32NX_MODEL_CONES_ENABLED) (L:A32NX_IS_STATIONARY, bool) and</GND_ENABLE_OVRD>
+			</UseTemplate>
+			<UseTemplate Name="FBW_Gnd_Equipment">
+				<NODE_ID>PLOTS_L</NODE_ID>
+				<GND_ENABLE_OVRD>(L:A32NX_MODEL_CONES_ENABLED) (L:A32NX_IS_STATIONARY, bool) and</GND_ENABLE_OVRD>
+			</UseTemplate>
 
-            <!-- Utility function for creating the A32NX_IS_STATIONARY and A32NX_GND_EQP_IS_VISIBLE L-vars. -->
-            <UseTemplate Name="ASOBO_GT_Update">
-                <FREQUENCY>10</FREQUENCY>
-                <UPDATE_CODE>
-                    (A:SURFACE RELATIVE GROUND SPEED, feet per second) 0.1 &gt; ! (&gt;L:A32NX_IS_STATIONARY, bool)
+			<!-- Utility function for creating the A32NX_IS_STATIONARY and A32NX_GND_EQP_IS_VISIBLE L-vars. -->
+			<UseTemplate Name="ASOBO_GT_Update">
+				<FREQUENCY>10</FREQUENCY>
+				<UPDATE_CODE>
+					(A:SURFACE RELATIVE GROUND SPEED, feet per second) 0.1 &gt; ! (&gt;L:A32NX_IS_STATIONARY, bool)
 					(A:SIM ON GROUND, bool) (L:A32NX_ENGINE_N1:1, Number) 3.5 &lt; and (L:A32NX_ENGINE_N1:2, Number) 3.5 &lt; and (L:A32NX_HYD_NW_STRG_DISC_ECAM_MEMO, bool) 0 == and (A:LIGHT BEACON, bool) 0 == and (&gt;L:A32NX_GND_EQP_IS_VISIBLE, bool)
-                </UPDATE_CODE>
-            </UseTemplate>
-        </Component>
+				</UPDATE_CODE>
+			</UseTemplate>
+		</Component>
 
 		<Component ID="Satcom">
-            <UseTemplate Name="FBW_Satcom">
-                <NODE_ID>HoneywellJetWave</NODE_ID>
-                <SAT_ENABLE>(L:A32NX_SATCOM_ENABLED, bool)</SAT_ENABLE>
-            </UseTemplate>
-        </Component>
+			<UseTemplate Name="FBW_Satcom">
+				<NODE_ID>HoneywellJetWave</NODE_ID>
+				<SAT_ENABLE>(L:A32NX_SATCOM_ENABLED, bool)</SAT_ENABLE>
+			</UseTemplate>
+		</Component>
 	</Behaviors>
 </ModelInfo>
