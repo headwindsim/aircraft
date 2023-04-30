@@ -55,6 +55,15 @@
 /hdw-a339x/src/systems/instruments/src/EFB/dist
 /hdw-a339x/src/systems/instruments/src/EFB/web/
 
+/hdw-a339x-liveries/*
+!/hdw-a339x-liveries/README.md
+!/hdw-a339x-liveries/mach.config.js
+!/hdw-a339x-liveries/.env
+!/hdw-a339x-liveries/docs/
+!/hdw-a339x-liveries/docs/**
+!/hdw-a339x-liveries/src/
+!/hdw-a339x-liveries/src/**
+
 !/scripts/**
 
 !/tools/**

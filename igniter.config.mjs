@@ -148,51 +148,15 @@ export default new TaskOfTasks("all", [
         ])
     ]),
 
-    // A380X Tasks
-    /*
-    new TaskOfTasks("a380x", [
-
+    // A339X Livery Package Task
+    new TaskOfTasks("a339x-livery-package", [
+        // Prepare the out folder and any other pre tasks.
+        // Currently, these can be run in parallel but in the future, we may need to run them in sequence if there are any dependencies.
         new TaskOfTasks("preparation", [
-            new ExecTask("copy-base-files", [
-                "npm run build-a380x:copy-base-files",
-                // temporary until folder exists
-                "mkdir -p fbw-a380x/out/flybywire-aircraft-a380-841/SimObjects/Airplanes/FlyByWire_A380_841/panel/"
-            ])
+            new ExecTask("copy-base-files", "npm run build-a339x-livery-package:copy-base-files")
         ], true),
-
-        new TaskOfTasks("wasm", [
-            new ExecTask("systems",
-                "npm run build-a380x:systems",
-                [
-                    "fbw-a380x/src/wasm/systems",
-                    "fbw-common/src/wasm/systems",
-                    "Cargo.lock",
-                    "Cargo.toml",
-                    "fbw-a380x/out/flybywire-aircraft-a380-841/SimObjects/Airplanes/FlyByWire_A380_841/panel/systems.wasm"
-                ]),
-            new ExecTask("systems-fadec",
-                "npm run build-a380x:fadec",
-                [
-                    "fbw-a380x/src/wasm/fadec_a380",
-                    "fbw-common/src/wasm/fbw_common",
-                    "fbw-common/src/wasm/fadec_common",
-                    "fbw-a380x/out/flybywire-aircraft-a380-841/SimObjects/Airplanes/FlyByWire_A380_841/panel/fadec.wasm"
-                ]),
-            new ExecTask("systems-fbw",
-                "npm run build-a380x:fbw",
-                [
-                    "fbw-a380x/src/wasm/fbw_a380",
-                    "fbw-common/src/wasm/fbw_common",
-                    "fbw-a380x/out/flybywire-aircraft-a380-841/SimObjects/Airplanes/FlyByWire_A380_841/panel/fbw.wasm"
-                ]),
-            new ExecTask("flypad-backend",
-                "npm run build-a380x:flypad-backend",
-                [
-                    "fbw-a380x/src/wasm/flypad-backend",
-                    "fbw-common/src/wasm/fbw_common",
-                    "fbw-a380x/out/flybywire-aircraft-a380-841/SimObjects/Airplanes/FlyByWire_A380_841/panel/flypad-backend.wasm"
-                ])
-        ], true)
+        new TaskOfTasks("dist", [
+            new ExecTask("manifests", "npm run build-a339x-livery-package:manifest")
+        ])
     ])
-    */
 ]);

@@ -48,6 +48,11 @@
     "build:instruments": "rollup --max-old-space-size=8192 -c src/systems/instruments/buildSrc/simulatorBuild.mjs",
     "watch:instruments": "rollup --max-old-space-size=8192 -wc src/systems/instruments/buildSrc/simulatorBuild.mjs",
 
+    "====== A339X LIVERY PACKAGE ====": "==========================================",
+    "build-a339x-livery-package:copy-base-package": "mkdir -p /hdw-a339x-liveries/out/headwindsim-a339x-livery-package && (rsync -a hdw-a339x-liveries/src/base/headwindsim-a339x-livery-package hdw-a339x-liveries/out || cp -a -u hdw-a339x-liveries/src/base/headwindsim-a339x-livery-package hdw-a339x-liveries/out)",
+    "build-a339x-livery-package:copy-base-files": "npm run build-a339x-livery-package:copy-base-package",
+    "build-a339x-livery-package:manifest": "node scripts/build-a339x-liveries.js",
+
     "====== COMMON ================": "==========================================",
     "lint": "eslint --cache **/*.{js,mjs,jsx,ts,tsx}",
     "lint-fix": "npm run lint -- --fix",

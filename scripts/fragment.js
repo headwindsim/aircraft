@@ -20,37 +20,10 @@ const execute = async () => {
                 name: 'Textures',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture'
             }, {
-                name: 'TextureABB',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.ABB'
-            }, {
                 name: 'TextureAIB',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.AIB'
             }, {
-                name: 'TextureCFGBEACH',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.CFGBEACH'
-            }, {
-                name: 'TextureCFGISLAND',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.CFGISLAND'
-            }, {
-                name: 'TextureCFGSEA',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.CFGSEA'
-            }, {
-                name: 'TextureCRL',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.CRL'
-            }, {
-                name: 'TextureDAL',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.DAL'
-            }, {
-                name: 'TextureHFY',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.HFY'
-            }, {
-                name: 'TextureSTAR',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.STAR'
-            }, {
-                name: 'TextureTAP',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.TAP'
-            }, {
-                name: 'TextureHDW',
+                name: 'Livery',
                 sourceDir: './SimObjects/Airplanes/_Headwind_A330neo-LIVERY'
             }, {
                 name: 'Sound',
