@@ -45,7 +45,12 @@
 !/hdw-a339x/src/
 !/hdw-a339x/src/**
 
+/hdw-a339x-acj/*
+!/hdw-a339x-acj/README.md
 !/hdw-a339x-acj/mach.config.js
+!/hdw-a339x-acj/.env
+!/hdw-a339x-acj/docs/
+!/hdw-a339x-acj/docs/**
 !/hdw-a339x-acj/src/
 !/hdw-a339x-acj/src/**
 
