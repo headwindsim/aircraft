@@ -1,5 +1,5 @@
 [package]
-name = "a320_systems_wasm"
+name = "a330_systems_wasm"
 version = "0.1.0"
 authors = ["FlyByWire Simulations"]
 edition = "2021"
@@ -10,7 +10,7 @@ test = false
 
 [dependencies]
 uom = "0.33.0"
-a320_systems = { path = "../a320_systems" }
+acj330_systems = { path = "../a320_systems" }
 systems = { path = "../../../../../a32nx/fbw-common/src/wasm/systems/systems" }
 systems_wasm = { path = "../../../../../a32nx/fbw-common/src/wasm/systems/systems_wasm" }
 msfs = { git = "https://github.com/flybywiresim/msfs-rs", branch = "main" }

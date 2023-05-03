@@ -10,7 +10,7 @@ mod rudder;
 mod spoilers;
 mod trimmable_horizontal_stabilizer;
 
-use a320_systems::A320;
+use acj320_systems::A320;
 use ailerons::ailerons;
 use autobrakes::autobrakes;
 use brakes::brakes;

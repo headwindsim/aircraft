@@ -44,6 +44,11 @@
 !/hdw-a339x/docs/**
 !/hdw-a339x/src/
 !/hdw-a339x/src/**
+
+!/hdw-a339x-acj/mach.config.js
+!/hdw-a339x-acj/src/
+!/hdw-a339x-acj/src/**
+
 /hdw-a339x/out
 /hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.bin
 /hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.gltf
@@ -87,6 +92,7 @@ target/
 *.wasm
 
 /build-a339x/
+/build-a339x-acj/
 
 # ======== OLD =============
 

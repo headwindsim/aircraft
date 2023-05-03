@@ -33,7 +33,7 @@ jobs:
           ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: Copy Sources
         run: |
-          ./scripts/dev-env/run.sh ./scripts/copy.sh
+          ./scripts/dev-env/run.sh ./scripts/copy_a339x.sh
       - name: Build A339X Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_a339x.sh --no-tty -j 4

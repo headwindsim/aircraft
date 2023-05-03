@@ -74,7 +74,7 @@ export const OverviewPage = () => {
                     </InformationEntry>
                 </div>
                 <div className="flex flex-col space-y-8">
-                    <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(7200, 'distance')}>
+                    <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(6550, 'distance')}>
                         <Rulers size={23} />
                     </InformationEntry>
 

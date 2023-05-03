@@ -5,11 +5,11 @@ set -ex
 #remove directory if it exist
 rm -rvf ./build-a339x
 
-# copy from FBW A32NX source and A339X into one src
-
+# create directory
 mkdir -p ./build-a339x/src
 mkdir -p ./build-a339x/out
 
+# copy from FBW A32NX source and A339X into one src
 cp -rva ./a32nx/fbw-a32nx/src/behavior/. ./build-a339x/src/behavior
 cp -rva ./a32nx/fbw-a32nx/src/fonts/. ./build-a339x/src/fonts
 cp -rva ./a32nx/fbw-a32nx/src/localization/. ./build-a339x/src/localization
@@ -57,3 +57,34 @@ cp -rva ./hdw-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight/. ./bu
 chmod +x ./build-a339x/src/wasm/fbw_a320/build.sh
 chmod +x ./build-a339x/src/wasm/fadec_a320/build.sh
 chmod +x ./build-a339x/src/wasm/flypad-backend/build.sh
+
+##### ACJ330neo
+
+# remove directory if it exist
+rm -rvf ./build-a339x-acj
+
+# create directory
+mkdir -p ./build-a339x-acj/src
+
+mkdir -p ./build-a339x-acj/src/localization
+mkdir -p ./build-a339x-acj/src/systems
+mkdir -p ./build-a339x-acj/src/wasm
+
+# copy from FBW A32NX source and A339X into one src
+
+cp -rva ./build-a339x/src/localization/. ./build-a339x-acj/src/localization
+cp -rva ./build-a339x/src/systems/. ./build-a339x-acj/src/systems
+cp -rva ./build-a339x/src/wasm/. ./build-a339x-acj/src/wasm
+
+cp -rva ./hdw-a339x-acj/src/systems/. ./build-a339x-acj/src/systems
+cp -rva ./hdw-a339x-acj/src/wasm/. ./build-a339x-acj/src/wasm
+
+cp -rva ./hdw-a339x-acj/.env ./build-a339x-acj/.env
+cp -rva ./hdw-a339x-acj/mach.config.js ./build-a339x-acj/mach.config.js
+
+# copy base of A339X to out
+cp -rva ./hdw-a339x-acj/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/headwindsim-aircraft-a330-900
+
+chmod +x ./build-a339x-acj/src/wasm/fbw_a320/build.sh
+chmod +x ./build-a339x-acj/src/wasm/fadec_a320/build.sh
+chmod +x ./build-a339x-acj/src/wasm/flypad-backend/build.sh
