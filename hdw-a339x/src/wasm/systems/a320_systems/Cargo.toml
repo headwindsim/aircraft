@@ -1,5 +1,5 @@
 [package]
-name = "acj330_systems"
+name = "a330_systems"
 version = "0.1.0"
 authors = ["FlyByWire Simulations"]
 edition = "2021"
