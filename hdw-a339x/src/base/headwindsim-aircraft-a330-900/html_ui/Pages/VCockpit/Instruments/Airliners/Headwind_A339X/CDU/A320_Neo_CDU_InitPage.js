@@ -68,10 +68,9 @@ class CDUInitPage {
         const tropo = new Column(23, "36090", Column.small, Column.cyan, Column.right);
         let requestButton = "REQUEST*";
         let requestButtonLabel = "INIT";
-        let requestEnable = true;
 
         if (mcdu.simbrief.sendStatus === "REQUESTING") {
-            requestEnable = false;
+            mcdu.flightPlanRequestEnabled = false;
             requestButton = "REQUEST ";
         }
 
@@ -83,7 +82,7 @@ class CDUInitPage {
                 // This allows loading a new OFP via INIT/REVIEW loading a different orig/dest to the current one
                 if (mcdu.simbrief.sendStatus != "DONE" ||
                     (mcdu.simbrief["originIcao"] === mcdu.flightPlanManager.getPersistentOrigin().ident && mcdu.simbrief["destinationIcao"] === mcdu.flightPlanManager.getDestination().ident)) {
-                    requestEnable = false;
+                    mcdu.flightPlanRequestEnabled = false;
                     requestButtonLabel = "";
                     requestButton = "";
                 }
@@ -240,7 +239,7 @@ class CDUInitPage {
             }
         };
         mcdu.onRightInput[1] = () => {
-            if (requestEnable) {
+            if (mcdu.flightPlanRequestEnabled) {
                 getSimBriefOfp(mcdu, () => {
                     if (mcdu.page.Current === mcdu.page.InitPageA) {
                         CDUInitPage.ShowPage1(mcdu);

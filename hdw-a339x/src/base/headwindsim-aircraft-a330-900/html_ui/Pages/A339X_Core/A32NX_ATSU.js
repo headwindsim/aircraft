@@ -36,6 +36,7 @@ const lbsToKg = (value) => {
  * Fetch SimBrief OFP data and store on FMCMainDisplay object
  * @param {FMCMainDisplay} mcdu FMCMainDisplay
  * @param {() => void} updateView
+ * @param callback
  */
 const getSimBriefOfp = (mcdu, updateView, callback = () => {}) => {
     const simBriefUserId = NXDataStore.get("CONFIG_SIMBRIEF_USERID", "");
@@ -73,6 +74,7 @@ const getSimBriefOfp = (mcdu, updateView, callback = () => {}) => {
             mcdu.simbrief["navlog"] = data.navlog.fix;
             mcdu.simbrief["callsign"] = data.atc.callsign;
             mcdu.simbrief["alternateIcao"] = data.alternate.icao_code;
+            mcdu.simbrief["alternateCruiseAltitude"] = parseInt(data.alternate.cruise_altitude, 10);
             mcdu.simbrief["alternateTransAlt"] = parseInt(data.alternate.trans_alt, 10);
             mcdu.simbrief["alternateTransLevel"] = parseInt(data.alternate.trans_level, 10);
             mcdu.simbrief["alternateAvgWindDir"] = parseInt(data.alternate.avg_wind_dir, 10);
@@ -121,6 +123,7 @@ const insertUplink = (mcdu) => {
         callsign
     } = mcdu.simbrief;
 
+    mcdu.flightPlanRequestEnabled = false;
     mcdu.setScratchpadMessage(NXSystemMessages.uplinkInsertInProg);
 
     /**
@@ -178,6 +181,10 @@ const insertUplink = (mcdu) => {
         if (mcdu.page.Current === mcdu.page.InitPageA) {
             CDUInitPage.ShowPage1(mcdu);
         }
+        if (mcdu.page.Current === mcdu.page.AcarsMenuPage) {
+            CDU_ACARS_MenuPage.ShowPage1(mcdu);
+        }
+        mcdu.flightPlanRequestEnabled = true;
     }, mcdu.getDelayHigh());
 };
 
@@ -291,7 +298,7 @@ const uplinkRoute = async (mcdu, coroute = false) => {
         // Last SID fix - either it's airway is in the list of procedures, or
         // this is the very first fix in the route (to deal with procedures
         // that only have an exit fix, which won't be caught when filtering)
-        if (procedures.has(fix.via_airway) || (i == 0)) {
+        if (procedures.has(fix.via_airway) || (i === 0)) {
             console.log("Inserting waypoint last of DEP: " + fix.ident);
             await addWaypointAsync(fix, mcdu, fix.ident);
             continue;
@@ -316,6 +323,7 @@ const uplinkRoute = async (mcdu, coroute = false) => {
 
 /**
  * Get the waypoint by ident and coords within the threshold
+ * @param mcdu
  * @param {string} ident Waypoint ident
  * @param {object} coords Waypoint coords
  * @param {function} callback Return waypoint

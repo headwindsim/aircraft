@@ -81,6 +81,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.aocWeight = undefined;
         this.aocTimes = undefined;
         this.winds = undefined;
+        this.uplinkWinds = undefined;
         this.computedVgd = undefined;
         this.computedVfs = undefined;
         this.computedVss = undefined;
@@ -424,6 +425,12 @@ class FMCMainDisplay extends BaseAirliners {
             in: 0,
         };
         this.winds = {
+            climb: [],
+            cruise: [],
+            des: [],
+            alternate: null,
+        };
+        this.uplinkWinds = {
             climb: [],
             cruise: [],
             des: [],
