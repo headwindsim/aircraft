@@ -48,7 +48,7 @@ const edition = require('../package.json').edition;
 let titlePostfix;
 if (edition === 'stable') {
     titlePostfix = 'Stable';
-} else if (GIT_BRANCH === 'master') {
+} else if (GIT_BRANCH === 'main') {
     titlePostfix = 'Development';
 } else if (GIT_BRANCH === 'experimental') {
     titlePostfix = 'Experimental';

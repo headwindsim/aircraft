@@ -9,10 +9,8 @@ jobs:
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      PRE_RELEASE_ID: 102436135
-      PRE_RELEASE_TAG: vstaging
       ZIP_NAME: headwind-aircraft-a330-900-staging.zip
-      BUILD_DIR_NAME: vstaging
+      BUILD_DIR_NAME: staging
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -47,35 +45,22 @@ jobs:
           cd ./build-a339x/out/
           zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-900/
           cd ../../
-      - name: Delete old release assets
-        uses: mknejp/delete-release-assets@v1
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          token: ${{ github.token }}
-          tag: ${{ env.PRE_RELEASE_TAG }}
-          assets: "*"
-          fail-if-no-assets: false
-      - name: Upload zip asset to Release
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: true
+      - name: Upload release asset
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ env.PRE_RELEASE_ID }}/assets{?name,label}
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }}
           asset_name: ${{ env.ZIP_NAME }}
           asset_content_type: application/zip
-      - name: Upload fragment assets to Release
-        uses: dwenegar/upload-release-assets@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          release_id: ${{ env.PRE_RELEASE_ID }}
-          assets_path: ./build-a339x/out/build-modules/
-      - name: Update Release body
-        run: |
-          curl --request PATCH \
-            --url 'https://api.github.com/repos/${{ github.repository }}/releases/${{ env.PRE_RELEASE_ID }}' \
-            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-            --header 'Content-Type: application/json' \
-            --data-raw '{
-              "body": "This pre-release has its asset updated on every release cadidate publish\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest staging build: https://github.com/${{ github.repository }}/releases/download/${{ env.PRE_RELEASE_TAG }}/${{ env.ZIP_NAME }}"
-            }'

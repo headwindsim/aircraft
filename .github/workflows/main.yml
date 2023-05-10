@@ -13,7 +13,7 @@ jobs:
       MAIN_PRE_RELEASE_ID: 64726828
       MAIN_PRE_RELEASE_TAG: vmain
       MAIN_ZIP_NAME: headwind-aircraft-a330-900-main.zip
-      BUILD_DIR_NAME: vmain
+      BUILD_DIR_NAME: main
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
