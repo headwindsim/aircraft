@@ -10,6 +10,8 @@ jobs:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
       ZIP_NAME: headwind-aircraft-a330-900-staging.zip
+      RELEASE_ID: 102440192
+      RELEASE_TAG: vstaging
       BUILD_DIR_NAME: staging
     steps:
       - name: Checkout source
@@ -45,6 +47,38 @@ jobs:
           cd ./build-a339x/out/
           zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-900/
           cd ../../
+      - name: Delete old vstaging release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ github.token }}
+          tag: ${{ env.RELEASE_TAG }}
+          assets: "*"
+          fail-if-no-assets: false
+      - name: Upload zip asset to vstaging Release
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}/assets{?name,label}
+          asset_path: ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }}
+          asset_name: ${{ env.ZIP_NAME }}
+          asset_content_type: application/zip
+      - name: Upload fragment assets to Release
+        uses: dwenegar/upload-release-assets@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          release_id: ${{ env.RELEASE_ID }}
+          assets_path: ./build-a339x/out/build-modules/
+      - name: Update vstaging Release body
+        run: |
+          curl --request PATCH \
+            --url 'https://api.github.com/repos/${{ github.repository }}/releases/${{ env.RELEASE_ID }}' \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+              "body": "This pre-release has its asset updated on every release cadidate publish\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest staging build: https://github.com/${{ github.repository }}/releases/download/${{ env.RELEASE_TAG }}/${{ env.ZIP_NAME }}"
+            }'
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -55,7 +89,7 @@ jobs:
           release_name: ${{ github.ref }}
           draft: false
           prerelease: true
-      - name: Upload release asset
+      - name: Upload Release asset
         uses: actions/upload-release-asset@v1.0.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
