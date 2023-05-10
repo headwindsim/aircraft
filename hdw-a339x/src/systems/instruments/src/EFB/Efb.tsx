@@ -8,8 +8,9 @@ import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import { useSimVar } from '@instruments/common/simVars';
 import { useInteractionEvent } from '@instruments/common/hooks';
 import { usePersistentNumberProperty, usePersistentProperty } from '@instruments/common/persistence';
+
 import { Battery } from 'react-bootstrap-icons';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import { distanceTo } from 'msfs-geo';
 import { Tooltip } from './UtilComponents/TooltipWrapper';
 import { HdwLogo } from './UtilComponents/HdwLogo';
@@ -32,7 +33,6 @@ import { Presets } from './Presets/Presets';
 
 import { clearEfbState, useAppDispatch, useAppSelector } from './Store/store';
 import { fetchSimbriefDataAction, isSimbriefDataLoaded } from './Store/features/simBrief';
-
 import { setFlightPlanProgress } from './Store/features/flightProgress';
 import { Checklists, setAutomaticItemStates } from './Checklists/Checklists';
 import { CHECKLISTS } from './Checklists/Lists';

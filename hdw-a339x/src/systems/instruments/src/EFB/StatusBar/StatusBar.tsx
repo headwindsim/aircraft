@@ -6,12 +6,12 @@ import { Wifi, WifiOff } from 'react-bootstrap-icons';
 import { useSimVar } from '@instruments/common/simVars';
 import { usePersistentNumberProperty, usePersistentProperty } from '@instruments/common/persistence';
 import { useInterval } from '@flybywiresim/react-components';
+import { ClientState } from '@simbridge/index';
 import { t } from '../translation';
 import { TooltipWrapper } from '../UtilComponents/TooltipWrapper';
 import { BatteryStatus } from './BatteryStatus';
 import { useAppSelector } from '../Store/store';
 import { initialState } from '../Store/features/simBrief';
-import { ClientState } from '../../../../simbridge-client/src';
 import { QuickControls } from './QuickControls';
 
 interface StatusBarProps {

@@ -2795,7 +2795,7 @@ class FMCMainDisplay extends BaseAirliners {
             || (isFinite(tow) && this.v2Speed < Math.trunc(1.13 * NXSpeedsUtils.getVs1g(tow, this.flaps, true)));
     }
 
-    toSpeedsChecks(init = false) {
+    toSpeedsChecks() {
         const toSpeedsNotInserted = !this.v1Speed || !this.vRSpeed || !this.v2Speed;
         if (toSpeedsNotInserted !== this.toSpeedsNotInserted) {
             this.toSpeedsNotInserted = toSpeedsNotInserted;
