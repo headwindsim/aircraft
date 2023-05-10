@@ -1,0 +1,81 @@
+name: staging
+on:
+  push:
+    tags:
+      - 'v*-rc*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      A32NX_PRODUCTION_BUILD: 1
+      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
+      PRE_RELEASE_ID: 102436135
+      PRE_RELEASE_TAG: vstaging
+      ZIP_NAME: headwind-aircraft-a330-900-staging.zip
+      BUILD_DIR_NAME: vstaging
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Set BUILT_DATE_TIME
+        run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
+      - name: Create .env file
+        run: |
+          echo A32NX_PRODUCTION_BUILD=1 >> hdw-a339x/.env
+          echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a339x/.env
+          echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a339x/.env
+          echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a339x/.env
+          echo BUILD_DIR_NAME=${{ env.BUILD_DIR_NAME }} >> .env
+          echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
+          echo VITE_BUILD=false >> .env
+      - name: Setup Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: Copy Sources
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/copy.sh
+      - name: Build A339X Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/build_a339x.sh --no-tty -j 4
+      - name: Build ZIP files
+        run: |
+          ./scripts/dev-env/run.sh node ./scripts/fragment.js
+          cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
+          ./scripts/dev-env/run.sh node ./scripts/install-source.js
+          mkdir ./${{ env.BUILD_DIR_NAME }}
+          cd ./build-a339x/out/
+          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-900/
+          cd ../../
+      - name: Delete old release assets
+        uses: mknejp/delete-release-assets@v1
+        with:
+          token: ${{ github.token }}
+          tag: ${{ env.PRE_RELEASE_TAG }}
+          assets: "*"
+          fail-if-no-assets: false
+      - name: Upload zip asset to Release
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: https://uploads.github.com/repos/${{ github.repository }}/releases/${{ env.PRE_RELEASE_ID }}/assets{?name,label}
+          asset_path: ./${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }}
+          asset_name: ${{ env.ZIP_NAME }}
+          asset_content_type: application/zip
+      - name: Upload fragment assets to Release
+        uses: dwenegar/upload-release-assets@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          release_id: ${{ env.PRE_RELEASE_ID }}
+          assets_path: ./build-a339x/out/build-modules/
+      - name: Update Release body
+        run: |
+          curl --request PATCH \
+            --url 'https://api.github.com/repos/${{ github.repository }}/releases/${{ env.PRE_RELEASE_ID }}' \
+            --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+            --header 'Content-Type: application/json' \
+            --data-raw '{
+              "body": "This pre-release has its asset updated on every release cadidate publish\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest staging build: https://github.com/${{ github.repository }}/releases/download/${{ env.PRE_RELEASE_TAG }}/${{ env.ZIP_NAME }}"
+            }'
