@@ -100,6 +100,9 @@ const NXSystemMessages = {
     windUplinkExists:       new TypeIMessage("WIND UPLINK EXISTS"),
     windUplinkPending:      new TypeIIMessage("WIND UPLINK PENDING", true),
     xxxIsDeselected:        new TypeIMessage("XXXX IS DESELECTED", false, "XXXX"),
+    stepAboveMaxFl:         new TypeIIMessage("STEP ABOVE MAX FL"),
+    stepAhead:              new TypeIIMessage("STEP AHEAD"),
+    stepDeleted:            new TypeIIMessage("STEP DELETED"),
 };
 
 const NXFictionalMessages = {
