@@ -45,11 +45,11 @@ For Git Bash/Linux:
 
 For powershell:
 ```shell
-.\scripts\dev-env\run.cmd ./scripts/copy.sh
+.\scripts\dev-env\run.cmd ./scripts/copy_a339x.sh
 ```
 For Git Bash/Linux:
 ```shell
-./scripts/dev-env/run.sh ./scripts/copy.sh
+./scripts/dev-env/run.sh ./scripts/copy_a339x.sh
 ```
 
 #### 3. Build all A32NX module by running following command on powershell.
