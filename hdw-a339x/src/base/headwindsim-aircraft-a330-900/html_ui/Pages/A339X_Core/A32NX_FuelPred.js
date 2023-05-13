@@ -153,7 +153,7 @@ const _buildBMatrix6 = (value) => {
 };
 
 //A330 Factor
-const factor = 0.94;
+const factor = 0.84;
 
 //TODO Refactor this when you have time
 class A32NX_FuelPred {
@@ -216,9 +216,9 @@ class A32NX_FuelPred {
             case this.computations.FUEL:
                 return (Math.round(math.sum(math.dotMultiply((alternate ? altFuelConsumedCoef : fuelConsumedCoeff), mmOfDistFL)) * factor));
             case this.computations.TIME:
-                return (Math.round(math.sum(math.dotMultiply((alternate ? altTimeCoef : timeCoeff), mmOfDistFL)) * factor));
+                return (Math.round(math.sum(math.dotMultiply((alternate ? altTimeCoef : timeCoeff), mmOfDistFL))));
             case this.computations.CORRECTIONS:
-                return (Math.round(math.sum(math.dotMultiply((alternate ? altCorrectionsCoeff : correctionsCoef), mmOfDistFL)) * factor));
+                return (Math.round(math.sum(math.dotMultiply((alternate ? altCorrectionsCoeff : correctionsCoef), mmOfDistFL))));
         }
     }
 
