@@ -238,7 +238,7 @@ export class EngineModel {
                     + (coefficients[17] * mach ** 3) + (coefficients[18] * mach ** 2 * alt) + (coefficients[19] * mach * alt ** 2)
                     + (coefficients[20] * alt ** 3);
 
-        return flow * 2.9;
+        return flow * 2.7;
     }
 
     // static getCN1fromUncorrectedThrust(thrust: number)
