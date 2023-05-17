@@ -3,6 +3,8 @@ on:
   push:
     tags:
       - 'v*'
+      - '!v*-alpha*'
+      - '!v*-beta*'
       - '!v*-rc*'
     paths:
       - '.github/workflows/a339x-livery-package-release.yml'
