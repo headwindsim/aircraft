@@ -12,7 +12,7 @@ jobs:
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
       EXP_PRE_RELEASE_ID: 79990124
       EXP_PRE_RELEASE_TAG: vexp
-      EXP_ZIP_NAME: headwind-aircraft-a330-900-experimental.zip
+      EXP_ZIP_NAME: headwindsim-aircraft-a330-900-experimental.zip
       BUILD_DIR_NAME: experimental
     steps:
       - name: Checkout source
@@ -78,5 +78,5 @@ jobs:
             --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
             --header 'Content-Type: application/json' \
             --data-raw '{
-              "body": "This release has its asset updated on every commit to the experimental branch\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\nThis link will always point to the latest main build: https://github.com/${{ github.repository }}/releases/download/${{ env.EXP_PRE_RELEASE_TAG }}/${{ env.EXP_ZIP_NAME }}"
+              "body": "This release has its asset updated on every commit to the experimental branch\nLast updated on ${{ env.BUILT_DATE_TIME }} from commit ${{ github.sha }}\n"
             }'
