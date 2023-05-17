@@ -85,7 +85,7 @@ export default new TaskOfTasks("all", [
                     'npm run build-a339x:systems-host',
                     [
                         'build-a339x/src/systems/systems-host',
-                        'a32nx/fbw-common/src/systems/datalink',
+                        'build-common/src/systems/datalink',
                         'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/SystemsHost'
                     ]
                 ),
@@ -105,7 +105,7 @@ export default new TaskOfTasks("all", [
                     "npm run build-a339x:systems",
                     [
                         "build-a339x/src/wasm/systems",
-                        "a32nx/fbw-common/src/wasm/systems",
+                        "build-common/src/wasm/systems",
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm"
@@ -114,30 +114,30 @@ export default new TaskOfTasks("all", [
                     "npm run build-a339x:fadec",
                     [
                         "build-a339x/src/wasm/fadec_a320",
-                        "a32nx/fbw-common/src/wasm/fbw_common",
-                        "a32nx/fbw-common/src/wasm/fadec_common",
+                        "build-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fadec_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm"
                     ]),
                 new ExecTask("systems-fbw",
                     "npm run build-a339x:fbw",
                     [
                         "build-a339x/src/wasm/fbw_a320",
-                        "a32nx/fbw-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fbw_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm"
                     ]),
                 new ExecTask("systems-terronnd", [
-                    "a32nx/fbw-common/src/wasm/terronnd/build.sh",
-                    "wasm-opt -O1 -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm a32nx/fbw-common/src/wasm/terronnd/out/terronnd.wasm"
+                    "build-common/src/wasm/terronnd/build.sh",
+                    "wasm-opt -O1 -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm build-common/src/wasm/terronnd/out/terronnd.wasm"
                 ], [
-                    "a32nx/fbw-common/src/wasm/terronnd",
+                    "build-common/src/wasm/terronnd",
                     "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm",
-                    "a32nx/fbw-common/src/wasm/terronnd/out/terronnd.wasm",
+                    "build-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
                 new ExecTask("flypad-backend",
                     "npm run build-a339x:flypad-backend",
                     [
                         "build-a339x/src/wasm/flypad-backend",
-                        "fbw-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fbw_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm"
                     ])
             ], true),
@@ -155,7 +155,7 @@ export default new TaskOfTasks("all", [
                     "npm run build-a339x-acj:systems",
                     [
                         "build-a339x-acj/src/wasm/systems",
-                        "a32nx/fbw-common/src/wasm/systems",
+                        "build-common/src/wasm/systems",
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/systems.wasm"
@@ -164,30 +164,30 @@ export default new TaskOfTasks("all", [
                     "npm run build-a339x-acj:fadec",
                     [
                         "build-a339x-acj/src/wasm/fadec_a320",
-                        "a32nx/fbw-common/src/wasm/fbw_common",
-                        "a32nx/fbw-common/src/wasm/fadec_common",
+                        "build-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fadec_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/fadec.wasm"
                     ]),
                 new ExecTask("systems-fbw",
                     "npm run build-a339x-acj:fbw",
                     [
                         "build-a339x-acj/src/wasm/fbw_a320",
-                        "a32nx/fbw-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fbw_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/fbw.wasm"
                     ]),
                 new ExecTask("systems-terronnd", [
-                    "a32nx/fbw-common/src/wasm/terronnd/build.sh",
-                    "wasm-opt -O1 -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/terronnd.wasm a32nx/fbw-common/src/wasm/terronnd/out/terronnd.wasm"
+                    "build-common/src/wasm/terronnd/build.sh",
+                    "wasm-opt -O1 -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/terronnd.wasm build-common/src/wasm/terronnd/out/terronnd.wasm"
                 ], [
-                    "a32nx/fbw-common/src/wasm/terronnd",
+                    "build-common/src/wasm/terronnd",
                     "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/terronnd.wasm",
-                    "a32nx/fbw-common/src/wasm/terronnd/out/terronnd.wasm",
+                    "build-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
                 new ExecTask("flypad-backend",
                     "npm run build-a339x-acj:flypad-backend",
                     [
                         "build-a339x-acj/src/wasm/flypad-backend",
-                        "fbw-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fbw_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/flypad-backend.wasm"
                     ])
             ], true),

@@ -9,7 +9,7 @@
                 "${workspaceFolder}/a32nx/fbw-common/src/wasm/fbw_common/src/**",
                 "${workspaceFolder}/a32nx/fbw-a32nx/src/wasm/fbw_a320/src/**",
                 "${workspaceFolder}/a32nx/fbw-a380x/src/wasm/fbw_a380/src/**"
-              ],
+            ],
             "defines": [
                 "_MSFS_WASM=1",
                 "__wasi__",
@@ -20,8 +20,8 @@
             "windowsSdkVersion": "10.0.18362.0",
             //"compilerPath": "${MSFS_SDK}/WASM/llvm/bin/clang-cl.exe",
             "compilerArgs": [
-              "--sysroot ${MSFS_SDK}/WASM/wasi-sysroot",
-              "-target wasm32-unknown-wasi"
+                "--sysroot ${MSFS_SDK}/WASM/wasi-sysroot",
+                "-target wasm32-unknown-wasi"
             ],
             "cStandard": "c17",
             "cppStandard": "c++17",

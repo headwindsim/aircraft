@@ -15,7 +15,7 @@ include_directories(
         ./src/Aircraft
         ./src/Lighting
         ./src/Pushback
-        ${FBW_ROOT}/a32nx/fbw-common/src/wasm/fbw_common/src/inih
+        ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/inih
 )
 
 add_executable(flybywire-a32nx-flypad-backend

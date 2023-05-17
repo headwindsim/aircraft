@@ -12,7 +12,7 @@ lazy_static = "1.4.0"
 nalgebra = "0.25.0"
 ntest = "0.7.2"
 enum-map = "2.4.2"
-systems = { path = "../../../../../a32nx/fbw-common/src/wasm/systems/systems" }
+systems = { path = "../../../../../build-common/src/wasm/systems/systems" }
 
 [dev-dependencies]
 rstest = "0.10.0"

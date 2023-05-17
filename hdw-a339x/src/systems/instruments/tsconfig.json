@@ -7,6 +7,6 @@
   },
   "include": [
     "src/**/*",
-    "../../../../../../a32nx/fbw-common/src/typings/**/*.d.ts"
+    "../../../../../../build-common/src/typings/**/*.d.ts"
   ]
 }

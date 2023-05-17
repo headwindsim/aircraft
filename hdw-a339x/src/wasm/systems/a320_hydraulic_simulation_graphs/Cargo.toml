@@ -9,7 +9,7 @@ name = "a320_hydraulic_simulation_graphs"
 doc = false
 
 [dependencies]
-systems = { path = "../../../../../a32nx/fbw-common/src/wasm/systems/systems" }
+systems = { path = "../../../../../build-common/src/wasm/systems/systems" }
 a320_systems = { path = "../a320_systems" }
 uom = "0.33.0"
 rand = "0.8.0"

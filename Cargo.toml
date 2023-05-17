@@ -1,4 +1,5 @@
 [workspace]
+exclude = ["a32nx"]
 
 members = [
     "build-a339x/src/wasm/systems/a320_systems",
@@ -7,8 +8,8 @@ members = [
     "build-a339x-acj/src/wasm/systems/a320_systems",
     "build-a339x-acj/src/wasm/systems/a320_systems_wasm",
     "build-a339x-acj/src/wasm/systems/a320_hydraulic_simulation_graphs",
-    "a32nx/fbw-common/src/wasm/systems/systems",
-    "a32nx/fbw-common/src/wasm/systems/systems_wasm",
+    "build-common/src/wasm/systems/systems",
+    "build-common/src/wasm/systems/systems_wasm",
 ]
 
 [profile.release]
