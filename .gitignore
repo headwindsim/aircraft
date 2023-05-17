@@ -36,6 +36,10 @@
 
 # Project folders
 
+/hdw-common/*
+!/hdw-common/src/
+!/hdw-common/src/**
+
 /hdw-a339x/*
 !/hdw-a339x/README.md
 !/hdw-a339x/mach.config.js
