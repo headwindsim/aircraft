@@ -24,6 +24,12 @@
             </UseTemplate>
         </Component>
 
+        <Component ID="CATSTICKER" Node="Plan.003">
+            <UseTemplate Name="ASOBO_GT_Visibility_Code">
+                <VISIBILITY_CODE>0</VISIBILITY_CODE>
+            </UseTemplate>
+        </Component>
+
         <Component ID="EFB_L">
             <Component ID="SCREEN_EFB_L" Node="SCREEN_EFB_L">
                 <DefaultTemplateParameters>
