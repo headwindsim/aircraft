@@ -123,7 +123,6 @@ const insertUplink = (mcdu) => {
         callsign
     } = mcdu.simbrief;
 
-    mcdu.flightPlanRequestEnabled = false;
     mcdu.setScratchpadMessage(NXSystemMessages.uplinkInsertInProg);
 
     /**
@@ -184,7 +183,6 @@ const insertUplink = (mcdu) => {
         if (mcdu.page.Current === mcdu.page.AcarsMenuPage) {
             CDU_ACARS_MenuPage.ShowPage1(mcdu);
         }
-        mcdu.flightPlanRequestEnabled = true;
     }, mcdu.getDelayHigh());
 };
 
