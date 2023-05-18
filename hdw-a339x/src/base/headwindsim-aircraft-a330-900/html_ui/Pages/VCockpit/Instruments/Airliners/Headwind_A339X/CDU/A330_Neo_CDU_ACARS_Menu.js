@@ -3,6 +3,20 @@ class CDU_ACARS_MenuPage {
         mcdu.clearDisplay();
         mcdu.page.Current = mcdu.page.AcarsMenuPage;
         mcdu.activeSystem = "ACARS";
+        let requestEnable = true;
+
+        if (mcdu.simbrief.sendStatus === "REQUESTING") {
+            requestEnable = false;
+        }
+
+        if (mcdu.flightPlanManager.getPersistentOrigin() && mcdu.flightPlanManager.getPersistentOrigin().ident) {
+            if (mcdu.flightPlanManager.getDestination() && mcdu.flightPlanManager.getDestination().ident) {
+                if (mcdu.simbrief.sendStatus != "DONE" ||
+                    (mcdu.simbrief["originIcao"] === mcdu.flightPlanManager.getPersistentOrigin().ident && mcdu.simbrief["destinationIcao"] === mcdu.flightPlanManager.getDestination().ident)) {
+                    requestEnable = false;
+                }
+            }
+        }
 
         const updateView = () => {
             mcdu.setTemplate(FormatTemplate([
@@ -13,7 +27,7 @@ class CDU_ACARS_MenuPage {
                 ],
                 [
                     new Column(7, "F-PLN INIT"),
-                    new Column(23, mcdu.flightPlanRequestEnabled ? "REQ*" : "REQ ", Column.right)
+                    new Column(23, requestEnable ? "REQ*" : "REQ ", Column.right)
                 ],
                 [""],
                 [
@@ -50,7 +64,7 @@ class CDU_ACARS_MenuPage {
         };
 
         mcdu.onRightInput[0] = () => {
-            if (mcdu.flightPlanRequestEnabled) {
+            if (requestEnable) {
                 getSimBriefOfp(mcdu, () => {
                     CDU_ACARS_MenuPage.ShowPage1(mcdu)
                 }).then(() => {
