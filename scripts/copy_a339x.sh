@@ -82,11 +82,11 @@ mkdir -p ./build-a339x-acj/src/wasm
 cp -rva ./build-a339x/src/localization/. ./build-a339x-acj/src/localization
 cp -rva ./build-a339x/src/systems/. ./build-a339x-acj/src/systems
 cp -rva ./build-a339x/src/wasm/. ./build-a339x-acj/src/wasm
+cp -rva ./build-a339x/.env ./build-a339x-acj/.env
 
 cp -rva ./hdw-a339x-acj/src/systems/. ./build-a339x-acj/src/systems
 cp -rva ./hdw-a339x-acj/src/wasm/. ./build-a339x-acj/src/wasm
 
-cp -rva ./hdw-a339x-acj/.env ./build-a339x-acj/.env
 cp -rva ./hdw-a339x-acj/mach.config.js ./build-a339x-acj/mach.config.js
 
 # copy base of A339X to out
