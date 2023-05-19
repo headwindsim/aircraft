@@ -87,24 +87,41 @@ Engine Sound: FTSiM+ - https://www.ftsimplus.com/´
 Cockpit 3D parts, learning: Project Mega Pack - https://github.com/Project-Mega-Pack
 
 
-## Licences
+## License Information
 
-The original contents of this repository are DUAL LICENSED. Original textual-form source code in this file is licensed under the GNU General Public License version 3 (GNU GPLv3).
+This repository and its contents are dual-licensed, with a unique set of terms applied to the original textual-form source code and the artistic assets, respectively.
 
-Creative Commons License Artistic Assets (Models, Textures) are licenced under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC 4.0).
+### GNU General Public License version 3 (GNU GPLv3)
 
-Microsoft Flight Simulator © Microsoft Corporation.
+The original textual-form source code in this repository is licensed under the GNU General Public License version 3 (GNU GPLv3). Compiled artifacts generated from this source code also fall under the GNU GPLv3 license.
 
-The Project Mega Pack A330 was created under Microsoft's "Game Content Usage Rules" using assets from Microsoft Flight Simulator 2020, and it is not endorsed by or affiliated with Microsoft.
+A copy of the GNU GPLv3 can be found in the LICENSE file in this repository or [online](https://www.gnu.org/licenses/gpl-3.0.html).
 
-The FlyByWire Simulations A32NX was created under Microsoft's "Game Content Usage Rules" using assets from Microsoft Flight Simulator, and it is not endorsed by or affiliated with Microsoft.
+### Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC 4.0)
 
-The Headwind Simulations A339X was created under Microsoft's "Game Content Usage Rules" using assets from Microsoft Flight Simulator, and it is not endorsed by or affiliated with Microsoft.
+The artistic assets within this repository, including models and textures, are licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (CC BY-NC 4.0).
 
-The contents of distribution packages built from the sources in this repository are therefore licensed as follows:
+You can view the full text of the CC BY-NC 4.0 license [here](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
-- in the case of original source code from Headwind Simulations or compiled artifacts generated from it, under GPLv3.
-- in the case of original 3D assets from Headwind Simulations, under CC BY-NC 4.0.
-- in the case of assets covered by the "Game Content Usage Rules", under the license granted by those rules.
+### Game Content Usage Rules
+
+The Project Mega Pack A330, the FlyByWire Simulations A32NX, and the Headwind Simulations A339X were all created under Microsoft's "Game Content Usage Rules" using assets from Microsoft Flight Simulator 2020. They are neither endorsed by nor affiliated with Microsoft.
+
+### A330neo Model Exception
+
+The A330neo model used in this project is based on the work of Shervin Ahooraei from Project Sky. It is not open source, but we have been granted explicit permission to use it. All rights and credits for this model belong to Shervin Ahooraei. The model cannot be copied, modified, or distributed without his direct permission.
+
+### Disclaimer
 
 We are not affiliated, associated, authorized, endorsed by, or in any way officially connected with the Airbus brand, or any of its subsidiaries or its affiliates.
+
+### Overall
+
+Content within distribution packages built from the sources in this repository are licensed as follows:
+
+- Original source code or compiled artifacts from Headwind Simulations: GNU GPLv3.
+- Original 3D assets from Headwind Simulations: CC BY-NC 4.0.
+- Assets covered by the "Game Content Usage Rules": Under the license granted by those rules.
+- A330neo model: Not open source, used with explicit permission from Shervin Ahooraei of Project Sky.
+
+Please respect these licenses and attributions when using content from this repository.
