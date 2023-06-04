@@ -44,10 +44,10 @@ module.exports = {
     ],
 };
 
-function msfsAvionicsInstrument(name) {
+function msfsAvionicsInstrument(name, folder = name) {
     return {
         name,
-        index: `src/systems/instruments/src/${name}/instrument.tsx`,
+        index: `src/systems/instruments/src/${folder}/instrument.tsx`,
         simulatorPackage: {
             type: 'baseInstrument',
             templateId: `ACJ339X_${name}`,
