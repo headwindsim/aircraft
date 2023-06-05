@@ -1,2 +1,3 @@
 <ModelBehaviors>
+    <Include RelativeFile="../generated/A32NX_Windshield.xml"/>
 </ModelBehaviors>
