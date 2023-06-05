@@ -615,7 +615,7 @@ export const LandingWidget = () => {
                                             className="w-full rounded-r-none"
                                             value={getVariableUnitDisplayValue<'kg' | 'lb'>(weight, weightUnit as 'kg' | 'lb', 'lb', Units.kilogramToPound)}
                                             placeholder={weightUnit}
-                                            min={weightUnit === 'kg' ? 124500 : 274476}
+                                            min={weightUnit === 'kg' ? 134500 : 296522}
                                             max={weightUnit === 'kg' ? 191000 : 421083}
                                             decimalPrecision={0}
                                             onChange={handleWeightChange}

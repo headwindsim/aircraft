@@ -69,12 +69,12 @@ export const OverviewPage = () => {
                         <LightningFill size={23} />
                     </InformationEntry>
 
-                    <InformationEntry title={t('Dispatch.Overview.MTOW')} info={getConvertedInfo(242000, 'weight')}>
+                    <InformationEntry title={t('Dispatch.Overview.MTOW')} info={getConvertedInfo(251000, 'weight')}>
                         <Box size={23} />
                     </InformationEntry>
                 </div>
                 <div className="flex flex-col space-y-8">
-                    <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(6550, 'distance')}>
+                    <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(7200, 'distance')}>
                         <Rulers size={23} />
                     </InformationEntry>
 
