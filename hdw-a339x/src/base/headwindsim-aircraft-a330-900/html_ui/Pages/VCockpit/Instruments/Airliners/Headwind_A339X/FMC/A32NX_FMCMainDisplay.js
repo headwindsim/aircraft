@@ -207,7 +207,6 @@ class FMCMainDisplay extends BaseAirliners {
             this.arincMissedEoAccelerationAltitude,
         ];
     }
-
     Init() {
         super.Init();
         this.initVariables();
@@ -2840,6 +2839,7 @@ class FMCMainDisplay extends BaseAirliners {
         }
 
         const departureElevation = this.getDepartureElevation();
+
         const zp = departureElevation !== null ? this.getPressureAltAtElevation(departureElevation, this.getBaroCorrection1()) : this.getPressureAlt();
         if (zp === null) {
             return false;
