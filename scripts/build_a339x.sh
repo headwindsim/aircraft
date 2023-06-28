@@ -9,13 +9,13 @@ ORIGINAL_GROUP_ID=$(stat -c '%g' /external)
 # set ownership to root to fix cargo/rust build (when run as github action)
 if [ "${GITHUB_ACTIONS}" == "true" ]; then
   chown -R root:root /external
+  rm -rf /external/flybywire
 fi
 
 # run build
 time npx igniter -r A339X "$@"
 
 if [ "${GITHUB_ACTIONS}" == "true" ]; then
-  rm -rf /external/flybywire
   rm -rf /external/build-a339x/src
   rm -rf /external/build-acj339x/src
   rm -rf /external/hdw-a339x/src
