@@ -1,4 +1,4 @@
-import { usePersistentNumberProperty, usePersistentProperty } from '@instruments/common/persistence';
+import { usePersistentNumberProperty, usePersistentProperty } from '@flybywiresim/fbw-sdk';
 import React, { useState } from 'react';
 import { t } from '../../translation';
 import { SelectGroup, SelectItem } from '../../UtilComponents/Form/Select';

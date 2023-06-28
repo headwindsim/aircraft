@@ -18,6 +18,7 @@
       "@fmgc/*": ["../../../build-a339x/src/systems/fmgc/src/*"],
       "@shared/*": ["../../../build-a339x/src/systems/shared/src/*"],
       "@typings/*": ["../typings/*"],
+      "@flybywiresim/fbw-sdk": ["./index.ts"]
     }
   },
 }

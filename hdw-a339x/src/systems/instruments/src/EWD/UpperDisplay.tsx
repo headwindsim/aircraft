@@ -1,5 +1,5 @@
 import { EventBus, DisplayComponent, FSComponent, Subject, VNode } from '@microsoft/msfs-sdk';
-import { NXDataStore } from '@shared/persistence';
+import { NXDataStore } from '@flybywiresim/fbw-sdk';
 import { AFloor } from './AFloor';
 import { Egt } from './EGT';
 import { FF } from './FF';

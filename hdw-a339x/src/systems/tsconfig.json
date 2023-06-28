@@ -24,6 +24,7 @@
       "@shared/*": ["./shared/src/*"],
       "@tcas/*": ["./tcas/src/*"],
       "@typings/*": ["../../../build-common/src/typings/*"],
+      "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index.ts"]
     }
   },
 }

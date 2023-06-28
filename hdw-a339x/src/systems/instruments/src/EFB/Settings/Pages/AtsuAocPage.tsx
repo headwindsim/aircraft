@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
 
-import { usePersistentProperty } from '@instruments/common/persistence';
+import { usePersistentProperty } from '@flybywiresim/fbw-sdk';
 
 import { Hoppie } from '@flybywiresim/api-client';
 import { toast } from 'react-toastify';

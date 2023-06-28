@@ -1,8 +1,7 @@
 import React, { FC } from 'react';
 import { IconPlane } from '@tabler/icons';
 import { Box, LightningFill, PeopleFill, Rulers, Speedometer2 } from 'react-bootstrap-icons';
-import { useSimVar } from '@instruments/common/simVars';
-import { Units } from '@shared/units';
+import { useSimVar, Units } from '@flybywiresim/fbw-sdk';
 import { t } from '../../translation';
 import { NoseOutline } from '../../Assets/NoseOutline';
 
@@ -42,7 +41,7 @@ export const OverviewPage = () => {
     };
 
     return (
-        <div className="overflow-hidden p-6 mr-3 w-full rounded-lg border-2 h-content-section-reduced border-theme-accent">
+        <div className="overflow-hidden p-6 mr-3 w-full h-content-section-reduced rounded-lg border-2 border-theme-accent">
             <h1 className="font-bold">Airbus ACJ330neo (A330-941)</h1>
             <p>{airline}</p>
 

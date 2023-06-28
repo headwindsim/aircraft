@@ -1,6 +1,4 @@
-import { usePersistentProperty } from '@instruments/common/persistence';
-import { useSimVar } from '@instruments/common/simVars';
-import { Units } from '@shared/units';
+import { usePersistentProperty, useSimVar, Units } from '@flybywiresim/fbw-sdk';
 import React, { useEffect, useRef, useState } from 'react';
 import { CanvasConst, PerformanceEnvelope, ChartLimits } from './Constants';
 

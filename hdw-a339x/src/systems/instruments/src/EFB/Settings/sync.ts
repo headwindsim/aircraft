@@ -1,4 +1,4 @@
-import { NXDataStore } from '@shared/persistence';
+import { NXDataStore } from '@flybywiresim/fbw-sdk';
 
 type SimVar = [name: string, type: string, defaultValue: string];
 type SimVarEnum = [name: string, type: string, defaultValue: string, map: Map<string, number>];

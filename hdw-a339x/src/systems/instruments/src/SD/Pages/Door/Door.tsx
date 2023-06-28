@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSimVar } from '../../../Common/simVars';
+import { useSimVar } from '@flybywiresim/fbw-sdk';
 
 import './Door.scss';
 

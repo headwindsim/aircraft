@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 
-import { usePersistentNumberProperty, usePersistentProperty } from '@instruments/common/persistence';
-import { useSimVar } from '@instruments/common/simVars';
+import { usePersistentNumberProperty, usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
 
 import Slider from 'rc-slider';
 import { Toggle } from '../../UtilComponents/Form/Toggle';

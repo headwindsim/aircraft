@@ -13,7 +13,7 @@ esbuild.build({
 
     define: { DEBUG: 'false' },
 
-    entryPoints: [ path.join(rootDir,  '../build-common/src/systems/datalink/common/src/index.ts')],
+    entryPoints: [path.join(rootDir, '../build-common/src/systems/datalink/common/src/index.ts')],
     bundle: true,
     treeShaking: false,
     minify: isProductionBuild,
@@ -23,7 +23,7 @@ esbuild.build({
     format: 'iife',
     globalName: 'AtsuCommon',
 
-    sourcemap: isProductionBuild ? undefined : 'linked',
+    sourcemap: isProductionBuild ? 'linked' : undefined,
 
     // Target approximate CoherentGT WebKit version
     target: 'safari11',

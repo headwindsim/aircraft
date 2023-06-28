@@ -1,5 +1,5 @@
 import { NdTraffic } from '@shared/NavigationDisplay';
-// import { MathUtils } from '@shared/MathUtils';
+// import { MathUtils } from '@flybywiresim/fbw-sdk';
 import { TaRaIntrusion } from '@tcas/lib/TcasConstants';
 import { MapLayer } from './MapLayer';
 import { PaintUtils } from './PaintUtils';

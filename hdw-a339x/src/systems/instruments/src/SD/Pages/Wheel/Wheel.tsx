@@ -1,7 +1,5 @@
 import React from 'react';
-import { useSimVar } from '@instruments/common/simVars';
-import { useArinc429Var } from '@instruments/common/arinc429';
-import { Arinc429Word } from '@shared/arinc429';
+import { useSimVar, useArinc429Var, Arinc429Word } from '@flybywiresim/fbw-sdk';
 import { HydraulicsProvider, useHydraulics } from '../../Common/HydraulicsProvider';
 import { HydraulicIndicator } from '../../Common/HydraulicIndicator';
 import { ComponentPositionProps } from '../../Common/ComponentPositionProps';

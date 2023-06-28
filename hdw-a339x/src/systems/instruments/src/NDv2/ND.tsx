@@ -1,5 +1,5 @@
 import { ClockEvents, ConsumerSubject, DisplayComponent, EventBus, FSComponent, MappedSubject, Subject, Subscribable, VNode } from '@microsoft/msfs-sdk';
-import { SimVarString } from '@shared/simvar';
+import { SimVarString } from '@flybywiresim/fbw-sdk';
 import { EfisNdMode, EfisNdRangeValue, EfisSide, rangeSettings } from '@shared/NavigationDisplay';
 import { DmcEvents } from 'instruments/src/MsfsAvionicsCommon/providers/DmcPublisher';
 import { clampAngle } from 'msfs-geo';

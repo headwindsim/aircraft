@@ -3,9 +3,8 @@
 
 /* eslint-disable max-len */
 import React, { useEffect, useState } from 'react';
-import { useSimVar } from '@instruments/common/simVars';
+import { useSimVar, MathUtils } from '@flybywiresim/fbw-sdk';
 import { ZoomIn, ZoomOut } from 'react-bootstrap-icons';
-import { MathUtils } from '@shared/MathUtils';
 import { IconPlane } from '@tabler/icons';
 import { Coordinates } from 'msfs-geo';
 import { computeDestinationPoint, getGreatCircleBearing } from 'geolib';
@@ -241,9 +240,9 @@ export const PushbackMap = () => {
                             <div
                                 className="absolute"
                                 style={{
-                                    transform: `rotate(-90deg) 
-                                scaleX(${tugCmdSpdFactor >= 0 ? 1 : -1}) 
-                                scaleY(${tugCmdHdgFactor >= 0 ? 1 : -1}) 
+                                    transform: `rotate(-90deg)
+                                scaleX(${tugCmdSpdFactor >= 0 ? 1 : -1})
+                                scaleY(${tugCmdHdgFactor >= 0 ? 1 : -1})
                                 translateY(${turningRadius}px)`,
                                 }}
                             >

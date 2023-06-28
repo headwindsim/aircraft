@@ -9,11 +9,7 @@ import {
     PersonFill,
     StopCircleFill,
 } from 'react-bootstrap-icons';
-import { useSimVar } from '@instruments/common/simVars';
-import { Units } from '@shared/units';
-import { usePersistentNumberProperty, usePersistentProperty } from '@instruments/common/persistence';
-import { SeatFlags } from '@shared/bitFlags';
-import { useSeatFlags } from '@instruments/common/bitFlags';
+import { useSimVar, Units, SeatFlags, useSeatFlags, usePersistentNumberProperty, usePersistentProperty } from '@flybywiresim/fbw-sdk';
 import { round } from 'lodash';
 import { CargoWidget } from './Seating/CargoWidget';
 import { ChartWidget } from './Chart/ChartWidget';
