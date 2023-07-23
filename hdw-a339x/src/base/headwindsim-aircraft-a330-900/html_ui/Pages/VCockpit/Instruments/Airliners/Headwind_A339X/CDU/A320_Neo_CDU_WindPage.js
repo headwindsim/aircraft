@@ -52,7 +52,7 @@ class CDUWindPage {
                 new Column(0, "<RETURN")
             ],
         ];
-        
+
 
         mcdu.setTemplate(FormatTemplate(CDUWindPage.ShowWinds(template, mcdu, 'CLB', CDUWindPage.ShowCLBPage, offset, 5)));
 
@@ -92,15 +92,15 @@ class CDUWindPage {
             if(waypoint) {
                 CDUWindPage.ShowWPTPage(mcdu, waypoint.ident);
                 return;
-            }    
+            }
         }
-        
+
         waypoint = mcdu.simbrief.navlog.find((val) => val.stage === 'CRZ');
         if(waypoint) {
             CDUWindPage.ShowWPTPage(mcdu, waypoint.ident);
             return;
         }
-        
+
         const template = [
             [new Column(7, "CRUISE WIND")],
             [
@@ -111,7 +111,7 @@ class CDUWindPage {
                 "",
                 new Column(22, "FL330", Column.right),
             ],
-            
+
             [
                 "",
                 CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
@@ -148,7 +148,7 @@ class CDUWindPage {
             [
                 new Column(0, "<RETURN")
             ],
-        ];        
+        ];
 
         mcdu.setTemplate(FormatTemplate(CDUWindPage.ShowWinds(template, mcdu, 'CRZ', CDUWindPage.ShowCRZPage, offset, 5)));
 
@@ -181,9 +181,9 @@ class CDUWindPage {
 
     static ShowWPTPage(mcdu, ident, offset = 0) {
         mcdu.clearDisplay();
-        mcdu.page.Current = mcdu.page.CruiseWind;        
-        
-        const waypoint = mcdu.simbrief.navlog.find((val) => val.ident === ident);        
+        mcdu.page.Current = mcdu.page.CruiseWind;
+
+        const waypoint = mcdu.simbrief.navlog.find((val) => val.ident === ident);
         if(!waypoint || waypoint.stage === "CLB") {
             CDUWindPage.ShowCLBPage(mcdu);
             return;
@@ -200,7 +200,7 @@ class CDUWindPage {
                 new Column(13, "AT", Column.small),
                 new Column(16, ident, Column.green)
             ],
-            
+
             [
                 new Column(0, "TRU WIND/ALT")
             ],
@@ -210,7 +210,7 @@ class CDUWindPage {
                 "",
                 CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
                     new Column(22, "INSERT", Column.cyan, Column.right) :
-                    new Column(22, "WIND", Column.amber, Column.right)                 
+                    new Column(22, "WIND", Column.amber, Column.right)
             ],
             [
                 "",
@@ -218,7 +218,7 @@ class CDUWindPage {
                     new Column(23, "UPLINK*", Column.cyan, Column.right) :
                     new Column(23, mcdu.windRequestEnabled ? "REQUEST*" : "REQUEST ", Column.amber, Column.right)
             ],
-            
+
             [""],
             [""],
 
@@ -327,8 +327,8 @@ class CDUWindPage {
                 new Column(0, "<RETURN")
             ],
         ];
-        
-        
+
+
 
         mcdu.setTemplate(FormatTemplate(CDUWindPage.ShowWinds(template, mcdu, 'DES', CDUWindPage.ShowDESPage, offset, 4)));
 
@@ -438,7 +438,7 @@ class CDUWindPage {
                         row = new Column(0, `${CDUWindPage.FormatNumber(wind.direction, 2)}°/${CDUWindPage.FormatNumber(wind.speed, 2)}/FL${wind.altitude}`, color);
                         break;
                 }
-                
+
                 rows[(i * 2) + 2][0] = row;
                 entries = i + 1;
                 mcdu.onLeftInput[i] = (value) => {
@@ -463,7 +463,7 @@ class CDUWindPage {
 
         let up = false;
         let down = false;
-        
+
         if(phase === 'WPT') {
             const waypoints = mcdu.simbrief.navlog.filter((val) => val.stage === 'CRZ');
             const actualCruiseWindIndex = waypoints.findIndex((x) => x.ident === _ident);
@@ -500,7 +500,7 @@ class CDUWindPage {
 
             mcdu.setArrows(up, down, false, false);
         }
-        
+
         return rows;
     }
 
@@ -819,7 +819,7 @@ class CDUWindPage {
                 }
             });
         });
-        
+
         return windData;
     }
 
