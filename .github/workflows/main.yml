@@ -15,6 +15,16 @@ jobs:
       ZIP_NAME: headwindsim-aircraft-a330-900-main.zip
       BUILD_DIR_NAME: main
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
       - name: Checkout source
         uses: actions/checkout@v2
         with:
