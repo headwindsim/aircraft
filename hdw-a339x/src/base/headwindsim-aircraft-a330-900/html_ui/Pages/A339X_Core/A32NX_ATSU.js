@@ -300,7 +300,7 @@ const uplinkRoute = async (mcdu, coroute = false) => {
         // Last SID fix - either it's airway is in the list of procedures, or
         // this is the very first fix in the route (to deal with procedures
         // that only have an exit fix, which won't be caught when filtering)
-        if (procedures.has(fix.via_airway) || (i === 0)) {
+        if (procedures.has(fix.via_airway) || (i == 0)) {
             console.log("Inserting waypoint last of DEP: " + fix.ident);
             await addWaypointAsync(fix, mcdu, fix.ident);
             continue;

@@ -338,6 +338,8 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
             this.requestUpdate();
         });
 
+        this.mcduServerClient = new SimBridgeClient.McduServerClient();
+
         // sync annunciator simvar state
         this.updateAnnunciators(true);
     }
