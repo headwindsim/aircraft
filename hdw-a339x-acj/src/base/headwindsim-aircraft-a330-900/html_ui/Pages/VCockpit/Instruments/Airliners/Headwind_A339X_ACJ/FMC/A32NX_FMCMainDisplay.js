@@ -572,6 +572,8 @@ class FMCMainDisplay extends BaseAirliners {
         });
 
         this.toSpeedsChecks(true);
+
+        this.setRequest('FMGEC');
     }
 
     onUpdate(_deltaTime) {
@@ -581,6 +583,7 @@ class FMCMainDisplay extends BaseAirliners {
         const flightPlanChanged = this.flightPlanManager.currentFlightPlanVersion !== this.lastFlightPlanVersion;
         if (flightPlanChanged) {
             this.lastFlightPlanVersion = this.flightPlanManager.currentFlightPlanVersion;
+            this.setRequest('FMGEC');
         }
 
         Fmgc.updateFmgcLoop(_deltaTime);
@@ -667,6 +670,8 @@ class FMCMainDisplay extends BaseAirliners {
     onFlightPhaseChanged(prevPhase, nextPhase) {
         this.updateConstraints();
         this.updateManagedSpeed();
+
+        this.setRequest("FMGEC");
 
         SimVar.SetSimVarValue("L:A32NX_CABIN_READY", "Bool", 0);
 
@@ -2132,7 +2137,7 @@ class FMCMainDisplay extends BaseAirliners {
             if (this.isMinDestFobInRange(value)) {
                 this._minDestFobEntered = true;
                 if (value < this._minDestFob) {
-                    this.setScratchpadMessage(NXSystemMessages.checkMinDestFob);
+                    this.addMessageToQueue(NXSystemMessages.checkMinDestFob);
                 }
                 this._minDestFob = value;
                 return true;
@@ -3194,10 +3199,10 @@ class FMCMainDisplay extends BaseAirliners {
     thrustReductionAccelerationChecks() {
         const activePlan = this.flightPlanManager.activeFlightPlan;
         if (activePlan.reconcileAccelerationWithConstraints()) {
-            this.setScratchpadMessage(NXSystemMessages.newAccAlt.getModifiedMessage(activePlan.accelerationAltitude.toFixed(0)));
+            this.addMessageToQueue(NXSystemMessages.newAccAlt.getModifiedMessage(activePlan.accelerationAltitude.toFixed(0)));
         }
         if (activePlan.reconcileThrustReductionWithConstraints()) {
-            this.setScratchpadMessage(NXSystemMessages.newThrRedAlt.getModifiedMessage(activePlan.thrustReductionAltitude.toFixed(0)));
+            this.addMessageToQueue(NXSystemMessages.newThrRedAlt.getModifiedMessage(activePlan.thrustReductionAltitude.toFixed(0)));
         }
     }
 

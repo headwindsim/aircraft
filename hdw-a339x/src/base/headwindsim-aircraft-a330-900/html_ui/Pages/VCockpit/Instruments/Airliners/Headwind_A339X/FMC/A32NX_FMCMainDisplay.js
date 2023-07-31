@@ -670,6 +670,8 @@ class FMCMainDisplay extends BaseAirliners {
         this.updateConstraints();
         this.updateManagedSpeed();
 
+        this.setRequest("FMGEC");
+
         SimVar.SetSimVarValue("L:A32NX_CABIN_READY", "Bool", 0);
 
         switch (nextPhase) {
