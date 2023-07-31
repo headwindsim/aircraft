@@ -127,7 +127,7 @@ const insertUplink = (mcdu) => {
         callsign
     } = mcdu.simbrief;
 
-    mcdu.setScratchpadMessage(NXSystemMessages.uplinkInsertInProg);
+    mcdu.addMessageToQueue(NXSystemMessages.uplinkInsertInProg);
 
     /**
      * AOC ACT F-PLN UPLINK
@@ -145,7 +145,7 @@ const insertUplink = (mcdu) => {
 
             setTimeout(async () => {
                 await uplinkRoute(mcdu);
-                mcdu.setScratchpadMessage(NXSystemMessages.aocActFplnUplink);
+                mcdu.addMessageToQueue(NXSystemMessages.aocActFplnUplink);
             }, mcdu.getDelayRouteChange());
 
             if (mcdu.page.Current === mcdu.page.InitPageA) {
