@@ -1577,10 +1577,6 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
             };
         }
 
-        if (SimVar.GetSimVarValue("L:A32NX_ELEC_AC_2_BUS_IS_POWERED", "bool")) {
-            right = left;
-        }
-
         if (mcdu1Powered) {
             left = Object.assign({}, screenState);
             left.annunciators = this.annunciators.left;
