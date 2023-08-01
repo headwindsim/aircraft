@@ -5,7 +5,7 @@ class CDUMenuPage {
         // The MCDU MENU does not maintain an editable scratchpad... subsystems and the backup nav do that.
         mcdu.activateMcduScratchpad();
 
-        const fmActive = mcdu.activeSystem === "FMGEC";
+        const fmActive = mcdu.activeSystem === "FMGC";
         const atsuActive = mcdu.activeSystem === "ATSU";
         const acarsActive = mcdu.activeSystem === "ACARS";
         const acmsActive = mcdu.activeSystem === "ACMS";
@@ -19,7 +19,7 @@ class CDUMenuPage {
 
         /**
          * Updates the page text.
-         * @param {"FMGEC" | "ATSU" | "ACARS" | "ACMS" | "CMS" | "SAT" | null} selectedSystem Newly selected system establishing comms, or null if none.
+         * @param {"FMGC" | "ATSU" | "ACARS" | "ACMS" | "CMS" | "SAT" | null} selectedSystem Newly selected system establishing comms, or null if none.
          */
         const updateView = (selectedSystem = null) => {
             const getText = (name, isRequesting = false, isLeft = true) => {
@@ -43,7 +43,7 @@ class CDUMenuPage {
                 [new Column(7, "MCDU MENU")],
                 [new Column(22, "SELECT", Column.right, Column.inop)],
                 [
-                    new Column(0, getText("<FM1", mcdu.isSubsystemRequesting("FMGEC")), getColor(fmActive, selectedSystem === "FMGEC")),
+                    new Column(0, getText("<FMGC", mcdu.isSubsystemRequesting("FMGC")), getColor(fmActive, selectedSystem === "FMGC")),
                     new Column(23, "NAV B/UP>", Column.right, Column.inop)
                 ],
                 [""],
@@ -65,12 +65,12 @@ class CDUMenuPage {
 
         mcdu.onLeftInput[0] = () => {
             mcdu.mcduScratchpad.setMessage(NXSystemMessages.waitForSystemResponse);
-            updateView("FMGEC");
+            updateView("FMGC");
 
             setTimeout(() => {
                 mcdu.mcduScratchpad.removeMessage(NXSystemMessages.waitForSystemResponse.text);
                 CDUIdentPage.ShowPage(mcdu);
-            }, connectedSubsystemDelay); // FMGECs are on high-speed port... always fast
+            }, connectedSubsystemDelay); // FMGCs are on high-speed port... always fast
         };
 
         mcdu.onLeftInput[1] = () => {

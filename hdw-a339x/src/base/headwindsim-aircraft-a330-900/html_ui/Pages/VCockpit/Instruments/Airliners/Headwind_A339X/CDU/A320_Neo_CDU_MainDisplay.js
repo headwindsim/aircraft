@@ -19,7 +19,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
         this._keypad = new Keypad(this);
         this.scratchpadDisplay = null;
         this._scratchpad = null;
-        /** @type {Record<'MCDU' | 'FMGEC' | 'ATSU' | 'ACARS' | 'ACMS' | 'CMS' | 'SAT', ScratchpadDataLink>} */
+        /** @type {Record<'MCDU' | 'FMGC' | 'ATSU' | 'ACARS' | 'ACMS' | 'CMS' | 'SAT', ScratchpadDataLink>} */
         this.scratchpads = {};
         this._arrows = [false, false, false, false];
         this.annunciators = {
@@ -47,7 +47,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
         };
         /** MCDU request flags from subsystems */
         this.requests = {
-            FMGEC: false,
+            FMGC: false,
             ACARS: false,
             ACMS: false,
             CMS: false,
@@ -61,8 +61,8 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
         this.onRightInput = [];
         this.leftInputDelay = [];
         this.rightInputDelay = [];
-        /** @type {'FMGEC' | 'ATSU' | 'ACARS' | 'ACMS' | 'CMS' | 'SAT'} */
-        this._activeSystem = 'FMGEC';
+        /** @type {'FMGC' | 'ATSU' | 'ACARS' | 'ACMS' | 'CMS' | 'SAT'} */
+        this._activeSystem = 'FMGC';
         this.windRequestEnabled = true;
         this.inFocus = false;
         this.lastInput = 0;
@@ -283,7 +283,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
         this.scratchpadDisplay = new ScratchpadDisplay(this, this.getChildById("in-out"));
         this.scratchpads["MCDU"] = new ScratchpadDataLink(this, this.scratchpadDisplay, 'MCDU', false);
-        this.scratchpads["FMGEC"] = new ScratchpadDataLink(this, this.scratchpadDisplay, 'FMGEC');
+        this.scratchpads["FMGC"] = new ScratchpadDataLink(this, this.scratchpadDisplay, 'FMGC');
         this.scratchpads["ATSU"] = new ScratchpadDataLink(this, this.scratchpadDisplay, 'ATSU');
         this.scratchpads["ACARS"] = new ScratchpadDataLink(this, this.scratchpadDisplay, 'ACARS');
         this.scratchpads["ACMS"] = new ScratchpadDataLink(this, this.scratchpadDisplay, 'ACMS');
@@ -520,7 +520,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
             let newState = !!(lightTest && powerOn);
 
             if (annunc === 'fm') {
-                newState = newState || this.isSubsystemRequesting('FMGEC');
+                newState = newState || this.isSubsystemRequesting('FMGC');
             } else if (annunc === 'mcdu_menu') {
                 newState = newState || this.isSubsystemRequesting('ACARS') || this.isSubsystemRequesting('ACMS') || this.isSubsystemRequesting('CMS') || this.isSubsystemRequesting('ATSU') || this.isSubsystemRequesting('SAT');
             }
@@ -891,7 +891,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
     /**
      * Set the active subsystem
-     * @param {'ACARS' | 'ACMS' | 'CMS' | 'ATSU' | 'SAT' | 'FMGEC'} subsystem
+     * @param {'ACARS' | 'ACMS' | 'CMS' | 'ATSU' | 'SAT' | 'FMGC'} subsystem
      */
     set activeSystem(subsystem) {
         this._activeSystem = subsystem;
@@ -926,8 +926,8 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
         return this.scratchpads['MCDU'];
     }
 
-    get fmgecScratchpad() {
-        return this.scratchpads['FMGEC'];
+    get fmgcScratchpad() {
+        return this.scratchpads['FMGC'];
     }
 
     get atsuScratchpad() {
@@ -956,7 +956,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
     /**
      * Check if there is an active request from a subsystem to the MCDU
-     * @param {'ACARS' | 'ACMS' | 'CMS' | 'SAT' | 'ATSU' | 'FMGEC'} subsystem
+     * @param {'ACARS' | 'ACMS' | 'CMS' | 'SAT' | 'ATSU' | 'FMGC'} subsystem
      * @returns true if an active request exists
      */
     isSubsystemRequesting(subsystem) {
@@ -965,7 +965,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
     /**
      * Set a request from a subsystem to the MCDU
-     * @param {'ACARS' | 'ACMS' | 'CMS' | 'SAT' | 'ATSU' | 'FMGEC'} subsystem
+     * @param {'ACARS' | 'ACMS' | 'CMS' | 'SAT' | 'ATSU' | 'FMGC'} subsystem
      */
     setRequest(subsystem) {
         if (!(subsystem in this.requests) || this.activeSystem === subsystem) {
@@ -983,7 +983,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
     /**
      * Clear a request from a subsystem to the MCDU
-     * @param {'ACARS' | 'ACMS' | 'CMS' | 'SAT' | 'ATSU' | 'FMGEC'} subsystem
+     * @param {'ACARS' | 'ACMS' | 'CMS' | 'SAT' | 'ATSU' | 'FMGC'} subsystem
      */
     _clearRequest(subsystem) {
         if (!(subsystem in this.requests)) {
