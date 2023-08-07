@@ -343,6 +343,7 @@ export const Payload = () => {
                     }}
                 />,
             );
+            return;
         }
         setBoardingStarted(false);
     }, [totalPaxDesired, totalPax, totalCargo, boardingStarted, totalCargoDesired]);
