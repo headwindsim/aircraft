@@ -8,16 +8,32 @@ import { Spoilers } from '../../Common/Spoilers';
 
 import '../../Common/CommonStyles.scss';
 
+const roundTemperature = (rawTemp: number) : number => Math.min(995, Math.max(0, Math.round(rawTemp / 5) * 5));
+
 const maxStaleness = 300;
 
 export const WheelPage = () => {
-    const temperatures: number[] = [];
-    for (let brakeNumber = 1; brakeNumber <= 8; brakeNumber++) {
-        const [temperature] = useSimVar(`L:A32NX_REPORTED_BRAKE_TEMPERATURE_${brakeNumber}`, 'celsius', maxStaleness);
-        temperatures.push(temperature);
-    }
+    const [rawTempBrake1] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_1', 'celsius', maxStaleness);
+    const [rawTempBrake2] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_2', 'celsius', maxStaleness);
+    const [rawTempBrake3] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_3', 'celsius', maxStaleness);
+    const [rawTempBrake4] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_4', 'celsius', maxStaleness);
+    const [rawTempBrake5] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_5', 'celsius', maxStaleness);
+    const [rawTempBrake6] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_6', 'celsius', maxStaleness);
+    const [rawTempBrake7] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_7', 'celsius', maxStaleness);
+    const [rawTempBrake8] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_8', 'celsius', maxStaleness);
 
-    const maxTemperatureIndex = temperatures.reduce((maxIndex, element, index, array) => (element > array[maxIndex] ? index : maxIndex), 0);
+    const roundedTemperatures = [
+        roundTemperature(rawTempBrake1),
+        roundTemperature(rawTempBrake2),
+        roundTemperature(rawTempBrake3),
+        roundTemperature(rawTempBrake4),
+        roundTemperature(rawTempBrake5),
+        roundTemperature(rawTempBrake6),
+        roundTemperature(rawTempBrake7),
+        roundTemperature(rawTempBrake8),
+    ];
+
+    const maxTemperature = roundedTemperatures.reduce((maxTemp, element) => Math.max(maxTemp, element), 0);
 
     const lgciu1DiscreteWord1 = useArinc429Var('L:A32NX_LGCIU_1_DISCRETE_WORD_1');
     const lgciu2DiscreteWord1 = useArinc429Var('L:A32NX_LGCIU_2_DISCRETE_WORD_1');
@@ -58,15 +74,15 @@ export const WheelPage = () => {
             <Wheels
                 x={36}
                 y={350}
-                left={{ number: 1, temperature: temperatures[0], hottest: maxTemperatureIndex === 0 }}
-                right={{ number: 2, temperature: temperatures[1], hottest: maxTemperatureIndex === 1 }}
+                left={{ number: 1, temperature: rawTempBrake1, hottest: maxTemperature === roundedTemperatures[0] }}
+                right={{ number: 2, temperature: rawTempBrake2, hottest: maxTemperature === roundedTemperatures[1] }}
             />
 
             <Wheels
                 x={36}
                 y={500}
-                left={{ number: 5, temperature: temperatures[4], hottest: maxTemperatureIndex === 4 }}
-                right={{ number: 6, temperature: temperatures[5], hottest: maxTemperatureIndex === 5 }}
+                left={{ number: 5, temperature: rawTempBrake5, hottest: maxTemperature === roundedTemperatures[4] }}
+                right={{ number: 6, temperature: rawTempBrake6, hottest: maxTemperature === roundedTemperatures[5] }}
             />
 
             <Gear
@@ -93,15 +109,15 @@ export const WheelPage = () => {
             <Wheels
                 x={551}
                 y={350}
-                left={{ number: 3, temperature: temperatures[2], hottest: maxTemperatureIndex === 2 }}
-                right={{ number: 4, temperature: temperatures[3], hottest: maxTemperatureIndex === 3 }}
+                left={{ number: 3, temperature: rawTempBrake3, hottest: maxTemperature === roundedTemperatures[2] }}
+                right={{ number: 4, temperature: rawTempBrake4, hottest: maxTemperature === roundedTemperatures[3] }}
             />
 
             <Wheels
                 x={551}
                 y={500}
-                left={{ number: 7, temperature: temperatures[6], hottest: maxTemperatureIndex === 6 }}
-                right={{ number: 8, temperature: temperatures[7], hottest: maxTemperatureIndex === 7 }}
+                left={{ number: 7, temperature: rawTempBrake7, hottest: maxTemperature === roundedTemperatures[6] }}
+                right={{ number: 8, temperature: rawTempBrake8, hottest: maxTemperature === roundedTemperatures[7] }}
             />
         </svg>
     );
@@ -498,8 +514,8 @@ const Wheels = ({ x, y, left, right }: WheelsProps) => {
             <text className="Cyan Standard" x={73} y={40}>°C</text>
             <text className="Standard" x={87} y={66}>R</text>
 
-            <text className={`${left.temperature > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`} x={57} y={33}>{Math.max(0, Math.round(left.temperature / 5) * 5)}</text>
-            <text className={`${right.temperature > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`} x={181} y={33}>{Math.max(0, Math.round(right.temperature / 5) * 5)}</text>
+            <text className={`${left.temperature > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`} x={57} y={33}>{roundTemperature(left.temperature)}</text>
+            <text className={`${right.temperature > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`} x={181} y={33}>{roundTemperature(right.temperature)}</text>
 
             <text className="Large" x={22} y={66}>{left.number}</text>
             <text className="Large" x={146} y={66}>{right.number}</text>
