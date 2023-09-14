@@ -4,16 +4,13 @@
   "edition": "development",
   "scripts": {
     "====== A339X =================": "==========================================",
-
     "build-a339x:copy-base-package": "mkdir -p build-a339x/out/headwindsim-aircraft-a330-900 && (rsync -a build-a339x/src/base/headwindsim-aircraft-a330-900 build-a339x/out/ || cp -a -u build-a339x/src/base/headwindsim-aircraft-a330-900 build-a339x/out/)",
     "build-a339x:copy-base-lock-highlight-package": "mkdir -p build-a339x/out/headwindsim-aircraft-a330-900-lock-highlight && (rsync -a build-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight build-a339x/out/ || cp -a -u build-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight build-a339x/out/)",
     "build-a339x:copy-base-files": "npm run build-a339x:copy-base-package && npm run build-a339x:copy-base-lock-highlight-package",
     "build-a339x:efb-translation": "cd build-a339x/src/localization && node build-flypad-translation.js",
     "build-a339x:locPak-translation": "cd build-a339x/src/localization && node build-locPak-translation.js",
-
     "build-a339x:model": "node build-a339x/src/model/build.js",
     "build-a339x:behavior": "node build-a339x/src/behavior/build.js",
-
     "build-a339x:atsu-common": "node build-a339x/src/systems/atsu/common/build.js",
     "build-a339x:atsu-fms-client": "node build-a339x/src/systems/atsu/fmsclient/build.js",
     "build-a339x:extras-host": "node build-a339x/src/systems/extras-host/build.js",
@@ -24,51 +21,38 @@
     "build-a339x:simbridge-client": "node build-a339x/src/systems/simbridge-client/build.js",
     "build-a339x:systems-host": "node build-a339x/src/systems/systems-host/build.js",
     "build-a339x:tcas": "node build-a339x/src/systems/tcas/build.js",
-
-    "build-a339x:fadec": "cd build-a339x/src/wasm/fadec_a320 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm",
+    "build-a339x:fadec": "cd build-a339x/src/wasm/fadec_a330 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm",
     "build-a339x:fbw": "cd build-a339x/src/wasm/fbw_a320 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm",
     "build-a339x:flypad-backend": "cd build-a339x/src/wasm/flypad-backend && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm",
     "build-a339x:systems": "cargo build -p a320_systems_wasm --target wasm32-wasi --release && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm /external/target/wasm32-wasi/release/a320_systems_wasm.wasm",
-
     "build-a339x:metadata": "node scripts/metadata.js build-a339x/out/headwindsim-aircraft-a330-900 a339x",
     "build-a339x:manifest": "node scripts/build_a339x.js",
-
     "build-a339x:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c .\\build-a339x\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
     "watch-a339x:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\build-a339x\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
-
     "build-a339x:all": "npm run build-a339x:copy-base-files && npm run build-a339x:efb-translation && npm run build-a339x:model && npm run build-a339x:behavior && npm run build-a339x:atsu-common && npm run build-a339x:atsu-fms-client && npm run build-a339x:systems-host && npm run build-a339x:failures && npm run build-a339x:fmgc && npm run build-a339x:sentry-client && npm run build-a339x:simbridge-client && npm run build-a339x:tcas && npm run build-a339x:pfd && npm run build-a339x:systems && npm run build-a339x:fadec && npm run build-a339x:fbw && npm run build-a339x:flypad-backend && npm run build-a339x:metadata && npm run build-a339x:manifest",
-
     "====== ACJ339x =================": "==========================================",
-
     "build-a339x-acj:copy-base-package": "mkdir -p build-a339x/out/headwindsim-aircraft-a330-900 && (rsync -a build-a339x-acj/src/base/headwindsim-aircraft-a330-900 build-a339x/out/ || cp -a -u build-a339x-acj/src/base/headwindsim-aircraft-a330-900 build-a339x/out/)",
     "build-a339x-acj:copy-base-lock-highlight-package": "mkdir -p build-a339x/out/headwindsim-aircraft-a330-900-lock-highlight && (rsync -a build-a339x-acj/src/base/headwindsim-aircraft-a330-900-lock-highlight build-a339x/out/ || cp -a -u build-a339x-acj/src/base/headwindsim-aircraft-a330-900-lock-highlight build-a339x/out/)",
     "build-a339x-acj:copy-base-files": "npm run build-a339x-acj:copy-base-package && npm run build-a339x-acj:copy-base-lock-highlight-package",
-
     "build-a339x-acj:fadec": "cd build-a339x-acj/src/wasm/fadec_a320 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/fadec.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/fadec.wasm",
     "build-a339x-acj:fbw": "cd build-a339x-acj/src/wasm/fbw_a320 && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/fbw.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/fbw.wasm",
     "build-a339x-acj:flypad-backend": "cd build-a339x-acj/src/wasm/flypad-backend && ./build.sh && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/flypad-backend.wasm /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/flypad-backend.wasm",
     "build-a339x-acj:systems": "cargo build -p acj330_systems_wasm --target wasm32-wasi --release && wasm-opt -O1 -o /external/build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/systems.wasm /external/target/wasm32-wasi/release/acj330_systems_wasm.wasm",
-
     "build-a339x-acj:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c .\\build-a339x-acj\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
     "watch-a339x-acj:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\build-a339x-acj\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
-
     "build-a339x-acj:all": "npm run build-a339x-acj:copy-base-files && npm run build-a339x-acj:efb-translation && npm run build-a339x-acj:model && npm run build-a339x-acj:behavior && npm run build-a339x-acj:atsu-common && npm run build-a339x-acj:atsu-fms-client && npm run build-a339x-acj:systems-host && npm run build-a339x-acj:failures && npm run build-a339x-acj:fmgc && npm run build-a339x-acj:sentry-client && npm run build-a339x-acj:simbridge-client && npm run build-a339x-acj:tcas && npm run build-a339x-acj:pfd && npm run build-a339x-acj:systems && npm run build-a339x-acj:fadec && npm run build-a339x-acj:fbw && npm run build-a339x-acj:flypad-backend && npm run build-a339x-acj:metadata && npm run build-a339x-acj:manifest",
-
     "=======deprecated=========": "===========================",
     "build-a339x:pfd": "cd build-a339x/src/systems/instruments/src/PFD && rollup -c",
     "build-a339x:clock": "cd build-a339x/src/systems/instruments/src/Clock && rollup -c",
     "build-a339x:ewd": "cd build-a339x/src/systems/instruments/src/EWD && rollup -c",
-
     "prettier": "prettier --write **/*.json **/*.yml build-a339x/src/systems/instruments/**/*.css",
     "serve:efb": "cd build-a339x/src/systems/instruments/src/EFB/ && vite --port 9696",
     "build:instruments": "rollup --max-old-space-size=8192 -c src/systems/instruments/buildSrc/simulatorBuild.mjs",
     "watch:instruments": "rollup --max-old-space-size=8192 -wc src/systems/instruments/buildSrc/simulatorBuild.mjs",
-
     "====== A339X LIVERY PACKAGE ====": "==========================================",
     "build-a339x-livery-package:copy-base-package": "mkdir -p /hdw-a339x-liveries/out/headwindsim-a339x-livery-package && (rsync -a hdw-a339x-liveries/src/base/headwindsim-a339x-livery-package hdw-a339x-liveries/out || cp -a -u hdw-a339x-liveries/src/base/headwindsim-a339x-livery-package hdw-a339x-liveries/out)",
     "build-a339x-livery-package:copy-base-files": "npm run build-a339x-livery-package:copy-base-package",
     "build-a339x-livery-package:manifest": "node scripts/build-a339x-liveries.js",
-
     "====== COMMON ================": "==========================================",
     "lint": "eslint --cache **/*.{js,mjs,jsx,ts,tsx}",
     "lint-fix": "npm run lint -- --fix",
