@@ -35,7 +35,7 @@ export class N3 extends DisplayComponent<N3Props> {
             this.activeVisibility.set(f ? 'visible' : 'hidden');
         });
 
-        sub.on(`engine${this.props.engine}N2`).whenChanged().handle((n3) => {
+        sub.on(`engine${this.props.engine}N3`).whenChanged().handle((n3) => {
             const n3Parts = n3.toFixed(1).split('.', 2);
             this.n3 = n3;
             this.n3Int.set(n3Parts[0]);
