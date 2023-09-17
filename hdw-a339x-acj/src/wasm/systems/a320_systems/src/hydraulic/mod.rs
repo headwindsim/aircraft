@@ -6040,7 +6040,7 @@ impl SimulationElement for A330TiltingGears {
 mod tests {
     use super::*;
 
-    mod a320_hydraulics {TrentEngine
+    mod a320_hydraulics {
         use super::*;
         use systems::{
             electrical::{
