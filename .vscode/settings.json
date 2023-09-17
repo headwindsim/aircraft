@@ -144,7 +144,9 @@
     "__functional_03": "cpp",
     "memory_resource": "cpp",
     "numbers": "cpp",
-    "xmemory0": "cpp"
+    "xmemory0": "cpp",
+    "span": "cpp",
+    "ranges": "cpp"
   },
   "typescript.preferences.quoteStyle": "single",
   "typescript.preferences.importModuleSpecifier": "non-relative"
