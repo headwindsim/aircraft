@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
 import React, { useEffect, useState } from 'react';
-
 import { useSimVar, useInterval, useInteractionEvent, usePersistentNumberProperty, usePersistentProperty } from '@flybywiresim/fbw-sdk';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
 import { Battery } from 'react-bootstrap-icons';
@@ -72,6 +71,8 @@ interface BatteryStatus {
 }
 
 export const usePower = () => React.useContext(PowerContext);
+
+export const getAirframeType = () => new URL(document.querySelectorAll('vcockpit-panel > *')[0].getAttribute('url')).searchParams.get('Airframe');
 
 const Efb = () => {
     const [powerState, setPowerState] = useState<PowerStates>(PowerStates.SHUTOFF);

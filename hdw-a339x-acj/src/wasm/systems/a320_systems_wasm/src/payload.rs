@@ -35,14 +35,6 @@ pub(super) fn payload(builder: &mut MsfsAspectBuilder) -> Result<(), Box<dyn Err
         Variable::aircraft("PAYLOAD STATION WEIGHT", "Pounds", 7),
         Variable::aspect("PAYLOAD_STATION_7_REQ"),
     );
-    builder.copy(
-        Variable::aircraft("PAYLOAD STATION WEIGHT", "Pounds", 8),
-        Variable::aspect("PAYLOAD_STATION_8_REQ"),
-    );
-    builder.copy(
-        Variable::aircraft("PAYLOAD STATION WEIGHT", "Pounds", 9),
-        Variable::aspect("PAYLOAD_STATION_9_REQ"),
-    );
 
     builder.variables_to_object(Box::new(Payload {
         payload_station_1: 0.,
@@ -52,8 +44,6 @@ pub(super) fn payload(builder: &mut MsfsAspectBuilder) -> Result<(), Box<dyn Err
         payload_station_5: 0.,
         payload_station_6: 0.,
         payload_station_7: 0.,
-        payload_station_8: 0.,
-        payload_station_9: 0.,
     }));
 
     Ok(())
@@ -88,16 +78,7 @@ struct Payload {
     #[name = "PAYLOAD STATION WEIGHT:7"]
     #[unit = "Pounds"]
     payload_station_7: f64,
-
-    #[name = "PAYLOAD STATION WEIGHT:8"]
-    #[unit = "Pounds"]
-    payload_station_8: f64,
-
-    #[name = "PAYLOAD STATION WEIGHT:9"]
-    #[unit = "Pounds"]
-    payload_station_9: f64,
 }
-
 impl VariablesToObject for Payload {
     fn variables(&self) -> Vec<Variable> {
         vec![
@@ -108,8 +89,6 @@ impl VariablesToObject for Payload {
             Variable::aspect("PAYLOAD_STATION_5_REQ"),
             Variable::aspect("PAYLOAD_STATION_6_REQ"),
             Variable::aspect("PAYLOAD_STATION_7_REQ"),
-            Variable::aspect("PAYLOAD_STATION_8_REQ"),
-            Variable::aspect("PAYLOAD_STATION_9_REQ"),
         ]
     }
 
@@ -121,8 +100,6 @@ impl VariablesToObject for Payload {
         self.payload_station_5 = values[4];
         self.payload_station_6 = values[5];
         self.payload_station_7 = values[6];
-        self.payload_station_8 = values[7];
-        self.payload_station_9 = values[8];
         ObjectWrite::default()
     }
 
