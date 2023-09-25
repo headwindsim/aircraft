@@ -3,7 +3,6 @@ import * as ReactDOMServer from 'react-dom/server';
 import { BitFlags } from '@flybywiresim/fbw-sdk';
 import { CanvasConst, SeatConstants, SeatInfo, PaxStationInfo, SeatType, RowInfo } from './Constants';
 import { Seat } from '../../../../Assets/Seat';
-import { SeatOutlineBg } from '../../../../Assets/SeatOutlineBg';
 
 interface SeatMapProps {
     seatMap: PaxStationInfo[],
@@ -73,7 +72,7 @@ export const SeatMapWidget: React.FC<SeatMapProps> = ({ seatMap, desiredFlags, a
         return yOff;
     }, [ctx]);
 
-    const draw = useMemo(() => () => {
+    const draw = () => {
         const currDeck = isMainDeck ? 0 : 1;
         if (ctx) {
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -95,9 +94,9 @@ export const SeatMapWidget: React.FC<SeatMapProps> = ({ seatMap, desiredFlags, a
             }
             ctx.fill();
         }
-    }, [ctx, ...activeFlags, ...desiredFlags]);
+    };
 
-    const drawRow = useMemo(() => (x: number, deck: number, station: number, rowI: number, rowInfo: RowInfo, seatId: number) => {
+    const drawRow = (x: number, deck: number, station: number, rowI: number, rowInfo: RowInfo, seatId: number) => {
         const seatsInfo: SeatInfo[] = rowInfo.seats;
         for (let seat = 0, yOff = 0; seat < seatsInfo.length; seat++) {
             yOff = addYOffsetSeat(yOff, station, rowI, seat);
@@ -108,9 +107,9 @@ export const SeatMapWidget: React.FC<SeatMapProps> = ({ seatMap, desiredFlags, a
             setXYMap(xYMap);
             drawSeat(x, yOff, seatsInfo[seat].type, SeatConstants[seatsInfo[seat].type].imageX, SeatConstants[seatsInfo[seat].type].imageY, station, seatId++);
         }
-    }, [ctx, ...activeFlags, ...desiredFlags]);
+    };
 
-    const drawSeat = useMemo(() => (x: number, y: number, seatType: number, imageX: number, imageY: number, station: number, seatId: number) => {
+    const drawSeat = (x: number, y: number, seatType: number, imageX: number, imageY: number, station: number, seatId: number) => {
         switch (seatType) {
         default:
             if (ctx && seatEmptyImg && seatMinusImg && seatAddImg && seatFilledImg) {
@@ -126,9 +125,9 @@ export const SeatMapWidget: React.FC<SeatMapProps> = ({ seatMap, desiredFlags, a
             }
             break;
         }
-    }, [ctx, ...desiredFlags, ...activeFlags]);
+    };
 
-    const mouseEvent = useMemo(() => (e) => {
+    const mouseEvent = (e) => {
         let selectedStation = -1;
         let selectedSeat = -1;
         let shortestDistance = Number.POSITIVE_INFINITY;
@@ -146,43 +145,30 @@ export const SeatMapWidget: React.FC<SeatMapProps> = ({ seatMap, desiredFlags, a
         if (selectedStation !== -1 && selectedSeat !== -1) {
             onClickSeat(selectedStation, selectedSeat);
         }
-    }, [ctx, ...activeFlags, ...desiredFlags, isMainDeck]);
+    };
 
     useCanvasEvent(canvasRef.current, 'click', mouseEvent);
 
     useEffect(() => {
-        setCtx(canvasRef.current.getContext('2d'));
+        const context = canvasRef.current.getContext('2d');
         const width = CanvasConst.width;
         const height = CanvasConst.height;
         let ratio = 1;
         ratio = window.devicePixelRatio;
         canvasRef.current.width = width * ratio;
         canvasRef.current.height = height * ratio;
-        ctx?.scale(ratio, ratio);
+        context.scale(ratio, ratio);
+        setCtx(context);
     }, []);
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        let frameId;
+        // work around rendering bug
+        setTimeout(() => draw(), 10);
+    }, [ctx]);
 
-        if (!canvas) {
-            return undefined;
-        }
-
-        const render = () => {
-            draw();
-            // workaround for rendering bug
-            if (!frameId || frameId < 10) {
-                frameId = window.requestAnimationFrame(render);
-            }
-        };
-        render();
-        return () => {
-            if (frameId) {
-                window.cancelAnimationFrame(frameId);
-            }
-        };
-    }, [ctx, ...activeFlags, ...desiredFlags]);
+    useEffect(() => {
+        draw();
+    }, [seatMap, desiredFlags, activeFlags, canvasX, canvasY]);
 
     const distSquared = useMemo(() => (x1: number, y1: number, x2: number, y2: number): number => {
         const diffX = x1 - x2;
