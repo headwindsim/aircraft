@@ -1161,6 +1161,7 @@ export class PseudoFWC {
             this.cabAltSetReset2.write(pressureAltitude > 16000 && this.excessPressure.get(), this.excessPressure.get() && [3, 10].includes(this.fwcFlightPhase.get())),
         );
         this.packOffBleedAvailable1.write((eng1Bleed === 1 && !eng1BleedPbFault) || !crossbleedFullyClosed, deltaTime);
+        this.packOffBleedAvailable2.write((eng2Bleed === 1 && !eng2BleedPbFault) || !crossbleedFullyClosed, deltaTime);
         this.packOffNotFailed1Status.set(this.packOffNotFailed1.write(!this.pack1On.get() && !pack1Fault && this.packOffBleedAvailable1.read() && this.fwcFlightPhase.get() === 6, deltaTime));
         this.packOffNotFailed2Status.set(this.packOffNotFailed2.write(!this.pack2On.get() && !pack2Fault && this.packOffBleedAvailable2.read() && this.fwcFlightPhase.get() === 6, deltaTime));
         this.pack1And2Fault.set(acscBothFault || (this.packOffNotFailed1Status.get() && this.acsc2Fault.get()) || (this.packOffNotFailed2Status.get() && this.acsc1Fault.get()));
