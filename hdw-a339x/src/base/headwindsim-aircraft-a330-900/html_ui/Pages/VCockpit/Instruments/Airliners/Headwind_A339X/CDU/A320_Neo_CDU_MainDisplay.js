@@ -519,7 +519,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
         for (const [annunc, state] of Object.entries(states)) {
             let newState = !!(lightTest && powerOn);
 
-            if (annunc === 'fm') {
+            if (annunc === 'fmgc') {
                 newState = newState || this.isSubsystemRequesting('FMGC');
             } else if (annunc === 'mcdu_menu') {
                 newState = newState || this.isSubsystemRequesting('ACARS') || this.isSubsystemRequesting('ACMS') || this.isSubsystemRequesting('CMS') || this.isSubsystemRequesting('ATSU') || this.isSubsystemRequesting('SAT');
