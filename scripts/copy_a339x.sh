@@ -68,6 +68,7 @@ cp -rva ./hdw-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight/. ./bu
 
 chmod +x ./build-a339x/src/wasm/fbw_a320/build.sh
 chmod +x ./build-a339x/src/wasm/fadec_a320/build.sh
+chmod +x ./build-a339x/src/wasm/fadec_a330/build.sh
 chmod +x ./build-a339x/src/wasm/flypad-backend/build.sh
 
 ##### ACJ330neo
