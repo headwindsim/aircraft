@@ -112,7 +112,7 @@ export default new TaskOfTasks("all", [
                 new ExecTask("systems-fadec",
                     "npm run build-a339x:fadec",
                     [
-                        "build-a339x/src/wasm/fadec_a320",
+                        "build-a339x/src/wasm/fadec_a330",
                         "build-common/src/wasm/fbw_common",
                         "build-common/src/wasm/fadec_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm"
