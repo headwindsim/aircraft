@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0
 
 /* eslint-disable no-console */
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useSimVar } from '@flybywiresim/fbw-sdk';
 import {
     ArchiveFill,
@@ -29,6 +29,7 @@ import {
     setGpuButtonState,
     setJetWayButtonState,
 } from '../../Store/features/groundServicePage';
+import { getAirframeType } from '../../Efb';
 
 interface ServiceButtonWrapperProps {
     className?: string,
@@ -104,6 +105,8 @@ const GroundServiceButton: React.FC<GroundServiceButtonProps> = ({ children, nam
 
 export const ServicesPage = () => {
     const dispatch = useAppDispatch();
+
+    const [airframe] = useState(getAirframeType());
 
     // Flight state
     const [simOnGround] = useSimVar('SIM ON GROUND', 'bool', 250);

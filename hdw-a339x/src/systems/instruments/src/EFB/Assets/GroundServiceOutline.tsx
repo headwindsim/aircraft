@@ -13,7 +13,7 @@ export const GroundServiceOutline = ({ className }: {className: string}) => (
         <defs>
             <style>
                 {
-                    '.cls-1,.cls-2,.cls-4,.cls-5,.cls-7{fill:none;stroke-miterlimit:10}.cls-1,.cls-4{stroke:#fff}.cls-2,.cls-4{stroke-width:2px}.cls-2{stroke:#6bbe45}.cls-5,.cls-7{stroke:#ccc;stroke-width:.5px}.cls-7{stroke:#d1d3d4}'
+                    '.cls-1,.cls-2,.cls-4,.cls-5,.cls-7{fill:none;stroke-miterlimit:10}.cls-1,.cls-4{stroke:currentColor}.cls-2,.cls-4{stroke-width:2px}.cls-2{stroke:currentColor}.cls-5,.cls-7{stroke:#ccc;stroke-width:.5px}.cls-7{stroke:currentColor}'
                 }
             </style>
         </defs>

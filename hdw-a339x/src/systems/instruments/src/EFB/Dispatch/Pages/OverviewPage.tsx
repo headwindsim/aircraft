@@ -1,4 +1,8 @@
-import React, { FC } from 'react';
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
+import React, { FC, useState } from 'react';
 import { IconPlane } from '@tabler/icons';
 import { Box, LightningFill, PeopleFill, Rulers, Speedometer2 } from 'react-bootstrap-icons';
 import { useSimVar, Units } from '@flybywiresim/fbw-sdk';
