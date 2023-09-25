@@ -4,6 +4,7 @@ import { Box, LightningFill, PeopleFill, Rulers, Speedometer2 } from 'react-boot
 import { useSimVar, Units } from '@flybywiresim/fbw-sdk';
 import { t } from '../../translation';
 import { NoseOutline } from '../../Assets/NoseOutline';
+import { getAirframeType } from '../../Efb';
 
 interface InformationEntryProps {
     title: string;
@@ -22,8 +23,9 @@ const InformationEntry: FC<InformationEntryProps> = ({ children, title, info }) 
 
 export const OverviewPage = () => {
     let [airline] = useSimVar('ATC AIRLINE', 'String', 1_000);
+    const [airframe] = useState(getAirframeType());
 
-    airline ||= 'HEADWIND';
+    airline ||= 'Headwind Simulations';
     const [actualGrossWeight] = useSimVar('TOTAL WEIGHT', 'kilograms', 5_000);
 
     const getConvertedInfo = (metricValue: number, unitType: 'weight' |'volume' |'distance') => {
@@ -40,62 +42,116 @@ export const OverviewPage = () => {
         }
     };
 
+    const A330941 = (
+        <div className="flex flex-row mt-8 space-x-16">
+            <div className="flex flex-col space-y-8">
+                <InformationEntry title={t('Dispatch.Overview.Model')} info="A330-941 [A339]">
+                    <IconPlane className="fill-current" size={23} stroke={1.5} strokeLinejoin="miter" />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MZFW')} info={getConvertedInfo(181000, 'weight')}>
+                    <Box size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MaximumPassengers')} info="436 passengers">
+                    <PeopleFill size={23} />
+                </InformationEntry>
+            </div>
+            <div className="flex flex-col space-y-8">
+                <InformationEntry title={t('Dispatch.Overview.Engines')} info="Rolls-Royce Trent 7000">
+                    <LightningFill size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MTOW')} info={getConvertedInfo(251000, 'weight')}>
+                    <Box size={23} />
+                </InformationEntry>
+            </div>
+            <div className="flex flex-col space-y-8">
+                <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(7200, 'distance')}>
+                    <Rulers size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MaximumCargo')} info={getConvertedInfo(44836, 'weight')}>
+                    <Box size={23} />
+                </InformationEntry>
+            </div>
+            <div className="flex flex-col space-y-8">
+
+                <InformationEntry title={t('Dispatch.Overview.MMO')} info="0.86">
+                    <Speedometer2 size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MaximumFuelCapacity')} info={getConvertedInfo(139090, 'volume')}>
+                    <Box size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.ActualGW')} info={getConvertedInfo(actualGrossWeight, 'weight')}>
+                    <Box size={23} />
+                </InformationEntry>
+            </div>
+        </div>
+    );
+
+    const ACJ330941 = (
+        <div className="flex flex-row mt-8 space-x-16">
+            <div className="flex flex-col space-y-8">
+                <InformationEntry title={t('Dispatch.Overview.Model')} info="A330-941 [A339]">
+                    <IconPlane className="fill-current" size={23} stroke={1.5} strokeLinejoin="miter" />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MZFW')} info={getConvertedInfo(181000, 'weight')}>
+                    <Box size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MaximumPassengers')} info="90 passengers">
+                    <PeopleFill size={23} />
+                </InformationEntry>
+            </div>
+            <div className="flex flex-col space-y-8">
+                <InformationEntry title={t('Dispatch.Overview.Engines')} info="Rolls-Royce Trent 7000">
+                    <LightningFill size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MTOW')} info={getConvertedInfo(251000, 'weight')}>
+                    <Box size={23} />
+                </InformationEntry>
+            </div>
+            <div className="flex flex-col space-y-8">
+                <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(9900, 'distance')}>
+                    <Rulers size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MaximumCargo')} info={getConvertedInfo(44836, 'weight')}>
+                    <Box size={23} />
+                </InformationEntry>
+            </div>
+            <div className="flex flex-col space-y-8">
+
+                <InformationEntry title={t('Dispatch.Overview.MMO')} info="0.86">
+                    <Speedometer2 size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.MaximumFuelCapacity')} info={getConvertedInfo(139090, 'volume')}>
+                    <Box size={23} />
+                </InformationEntry>
+
+                <InformationEntry title={t('Dispatch.Overview.ActualGW')} info={getConvertedInfo(actualGrossWeight, 'weight')}>
+                    <Box size={23} />
+                </InformationEntry>
+            </div>
+        </div>
+    );
+
     return (
         <div className="overflow-hidden p-6 mr-3 w-full h-content-section-reduced rounded-lg border-2 border-theme-accent">
-            <h1 className="font-bold">Airbus A330-900</h1>
+            {airframe === 'A330_941' ? <h1 className="font-bold">Airbus A330-900neo</h1> : <h1 className="font-bold">Airbus ACJ330-900neo</h1>}
             <p>{airline}</p>
 
             <div className="flex justify-center items-center mt-6">
                 <NoseOutline className="w-full flip-horizontal" />
             </div>
 
-            <div className="flex flex-row mt-8 space-x-16">
-                <div className="flex flex-col space-y-8">
-                    <InformationEntry title={t('Dispatch.Overview.Model')} info="A330-941 [A339]">
-                        <IconPlane className="fill-current" size={23} stroke={1.5} strokeLinejoin="miter" />
-                    </InformationEntry>
-
-                    <InformationEntry title={t('Dispatch.Overview.MZFW')} info={getConvertedInfo(181000, 'weight')}>
-                        <Box size={23} />
-                    </InformationEntry>
-
-                    <InformationEntry title={t('Dispatch.Overview.MaximumPassengers')} info="436 passengers">
-                        <PeopleFill size={23} />
-                    </InformationEntry>
-                </div>
-                <div className="flex flex-col space-y-8">
-                    <InformationEntry title={t('Dispatch.Overview.Engines')} info="Rolls-Royce Trent 7000">
-                        <LightningFill size={23} />
-                    </InformationEntry>
-
-                    <InformationEntry title={t('Dispatch.Overview.MTOW')} info={getConvertedInfo(251000, 'weight')}>
-                        <Box size={23} />
-                    </InformationEntry>
-                </div>
-                <div className="flex flex-col space-y-8">
-                    <InformationEntry title={t('Dispatch.Overview.Range')} info={getConvertedInfo(7200, 'distance')}>
-                        <Rulers size={23} />
-                    </InformationEntry>
-
-                    <InformationEntry title={t('Dispatch.Overview.MaximumCargo')} info={getConvertedInfo(44836, 'weight')}>
-                        <Box size={23} />
-                    </InformationEntry>
-                </div>
-                <div className="flex flex-col space-y-8">
-
-                    <InformationEntry title={t('Dispatch.Overview.MMO')} info="0.86">
-                        <Speedometer2 size={23} />
-                    </InformationEntry>
-
-                    <InformationEntry title={t('Dispatch.Overview.MaximumFuelCapacity')} info={getConvertedInfo(139090, 'volume')}>
-                        <Box size={23} />
-                    </InformationEntry>
-
-                    <InformationEntry title={t('Dispatch.Overview.ActualGW')} info={getConvertedInfo(actualGrossWeight, 'weight')}>
-                        <Box size={23} />
-                    </InformationEntry>
-                </div>
-            </div>
+            {airframe === 'A330_941' ? A330941 : ACJ330941}
         </div>
     );
 };

@@ -60,7 +60,7 @@ cp -rva ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages
 cp -rva ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Printer ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer/A339X
 
 # remove fbw submodule
-rm -rvf ./flybywire
+#rm -rvf ./flybywire
 
 # copy base of A339X to out
 cp -rva ./hdw-a339x/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/headwindsim-aircraft-a330-900
@@ -77,26 +77,19 @@ rm -rvf ./build-a339x-acj
 
 # create directory
 mkdir -p ./build-a339x-acj/src
-
-mkdir -p ./build-a339x-acj/src/localization
-mkdir -p ./build-a339x-acj/src/systems
 mkdir -p ./build-a339x-acj/src/wasm
 
 # copy from FBW A32NX source and A339X into one src
-
-cp -rva ./build-a339x/src/localization/. ./build-a339x-acj/src/localization
-cp -rva ./build-a339x/src/systems/. ./build-a339x-acj/src/systems
 cp -rva ./build-a339x/src/wasm/. ./build-a339x-acj/src/wasm
 cp -rva ./build-a339x/.env ./build-a339x-acj/.env
 
-cp -rva ./hdw-a339x-acj/src/systems/. ./build-a339x-acj/src/systems
 cp -rva ./hdw-a339x-acj/src/wasm/. ./build-a339x-acj/src/wasm
 
-cp -rva ./hdw-a339x-acj/mach.config.js ./build-a339x-acj/mach.config.js
+#cp -rva ./hdw-a339x-acj/mach.config.js ./build-a339x-acj/mach.config.js
 
 # copy base of A339X to out
-cp -rva ./hdw-a339x-acj/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/headwindsim-aircraft-a330-900
+#cp -rva ./hdw-a339x-acj/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/headwindsim-aircraft-a330-900
 
-chmod +x ./build-a339x-acj/src/wasm/fbw_a320/build.sh
-chmod +x ./build-a339x-acj/src/wasm/fadec_a320/build.sh
-chmod +x ./build-a339x-acj/src/wasm/flypad-backend/build.sh
+#chmod +x ./build-a339x-acj/src/wasm/fbw_a320/build.sh
+#chmod +x ./build-a339x-acj/src/wasm/fadec_a320/build.sh
+#chmod +x ./build-a339x-acj/src/wasm/flypad-backend/build.sh

@@ -1,4 +1,13 @@
-export const TYPE = Object.freeze({ ECO: 0, ECO_EMERG: 1, BUSINESS: 2, PREMECO: 3 });
+export enum SeatType {
+    NarrowbodyEconomy = 0,
+    NarrowbodyEconomyEmergency = 1,
+    WidebodyEconomy = 2,
+    WidebodyEconomyEmergency = 3,
+    WidebodyBusinessFlatRight = 4,
+    WidebodyBusinessFlatLeft = 5,
+    WidebodySuiteRight = 6,
+    WidebodySuiteLeft = 7,
+}
 
 export const CanvasConst = Object.freeze({
     width: 1000,
@@ -27,6 +36,7 @@ export interface PaxStationInfo {
     fill: number,
     stationIndex: number,
     position: number,
+    deck: number
 }
 
 export interface CargoStationInfo {
@@ -39,7 +49,7 @@ export interface CargoStationInfo {
 }
 
 export const SeatConstants = Object.freeze({
-    [TYPE.ECO]: {
+    [SeatType.NarrowbodyEconomy]: {
         len: 15,
         wid: 15,
         padX: 1,
@@ -47,7 +57,7 @@ export const SeatConstants = Object.freeze({
         imageX: 12,
         imageY: 12,
     },
-    [TYPE.ECO_EMERG]: {
+    [SeatType.NarrowbodyEconomyEmergency]: {
         len: 19.2,
         wid: 19.2,
         padX: 20,
@@ -55,7 +65,7 @@ export const SeatConstants = Object.freeze({
         imageX: 25.4,
         imageY: 19.2,
     },
-    [TYPE.BUSINESS]: {
+    [SeatType.WidebodyBusinessFlatRight]: {
         len: 20,
         wid: 17,
         padX: 10,
@@ -63,7 +73,7 @@ export const SeatConstants = Object.freeze({
         imageX: 25,
         imageY: 25,
     },
-    [TYPE.PREMECO]: {
+    [SeatType.WidebodySuiteRight]: {
         len: 20,
         wid: 18,
         padX: 5,

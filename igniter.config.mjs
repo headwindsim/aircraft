@@ -1,6 +1,5 @@
 import { ExecTask, TaskOfTasks } from "@flybywiresim/igniter";
 import * as A339X from "./build-a339x/src/systems/instruments/buildSrc/igniter/tasks.mjs";
-import * as ACJ339X from "./build-a339x-acj/src/systems/instruments/buildSrc/igniter/tasks.mjs";
 
 export default new TaskOfTasks("all", [
     new TaskOfTasks("A339X", [
@@ -144,11 +143,6 @@ export default new TaskOfTasks("all", [
         ]),
 
         new TaskOfTasks("ACJ330neo", [
-            // Group all typescript and react build tasks together.
-            new TaskOfTasks("build", [
-                new TaskOfTasks("instruments", ACJ339X.getInstrumentsIgniterTasks(), true),
-            ], true),
-
             // Group all WASM build tasks together but separate from the rest of the tasks as build run more stable like this.
             new TaskOfTasks("wasm", [
                 new ExecTask("systems",
@@ -159,36 +153,6 @@ export default new TaskOfTasks("all", [
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/systems.wasm"
-                    ]),
-                new ExecTask("systems-fadec",
-                    "npm run build-a339x-acj:fadec",
-                    [
-                        "build-a339x-acj/src/wasm/fadec_a320",
-                        "build-common/src/wasm/fbw_common",
-                        "build-common/src/wasm/fadec_common",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/fadec.wasm"
-                    ]),
-                new ExecTask("systems-fbw",
-                    "npm run build-a339x-acj:fbw",
-                    [
-                        "build-a339x-acj/src/wasm/fbw_a320",
-                        "build-common/src/wasm/fbw_common",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/fbw.wasm"
-                    ]),
-                new ExecTask("systems-terronnd", [
-                    "build-common/src/wasm/terronnd/build.sh",
-                    "wasm-opt -O1 -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/terronnd.wasm build-common/src/wasm/terronnd/out/terronnd.wasm"
-                ], [
-                    "build-common/src/wasm/terronnd",
-                    "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/terronnd.wasm",
-                    "build-common/src/wasm/terronnd/out/terronnd.wasm",
-                ]),
-                new ExecTask("flypad-backend",
-                    "npm run build-a339x-acj:flypad-backend",
-                    [
-                        "build-a339x-acj/src/wasm/flypad-backend",
-                        "build-common/src/wasm/fbw_common",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/flypad-backend.wasm"
                     ])
             ], true),
         ]),
