@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import * as React from 'react';
 // viewBox="0 0 777 814"
-export const GroundServiceOutline = ({ className }: {className: string}) => (
+export const GroundServiceOutline = ({ className, fwdLeftStatus, fwdRightStatus, midLeftStatus, midRightStatus, aftLeftStatus, aftRightStatus }: {className: string, fwdLeftStatus: boolean, fwdRightStatus: boolean, midLeftStatus: boolean, midRightStatus: boolean, aftLeftStatus: boolean, aftRightStatus: boolean}) => (
     <svg
         id="SVG"
         className={className}
@@ -170,11 +170,23 @@ export const GroundServiceOutline = ({ className }: {className: string}) => (
                         id="AFT_Left_PS_PSS"
                         className="cls-2"
                         d="M352.06 650.21h5.13c1.55 0 2.74-1.36 2.54-2.9l-1.55-11.75a2.558 2.558 0 0 0-2.54-2.23h-6.16"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: aftLeftStatus ? '#6bbe45' : 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                     <path
                         id="AFT_Right_CAT"
                         className="cls-2"
                         d="M424.48 650.21h-5.13c-1.55 0-2.74-1.36-2.54-2.9l1.55-11.75a2.558 2.558 0 0 1 2.54-2.23h6.16"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: aftRightStatus ? '#6bbe45' : 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                 </g>
                 <g id="Emergency_Doors">
@@ -182,21 +194,45 @@ export const GroundServiceOutline = ({ className }: {className: string}) => (
                         id="AFT_Left_EMG"
                         className="cls-2"
                         d="M346.2 337.61h3.14c.95 0 1.72-.77 1.72-1.72v-7.61c0-.95-.77-1.72-1.72-1.72h-3.14"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                     <path
                         id="FWD_Left_EMG"
                         className="cls-2"
                         d="M346.2 319.32h3.14c.95 0 1.72-.77 1.72-1.72v-7.61c0-.95-.77-1.72-1.72-1.72h-3.14"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                     <path
                         id="AFT_Right_EMG"
                         className="cls-2"
                         d="M430.28 337.61h-3.14c-.95 0-1.72-.77-1.72-1.72v-7.61c0-.95.77-1.72 1.72-1.72h3.14"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                     <path
                         id="FWD_Right_EMG"
                         className="cls-2"
                         d="M430.28 319.32h-3.14c-.95 0-1.72-.77-1.72-1.72v-7.61c0-.95.77-1.72 1.72-1.72h3.14"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                 </g>
                 <g id="After_Mid_Doors">
@@ -204,11 +240,23 @@ export const GroundServiceOutline = ({ className }: {className: string}) => (
                         id="AFT_MID_Right_CAT"
                         className="cls-2"
                         d="M430.28 455.06h-9.08a2.67 2.67 0 0 1-2.67-2.67v-11.72a2.67 2.67 0 0 1 2.67-2.67h8.38"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                     <path
                         id="AFT_MID_Left_PS_PSS"
                         className="cls-2"
                         d="M346.2 455.06h9.08a2.67 2.67 0 0 0 2.67-2.67v-11.72a2.67 2.67 0 0 0-2.67-2.67h-8.38"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                 </g>
                 <g id="Front_Mid_Doors">
@@ -216,11 +264,23 @@ export const GroundServiceOutline = ({ className }: {className: string}) => (
                         id="FWD_MID_Right_CAT"
                         className="cls-2"
                         d="M430.28 235.06h-9.08a2.67 2.67 0 0 1-2.67-2.67v-11.72a2.67 2.67 0 0 1 2.67-2.67h8.38"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: midRightStatus ? '#6bbe45' : 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                     <path
                         id="FWD_MID_Left_PS_PSS"
                         className="cls-2"
                         d="M346.2 235.06h9.08a2.67 2.67 0 0 0 2.67-2.67v-11.72a2.67 2.67 0 0 0-2.67-2.67h-8.38"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: midLeftStatus ? '#6bbe45' : 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                 </g>
                 <g id="Front_Doors">
@@ -228,11 +288,23 @@ export const GroundServiceOutline = ({ className }: {className: string}) => (
                         id="FWD_Right_CAT"
                         className="cls-2"
                         d="M430.28 118.06h-9.08a2.67 2.67 0 0 1-2.67-2.67v-11.72a2.67 2.67 0 0 1 2.67-2.67h8.38"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: fwdRightStatus ? '#6bbe45' : 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                     <path
                         id="FWD_Left_PS_PSS"
                         className="cls-2"
                         d="M346.2 118.06h9.08a2.67 2.67 0 0 0 2.67-2.67v-11.72a2.67 2.67 0 0 0-2.67-2.67h-8.38"
+                        style={{
+                            stroke: '#6bbe45',
+                            strokeWidth: 2,
+                            fill: fwdLeftStatus ? '#6bbe45' : 'none',
+                            strokeMiterlimit: 10,
+                        }}
                     />
                 </g>
                 <g id="Cargo_Doors">
