@@ -38,7 +38,7 @@ export const SeatMapWidget: React.FC<SeatMapProps> = ({ seatMap, desiredFlags, a
 
     const seatEmptyImg = useRef(getImageFromComponent(<Seat fill="none" stroke={theme[0]} opacity="1.0" />));
     const seatMinusImg = useRef(getImageFromComponent(<Seat fill={theme[0]} stroke="none" opacity="0.25" />));
-    const seatAddImg = useRef(getImageFromComponent(<Seat fill={theme[1]} stroke="none" opacity="0.6" />));
+    const seatAddImg = useRef(getImageFromComponent(<Seat fill={theme[1]} stroke="none" opacity="0.4" />));
     const seatFilledImg = useRef(getImageFromComponent(<Seat fill={theme[1]} stroke="none" opacity="1.0" />));
 
     const [xYMap, setXYMap] = useState<number[][][]>([]);
