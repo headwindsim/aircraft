@@ -6047,7 +6047,7 @@ mod tests {
                 test::TestElectricitySource, ElectricalBus, Electricity, ElectricitySource,
                 ExternalPowerSource,
             },
-            engine::{leap_engine::TrentEngine, EngineFireOverheadPanel},
+            engine::{trent_engine::TrentEngine, EngineFireOverheadPanel},
             failures::FailureType,
             hydraulic::{
                 cargo_doors::{DoorControlState, HydraulicDoorController},
