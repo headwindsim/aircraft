@@ -145,6 +145,9 @@ export default new TaskOfTasks("all", [
         new TaskOfTasks("ACJ330neo", [
             // Group all WASM build tasks together but separate from the rest of the tasks as build run more stable like this.
             new TaskOfTasks("wasm", [
+                new ExecTask("copy-wasm",
+                    "npm run build-a339x-acj:copy-wasm"
+                    ),
                 new ExecTask("systems",
                     "npm run build-a339x-acj:systems",
                     [
