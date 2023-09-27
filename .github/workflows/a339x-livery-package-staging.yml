@@ -2,7 +2,8 @@ name: A339X Livery Package Staging
 on:
   push:
     tags:
-      - 'v*-rc*'
+      - 'v*-alpha*'
+      - 'v*-beta*'
     paths:
       - '.github/workflows/a339x-livery-package-staging.yml'
       - 'hdw-a339x-liveries/**'
