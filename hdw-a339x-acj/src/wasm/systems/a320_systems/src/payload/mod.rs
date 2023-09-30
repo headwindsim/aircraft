@@ -58,7 +58,7 @@ impl From<usize> for A320Cargo {
 }
 
 pub struct A320Payload {
-    payload_manager: PayloadManager<3, 1, 4>,
+    payload_manager: PayloadManager<3, 2, 4>,
 }
 impl A320Payload {
     // Note: These constants reflect flight_model.cfg values and will have to be updated in sync with the configuration
@@ -144,6 +144,10 @@ impl A320Payload {
             BoardingAgent::new(
                 context.get_identifier("INTERACTIVE POINT OPEN:0".to_owned()),
                 [0, 1, 2],
+            ),
+            BoardingAgent::new(
+                context.get_identifier("INTERACTIVE POINT OPEN:2".to_owned()),
+                [2, 1, 0],
             ),
         ];
 

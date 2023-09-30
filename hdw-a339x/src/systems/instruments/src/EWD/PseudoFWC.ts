@@ -1509,13 +1509,15 @@ export class PseudoFWC {
                 && !this.greenLP.get() && !this.yellowLP.get() && !this.blueLP.get()
                 && this.eng1pumpPBisAuto.get() && this.eng2pumpPBisAuto.get();
 
-            const cabin = SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:0', 'percent');
-            const catering = SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:1', 'percent');
-            const cargo = SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:2', 'percent');
+            const cabinMidLeft = SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:0', 'percent');
+            const catering1 = SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:1', 'percent');
+            const catering2 = SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:2', 'percent');
+            const cabinAftLeft = SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:3', 'percent');
+            const cargo = SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:4', 'percent');
             const brakesHot = SimVar.GetSimVarValue('L:A32NX_BRAKES_HOT', 'bool');
 
             const speeds = !toSpeedsTooLow && !toV2VRV2Disagree && !fmToSpeedsNotInserted;
-            const doors = !!(cabin === 0 && catering === 0 && cargo === 0);
+            const doors = !!(cabinMidLeft === 0 && cabinAftLeft === 0 && catering1 === 0 && catering2 === 0 && cargo === 0);
             const surfacesNotTo = flapsNotInToPos || slatsNotInToPos || this.speedbrakesNotTo.get() || this.rudderTrimNotTo.get() || this.pitchTrimNotTo.get();
 
             const toConfigNormal = systemStatus && speeds && !brakesHot && doors && !this.flapsMcduDisagree.get() && !surfacesNotTo;

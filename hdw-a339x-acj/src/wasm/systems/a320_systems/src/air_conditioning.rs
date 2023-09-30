@@ -156,8 +156,8 @@ struct A320Cabin {
 }
 
 impl A320Cabin {
-    const FWD_DOOR: &'static str = "INTERACTIVE POINT OPEN:1";
-    const REAR_DOOR: &'static str = "INTERACTIVE POINT OPEN:0";
+    const FWD_DOOR: &'static str = "INTERACTIVE POINT OPEN:0";
+    const REAR_DOOR: &'static str = "INTERACTIVE POINT OPEN:2";
 
     fn new(context: &mut InitContext) -> Self {
         Self {

@@ -310,9 +310,10 @@ export const A330Payload: React.FC<A320Props> = ({
     }, [totalPaxDesired, totalPax, totalCargo, boardingStarted, totalCargoDesired]);
 
     // Note: will need to be looked into when doors can be opened on this page.
-    const [cabinLeftDoorOpen] = useState(SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:0', 'Percent over 100'));
-    const [cabinRightDoorOpen] = useState(SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:1', 'Percent over 100'));
+    const [midLeftDoorOpen] = useState(SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:0', 'Percent over 100'));
+    const [fwdRightDoorOpen] = useState(SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:1', 'Percent over 100'));
     const [aftLeftDoorOpen] = useState(SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:2', 'Percent over 100'));
+    const [midRightDoorOpen] = useState(SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:3', 'Percent over 100'));
 
 
     const calculateBoardingTime = useMemo(() => {
@@ -325,10 +326,13 @@ export const A330Payload: React.FC<A320Props> = ({
         }
 
         let boardingDoorsOpen = 0;
-        if (cabinLeftDoorOpen) {
+        if (midLeftDoorOpen) {
             boardingDoorsOpen++;
         }
-        if (cabinRightDoorOpen) {
+        if (midRightDoorOpen) {
+            boardingDoorsOpen++;
+        }
+        if (fwdRightDoorOpen) {
             boardingDoorsOpen++;
         }
         if (aftLeftDoorOpen) {
@@ -347,7 +351,7 @@ export const A330Payload: React.FC<A320Props> = ({
         const estimatedCargoLoadingSeconds = (differentialCargo / cargoWeightPerWeightStep) * boardingRateMultiplier;
 
         return Math.max(estimatedPaxBoardingSeconds, estimatedCargoLoadingSeconds);
-    }, [totalPaxDesired, totalPax, totalCargoDesired, totalCargo, cabinLeftDoorOpen, cabinRightDoorOpen, aftLeftDoorOpen, boardingRate]);
+    }, [totalPaxDesired, totalPax, totalCargoDesired, totalCargo, midLeftDoorOpen, midRightDoorOpen, fwdRightDoorOpen, aftLeftDoorOpen, boardingRate]);
 
     const boardingStatusClass = useMemo(() => {
         if (!boardingStarted) {

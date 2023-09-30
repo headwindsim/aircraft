@@ -95,9 +95,10 @@ class A32NX_LocalVarUpdater {
         return !SimVar.GetSimVarValue('SIM ON GROUND', 'bool') ||
         SimVar.GetSimVarValue('ON ANY RUNWAY', 'bool') ||
         (SimVar.GetSimVarValue('LIGHT BEACON ON', 'bool') &&
-            SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:0', 'percent') < 5 && // Pilot side front door for ramp/stairs
-            SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:1', 'percent') < 5 && // Rear door, FO side for catering
-            SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:2', 'percent') < 5 // Cargo door FO side
+            SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:0', 'percent') < 5 && // MID LEFT DOOR CABIN
+            SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:1', 'percent') < 5 && // FWD RIGHT DOOR SERVICE
+            SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:2', 'percent') < 5 && // AFT LEFT DOOR CABIN
+            SimVar.GetSimVarValue('INTERACTIVE POINT OPEN:3', 'percent') < 5 // MID RIGHT DOOR SERVICE
         );
     }
 
