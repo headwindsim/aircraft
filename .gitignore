@@ -41,6 +41,7 @@
 !/hdw-common/src/**
 
 /hdw-a339x/*
+/hdw-a339x/.env.local
 !/hdw-a339x/README.md
 !/hdw-a339x/mach.config.js
 !/hdw-a339x/.env
@@ -79,6 +80,8 @@
 !/hdw-a339x-liveries/src/**
 
 !/scripts/**
+
+!/build-utils.js
 
 !/tools/**
 /tools/fdr2csv/*.exe
