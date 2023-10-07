@@ -134,11 +134,11 @@ const MAX_SEAT_AVAILABLE = 436;
  * Calculate %MAC ZWFCG of all stations
  */
 function getZfwcg() {
-    const leMacZ = -21.63; // Accurate to 3 decimals, replaces debug weight values
-    const macSize = 25.49; // Accurate to 3 decimals, replaces debug weight values
+    const leMacZ = -22.20; // Accurate to 3 decimals, replaces debug weight values
+    const macSize = 23.19; // Accurate to 3 decimals, replaces debug weight values
 
     const emptyWeight = (SimVar.GetSimVarValue("EMPTY WEIGHT", getUserUnit()));
-    const emptyPosition = -28.31; // Value from flight_model.cfg
+    const emptyPosition = -28.276; // Value from flight_model.cfg
     const emptyMoment = emptyPosition * emptyWeight;
     const PAX_WEIGHT = SimVar.GetSimVarValue("L:A32NX_WB_PER_PAX_WEIGHT", "Number");
 

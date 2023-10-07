@@ -1,9 +1,9 @@
 {
     "specs": {
         "prefix": "A339X",
-        "emptyPosition": -28.31,
-        "macSize": 25.49,
-        "leMacZ": -21.63,
+        "emptyPosition": -28.276,
+        "macSize": 23.19,
+        "leMacZ": -22.20,
         "weights": {
             "maxGw": 251000,
             "maxZfw": 181000,
@@ -1695,7 +1695,6 @@
                         },
                         {
                             "type": 0,
-
                             "yOffset": 19
                         },
                         {
@@ -1706,40 +1705,6 @@
                         },
                         {
                             "type": 0,
-
-                            "yOffset": 19
-                        },
-                        {
-                            "type": 0
-                        }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "xOffset": 0,
-                    "yOffset": 0
-                },
-                {
-                    "seats": [
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0,
-
-                            "yOffset": 19
-                        },
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0,
-
                             "yOffset": 19
                         },
                         {
@@ -1761,7 +1726,6 @@
                         },
                         {
                             "type": 0,
-
                             "yOffset": 19
                         },
                         {
@@ -1772,40 +1736,6 @@
                         },
                         {
                             "type": 0,
-
-                            "yOffset": 19
-                        },
-                        {
-                            "type": 0
-                        }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "xOffset": 0,
-                    "yOffset": 0
-                },
-                {
-                    "seats": [
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0,
-
-                            "yOffset": 19
-                        },
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0,
-
                             "yOffset": 19
                         },
                         {
@@ -1827,7 +1757,6 @@
                         },
                         {
                             "type": 0,
-
                             "yOffset": 19
                         },
                         {
@@ -1838,33 +1767,6 @@
                         },
                         {
                             "type": 0,
-
-                            "yOffset": 19
-                        },
-                        {
-                            "type": 0
-                        }
-                    ],
-                    "x": 0,
-                    "y": 0,
-                    "xOffset": 0,
-                    "yOffset": 0
-                },
-                {
-                    "seats": [
-                        {
-                            "type": 0,
-                            "yOffset": 49
-                        },
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0
-                        },
-                        {
-                            "type": 0,
-
                             "yOffset": 19
                         },
                         {
@@ -1886,7 +1788,6 @@
                         },
                         {
                             "type": 0,
-
                             "yOffset": 19
                         },
                         {
@@ -1897,7 +1798,37 @@
                         },
                         {
                             "type": 0,
-
+                            "yOffset": 19
+                        },
+                        {
+                            "type": 0
+                        }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "xOffset": 0,
+                    "yOffset": 0
+                },
+                {
+                    "seats": [
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0,
+                            "yOffset": 19
+                        },
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0,
                             "yOffset": 19
                         },
                         {
@@ -1923,7 +1854,62 @@
                         },
                         {
                             "type": 0,
-
+                            "yOffset": 19
+                        },
+                        {
+                            "type": 0
+                        }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "xOffset": 0,
+                    "yOffset": 0
+                },
+                {
+                    "seats": [
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0,
+                            "yOffset": 19
+                        },
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0,
+                            "yOffset": 19
+                        },
+                        {
+                            "type": 0
+                        }
+                    ],
+                    "x": 0,
+                    "y": 0,
+                    "xOffset": 0,
+                    "yOffset": 0
+                },
+                {
+                    "seats": [
+                        {
+                            "type": 0,
+                            "yOffset": 49
+                        },
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0
+                        },
+                        {
+                            "type": 0,
                             "yOffset": 19
                         },
                         {
