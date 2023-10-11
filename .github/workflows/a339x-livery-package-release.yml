@@ -54,7 +54,7 @@ jobs:
           echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
       - name: Setup Package
         run: |
-          ./scripts/dev-env/run.sh ./scripts/setup.sh
+          ./scripts/dev-env/run.sh ./scripts/setup.sh --clean
       - name: Copy Sources
         run: |
           ./scripts/dev-env/run.sh ./scripts/copy_a339x.sh

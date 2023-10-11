@@ -1,10 +1,10 @@
-name: A339X Livery Package Main
+name: A339X Livery Package Development
 on:
   push:
     branches:
       - main
     paths:
-      - '.github/workflows/a339x-livery-package-main.yml'
+      - '.github/workflows/a339x-livery-package-dev.yml'
       - 'hdw-a339x-liveries/**'
       - 'scripts/build-a339x-liveries.js'
       - 'scripts/build-a339x-liveries.sh'
@@ -21,8 +21,8 @@ jobs:
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: hdw-a339x-liveries-main.zip
-      BUILD_DIR_NAME: main
+      ZIP_NAME: hdw-a339x-liveries-dev.zip
+      BUILD_DIR_NAME: dev
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -51,7 +51,7 @@ jobs:
           echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
       - name: Setup Package
         run: |
-          ./scripts/dev-env/run.sh ./scripts/setup.sh
+          ./scripts/dev-env/run.sh ./scripts/setup.sh --clean
       - name: Copy Sources
         run: |
           ./scripts/dev-env/run.sh ./scripts/copy_a339x.sh
@@ -70,6 +70,6 @@ jobs:
       - name: Upload to CloudFlare CDN
         env:
           CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
-          CDN_BUCKET_DESTINATION: addons/a339x-livery-package/main
+          CDN_BUCKET_DESTINATION: addons/a339x-livery-package/dev
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./hdw-a339x-liveries/out/build-modules
