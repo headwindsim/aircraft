@@ -59,6 +59,6 @@ jobs:
       - name: Upload to CloudFlare CDN
         env:
           CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
-          CDN_BUCKET_DESTINATION: addons/a339x-livery-package/exp
+          CDN_BUCKET_DESTINATION: addons/a339x/experimental
         run: |
-          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./hdw-a339x-liveries/out/build-modules
+          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/build-modules
