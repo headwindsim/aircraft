@@ -404,13 +404,23 @@
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_PRESS</TOOLTIPID>
         </UseTemplate>
 
-        <!-- ECAM ELEC -->
+        <!-- ECAM ELEC AC -->
         <UseTemplate Name="FBW_Anim_Interactions">
             <ANIM_TYPE>BUTTON</ANIM_TYPE>
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
-            <BASE_NAME>ELEC</BASE_NAME>
-            <PART_ID>ECAM_ELEC</PART_ID>
+            <BASE_NAME>ELECAC</BASE_NAME>
+            <PART_ID>ECAM_ELECAC</PART_ID>
             <GROUP_INDEX>3</GROUP_INDEX> <!--Change to positive to activate-->
+            <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_ELEC</TOOLTIPID>
+        </UseTemplate>
+
+        <!-- ECAM ELEC DC -->
+        <UseTemplate Name="FBW_Anim_Interactions">
+            <ANIM_TYPE>BUTTON</ANIM_TYPE>
+            <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
+            <BASE_NAME>ELECDC</BASE_NAME>
+            <PART_ID>ECAM_ELECDC</PART_ID>
+            <GROUP_INDEX>4</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_ELEC</TOOLTIPID>
         </UseTemplate>
 
@@ -420,7 +430,7 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>HYD</BASE_NAME>
             <PART_ID>ECAM_HYD</PART_ID>
-            <GROUP_INDEX>4</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>5</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_HYD</TOOLTIPID>
         </UseTemplate>
 
@@ -430,7 +440,7 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>FUEL</BASE_NAME>
             <PART_ID>ECAM_FUEL</PART_ID>
-            <GROUP_INDEX>5</GROUP_INDEX>
+            <GROUP_INDEX>6</GROUP_INDEX>
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_FUEL</TOOLTIPID>
         </UseTemplate>
 
@@ -440,7 +450,7 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>APU</BASE_NAME>
             <PART_ID>ECAM_APU</PART_ID>
-            <GROUP_INDEX>6</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>7</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_APU</TOOLTIPID>
         </UseTemplate>
 
@@ -450,7 +460,7 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>COND</BASE_NAME>
             <PART_ID>ECAM_COND</PART_ID>
-            <GROUP_INDEX>7</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>8</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_COND</TOOLTIPID>
         </UseTemplate>
 
@@ -460,7 +470,7 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>DOOR</BASE_NAME>
             <PART_ID>ECAM_DOOR</PART_ID>
-            <GROUP_INDEX>8</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>9</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_DOOR</TOOLTIPID>
         </UseTemplate>
 
@@ -470,7 +480,7 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>WHEEL</BASE_NAME>
             <PART_ID>ECAM_WHEEL</PART_ID>
-            <GROUP_INDEX>9</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>10</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_WHEEL</TOOLTIPID>
         </UseTemplate>
 
@@ -480,7 +490,7 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>FTCL</BASE_NAME>
             <PART_ID>ECAM_FCTL</PART_ID>
-            <GROUP_INDEX>10</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>11</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_FCTL</TOOLTIPID>
         </UseTemplate>
 
@@ -501,7 +511,7 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>STS</BASE_NAME>
             <Part_ID>STS</Part_ID>
-            <GROUP_INDEX>11</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>12</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>Display STS informations on ECAM</TOOLTIPID>
         </UseTemplate>
 
