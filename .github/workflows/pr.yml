@@ -56,8 +56,15 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     env:
-      A32NX_PRODUCTION_BUILD: 1
-      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
+      run: |
+        echo A32NX_PRODUCTION_BUILD=1 >> hdw-a339x/.env
+        echo FBW_TYPECHECK=1 >> hdw-a339x/.env
+        echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a339x/.env
+        echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a339x/.env
+        echo CHARTFOX_SECRET=\"${{ secrets.CHARTFOX_SECRET }}\" >> hdw-a339x/.env
+        echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a339x/.env
+        echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
+        echo VITE_BUILD=false >> .env
     steps:
       - name: Checkout source
         uses: actions/checkout@v2

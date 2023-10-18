@@ -22,8 +22,12 @@ hdw-a339x/src/systems/fmgc/src/utils/LzUtf8.js
 target/*
 CMakeFiles/*
 cmake*
-hdw-a338x/out/*
 hdw-a339x/out/*
+build-a339x/out/*
 # TODO: these need to be more granular
-hdw-a338x/src/base/*
 hdw-a339x/src/base/*
+hdw-a339x-acj/src/base/*
+hdw-a339x/bundles/*
+build-a339x-acj/bundles/*
+build-a339x/bundles/*
+build-a339x-acj/bundles/*

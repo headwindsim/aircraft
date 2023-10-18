@@ -6,8 +6,8 @@
 
 const esbuild = require('esbuild');
 const path = require('path');
-const { esbuildModuleBuild } = require('#build-utils');
+const { createModuleBuild } = require('#build-utils');
 
 const outFile = 'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X/atsu/fmsclient.js';
 
-esbuild.build(esbuildModuleBuild('build-a339x', 'AtsuFmsClient', path.join(__dirname, 'src/index.ts'), outFile));
+esbuild.build(createModuleBuild('build-a339x', 'AtsuFmsClient', path.join(__dirname, 'src/index.ts'), outFile, __dirname));
