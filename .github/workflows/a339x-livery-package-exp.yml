@@ -58,11 +58,12 @@ jobs:
       - name: Build A339X Livery Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/build-a339x-liveries.sh --no-tty -j 4
+          docker system prune -af
       - name: Build ZIP files
         run: |
-          ./scripts/dev-env/run.sh node ./scripts/fragment-a339x-liveries.js
+          node ./scripts/fragment-a339x-liveries.js
           cp ./hdw-a339x-liveries/out/build-modules/modules.json ./hdw-a339x-liveries/out/headwindsim-a339x-livery-package/install.json
-          ./scripts/dev-env/run.sh node ./scripts/install-source-a339x-liveries.js
+          node ./scripts/install-source-a339x-liveries.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
           cd ./hdw-a339x-liveries/out/
           zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-a339x-livery-package/

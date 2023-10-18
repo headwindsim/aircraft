@@ -79,12 +79,12 @@ jobs:
       - name: Build A339X Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_a339x.sh --no-tty -j 4
+          docker system prune -af
       - name: Generate install.json
         run: |
-          ./scripts/dev-env/run.sh node ./scripts/fragment.js
-
+          node ./scripts/fragment.js
           cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
-          ./scripts/dev-env/run.sh node ./scripts/install-source.js
+          node ./scripts/install-source.js
       - uses: actions/upload-artifact@v2
         with:
           name: HEADWIND-A339X

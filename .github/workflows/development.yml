@@ -47,11 +47,12 @@ jobs:
       - name: Build A339X Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_a339x.sh --no-tty -j 4
+          docker system prune -af
       - name: Build ZIP files
         run: |
-          ./scripts/dev-env/run.sh node ./scripts/fragment.js
+          node ./scripts/fragment.js
           cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
-          ./scripts/dev-env/run.sh node ./scripts/install-source.js
+          node ./scripts/install-source.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
           cd ./build-a339x/out/
           zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-900/
@@ -62,4 +63,3 @@ jobs:
           CDN_BUCKET_DESTINATION: addons/a339x/development
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/build-modules
-    
