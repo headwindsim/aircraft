@@ -95,4 +95,3 @@ impl VariablesToObject for GearPosition {
 
     set_data_on_sim_object!();
 }
-

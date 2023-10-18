@@ -25,7 +25,7 @@ pub enum A320Pax {
     G,
     H,
     I,
-    J
+    J,
 }
 impl From<A320Pax> for usize {
     fn from(value: A320Pax) -> Self {
@@ -204,7 +204,7 @@ impl A320Payload {
             BoardingAgent::new(
                 context.get_identifier("INTERACTIVE POINT OPEN:2".to_owned()),
                 [9, 8, 7, 6, 5, 4, 3, 2, 1, 0],
-            )
+            ),
         ];
 
         let passenger_deck = PassengerDeck::new(pax, boarding_agents);
