@@ -17,16 +17,16 @@
 #define CONFIGURATION_SECTION_FUEL_RIGHT_QUANTITY "FUEL_RIGHT_QUANTITY"
 #define CONFIGURATION_SECTION_FUEL_LEFT_AUX_QUANTITY "FUEL_LEFT_AUX_QUANTITY"
 #define CONFIGURATION_SECTION_FUEL_RIGHT_AUX_QUANTITY "FUEL_RIGHT_AUX_QUANTITY"
-// #define CONFIGURATION_SECTION_FUEL_TRIM_QTY "FUEL_TRIM_QTY"
+#define CONFIGURATION_SECTION_FUEL_TRIM_QUANTITY "FUEL_TRIM_QUANTITY"
 
 /* Values in gallons */
 struct Configuration {
   double fuelCenter = 0;
-  double fuelLeft = 1645.0;
+  double fuelLeft = 5535.5;
   double fuelRight = fuelLeft;
-  double fuelLeftAux = 228.0;
+  double fuelLeftAux = 478.5;
   double fuelRightAux = fuelLeftAux;
-  // double fuelTrim = 1617.0;
+  double fuelTrim = 823.0;
 };
 
 class EngineControl {
@@ -686,6 +686,7 @@ class EngineControl {
     bool xfrCenterRightAuto = simVars->getValve(12) > 0.0 && !xfrCenterRightManual;
     bool xfrValveCenterLeftOpen = simVars->getValve(9) > 0.0 && (xfrCenterLeftAuto || xfrCenterLeftManual);
     bool xfrValveCenterRightOpen = simVars->getValve(10) > 0.0 && (xfrCenterRightAuto || xfrCenterRightManual);
+
     double xfrValveOuterLeft1 = simVars->getValve(6);
     double xfrValveOuterLeft2 = simVars->getValve(4);
     double xfrValveOuterRight1 = simVars->getValve(7);
@@ -704,25 +705,25 @@ class EngineControl {
     double fuelUsedEngine1 = simVars->getFuelUsedEngine1();  // Kg
     double fuelUsedEngine2 = simVars->getFuelUsedEngine2();  // Kg
 
-    double fuelLeftPre = simVars->getFuelLeftPre();          // LBS
-    double fuelRightPre = simVars->getFuelRightPre();        // LBS
-    double fuelAuxLeftPre = simVars->getFuelAuxLeftPre();    // LBS
-    double fuelAuxRightPre = simVars->getFuelAuxRightPre();  // LBS
-    double fuelCenterPre = simVars->getFuelCenterPre();      // LBS
-    // double fuelTrimPre = simVars->getFuelTrimPre();                                // LBS
+    double fuelLeftPre = simVars->getFuelLeftPre();                                // LBS
+    double fuelRightPre = simVars->getFuelRightPre();                              // LBS
+    double fuelAuxLeftPre = simVars->getFuelAuxLeftPre();                          // LBS
+    double fuelAuxRightPre = simVars->getFuelAuxRightPre();                        // LBS
+    double fuelCenterPre = simVars->getFuelCenterPre();                            // LBS
+    double fuelTrimPre = simVars->getFuelTrimPre();                                // LBS
     double leftQuantity = simVars->getFuelTankQuantity(2) * fuelWeightGallon;      // LBS
     double rightQuantity = simVars->getFuelTankQuantity(3) * fuelWeightGallon;     // LBS
     double leftAuxQuantity = simVars->getFuelTankQuantity(4) * fuelWeightGallon;   // LBS
     double rightAuxQuantity = simVars->getFuelTankQuantity(5) * fuelWeightGallon;  // LBS
     double centerQuantity = simVars->getFuelTankQuantity(1) * fuelWeightGallon;    // LBS
-    // double trimQuantity = simVars->getTankFuelQuantity(6) * fuelWeightGallon;      // LBS
+    double trimQuantity = simVars->getFuelTankQuantity(6) * fuelWeightGallon;      // LBS
 
     double fuelLeft = 0;
     double fuelRight = 0;
     double fuelLeftAux = 0;
     double fuelRightAux = 0;
     double fuelCenter = 0;
-    // double fuelTrim = 0;
+    double fuelTrim = 0;
     double xfrCenterToLeft = 0;
     double xfrCenterToRight = 0;
     double xfrAuxLeft = 0;
@@ -798,14 +799,14 @@ class EngineControl {
       simVars->setFuelAuxLeftPre(fuelAuxLeftPre);      // in LBS
       simVars->setFuelAuxRightPre(fuelAuxRightPre);    // in LBS
       simVars->setFuelCenterPre(fuelCenterPre);        // in LBS
-      // simVars->setFuelTrimPre(fuelTrimPre);            // in LBS
+      simVars->setFuelTrimPre(fuelTrimPre);            // in LBS
 
       fuelLeft = (fuelLeftPre / fuelWeightGallon);          // USG
       fuelRight = (fuelRightPre / fuelWeightGallon);        // USG
       fuelCenter = (fuelCenterPre / fuelWeightGallon);      // USG
       fuelLeftAux = (fuelAuxLeftPre / fuelWeightGallon);    // USG
       fuelRightAux = (fuelAuxRightPre / fuelWeightGallon);  // USG
-      // fuelTrim = (fuelTrimPre / fuelWeightGallon);          // USG
+      fuelTrim = (fuelTrimPre / fuelWeightGallon);          // USG
 
       SimConnect_SetDataOnSimObject(hSimConnect, DataTypesID::FuelCenterMain, SIMCONNECT_OBJECT_ID_USER, 0, 0, sizeof(double), &fuelCenter);
       SimConnect_SetDataOnSimObject(hSimConnect, DataTypesID::FuelLeftMain, SIMCONNECT_OBJECT_ID_USER, 0, 0, sizeof(double), &fuelLeft);
@@ -820,7 +821,7 @@ class EngineControl {
       simVars->setFuelAuxLeftPre(leftAuxQuantity);           // in LBS
       simVars->setFuelAuxRightPre(rightAuxQuantity);         // in LBS
       simVars->setFuelCenterPre(centerQuantity);             // in LBS
-      // simVars->setFuelTrimPre(trimQty);                      // in LBS
+      simVars->setFuelTrimPre(trimQuantity);                 // in LBS
     } else {
       if (uiFuelTamper == 1) {
         fuelLeftPre = leftQuantity;          // LBS
@@ -828,7 +829,7 @@ class EngineControl {
         fuelAuxLeftPre = leftAuxQuantity;    // LBS
         fuelAuxRightPre = rightAuxQuantity;  // LBS
         fuelCenterPre = centerQuantity;      // LBS
-        // fuelTrimPre = trimQuantity;          // LBS
+        fuelTrimPre = trimQuantity;          // LBS
       }
       //-----------------------------------------------------------
       // Cross-feed Logic
@@ -962,7 +963,7 @@ class EngineControl {
       configuration.fuelCenter = simVars->getFuelCenterPre() / simVars->getFuelWeightGallon();
       configuration.fuelLeftAux = simVars->getFuelAuxLeftPre() / simVars->getFuelWeightGallon();
       configuration.fuelRightAux = simVars->getFuelAuxRightPre() / simVars->getFuelWeightGallon();
-      // configuration.fuelTrim = simVars->getFuelTrimPre() / simVars->getFuelWeightGallon();
+      configuration.fuelTrim = simVars->getFuelTrimPre() / simVars->getFuelWeightGallon();
 
       saveFuelInConfiguration(configuration);
       timerFuel.reset();
@@ -1165,7 +1166,7 @@ class EngineControl {
     simVars->setFuelAuxLeftPre(configuration.fuelLeftAux * simVars->getFuelWeightGallon());    // in LBS
     simVars->setFuelAuxRightPre(configuration.fuelRightAux * simVars->getFuelWeightGallon());  // in LBS
     simVars->setFuelCenterPre(configuration.fuelCenter * simVars->getFuelWeightGallon());      // in LBS
-    // simVars->setFuelTrimPre(configuration.fuelTrim * simVars->getFuelWeightGallon());
+    simVars->setFuelTrimPre(configuration.fuelTrim * simVars->getFuelWeightGallon());
 
     // Initialize Pump State
     simVars->setPumpStateEngine1(0);
@@ -1287,7 +1288,7 @@ class EngineControl {
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_RIGHT_QUANTITY, 1645.0),
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_LEFT_AUX_QUANTITY, 228.0),
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_RIGHT_AUX_QUANTITY, 228.0),
-        // mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_TRIM_QTY, 1617.0),
+        mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_TRIM_QUANTITY, 1617.0),
     };
   }
 
@@ -1303,7 +1304,7 @@ class EngineControl {
     stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_RIGHT_QUANTITY] = std::to_string(configuration.fuelRight);
     stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_LEFT_AUX_QUANTITY] = std::to_string(configuration.fuelLeftAux);
     stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_RIGHT_AUX_QUANTITY] = std::to_string(configuration.fuelRightAux);
-    // stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_TRIM_QTY] = std::to_string(configuration.fuelTrim);
+    stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_TRIM_QUANTITY] = std::to_string(configuration.fuelTrim);
 
     if (!iniFile.write(stInitStructure, true)) {
       std::cout << "EngineControl: failed to write engine conf " << confFilename << " due to error \"" << strerror(errno) << "\""
