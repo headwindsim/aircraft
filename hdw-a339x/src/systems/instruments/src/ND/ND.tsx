@@ -1,15 +1,19 @@
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import { ClockEvents, ConsumerSubject, DisplayComponent, EventBus, FSComponent, MappedSubject, Subject, Subscribable, VNode } from '@microsoft/msfs-sdk';
 import { SimVarString } from '@flybywiresim/fbw-sdk';
 import { EfisNdMode, EfisNdRangeValue, EfisSide, rangeSettings } from '@shared/NavigationDisplay';
 import { DmcEvents } from 'instruments/src/MsfsAvionicsCommon/providers/DmcPublisher';
 import { clampAngle } from 'msfs-geo';
 import { ArincEventBus } from 'instruments/src/MsfsAvionicsCommon/ArincEventBus';
-import { CrossTrackError } from 'instruments/src/NDv2/shared/CrossTrackError';
+import { CrossTrackError } from 'instruments/src/ND/shared/CrossTrackError';
 import { FmsVars } from 'instruments/src/MsfsAvionicsCommon/providers/FmsDataPublisher';
 import { FcuSimVars } from 'instruments/src/MsfsAvionicsCommon/providers/FcuBusPublisher';
-import { RadioNeedle } from 'instruments/src/NDv2/shared/RadioNeedle';
+import { RadioNeedle } from 'instruments/src/ND/shared/RadioNeedle';
 import { getSmallestAngle } from 'instruments/src/PFD/PFDUtils';
-import { SelectedHeadingBug } from 'instruments/src/NDv2/pages/arc/SelectedHeadingBug';
+import { SelectedHeadingBug } from 'instruments/src/ND/pages/arc/SelectedHeadingBug';
 import { DisplayUnit } from '../MsfsAvionicsCommon/displayUnit';
 import { AdirsSimVars } from '../MsfsAvionicsCommon/SimVarTypes';
 import { NDSimvars } from './NDSimvarPublisher';
