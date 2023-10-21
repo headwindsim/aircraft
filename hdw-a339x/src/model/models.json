@@ -20,6 +20,11 @@
     },
     "additions": [
       {
+        "gltf": "./wipers/flight-deck-wipers.gltf",
+        "bin": "./wipers/flight-deck-wipers.bin",
+        "maxLod": 0
+      },
+      {
         "gltf": "./efb/efb.gltf",
         "bin": "./efb/efb.bin"
       },
