@@ -188,6 +188,8 @@ class FMCMainDisplay extends BaseAirliners {
         this.arincMissedThrustReductionAltitude = FmArinc429OutputWord.empty("MISSED_THR_RED_ALT");
         this.arincMissedAccelerationAltitude = FmArinc429OutputWord.empty("MISSED_ACC_ALT");
         this.arincMissedEoAccelerationAltitude = FmArinc429OutputWord.empty("MISSED_EO_ACC_ALT");
+        this.arincTransitionAltitude = FmArinc429OutputWord.empty("TRANS_ALT");
+        this.arincTransitionLevel = FmArinc429OutputWord.empty("TRANS_LVL");
         /** contains fm messages (not yet implemented) and nodh bit */
         this.arincEisWord2 = FmArinc429OutputWord.empty("EIS_DISCRETE_WORD_2");
 
@@ -207,6 +209,8 @@ class FMCMainDisplay extends BaseAirliners {
             this.arincMissedThrustReductionAltitude,
             this.arincMissedAccelerationAltitude,
             this.arincMissedEoAccelerationAltitude,
+            this.arincTransitionAltitude,
+            this.arincTransitionLevel,
             this.arincEisWord2,
         ];
     }
@@ -609,6 +613,7 @@ class FMCMainDisplay extends BaseAirliners {
             this.toSpeedsChecks();
             this.thrustReductionAccelerationChecks();
             this.updateThrustReductionAcceleration();
+            this.updateTransitionAltitudeLevel();
             this.updateMinimums();
             this.updateIlsCourse();
         }
@@ -2966,6 +2971,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (s === FMCMainDisplay.clrValue) {
             // TODO when possible fetch default from database
             this.flightPlanManager.setOriginTransitionAltitude();
+            this.updateTransitionAltitudeLevel();
             return true;
         }
 
@@ -2982,6 +2988,7 @@ class FMCMainDisplay extends BaseAirliners {
         }
 
         this.flightPlanManager.setOriginTransitionAltitude(value);
+        this.updateTransitionAltitudeLevel();
         return true;
     }
 
@@ -3240,6 +3247,22 @@ class FMCMainDisplay extends BaseAirliners {
             activePlan.missedEngineOutAccelerationAltitude !== undefined ? Arinc429Word.SignStatusMatrix.NormalOperation : Arinc429Word.SignStatusMatrix.NoComputedData,
             17, 131072, 0,
         );
+    }
+
+    updateTransitionAltitudeLevel() {
+        const originTransitionAltitude = this.flightPlanManager.originTransitionAltitude;
+        this.arincTransitionAltitude.setBnrValue(
+            originTransitionAltitude !== undefined ? originTransitionAltitude : 0,
+            originTransitionAltitude !== undefined ? Arinc429Word.SignStatusMatrix.NormalOperation : Arinc429Word.SignStatusMatrix.NoComputedData,
+            17, 131072, 0,
+        )
+
+        const destinationTansitionLevel = this.flightPlanManager.destinationTransitionLevel;
+        this.arincTransitionLevel.setBnrValue(
+            destinationTansitionLevel !== undefined ? destinationTansitionLevel : 0,
+            destinationTansitionLevel !== undefined ? Arinc429Word.SignStatusMatrix.NormalOperation : Arinc429Word.SignStatusMatrix.NoComputedData,
+            9, 512, 0,
+        )
     }
 
     //Needs PR Merge #3082
@@ -3870,6 +3893,7 @@ class FMCMainDisplay extends BaseAirliners {
     setPerfApprTransAlt(s) {
         if (s === FMCMainDisplay.clrValue) {
             this.flightPlanManager.setDestinationTransitionLevel();
+            this.updateTransitionAltitudeLevel();
             return true;
         }
 
@@ -3884,6 +3908,7 @@ class FMCMainDisplay extends BaseAirliners {
         }
 
         this.flightPlanManager.setDestinationTransitionLevel(Math.round(value / 100));
+        this.updateTransitionAltitudeLevel();
         return true;
     }
 
