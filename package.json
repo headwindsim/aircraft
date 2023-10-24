@@ -1,6 +1,6 @@
 {
   "name": "a339x",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "edition": "development",
   "imports": {
     "#build-utils": "./build-utils.js"
