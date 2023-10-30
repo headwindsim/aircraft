@@ -1,0 +1,15 @@
+{
+  "Headwind": {
+    "Settings": {
+      "AtsuAoc": {
+        "OptionalA32nxErrorReporting": "Opcionális A333X hibajelentés"
+      },
+      "flyPad": {
+        "Orange": "Narancssárga"
+      }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Frissítse a repülőgépet a telepítő segítségével"
+    }
+  }
+}

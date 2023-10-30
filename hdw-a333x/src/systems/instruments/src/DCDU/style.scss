@@ -1,0 +1,195 @@
+@font-face {
+  font-family: "dcdu-small-black-white";
+  src: url("/Fonts/A333X/FBW-Display-DCDU-H12.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "dcdu-small-green";
+  src: url("/Fonts/A333X/FBW-Display-DCDU-H12.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "dcdu-small-cyan";
+  src: url("/Fonts/A333X/FBW-Display-DCDU-H12.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "dcdu-normal-black-white";
+  src: url("/Fonts/A333X/FBW-Display-DCDU-H16-W.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "dcdu-normal-green";
+  src: url("/Fonts/A333X/FBW-Display-DCDU-H16-W.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "dcdu-normal-cyan";
+  src: url("/Fonts/A333X/FBW-Display-DCDU-H16-W.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.dcdu {
+  position: absolute;
+  left: 80px !important;
+  top: 80px !important;
+  width: 3936px;
+  height: 2912px;
+
+  background: radial-gradient(
+    ellipse at center,
+    rgba(4, 4, 4, 1) 0%,
+    rgb(4, 4, 4) 100%
+  );
+}
+
+path.dcdu-line {
+  stroke: white;
+  stroke-width: 16;
+}
+
+.station {
+  fill: rgb(0,255,0);
+  font-size: 134px;
+  font-family: dcdu-small-green;
+}
+
+.status-message {
+  text-anchor: end;
+  font-size: 192px;
+}
+
+.status-open {
+  font-family: dcdu-normal-cyan;
+  fill: rgb(0,255,255);
+}
+
+.status-other {
+  font-family: dcdu-normal-black-white;
+  fill: rgb(0, 0, 0);
+}
+
+.status-atsu {
+  text-anchor: middle;
+  font-size: 134px;
+  font-family: dcdu-small-black-white;
+}
+
+.message-background {
+  width: 3600px;
+}
+
+.message-background-off {
+  fill: rgba(0,0,0,0);
+}
+
+.message-out {
+  fill: rgb(0,255,255);
+}
+
+.message-sent {
+  fill: rgb(0, 255, 0);
+}
+
+.atc-info {
+  font-size: 192px;
+}
+
+.atc-info-standby {
+  font-family: dcdu-normal-black-white;
+  fill: rgb(255,255,255);
+}
+
+.atc-info-active {
+  font-family: dcdu-normal-green;
+  fill: rgb(0,255,0);
+}
+
+.message-tspan {
+  display: block;
+  white-space: pre;
+}
+
+.message-highlight {
+  font-family: dcdu-normal-cyan;
+  fill: rgb(0,255,255);
+}
+
+.message-monitoring {
+  font-family: dcdu-normal-cyan;
+  fill: rgb(255,148,255);
+}
+
+.message-onbackground {
+  font-family: dcdu-normal-cyan;
+  fill: rgb(0,0,0);
+}
+
+.message-content {
+  font-size: 192px;
+}
+
+.message-content-other {
+  font-family: dcdu-normal-black-white;
+}
+
+.message-content-out {
+  fill: rgb(0,0,0);
+}
+
+.message-content-in {
+  fill: rgb(255,255,255);
+}
+
+.message-content-sent {
+  font-family: dcdu-normal-green;
+  fill: rgb(0,255,0);
+}
+
+.startup-text {
+  position: absolute;
+  left: 80px !important;
+  top: 80px !important;
+  width: 3936px;
+  height: 2912px;
+
+  text {
+    fill: rgb(0,255,0);
+    font-size: 240px;
+    text-anchor: middle;
+    font-family: dcdu-normal-green;
+  }
+}
+
+.button {
+  font-size: 134px;
+}
+
+.button-color {
+  font-family: dcdu-small-cyan;
+  fill: rgb(0,255,255);
+}
+
+.button-color-clicked {
+  font-family: dcdu-small-black-white;
+  fill: rgb(0, 0, 0);
+}
+
+.button-left {
+  text-anchor: start;
+}
+
+.button-right {
+  text-anchor: end;
+}

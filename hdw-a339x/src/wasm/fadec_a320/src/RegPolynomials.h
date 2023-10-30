@@ -195,8 +195,8 @@ class Polynomial {
 
     outCEGT = c_EGT[0] + c_EGT[1] + (c_EGT[2] * cn1) + (c_EGT[3] * cff_a330) + (c_EGT[4] * mach) + (c_EGT[5] * alt) +
               (c_EGT[6] * powFBW(cn1, 2)) + (c_EGT[7] * cn1 * cff_a330) + (c_EGT[8] * cn1 * mach) + (c_EGT[9] * cn1 * alt) +
-              (c_EGT[10] * powFBW(cff_a330, 2)) + (c_EGT[11] * mach * cff_a330) + (c_EGT[12] * cff_a330 * alt) + (c_EGT[13] * powFBW(mach, 2)) +
-              (c_EGT[14] * mach * alt) + (c_EGT[15] * powFBW(alt, 2));
+              (c_EGT[10] * powFBW(cff_a330, 2)) + (c_EGT[11] * mach * cff_a330) + (c_EGT[12] * cff_a330 * alt) +
+              (c_EGT[13] * powFBW(mach, 2)) + (c_EGT[14] * mach * alt) + (c_EGT[15] * powFBW(alt, 2));
 
     return outCEGT;
   }
@@ -248,8 +248,7 @@ class Polynomial {
   /// </summary>
   double oilGulpPct(double thrust) {
     double outOilGulpPct = 0;
-    double thrust_a330 = thrust/2.53;
-
+    double thrust_a330 = thrust / 2.53;
 
     double c_OilGulp[3] = {20.1968848, -1.2270302e-4, 1.78442e-8};
 

@@ -19,10 +19,14 @@
 !.prettierrc.json
 
 !igniter.config.mjs
+!a333x-igniter.config.mjs
+!a339x-igniter.config.mjs
 !jsconfig.json
 
 !Cargo.lock
-!Cargo.toml
+Cargo.toml
+!Cargo-A333X.toml
+!Cargo-A339X.toml
 !/.cargo/config.toml
 !rust-toolchain.toml
 
@@ -36,9 +40,15 @@
 
 # Project folders
 
-/hdw-common/*
-!/hdw-common/src/
-!/hdw-common/src/**
+!/textures/**
+
+/hdw-a333x-common/*
+!/hdw-a333x-common/src/
+!/hdw-a333x-common/src/**
+
+/hdw-a339x-common/*
+!/hdw-a339x-common/src/
+!/hdw-a339x-common/src/**
 
 /hdw-a339x/*
 /hdw-a339x/.env.local
@@ -58,6 +68,15 @@
 !/hdw-a339x-acj/docs/**
 !/hdw-a339x-acj/src/
 !/hdw-a339x-acj/src/**
+
+/hdw-a333x/*
+!/hdw-a333x/README.md
+!/hdw-a333x/mach.config.js
+!/hdw-a333x/.env
+!/hdw-a333x/docs/
+!/hdw-a333x/docs/**
+!/hdw-a333x/src/
+!/hdw-a333x/src/**
 
 /hdw-a339x/out
 /hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.bin
@@ -103,9 +122,11 @@ target/
 *.tgz
 *.wasm
 
+/build-a333x/
 /build-a339x/
 /build-a339x-acj/
-/build-common/
+/build-a333x-common/
+/build-a339x-common/
 
 # ======== OLD =============
 

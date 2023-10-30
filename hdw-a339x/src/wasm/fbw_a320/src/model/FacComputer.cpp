@@ -5,7 +5,6 @@
 #include "rt_remd.h"
 #include "look2_binlxpw.h"
 #include "look1_binlxpw.h"
-#include "look2_pbinlxpw.h"
 #include "plook_binx.h"
 #include "intrp3d_l_pw.h"
 
@@ -835,42 +834,29 @@ void FacComputer::step()
     }
 
     if (rtb_alt >= FacComputer_P.CompareToConstant_const) {
-      if (rtb_alt >= FacComputer_P.CompareToConstant1_const) {
-        u0 = FacComputer_P.Gain1_Gain * rtb_alt;
-        if (u0 > FacComputer_P.Saturation1_UpperSat) {
-          u0 = FacComputer_P.Saturation1_UpperSat;
-        } else if (u0 < FacComputer_P.Saturation1_LowerSat) {
-          u0 = FacComputer_P.Saturation1_LowerSat;
-        }
-
-        bpIndices[0U] = plook_binx(u0, FacComputer_P.uDLookupTable_bp01Data, 7U, &absx);
-        fractions[0U] = absx;
-        bpIndices[1U] = plook_binx(static_cast<real_T>(rtb_DataTypeConversion2), FacComputer_P.uDLookupTable_bp02Data,
-          5U, &absx);
-        fractions[1U] = absx;
-        u0 = 1.0 / rtb_Switch1_a;
-        if (u0 > FacComputer_P.Saturation3_UpperSat) {
-          u0 = FacComputer_P.Saturation3_UpperSat;
-        } else if (u0 < FacComputer_P.Saturation3_LowerSat) {
-          u0 = FacComputer_P.Saturation3_LowerSat;
-        }
-
-        bpIndices[2U] = plook_binx(u0, FacComputer_P.uDLookupTable_bp03Data, 2U, &absx);
-        fractions[2U] = absx;
-        rtb_Switch1_a = intrp3d_l_pw(bpIndices, fractions, FacComputer_P.uDLookupTable_tableData,
-          FacComputer_P.uDLookupTable_dimSizes);
-      } else {
-        u0 = FacComputer_P.Gain_Gain * rtb_alt;
-        if (u0 > FacComputer_P.Saturation2_UpperSat) {
-          u0 = FacComputer_P.Saturation2_UpperSat;
-        } else if (u0 < FacComputer_P.Saturation2_LowerSat) {
-          u0 = FacComputer_P.Saturation2_LowerSat;
-        }
-
-        rtb_Switch1_a = look2_pbinlxpw(rtb_DataTypeConversion2 / 2205.0, u0, FacComputer_P.uDLookupTable1_bp01Data,
-          FacComputer_P.uDLookupTable1_bp02Data, FacComputer_P.uDLookupTable1_tableData, FacComputer_DWork.m_bpIndex,
-          FacComputer_P.uDLookupTable1_maxIndex, 9U);
+      bpIndices[0U] = plook_binx(static_cast<real_T>(rtb_DataTypeConversion2), FacComputer_P.uDLookupTable_bp01Data, 5U,
+        &absx);
+      fractions[0U] = absx;
+      u0 = FacComputer_P.Gain_Gain * rtb_alt;
+      if (u0 > FacComputer_P.Saturation2_UpperSat) {
+        u0 = FacComputer_P.Saturation2_UpperSat;
+      } else if (u0 < FacComputer_P.Saturation2_LowerSat) {
+        u0 = FacComputer_P.Saturation2_LowerSat;
       }
+
+      bpIndices[1U] = plook_binx(u0, FacComputer_P.uDLookupTable_bp02Data, 7U, &absx);
+      fractions[1U] = absx;
+      u0 = 1.0 / rtb_Switch1_a;
+      if (u0 > FacComputer_P.Saturation3_UpperSat) {
+        u0 = FacComputer_P.Saturation3_UpperSat;
+      } else if (u0 < FacComputer_P.Saturation3_LowerSat) {
+        u0 = FacComputer_P.Saturation3_LowerSat;
+      }
+
+      bpIndices[2U] = plook_binx(u0, FacComputer_P.uDLookupTable_bp03Data, 2U, &absx);
+      fractions[2U] = absx;
+      rtb_Switch1_a = intrp3d_l_pw(bpIndices, fractions, FacComputer_P.uDLookupTable_tableData,
+        FacComputer_P.uDLookupTable_dimSizes);
     } else {
       rtb_Switch1_a = FacComputer_P.Constant_Value_l;
     }
@@ -907,7 +893,7 @@ void FacComputer::step()
       FacComputer_P.uDLookupTable6_tableData, 5U), look1_binlxpw(FacComputer_P.Constant_Value_k,
       FacComputer_P.uDLookupTable5_bp01Data, FacComputer_P.uDLookupTable5_tableData, 5U), static_cast<real_T>
       (rtb_DataTypeConversion2), &rtb_Switch1_a);
-    rtb_BusAssignment_g5_flight_envelope_v_3_kn = std::fmax(FacComputer_P.Gain1_Gain_l * rtb_Switch1_a,
+    rtb_BusAssignment_g5_flight_envelope_v_3_kn = std::fmax(FacComputer_P.Gain1_Gain * rtb_Switch1_a,
       FacComputer_P.Vmcl_Value_a + FacComputer_P.Bias_Bias);
     rtb_Y_d = FacComputer_P.Vmcl_Value_a + FacComputer_P.Bias2_Bias;
     FacComputer_MATLABFunction2(look1_binlxpw(FacComputer_P.Constant1_Value_h, FacComputer_P.uDLookupTable8_bp01Data,
@@ -935,8 +921,7 @@ void FacComputer::step()
       FacComputer_P.BitfromLabel5_bit_j4, &rtb_y_c);
     FacComputer_MATLABFunction_d(rtb_Memory, rtb_y_i, rtb_DataTypeConversion_ml, rtb_OR1, rtb_DataTypeConversion_kr,
       rtb_y_c != 0U, &rtb_Y_d);
-    rtb_y_i = ((rtb_Y_d == FacComputer_P.CompareToConstant3_const) || (rtb_Y_d ==
-                FacComputer_P.CompareToConstant1_const_n));
+    rtb_y_i = ((rtb_Y_d == FacComputer_P.CompareToConstant3_const) || (rtb_Y_d == FacComputer_P.CompareToConstant1_const));
     rtb_Memory = (rtb_Y_d == FacComputer_P.CompareToConstant_const_k);
     rtb_BusAssignment_g5_flight_envelope_v_stall_kn = rtb_Y_f;
     rtb_DataTypeConversion_ml = ((rtb_Y_d == FacComputer_P.CompareToConstant4_const) || (rtb_Y_d ==
@@ -961,7 +946,7 @@ void FacComputer::step()
     FacComputer_MATLABFunction_d(rtb_OR1, rtb_DataTypeConversion_kr, rtb_DataTypeConversion_he,
       rtb_DataTypeConversion_e0, rtb_DataTypeConversion_jc, rtb_y_c != 0U, &rtb_Switch1_a);
     rtb_BusAssignment_f_flight_envelope_v_fe_next_kn = look1_binlxpw(rtb_Switch1_a,
-      FacComputer_P.uDLookupTable1_bp01Data_p, FacComputer_P.uDLookupTable1_tableData_o, 5U);
+      FacComputer_P.uDLookupTable1_bp01Data, FacComputer_P.uDLookupTable1_tableData, 5U);
     rtb_DataTypeConversion_he = ((rtb_Switch1_a < FacComputer_P.CompareToConstant_const_i) && (rtb_alt <=
       FacComputer_P.CompareToConstant1_const_i));
     if (rtb_Switch_i_idx_2) {
@@ -1087,10 +1072,10 @@ void FacComputer::step()
       }
     } else {
       rtb_Y_d = FacComputer_P.Gain_Gain_p * FacComputer_DWork.pY;
-      if (rtb_Y_d > FacComputer_P.Saturation1_UpperSat_e) {
-        rtb_Y_d = FacComputer_P.Saturation1_UpperSat_e;
-      } else if (rtb_Y_d < FacComputer_P.Saturation1_LowerSat_c) {
-        rtb_Y_d = FacComputer_P.Saturation1_LowerSat_c;
+      if (rtb_Y_d > FacComputer_P.Saturation1_UpperSat) {
+        rtb_Y_d = FacComputer_P.Saturation1_UpperSat;
+      } else if (rtb_Y_d < FacComputer_P.Saturation1_LowerSat) {
+        rtb_Y_d = FacComputer_P.Saturation1_LowerSat;
       }
     }
 

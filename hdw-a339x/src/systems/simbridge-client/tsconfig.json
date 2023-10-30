@@ -4,10 +4,10 @@
       "moduleResolution": "node",
       "target": "ESNext",
       "noEmit": true,
-      "typeRoots": ["../../../../build-common/src/typings"]
+      "typeRoots": ["../../../../build-a339x-common/src/typings"]
     },
     "include": [
       "src/**/*",
-      "../../../../build-common/src/typings/**/*.d.ts"
+      "../../../../build-a339x-common/src/typings/**/*.d.ts"
     ]
   }

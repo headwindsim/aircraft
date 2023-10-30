@@ -13,11 +13,13 @@ if [ "${GITHUB_ACTIONS}" == "true" ]; then
 fi
 
 # run build
-time npx igniter -r A339X "$@"
+time npx igniter -c a339x-igniter.config.mjs -r A339X "$@"
 
 if [ "${GITHUB_ACTIONS}" == "true" ]; then
+  rm -rf /external/build-a333x/src
   rm -rf /external/build-a339x/src
   rm -rf /external/build-acj339x/src
+  rm -rf /external/hdw-a333x/src
   rm -rf /external/hdw-a339x/src
   rm -rf /external/hdw-acj339x/src
 fi

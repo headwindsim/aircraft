@@ -24,8 +24,7 @@ for arg in "$@"; do
   fi
 done
 
-# run build
-time npx igniter -r 'a339x-livery-package' "${args[@]}"
+time npx igniter -c a339x-igniter.config.mjs -r 'a339x-livery-package' "$@"
 
 # restore ownership (when run as github action)
 if [ "${GITHUB_ACTIONS}" == "true" ]; then
