@@ -1,0 +1,15 @@
+{
+  "Headwind": {
+    "Settings": {
+      "AtsuAoc": {
+        "OptionalA32nxErrorReporting": "İsteğe Bağlı A333X Hata Bildirimi"
+      },
+      "flyPad": {
+        "Orange": "Portakal"
+      }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Please update your aircraft using the Installer."
+    }
+  }
+}

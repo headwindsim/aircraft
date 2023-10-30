@@ -42,45 +42,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "acj330_hydraulic_simulation_graphs"
-version = "0.1.0"
-dependencies = [
- "acj330_systems",
- "ntest",
- "num-derive",
- "num-traits",
- "plotlib",
- "rand",
- "rustplotlib",
- "systems",
- "uom",
-]
-
-[[package]]
-name = "acj330_systems"
-version = "0.1.0"
-dependencies = [
- "nalgebra",
- "ntest",
- "rand",
- "rand_pcg",
- "rstest",
- "systems",
- "uom",
-]
-
-[[package]]
-name = "acj330_systems_wasm"
-version = "0.1.0"
-dependencies = [
- "acj330_systems",
- "msfs",
- "systems",
- "systems_wasm",
- "uom",
-]
-
-[[package]]
 name = "addr2line"
 version = "0.19.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

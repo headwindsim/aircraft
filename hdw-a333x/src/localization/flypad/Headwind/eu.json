@@ -1,0 +1,15 @@
+{
+  "Headwind": {
+    "Settings": {
+      "AtsuAoc": {
+        "OptionalA32nxErrorReporting": "Optional A333X Error Reporting"
+      },
+      "flyPad": {
+        "Orange": "Laranja"
+      }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Please update your aircraft using the Installer."
+    }
+  }
+}

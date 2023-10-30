@@ -1,0 +1,41 @@
+@import "../Common/definitions";
+
+@font-face {
+  font-family: "Ecam";
+  //noinspection CssUnknownTarget
+  src: url("/Fonts/A333X/ECAMFontRegular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+.sd-svg {
+  visibility: visible !important;
+
+  font-family: "Ecam", monospace !important;
+
+  background: $display-background;
+}
+
+:root {
+  --bodyHeightScale: 1;
+}
+
+
+#Mainframe {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  position: relative;
+}
+
+#door-video-wrapper {
+  position: absolute;
+  top: -5%;
+  width: 100%;
+  height: 82%;
+  z-index: 100;
+  background-image: url(/Images/A333X/SD/DoorVideoResources/empty.png);
+  background-size: cover;
+}

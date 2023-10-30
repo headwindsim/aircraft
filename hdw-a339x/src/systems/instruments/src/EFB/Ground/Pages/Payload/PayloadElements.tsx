@@ -5,7 +5,7 @@ import { ProgressBar } from '../../../UtilComponents/Progress/Progress';
 import { t } from '../../../translation';
 import { TooltipWrapper } from '../../../UtilComponents/TooltipWrapper';
 import { SimpleInput } from '../../../UtilComponents/Form/SimpleInput/SimpleInput';
-import { Units } from '../../../../../../../../../build-common/src/systems/shared/src';
+import { Units } from '../../../../../../../../../build-a339x-common/src/systems/shared/src';
 import { CargoStationInfo, PaxStationInfo } from './Seating/Constants';
 
 export type Loadsheet = {

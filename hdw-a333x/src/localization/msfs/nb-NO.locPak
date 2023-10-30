@@ -1,0 +1,31 @@
+{
+  "LocalisationPackage": {
+    "Language": "nb-NO",
+    "Strings": {
+      "AIRCRAFT.DESCRIPTION": "A330-900 er et tomotors langdistansefly produsert av den europeiske flyprodusenten Airbus. Det er en modernisert og forbedret versjon av A330-300 med forbedrede motorer, aerodynamiske forbedringer og en lengre rekkevidde på opptil 13 334 kilometer. Flyet har plass til opptil 440 passasjerer i en typisk to-klasses konfigurasjon og har toppmoderne teknologi som fly-by-wire-kontroller og berøringsskjerm i cockpiten.",
+      "AIRCRAFT.UI_MANUFACTURER": "Headwind Simulations",
+      "AIRCRAFT.UI_MODEL": "A330-941",
+      "AIRCRAFT.UI_VARIATION": "Airbus",
+      "COCKPIT.TOOLTIPS.APU_AVAILABLE": "APU er tilgjengelig",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_HDG_TUNING_LEFT": "Juster valgt kurs til venstre (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_HDG_TUNING_RIGHT": "Juster valgt kurs til høyre (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_TRK_TUNING_LEFT": "Juster valgt rettvisende beholden kurs til venstre (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_TRK_TUNING_RIGHT": "Juster valgt rettvisende beholden kurs til høyre (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_L_PFD_DECREASE": "Reduser lysstyrke til venstre PFD",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_L_PFD_INCREASE": "Øk lysstyrke til venstre PFD",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_R_PFD_DECREASE": "Reduser lysstyrke for høyre PFD",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_R_PFD_INCREASE": "Øk lysstyrke for høyre PFD",
+      "COCKPIT.TOOLTIPS.LIGHTS_NOSMOKE_AUTO": "Sett \"røyking forbudt\" lampen til AUTO",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_IDENT_DISABLE": "Turn off the ident of the ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_IDENT_ENABLE": "Turn on the ident of the ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_VOLUME_DECREASE": "Decrease the volume of the ident of the ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_VOLUME_INCREASE": "Increase the volume of the ident of the ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_IDENT_DISABLE": "Turn off the ident of the Markers beacons",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_IDENT_ENABLE": "Turn on the ident of the Markers beacons",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_VOLUME_DECREASE": "Decrease the volume of the ident of the Markers beacons",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_VOLUME_INCREASE": "Increase the volume of the ident of the Markers beacons",
+      "COCKPIT.TOOLTIPS.NAV_PUSHBUTTON_VOICE_OFF": "Allow morse ident",
+      "COCKPIT.TOOLTIPS.NAV_PUSHBUTTON_VOICE_ON": "Inhibit morse ident"
+    }
+  }
+}
