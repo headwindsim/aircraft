@@ -130,7 +130,7 @@ export default new TaskOfTasks("all", [
                     ]),
                 new ExecTask("systems-terronnd", [
                     "build-a339x-common/src/wasm/terronnd/build.sh",
-                    "wasm-opt -O1 -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm build-a339x-common/src/wasm/terronnd/out/terronnd.wasm"
+                    "wasm-opt -O1 --signext-lowering -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm build-a339x-common/src/wasm/terronnd/out/terronnd.wasm"
                 ], [
                     "build-a339x-common/src/wasm/terronnd",
                     "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm",

@@ -1,5 +1,6 @@
 [workspace]
 exclude = ["a32nx"]
+resolver = "2"
 
 members = [
     "build-a339x/src/wasm/systems/a320_systems",
