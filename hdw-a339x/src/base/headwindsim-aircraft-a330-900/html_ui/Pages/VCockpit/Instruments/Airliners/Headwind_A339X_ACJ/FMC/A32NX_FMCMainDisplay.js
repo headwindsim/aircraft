@@ -2206,7 +2206,7 @@ class FMCMainDisplay extends BaseAirliners {
             const deviation = (this.zeroFuelWeight + this._routeFinalFuelWeight - A32NX_FuelPred.refWeight) * A32NX_FuelPred.computeNumbers(airDistance, alternateFlightLevel, A32NX_FuelPred.computations.CORRECTIONS, true);
             if ((50 <= airDistance && airDistance <= 1200) && (100 <= alternateFlightLevel && alternateFlightLevel <= 390)) { //This will always be true until we can setup alternate routes
                 this._routeAltFuelWeight = (A32NX_FuelPred.computeNumbers(airDistance, alternateFlightLevel, A32NX_FuelPred.computations.FUEL, true) + deviation) / 1000;
-                this._routeAltFuelTime = A32NX_FuelPred.computeNumbers(airDistance, alternateFlightLevel, A32NX_FuelPred.computations.TIME, true);
+                this._routeAltFuelTime = this._routeAltFuelEntered ? null : A32NX_FuelPred.computeNumbers(airDistance, alternateFlightLevel, A32NX_FuelPred.computations.TIME, true);
             }
         }
     }
