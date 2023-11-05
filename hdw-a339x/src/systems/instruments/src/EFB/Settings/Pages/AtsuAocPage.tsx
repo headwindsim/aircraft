@@ -38,7 +38,7 @@ export const AtsuAocPage = () => {
 
         const body = {
             logon: value,
-            from: 'FBWA32NX',
+            from: 'HDWA339X',
             to: 'ALL-CALLSIGNS',
             type: 'ping',
             packet: '',
