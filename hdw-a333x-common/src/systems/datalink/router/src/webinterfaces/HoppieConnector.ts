@@ -2,7 +2,7 @@
 //  SPDX-License-Identifier: GPL-3.0
 
 import { NXDataStore } from '@flybywiresim/fbw-sdk';
-import { Hoppie } from '@flybywiresim/api-client';
+import { Hoppie } from '@headwindsimulations/api-client';
 import {
     AtsuStatusCodes,
     CpdlcMessage,

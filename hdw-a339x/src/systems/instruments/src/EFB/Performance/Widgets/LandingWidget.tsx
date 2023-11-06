@@ -18,7 +18,7 @@
  */
 
 import React, { FC, useState } from 'react';
-import { Metar as FbwApiMetar } from '@flybywiresim/api-client';
+import { Metar as FbwApiMetar } from '@headwindsimulations/api-client';
 import { Metar as MsfsMetar } from '@microsoft/msfs-sdk';
 import { Units, MetarParserType, useSimVar, usePersistentProperty, parseMetar, ConfigWeatherMap } from '@flybywiresim/fbw-sdk';
 import { toast } from 'react-toastify';
