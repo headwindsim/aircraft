@@ -7,7 +7,7 @@ import React from 'react';
 
 import { usePersistentProperty } from '@flybywiresim/fbw-sdk';
 
-import { Hoppie } from '@flybywiresim/api-client';
+import { Hoppie } from '@headwindsimulations/api-client';
 import { toast } from 'react-toastify';
 import { HoppieConnector } from '@datalink/router';
 import { SENTRY_CONSENT_KEY, SentryConsentState } from '@sentry/FbwAircraftSentryClient';
@@ -38,7 +38,7 @@ export const AtsuAocPage = () => {
 
         const body = {
             logon: value,
-            from: 'FBWA32NX',
+            from: 'HDWA339X',
             to: 'ALL-CALLSIGNS',
             type: 'ping',
             packet: '',

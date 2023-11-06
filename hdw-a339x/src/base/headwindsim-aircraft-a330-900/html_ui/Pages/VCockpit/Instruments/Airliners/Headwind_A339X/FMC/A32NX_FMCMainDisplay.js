@@ -1126,7 +1126,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (!this.managedSpeedCruiseIsPilotEntered) {
             this.managedSpeedCruise = this.getCrzManagedSpeedFromCostIndex();
         }
-        
+
         this.managedSpeedDescend = this.getDesManagedSpeedFromCostIndex();
     }
 
@@ -2116,6 +2116,8 @@ class FMCMainDisplay extends BaseAirliners {
             if (!airportFrom || !airportTo) {
                 throw NXSystemMessages.notInDatabase;
             }
+            NXDataStore.set("PLAN_ORIGIN", from);
+            NXDataStore.set("PLAN_DESTINATION", to);
         } catch (e) {
             console.log(e);
             throw NXSystemMessages.notInDatabase;
@@ -2169,7 +2171,7 @@ class FMCMainDisplay extends BaseAirliners {
             if (this.isAltFuelInRange(value)) {
                 this._routeAltFuelEntered = true;
                 this._routeAltFuelWeight = value;
-                this._routeAltFuelTime = FMCMainDisplay.minutesTohhmm(A32NX_FuelPred.computeUserAltTime(this._routeAltFuelWeight * 1000, alternateFlightLevel));
+                this._routeAltFuelTime = null;
                 return true;
             } else {
                 this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
@@ -2260,7 +2262,7 @@ class FMCMainDisplay extends BaseAirliners {
             const deviation = (this.zeroFuelWeight + this._routeFinalFuelWeight - A32NX_FuelPred.refWeight) * A32NX_FuelPred.computeNumbers(airDistance, alternateFlightLevel, A32NX_FuelPred.computations.CORRECTIONS, true);
             if ((50 <= airDistance && airDistance <= 1200) && (100 <= alternateFlightLevel && alternateFlightLevel <= 390)) { //This will always be true until we can setup alternate routes
                 this._routeAltFuelWeight = (A32NX_FuelPred.computeNumbers(airDistance, alternateFlightLevel, A32NX_FuelPred.computations.FUEL, true) + deviation) / 1000;
-                this._routeAltFuelTime = A32NX_FuelPred.computeNumbers(airDistance, alternateFlightLevel, A32NX_FuelPred.computations.TIME, true);
+                this._routeAltFuelTime = this._routeAltFuelEntered ? null : A32NX_FuelPred.computeNumbers(airDistance, alternateFlightLevel, A32NX_FuelPred.computations.TIME, true);
             }
         }
     }
@@ -3775,7 +3777,7 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
-        
+
         const spd = parseInt(s);
         if (!Number.isFinite(spd)) {
             this.setScratchpadMessage(NXSystemMessages.formatError);
