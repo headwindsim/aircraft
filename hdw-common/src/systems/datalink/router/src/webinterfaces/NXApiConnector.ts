@@ -30,7 +30,8 @@ export class NXApiConnector {
         const long = SimVar.GetSimVarValue('PLANE LONGITUDE', 'degree longitude');
         const alt = SimVar.GetSimVarValue('PLANE ALTITUDE', 'feet');
         const heading = SimVar.GetSimVarValue('PLANE HEADING DEGREES TRUE', 'degree');
-        const acType = SimVar.GetSimVarValue('TITLE', 'string');
+        const acType = 'A339';
+        const airline = SimVar.GetSimVarValue('ATC AIRLINE', 'string');
         const origin = NXDataStore.get('PLAN_ORIGIN', '');
         const destination = NXDataStore.get('PLAN_DESTINATION', '');
         const freetext = NXDataStore.get('CONFIG_ONLINE_FEATURES_STATUS', 'DISABLED') === 'ENABLED';
@@ -47,6 +48,7 @@ export class NXApiConnector {
             freetextEnabled: freetext,
             flight: NXApiConnector.flightNumber,
             aircraftType: acType,
+            airline
         };
     }
 

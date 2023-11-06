@@ -1126,7 +1126,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (!this.managedSpeedCruiseIsPilotEntered) {
             this.managedSpeedCruise = this.getCrzManagedSpeedFromCostIndex();
         }
-        
+
         this.managedSpeedDescend = this.getDesManagedSpeedFromCostIndex();
     }
 
@@ -2116,6 +2116,8 @@ class FMCMainDisplay extends BaseAirliners {
             if (!airportFrom || !airportTo) {
                 throw NXSystemMessages.notInDatabase;
             }
+            NXDataStore.set("PLAN_ORIGIN", from);
+            NXDataStore.set("PLAN_DESTINATION", to);
         } catch (e) {
             console.log(e);
             throw NXSystemMessages.notInDatabase;
@@ -3775,7 +3777,7 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
-        
+
         const spd = parseInt(s);
         if (!Number.isFinite(spd)) {
             this.setScratchpadMessage(NXSystemMessages.formatError);
