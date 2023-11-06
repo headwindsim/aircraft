@@ -3,7 +3,7 @@
 
 /* eslint-disable no-console */
 import Compare from 'semver/functions/compare';
-import { CommitInfo, GitVersions, ReleaseInfo } from '@flybywiresim/api-client';
+import { CommitInfo, GitVersions, ReleaseInfo } from '@headwindsimulations/api-client';
 import { NotificationManager, PopUpDialog } from '@flybywiresim/fbw-sdk';
 
 /**
