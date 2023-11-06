@@ -2062,6 +2062,8 @@ class FMCMainDisplay extends BaseAirliners {
             if (!airportFrom || !airportTo) {
                 throw NXSystemMessages.notInDatabase;
             }
+            NXDataStore.set("PLAN_ORIGIN", from);
+            NXDataStore.set("PLAN_DESTINATION", to);
         } catch (e) {
             console.log(e);
             throw NXSystemMessages.notInDatabase;
