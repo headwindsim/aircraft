@@ -1,9 +1,9 @@
 {
     "specs": {
         "prefix": "A333X",
-        "emptyPosition": -28.276,
-        "macSize": 23.19,
-        "leMacZ": -22.20,
+        "emptyPosition": -27.56,
+        "macSize": 46.69,
+        "leMacZ": -15.33,
         "weights": {
             "maxGw": 235000,
             "maxZfw": 173000,
