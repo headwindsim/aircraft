@@ -40,7 +40,7 @@
   "files.trimFinalNewlines": true,
   "[cpp]": {
     "editor.defaultFormatter": "ms-vscode.cpptools",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "editor.formatOnPaste": false
   },
   "cmake.configureOnOpen": false,
