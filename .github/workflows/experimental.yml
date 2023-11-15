@@ -5,12 +5,70 @@ on:
       - experimental
 
 jobs:
-  build:
+  build-a333x:
     runs-on: ubuntu-latest
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      EXP_ZIP_NAME: headwindsim-aircraft-a330-900-exp.zip
+      ZIP_NAME: headwindsim-aircraft-a330-300-exp.zip
+      BUILD_DIR_NAME: experimental
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Set BUILT_DATE_TIME
+        run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
+      - name: Create .env file
+        run: |
+          echo A32NX_PRODUCTION_BUILD=1 >> hdw-a333x/.env
+          echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a333x/.env
+          echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a333x/.env
+          echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a333x/.env
+          echo BUILD_DIR_NAME=${{ env.BUILD_DIR_NAME }} >> .env
+          echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
+          echo VITE_BUILD=false >> .env
+      - name: Setup Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/setup.sh --clean
+      - name: Copy Sources
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/copy_a333x.sh
+      - name: Build A339X Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/build_a333x.sh --no-tty -j 4
+          docker system prune -af
+      - name: Build ZIP files
+        run: |
+          node ./scripts/fragment-a333x.js
+          cp ./build-a333x/out/build-modules/modules.json ./build-a333x/out/headwindsim-aircraft-a330-300/install.json
+          node ./scripts/install-source-a333x.js
+          mkdir ./${{ env.BUILD_DIR_NAME }}
+          cd ./build-a333x/out/
+          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-300/
+          cd ../../
+      - name: Upload to CloudFlare CDN
+        env:
+          CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
+          CDN_BUCKET_DESTINATION: addons/a333x/experimental
+        run: |
+          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a333x/out/build-modules
+  build-a339x:
+    runs-on: ubuntu-latest
+    env:
+      A32NX_PRODUCTION_BUILD: 1
+      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
+      ZIP_NAME: headwindsim-aircraft-a330-900-exp.zip
       BUILD_DIR_NAME: experimental
     steps:
       - name: Free Disk Space (Ubuntu)
@@ -50,12 +108,12 @@ jobs:
           docker system prune -af
       - name: Build ZIP files
         run: |
-          node ./scripts/fragment.js
+          node ./scripts/fragment-a339x.js
           cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
-          node ./scripts/install-source.js
+          node ./scripts/install-source-a339x.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
           cd ./build-a339x/out/
-          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.EXP_ZIP_NAME }} ./headwindsim-aircraft-a330-900/
+          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-900/
           cd ../../
       - name: Upload to CloudFlare CDN
         env:
