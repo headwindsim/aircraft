@@ -121,3 +121,61 @@ jobs:
           CDN_BUCKET_DESTINATION: addons/a339x/development
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/build-modules
+  build-su95x:
+    runs-on: ubuntu-latest
+    env:
+      A32NX_PRODUCTION_BUILD: 1
+      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
+      ZIP_NAME: headwindsim-aircraft-su100-95-dev.zip
+      BUILD_DIR_NAME: development
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Set BUILT_DATE_TIME
+        run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
+      - name: Create .env file
+        run: |
+          echo A32NX_PRODUCTION_BUILD=1 >> hdw-su95x/.env
+          echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-su95x/.env
+          echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-su95x/.env
+          echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-su95x/.env
+          echo BUILD_DIR_NAME=${{ env.BUILD_DIR_NAME }} >> .env
+          echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
+          echo VITE_BUILD=false >> .env
+      - name: Setup Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/setup.sh --clean
+      - name: Copy Sources
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/copy_su95x.sh
+      - name: Build SU95X Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/build_su95x.sh --no-tty -j 4
+          docker system prune -af
+      - name: Build ZIP files
+        run: |
+          node ./scripts/fragment-su95x.js
+          cp ./build-su95x/out/build-modules/modules.json ./build-su95x/out/headwindsim-aircraft-su100-95/install.json
+          node ./scripts/install-source-su95x.js
+          mkdir ./${{ env.BUILD_DIR_NAME }}
+          cd ./build-su95x/out/
+          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-su100-95/
+          cd ../../
+      - name: Upload to CloudFlare CDN
+        env:
+          CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
+          CDN_BUCKET_DESTINATION: addons/su95x/development
+        run: |
+          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-su95x/out/build-modules

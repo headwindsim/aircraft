@@ -1,0 +1,25 @@
+{
+  "creator": "Eastern Aviation Simulations",
+  "release_notes": {
+    "neutral": {
+      "LastUpdate": "",
+      "OlderHistory": ""
+    }
+  },
+  "title": "SU95 (Stable)",
+  "dependencies": [
+    {
+      "package_version": "0.1.129",
+      "name": "asobo-vcockpits-instruments-airliners"
+    },
+    {
+      "package_version": "0.1.125",
+      "name": "fs-base-aircraft-common"
+    }
+  ],
+  "content_type": "AIRCRAFT",
+  "minimum_game_version": "1.26.5",
+  "manufacturer": "Sukhoi",
+  "package_version": "0.3.0-3ff7545",
+  "total_package_size": "00000000006114818904"
+}

@@ -1,0 +1,43 @@
+$colour-main: hsl(0, 0%, 100%);
+
+:root {
+  background-color: black;
+  height: 100%;
+  width: 100%;
+}
+
+@font-face {
+  src: url("/Fonts/SU95X/AirbusRMP.ttf") format("truetype");
+  font-family: "AirbusRMP";
+  font-style: normal;
+  font-weight: 900;
+}
+
+.rmp-wrapper {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  left: 0%;
+}
+
+.rmp-wrapper svg {
+  height: 25%;
+  width: 100%;
+}
+
+.rmp-svg {
+  background-color: hsl(55, 82%, 2%);
+  box-shadow: inset 0px 0px 110px -20px rgba(255,175,0,0.5);
+  /* TODO: Remove opacity when SAI/ISIS/CLOCK/BAT/ATC/RMP/RUD TRIM is split and not share the same emissive/mesh */
+  opacity: 0.5;
+}
+
+text {
+  alignment-baseline: central;
+  font-family: AirbusRMP;
+  letter-spacing: 0px;
+  fill: $colour-main;
+  text-anchor: end;
+  font-size: 123px;
+  height: 100%;
+}

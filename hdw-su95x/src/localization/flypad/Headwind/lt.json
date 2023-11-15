@@ -1,0 +1,15 @@
+{
+  "Headwind": {
+    "Settings": {
+      "AtsuAoc": {
+        "OptionalA32nxErrorReporting": "Pasirinktinis SU95X klaidų pranešimas"
+      },
+      "flyPad": {
+        "Orange": "Oranžinė"
+      }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Please update your aircraft using the Installer."
+    }
+  }
+}

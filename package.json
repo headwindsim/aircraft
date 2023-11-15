@@ -93,6 +93,48 @@
     "watch-a339x-acj:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\build-a339x-acj\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
     "build-a339x-acj:all": "npm run build-a339x-acj:copy-base-files && npm run build-a339x-acj:efb-translation && npm run build-a339x-acj:model && npm run build-a339x-acj:behavior && npm run build-a339x-acj:atsu-common && npm run build-a339x-acj:atsu-fms-client && npm run build-a339x-acj:systems-host && npm run build-a339x-acj:failures && npm run build-a339x-acj:fmgc && npm run build-a339x-acj:sentry-client && npm run build-a339x-acj:simbridge-client && npm run build-a339x-acj:tcas && npm run build-a339x-acj:pfd && npm run build-a339x-acj:systems && npm run build-a339x-acj:fadec && npm run build-a339x-acj:fbw && npm run build-a339x-acj:flypad-backend && npm run build-a339x-acj:metadata && npm run build-a339x-acj:manifest",
 
+    "====== SU95X =================": "==========================================",
+
+    "build-su95x:copy-textures-cockpit": "(rsync -a textures/cockpit/ build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture/ || cp -a -u textures/cockpit/ build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture/)",
+    "build-su95x:copy-textures-fuselage": "(rsync -a textures/fuselage/ build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture/ || cp -a -u textures/fuselage/ build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture/)",
+    "build-su95x:copy-cargo-config": "cp -rf Cargo-SU95X.toml Cargo.toml",
+    "build-su95x:copy-base-package": "mkdir -p build-su95x/out/headwindsim-aircraft-su100-95 && (rsync -a build-su95x/src/base/headwindsim-aircraft-su100-95 build-su95x/out/ || cp -a -u build-su95x/src/base/headwindsim-aircraft-su100-95 build-su95x/out/)",
+    "build-su95x:copy-base-lock-highlight-package": "mkdir -p build-su95x/out/headwindsim-aircraft-su100-95-lock-highlight && (rsync -a build-su95x/src/base/headwindsim-aircraft-su100-95-lock-highlight build-su95x/out/ || cp -a -u build-su95x/src/base/headwindsim-aircraft-su100-95-lock-highlight build-su95x/out/)",
+    "build-su95x:copy-base-files": "npm run build-su95x:copy-base-package && npm run build-su95x:copy-base-lock-highlight-package",
+
+    "build-su95x:efb-translation": "cd build-su95x/src/localization && node build-flypad-translation.js",
+    "build-su95x:locPak-translation": "cd build-su95x/src/localization && node build-locPak-translation.js",
+
+    "build-su95x:model": "node build-su95x/src/model/build.js",
+    "build-su95x:behavior": "node build-su95x/src/behavior/build.js",
+    "build-su95x:atsu-common": "node build-su95x/src/systems/atsu/common/build.js",
+    "build-su95x:atsu-fms-client": "node build-su95x/src/systems/atsu/fmsclient/build.js",
+    "build-su95x:extras-host": "node build-su95x/src/systems/extras-host/build.js",
+    "build-su95x:failures": "rollup -c build-su95x/src/systems/failures/rollup.config.js",
+    "build-su95x:fmgc": "node build-su95x/src/systems/fmgc/build.js",
+    "build-su95x:instruments": "mach build --config build-su95x/mach.config.js --work-in-config-dir",
+    "build-su95x:sentry-client": "node build-su95x/src/systems/sentry-client/build.js",
+    "build-su95x:simbridge-client": "node build-su95x/src/systems/simbridge-client/build.js",
+    "build-su95x:systems-host": "node build-su95x/src/systems/systems-host/build.js",
+    "build-su95x:tcas": "node build-su95x/src/systems/tcas/build.js",
+
+    "build-su95x:fadec": "cd build-su95x/src/wasm/fadec_a320 && ./build.sh && wasm-opt -O1 --signext-lowering  -o /external/build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fadec.wasm /external/build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fadec.wasm",
+    "build-su95x:fbw": "cd build-su95x/src/wasm/fbw_a320 && ./build.sh && wasm-opt -O1 --signext-lowering  -o /external/build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fbw.wasm /external/build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fbw.wasm",
+    "build-su95x:flypad-backend": "cd build-su95x/src/wasm/flypad-backend && ./build.sh && wasm-opt -O1 --signext-lowering  -o /external/build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/flypad-backend.wasm /external/build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/flypad-backend.wasm",
+    "build-su95x:systems": "cargo build -p a320_systems_wasm --target wasm32-wasi --release && wasm-opt -O1 --signext-lowering --enable-bulk-memory -o /external/build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/systems.wasm /external/target/wasm32-wasi/release/a320_systems_wasm.wasm",
+
+    "build-su95x:metadata": "node scripts/metadata.js build-su95x/out/headwindsim-aircraft-su100-95 su95x",
+    "build-su95x:manifest": "node scripts/build_su95x.js",
+
+    "build-su95x:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -c .\\build-su95x\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
+    "watch-su95x:ace": "node --max-old-space-size=8192 node_modules/rollup/dist/bin/rollup -wc .\\build-su95x\\src\\systems\\instruments\\buildSrc\\aceBuild.mjs",
+    "build-su95x:all": "npm run build-su95x:copy-base-files && npm run build-su95x:efb-translation && npm run build-su95x:model && npm run build-su95x:behavior && npm run build-su95x:atsu-common && npm run build-su95x:atsu-fms-client && npm run build-su95x:systems-host && npm run build-su95x:failures && npm run build-su95x:fmgc && npm run build-su95x:sentry-client && npm run build-su95x:simbridge-client && npm run build-su95x:tcas && npm run build-su95x:pfd && npm run build-su95x:systems && npm run build-su95x:fadec && npm run build-su95x:fbw && npm run build-su95x:flypad-backend && npm run build-su95x:metadata && npm run build-su95x:manifest",
+
+    "====== SU95X LIVERY PACKAGE ====": "==========================================",
+    "build-su95x-livery-package:copy-base-package": "mkdir -p /hdw-su95x-liveries/out/headwindsim-su95x-livery-package && (rsync -a hdw-su95x-liveries/src/base/headwindsim-su95x-livery-package hdw-su95x-liveries/out || cp -a -u hdw-su95x-liveries/src/base/headwindsim-su95x-livery-package hdw-su95x-liveries/out)",
+    "build-su95x-livery-package:copy-base-files": "npm run build-su95x-livery-package:copy-base-package",
+    "build-su95x-livery-package:manifest": "node scripts/build-su95x-liveries.js",
+
     "=======deprecated=========": "===========================",
 
     "build-a339x:pfd": "cd build-a339x/src/systems/instruments/src/PFD && rollup -c",

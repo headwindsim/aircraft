@@ -1,0 +1,15 @@
+{
+  "Headwind": {
+    "Settings": {
+      "AtsuAoc": {
+        "OptionalA32nxErrorReporting": "Optionele SU95X-foutrapportage"
+      },
+      "flyPad": {
+        "Orange": "Oranje"
+      }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Please update your aircraft using the Installer."
+    }
+  }
+}

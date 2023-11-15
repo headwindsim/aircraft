@@ -1,0 +1,15 @@
+{
+  "Headwind": {
+    "Settings": {
+      "AtsuAoc": {
+        "OptionalA32nxErrorReporting": "Volitelné hlášení chyb SU95X"
+      },
+      "flyPad": {
+        "Orange": "Oranžový"
+      }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Aktualizujte prosím své letadlo pomocí instalátoru."
+    }
+  }
+}

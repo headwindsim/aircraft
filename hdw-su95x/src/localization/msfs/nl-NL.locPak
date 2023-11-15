@@ -1,0 +1,31 @@
+{
+  "LocalisationPackage": {
+    "Language": "nl-NL",
+    "Strings": {
+      "AIRCRAFT.DESCRIPTION": "De Sukhoi Superjet 100 (nu alleen nog "Superjet 100" ) is een regionaal vliegtuig ontworpen door Sukhoi Civil Aircraft.</br></br>Het vervangt de Tupolev Tu-134 en de Yakovlev Yak-42, en concurreert met de Embraer E190 en de Bombardier CRJ1000.</br></br>Het is het eerste Russische vliegtuig dat is ontworpen na de val van de Sovjet-Unie. Het maakt gebruik van PowerJet (joint venture tussen Safran en de Russische NPO Saturn) SaM 146 voor de aandrijving van het vliegtuig.</br></br>Hoewel het enkele internationale orders ontvangt, heeft de SSJ100 moeite om buiten Rusland aan populariteit te winnen als gevolg van problemen met reserveonderdelen.",
+      "AIRCRAFT.UI_MANUFACTURER": "Headwind Simulations",
+      "AIRCRAFT.UI_MODEL": "SSJ100",
+      "AIRCRAFT.UI_VARIATION": "Sukhoi",
+      "COCKPIT.TOOLTIPS.APU_AVAILABLE": "APU beschikbaar",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_HDG_TUNING_LEFT": "De geselecteerde koers naar links aanpassen (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_HDG_TUNING_RIGHT": "De geselecteerde koers naar rechts aanpassen (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_TRK_TUNING_LEFT": "De geselecteerde track naar links aanpassen (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_TRK_TUNING_RIGHT": "De geselecteerde track naar rechts aanpassen (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_L_PFD_DECREASE": "Helderheid PFD links verlagen",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_L_PFD_INCREASE": "Helderheid PFD links verhogen",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_R_PFD_DECREASE": "Helderheid PFD rechts verlagen",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_R_PFD_INCREASE": "Helderheid PFD rechts verhogen",
+      "COCKPIT.TOOLTIPS.LIGHTS_NOSMOKE_AUTO": "Waarschuwingslicht \"niet roken\" naar AUTO",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_IDENT_DISABLE": "Turn off the ident of the ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_IDENT_ENABLE": "Turn on the ident of the ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_VOLUME_DECREASE": "Decrease the volume of the ident of the ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_VOLUME_INCREASE": "Increase the volume of the ident of the ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_IDENT_DISABLE": "Turn off the ident of the Markers beacons",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_IDENT_ENABLE": "Turn on the ident of the Markers beacons",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_VOLUME_DECREASE": "Decrease the volume of the ident of the Markers beacons",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_VOLUME_INCREASE": "Increase the volume of the ident of the Markers beacons",
+      "COCKPIT.TOOLTIPS.NAV_PUSHBUTTON_VOICE_OFF": "Allow morse ident",
+      "COCKPIT.TOOLTIPS.NAV_PUSHBUTTON_VOICE_ON": "Inhibit morse ident"
+    }
+  }
+}

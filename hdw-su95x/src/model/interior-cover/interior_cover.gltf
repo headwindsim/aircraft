@@ -1,0 +1,554 @@
+{
+    "accessors": [
+        {
+            "bufferView": 1,
+            "byteOffset": 28,
+            "componentType": 5123,
+            "count": 516,
+            "type": "VEC4",
+            "name": "x0_WINDSHIELD_EXT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 16,
+            "componentType": 5120,
+            "count": 516,
+            "type": "VEC4",
+            "name": "x0_WINDSHIELD_EXT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "componentType": 5126,
+            "count": 516,
+            "min": [
+                -1.5122013092041016,
+                0.41324639320373535,
+                16.33877944946289
+            ],
+            "max": [
+                1.5128778219223022,
+                0.98350989818573,
+                18.173280715942383
+            ],
+            "type": "VEC3",
+            "name": "x0_WINDSHIELD_EXT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 12,
+            "componentType": 5120,
+            "count": 516,
+            "type": "VEC4",
+            "name": "x0_WINDSHIELD_EXT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 20,
+            "componentType": 5122,
+            "count": 516,
+            "type": "VEC2",
+            "name": "x0_WINDSHIELD_EXT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 24,
+            "componentType": 5122,
+            "count": 516,
+            "type": "VEC2",
+            "name": "x0_WINDSHIELD_EXT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "componentType": 5123,
+            "count": 2415,
+            "type": "SCALAR",
+            "name": "x0_WINDSHIELD_EXT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 18604,
+            "componentType": 5123,
+            "count": 284,
+            "type": "VEC4",
+            "name": "x0_FUSELAGE.011_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 18592,
+            "componentType": 5120,
+            "count": 284,
+            "type": "VEC4",
+            "name": "x0_FUSELAGE.011_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 18576,
+            "componentType": 5126,
+            "count": 284,
+            "min": [
+                -1.8603427410125732,
+                0,
+                -1.2408151626586914
+            ],
+            "max": [
+                1.8599631786346436,
+                7.534742252346405e-08,
+                1.2636165618896484
+            ],
+            "type": "VEC3",
+            "name": "x0_FUSELAGE.011_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 18588,
+            "componentType": 5120,
+            "count": 284,
+            "type": "VEC4",
+            "name": "x0_FUSELAGE.011_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 18596,
+            "componentType": 5122,
+            "count": 284,
+            "type": "VEC2",
+            "name": "x0_FUSELAGE.011_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 18600,
+            "componentType": 5122,
+            "count": 284,
+            "type": "VEC2",
+            "name": "x0_FUSELAGE.011_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 4832,
+            "componentType": 5123,
+            "count": 600,
+            "type": "SCALAR",
+            "name": "x0_FUSELAGE.011_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 28828,
+            "componentType": 5123,
+            "count": 171,
+            "type": "VEC4",
+            "name": "x0_FUSELAGE.012_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 28816,
+            "componentType": 5120,
+            "count": 171,
+            "type": "VEC4",
+            "name": "x0_FUSELAGE.012_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 28800,
+            "componentType": 5126,
+            "count": 171,
+            "min": [
+                -1.8725018501281738,
+                0,
+                -1.5072330236434937
+            ],
+            "max": [
+                1.8645455837249756,
+                0,
+                1.4869805574417114
+            ],
+            "type": "VEC3",
+            "name": "x0_FUSELAGE.012_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 28812,
+            "componentType": 5120,
+            "count": 171,
+            "type": "VEC4",
+            "name": "x0_FUSELAGE.012_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 28820,
+            "componentType": 5122,
+            "count": 171,
+            "type": "VEC2",
+            "name": "x0_FUSELAGE.012_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 28824,
+            "componentType": 5122,
+            "count": 171,
+            "type": "VEC2",
+            "name": "x0_FUSELAGE.012_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 6032,
+            "componentType": 5123,
+            "count": 600,
+            "type": "SCALAR",
+            "name": "x0_FUSELAGE.012_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 34984,
+            "componentType": 5123,
+            "count": 9020,
+            "type": "VEC4",
+            "name": "x0_FUSELAGE.010_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 34972,
+            "componentType": 5120,
+            "count": 9020,
+            "type": "VEC4",
+            "name": "x0_FUSELAGE.010_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 34956,
+            "componentType": 5126,
+            "count": 9020,
+            "min": [
+                -1.853617787361145,
+                0.7699996829032898,
+                9.479999542236328
+            ],
+            "max": [
+                1.8536304235458374,
+                3.259683609008789,
+                12.449999809265137
+            ],
+            "type": "VEC3",
+            "name": "x0_FUSELAGE.010_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 34976,
+            "componentType": 5122,
+            "count": 9020,
+            "type": "VEC2",
+            "name": "x0_FUSELAGE.010_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 34980,
+            "componentType": 5122,
+            "count": 9020,
+            "type": "VEC2",
+            "name": "x0_FUSELAGE.010_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 7232,
+            "componentType": 5123,
+            "count": 29772,
+            "type": "SCALAR",
+            "name": "x0_FUSELAGE.010_indices#0"
+        }
+    ],
+    "asset": {
+        "generator": "Khronos glTF Blender I/O v1.7.5",
+        "version": "2.0",
+        "extensions": {
+            "ASOBO_normal_map_convention": {
+                "tangent_space_convention": "DirectX"
+            },
+            "ASOBO_asset_optimized": {
+                "BoundingBoxMax": [
+                    1.8645455837249756,
+                    3.259683609008789,
+                    18.173280715942383
+                ],
+                "BoundingBoxMin": [
+                    -1.8725018501281738,
+                    0,
+                    -1.5072330236434937
+                ],
+                "MajorVersion": 4,
+                "MinorVersion": 2
+            }
+        }
+    },
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteLength": 66776,
+            "byteOffset": 0,
+            "target": 34963,
+            "name": "BufferViewIndex"
+        },
+        {
+            "buffer": 0,
+            "byteLength": 359676,
+            "byteStride": 36,
+            "byteOffset": 66776,
+            "target": 34962,
+            "name": "BufferViewVertexND"
+        }
+    ],
+    "extensionsUsed": [
+        "MSFT_texture_dds",
+        "ASOBO_asset_optimized",
+        "ASOBO_normal_map_convention"
+    ],
+    "extensionsRequired": [
+        "MSFT_texture_dds"
+    ],
+    "materials": [
+        {
+            "name": "WINDSHIELD_EXT",
+            "alphaMode": "BLEND",
+            "normalTexture": {
+                "index": 0
+            },
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    1,
+                    1,
+                    1,
+                    0.009999999776482582
+                ],
+                "metallicFactor": 0,
+                "roughnessFactor": 0
+            }
+        },
+        {
+            "name": "GRID2",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1
+                ],
+                "metallicFactor": 0,
+                "roughnessFactor": 0.5
+            }
+        },
+        {
+            "name": "GRID1",
+            "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                    0.800000011920929,
+                    0.800000011920929,
+                    0.800000011920929,
+                    1
+                ],
+                "metallicFactor": 0,
+                "roughnessFactor": 0.5
+            }
+        },
+        {
+            "name": "FUSELAGE.010",
+            "normalTexture": {
+                "index": 1,
+                "scale": 0.4000000059604645
+            },
+            "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                    "index": 2
+                },
+                "metallicRoughnessTexture": {
+                    "index": 3
+                }
+            }
+        }
+    ],
+    "meshes": [
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 0,
+                        "NORMAL": 1,
+                        "POSITION": 2,
+                        "TANGENT": 3,
+                        "TEXCOORD_0": 4,
+                        "TEXCOORD_1": 5
+                    },
+                    "indices": 6,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "PrimitiveCount": 805,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "x0_WINDSHIELD_EXT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 7,
+                        "NORMAL": 8,
+                        "POSITION": 9,
+                        "TANGENT": 10,
+                        "TEXCOORD_0": 11,
+                        "TEXCOORD_1": 12
+                    },
+                    "indices": 13,
+                    "material": 1,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "PrimitiveCount": 200,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "x0_FUSELAGE.011"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 14,
+                        "NORMAL": 15,
+                        "POSITION": 16,
+                        "TANGENT": 17,
+                        "TEXCOORD_0": 18,
+                        "TEXCOORD_1": 19
+                    },
+                    "indices": 20,
+                    "material": 2,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "PrimitiveCount": 200,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "x0_FUSELAGE.012"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 21,
+                        "NORMAL": 22,
+                        "POSITION": 23,
+                        "TEXCOORD_0": 24,
+                        "TEXCOORD_1": 25
+                    },
+                    "indices": 26,
+                    "material": 3,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "PrimitiveCount": 9924,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "x0_FUSELAGE.010"
+        }
+    ],
+    "nodes": [
+        {
+            "translation": [
+                0,
+                1.3199599981307983,
+                -5.994579792022705
+            ],
+            "mesh": 0,
+            "name": "WINDSHIELD_EXT"
+        },
+        {
+            "translation": [
+                0,
+                2.0299999713897705,
+                9.479999542236328
+            ],
+            "rotation": [
+                0.7071068286895752,
+                0,
+                0,
+                0.7071067094802856
+            ],
+            "mesh": 1,
+            "name": "GRID2"
+        },
+        {
+            "translation": [
+                0,
+                0.7699999809265137,
+                10.979999542236328
+            ],
+            "mesh": 2,
+            "name": "GRID1"
+        },
+        {
+            "mesh": 3,
+            "name": "FUSELAGE.010"
+        }
+    ],
+    "scene": 0,
+    "scenes": [
+        {
+            "name": "Scene",
+            "nodes": [
+                0,
+                1,
+                2,
+                3
+            ]
+        }
+    ],
+    "textures": [
+        {
+            "extensions": {
+                "MSFT_texture_dds": {}
+            }
+        },
+        {
+            "extensions": {
+                "MSFT_texture_dds": {}
+            }
+        },
+        {
+            "extensions": {
+                "MSFT_texture_dds": {
+                    "source": 0
+                }
+            }
+        },
+        {
+            "extensions": {
+                "MSFT_texture_dds": {}
+            }
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 426452,
+            "uri": "interior_cover.bin"
+        }
+    ],
+    "images": [
+        {
+            "extras": "ASOBO_image_converted_meta",
+            "uri": "A320NEO_AIRFRAME_FUSELAGE_ALBD.PNG.DDS"
+        }
+    ]
+}

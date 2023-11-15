@@ -1,0 +1,31 @@
+{
+  "LocalisationPackage": {
+    "Language": "fr-FR",
+    "Strings": {
+      "AIRCRAFT.DESCRIPTION": "SLe Sukhoi Superjet 100 (désormais seulement "Superjet 100" ) est un jet régional conçu par Sukhoi Civil Aircraft.<\/br></br>Il remplace le Tupolev Tu-134 et le Yakovlev Yak-42, ainsi que la concurrence de l'Embraer E190 et du Bombardier CRJ1000.<\i></br>Il s'agit du premier avion de ligne russe conçu après la chute de l'Union soviétique. Il utilise le PowerJet (joint-venture entre Safran et la société russe NPO Saturn) SaM 146 pour propulser l'avion.<br></br>Bien qu'il reçoive quelques commandes internationales, le SSJ100 a du mal à gagner en popularité en dehors de la Russie en raison des problèmes de pièces détachées.",
+      "AIRCRAFT.UI_MANUFACTURER": "Headwind Simulations",
+      "AIRCRAFT.UI_MODEL": "SSJ100",
+      "AIRCRAFT.UI_VARIATION": "Sukhoi",
+      "COCKPIT.TOOLTIPS.APU_AVAILABLE": "APU disponible",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_HDG_TUNING_LEFT": "Adapter le cap souhaité sur la gauche (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_HDG_TUNING_RIGHT": "Adapter le cap souhaité sur la droite (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_TRK_TUNING_LEFT": "Adapter la trajectoire souhaité sur la gauche (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_TRK_TUNING_RIGHT": "Adapter la trajectoire souhaité sur la droite (%((A:AUTOPILOT HEADING LOCK DIR:1,degrees))%!d!°)",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_L_PFD_DECREASE": "Réduire la luminosité du PFD gauche",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_L_PFD_INCREASE": "Augmenter la luminosité du PFD gauche",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_R_PFD_DECREASE": "Réduire la luminosité du PDF droit",
+      "COCKPIT.TOOLTIPS.LIGHTING_KNOB_R_PFD_INCREASE": "Augmenter la luminosité du PDF droit",
+      "COCKPIT.TOOLTIPS.LIGHTS_NOSMOKE_AUTO": "Mettre le témoin d'interdiction de fumer en mode AUTO",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_IDENT_DISABLE": "Désactiver l'identification de l'ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_IDENT_ENABLE": "Activer l'identification de l'ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_VOLUME_DECREASE": "Diminuer le volume de l'identification de l'ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_ILS_VOLUME_INCREASE": "Augmenter le volume de l'identification de l'ILS",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_IDENT_DISABLE": "Désactiver l'identification des balises Markers",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_IDENT_ENABLE": "Activer l'identification des balises Markers",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_VOLUME_DECREASE": "Diminuer le volume de l'identification des balises Marker",
+      "COCKPIT.TOOLTIPS.NAV_KNOB_MARKERS_VOLUME_INCREASE": "Augmenter le volume de l'identification des balises Markers",
+      "COCKPIT.TOOLTIPS.NAV_PUSHBUTTON_VOICE_OFF": "Autoriser l'identification morse",
+      "COCKPIT.TOOLTIPS.NAV_PUSHBUTTON_VOICE_ON": "Inhiber l'identification morse"
+    }
+  }
+}

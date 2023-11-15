@@ -21,12 +21,14 @@
 !igniter.config.mjs
 !a333x-igniter.config.mjs
 !a339x-igniter.config.mjs
+!su95x-igniter.config.mjs
 !jsconfig.json
 
 !Cargo.lock
 Cargo.toml
 !Cargo-A333X.toml
 !Cargo-A339X.toml
+!Cargo-SU95X.toml
 !/.cargo/config.toml
 !rust-toolchain.toml
 
@@ -49,6 +51,10 @@ Cargo.toml
 /hdw-a339x-common/*
 !/hdw-a339x-common/src/
 !/hdw-a339x-common/src/**
+
+/hdw-su95x-common/*
+!/hdw-su95x-common/src/
+!/hdw-su95x-common/src/**
 
 /hdw-a339x/*
 /hdw-a339x/.env.local
@@ -77,6 +83,16 @@ Cargo.toml
 !/hdw-a333x/docs/**
 !/hdw-a333x/src/
 !/hdw-a333x/src/**
+
+/hdw-su95x/*
+/hdw-su95x/.env.local
+!/hdw-su95x/README.md
+!/hdw-su95x/mach.config.js
+!/hdw-su95x/.env
+!/hdw-su95x/docs/
+!/hdw-su95x/docs/**
+!/hdw-su95x/src/
+!/hdw-su95x/src/**
 
 /hdw-a339x/out
 /hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.bin
@@ -125,8 +141,10 @@ target/
 /build-a333x/
 /build-a339x/
 /build-a339x-acj/
+/build-su95x/
 /build-a333x-common/
 /build-a339x-common/
+/build-su95x-common/
 
 # ======== OLD =============
 
@@ -164,3 +182,5 @@ target/
 #!/src/**
 #!/scripts/**
 #!/typings/**
+
+Cargo.lock

@@ -1,0 +1,19 @@
+{
+  "creator": "Headwind Simulations",
+  "release_notes": {
+    "neutral": {
+      "LastUpdate": "",
+      "OlderHistory": ""
+    }
+  },
+  "title": "SU95X Lock Highlights",
+  "dependencies": [
+    {
+      "package_version": "0.300.0",
+      "name": "headwindsim-aircraft-su100-95"
+    }
+  ],
+  "content_type": "AIRCRAFT",
+  "minimum_game_version": "1.26.5",
+  "manufacturer": "Airbus"
+}

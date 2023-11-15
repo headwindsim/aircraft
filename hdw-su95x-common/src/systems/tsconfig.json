@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+      "target": "ES2017",
+      "baseUrl": ".",
+      "resolveJsonModule" : true,
+      "typeRoots": [
+        "../typings"
+      ],
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "jsx": "react",
+      "skipLibCheck": true,
+      "paths": {
+        "@datalink/aoc": ["datalink/aoc/src/index.ts"],
+        "@datalink/atc": ["datalink/atc/src/index.ts"],
+        "@datalink/common": ["datalink/common/src/index.ts"],
+        "@datalink/router": ["datalink/router/src/index.ts"],
+        "@fmgc/*": ["../../../build-su95x/src/systems/fmgc/src/*"],
+        "@shared/*": ["../../../build-su95x/src/systems/shared/src/*"],
+        "@typings/*": ["../typings/*"],
+        "@flybywiresim/fbw-sdk": ["./index.ts"]
+      }
+    }
+  }

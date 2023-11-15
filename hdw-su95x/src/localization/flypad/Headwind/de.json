@@ -1,0 +1,18 @@
+{
+  "Headwind": {
+    "Settings": {
+      "AtsuAoc": {
+        "OptionalA32nxErrorReporting": "Optionale SU95X-Fehlerberichterstattung"
+      },
+      "flyPad": {
+        "Orange": "Orange"
+      }
+    },
+    "VersionCheck": {
+      "RecommendationText": "Bitte mit Hilfe des Installer die neueste Version installieren.",
+      "TT": {
+        "StatusBarWarning": "Bitte mit Hilfe des Installer die neueste Version installieren."
+      }
+    }
+  }
+}
