@@ -2,7 +2,7 @@ import { MathUtils } from '@flybywiresim/fbw-sdk';
 import { Common, FlapConf } from './common';
 
 export class FlightModel {
-    static Cd0 = 0.0280;
+    static Cd0 = 0.0260;
 
     static wingSpan = 209.97;
 
