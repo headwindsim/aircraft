@@ -76,16 +76,11 @@ jobs:
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./hdw-a339x-liveries/out/build-modules
-      - name: Get short SHA
-        uses: benjlevesque/short-sha@v2.2
-        id: short-sha
       - name: Upload Release Config to CloudFlare CDN
-        env:
-          SHA: ${{ steps.short-sha.outputs.sha }}
         run: |
           mkdir -p ./hdw-a339x-liveries/out/config
           echo "releases:" >> ./hdw-a339x-liveries/out/config/releases.yaml
-          echo "  - name: $SHA" >> ./hdw-a339x-liveries/out/config/releases.yaml
+          echo "  - name: $GITHUB_REF_NAME" >> ./hdw-a339x-liveries/out/config/releases.yaml
           echo "    date: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ./hdw-a339x-liveries/out/config/releases.yaml
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./hdw-a339x-liveries/out/config
   build-su95x-livery-package:
@@ -148,15 +143,10 @@ jobs:
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./hdw-su95x-liveries/out/build-modules
-      - name: Get short SHA
-        uses: benjlevesque/short-sha@v2.2
-        id: short-sha
       - name: Upload Release Config to CloudFlare CDN
-        env:
-          SHA: ${{ steps.short-sha.outputs.sha }}
         run: |
           mkdir -p ./hdw-su95x-liveries/out/config
           echo "releases:" >> ./hdw-su95x-liveries/out/config/releases.yaml
-          echo "  - name: $SHA" >> ./hdw-su95x-liveries/out/config/releases.yaml
+          echo "  - name: $GITHUB_REF_NAME" >> ./hdw-su95x-liveries/out/config/releases.yaml
           echo "    date: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ./hdw-su95x-liveries/out/config/releases.yaml
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./hdw-su95x-liveries/out/config
