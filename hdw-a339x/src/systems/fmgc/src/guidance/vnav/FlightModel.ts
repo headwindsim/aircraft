@@ -6,7 +6,7 @@ export class FlightModel {
 
     static wingSpan = 209.97;
 
-    static wingArea = 3892.23;
+    static wingArea = 5010;
 
     static wingEffcyFactor = 0.72;
 
