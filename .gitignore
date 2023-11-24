@@ -114,6 +114,15 @@ Cargo.toml
 !/hdw-a339x-liveries/src/
 !/hdw-a339x-liveries/src/**
 
+/hdw-su95x-liveries/*
+!/hdw-su95x-liveries/README.md
+!/hdw-su95x-liveries/mach.config.js
+!/hdw-su95x-liveries/.env
+!/hdw-su95x-liveries/docs/
+!/hdw-su95x-liveries/docs/**
+!/hdw-su95x-liveries/src/
+!/hdw-su95x-liveries/src/**
+
 !/scripts/**
 
 !/build-utils.js
