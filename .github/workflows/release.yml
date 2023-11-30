@@ -54,9 +54,9 @@ jobs:
           docker system prune -af
       - name: Build ZIP files
         run: |
-          node ./scripts/fragment.js
+          node ./scripts/fragment-a333x.js
           cp ./build-a333x/out/build-modules/modules.json ./build-a333x/out/headwindsim-aircraft-a330-300/install.json
-          node ./scripts/install-source.js
+          node ./scripts/install-source-a333x.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
           cd ./build-a333x/out/
           zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-300/
@@ -117,9 +117,9 @@ jobs:
           docker system prune -af
       - name: Build ZIP files
         run: |
-          node ./scripts/fragment.js
+          node ./scripts/fragment-a339x.js
           cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
-          node ./scripts/install-source.js
+          node ./scripts/install-source-a339x.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
           cd ./build-a339x/out/
           zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-900/
@@ -180,9 +180,9 @@ jobs:
           docker system prune -af
       - name: Build ZIP files
         run: |
-          node ./scripts/fragment.js
+          node ./scripts/fragment-su95x.js
           cp ./build-su95x/out/build-modules/modules.json ./build-su95x/out/headwindsim-aircraft-su100-95/install.json
-          node ./scripts/install-source.js
+          node ./scripts/install-source-su95x.js
           mkdir ./${{ env.BUILD_DIR_NAME }}
           cd ./build-su95x/out/
           zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-su100-95/
