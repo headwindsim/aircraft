@@ -43,9 +43,7 @@ clang++ \
   -I "${COMMON_DIR}/fadec_common/src" \
   -I "${COMMON_DIR}/fbw_common/src/inih" \
   -I "${DIR}/common" \
-  "${DIR}/src/FadecGauge.cpp" \
-  "${DIR}/src/Arinc429.cpp" \
-  "${DIR}/src/Arinc429Utils.cpp"
+  "${DIR}/src/FadecGauge.cpp"
 
 # restore directory
 popd
