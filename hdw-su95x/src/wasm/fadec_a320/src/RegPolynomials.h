@@ -218,7 +218,7 @@ class Polynomial {
              (c_Flow[16] * cn1 * powFBW(alt, 2)) + (c_Flow[17] * powFBW(mach, 3)) + (c_Flow[18] * powFBW(mach, 2) * alt) +
              (c_Flow[19] * mach * powFBW(alt, 2)) + (c_Flow[20] * powFBW(alt, 3));
 
-    return (outCFF*ssj_coeff);
+    return (outCFF * ssj_coeff);
   }
 
   double oilTemperature(double energy, double preOilTemp, double maxOilTemp, double deltaTime) {

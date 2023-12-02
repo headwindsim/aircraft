@@ -2,7 +2,7 @@
 
 # get directory of this script relative to root
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-COMMON_DIR="${DIR}/../../../../build-su95x-common/src/wasm"
+COMMON_DIR="${DIR}/../../../../flybywire/fbw-common/src/wasm"
 OUTPUT="${DIR}/../../../../build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fadec.wasm"
 
 if [ "$1" == "--debug" ]; then
@@ -43,7 +43,9 @@ clang++ \
   -I "${COMMON_DIR}/fadec_common/src" \
   -I "${COMMON_DIR}/fbw_common/src/inih" \
   -I "${DIR}/common" \
-  "${DIR}/src/FadecGauge.cpp"
+  "${DIR}/src/FadecGauge.cpp" \
+  "${DIR}/src/Arinc429.cpp" \
+  "${DIR}/src/Arinc429Utils.cpp"
 
 # restore directory
 popd

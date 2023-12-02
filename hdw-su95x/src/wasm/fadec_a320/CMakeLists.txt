@@ -17,6 +17,7 @@ include_directories(
         ./src
         ${FBW_ROOT}/flybywire/fbw-common/src/wasm/fadec_common/src
         ${FBW_ROOT}/flybywire/fbw-common/src/wasm/fbw_common/src
+        ${FBW_ROOT}/flybywire/fbw-common/src/wasm/fbw_common/src/inih
 )
 
 add_executable(flybywire-a32nx-fadec
