@@ -30,7 +30,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          lfs: true
+          lfs: false
       - name: Set BUILT_DATE_TIME
         run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
@@ -160,7 +160,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
-          lfs: true
+          lfs: false
       - name: Set BUILT_DATE_TIME
         run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
