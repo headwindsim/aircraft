@@ -54,21 +54,24 @@ class FadecGauge {
       SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::FuelRightAux, "FUEL TANK RIGHT AUX QUANTITY", "Gallons");
 
       // SimConnect Oil Temperature Definitions
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilTempEngine1, "GENERAL ENG OIL TEMPERATURE:1", "Celsius");
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilTempEngine2, "GENERAL ENG OIL TEMPERATURE:2", "Celsius");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilTempLeft, "GENERAL ENG OIL TEMPERATURE:1", "Celsius");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilTempRight, "GENERAL ENG OIL TEMPERATURE:2", "Celsius");
 
       // SimConnect Oil Pressure Definitions
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilPsiEngine1, "GENERAL ENG OIL PRESSURE:1", "Psi");
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilPsiEngine2, "GENERAL ENG OIL PRESSURE:2", "Psi");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilPsiLeft, "GENERAL ENG OIL PRESSURE:1", "Psi");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::OilPsiRight, "GENERAL ENG OIL PRESSURE:2", "Psi");
 
       // SimConnect Engine Start Definitions
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::StartCN3Engine1, "TURB ENG CORRECTED N2:1", "Percent");
-      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::StartCN3Engine2, "TURB ENG CORRECTED N2:2", "Percent");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::StartCN3Left, "TURB ENG CORRECTED N2:1", "Percent");
+      SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::StartCN3Right, "TURB ENG CORRECTED N2:2", "Percent");
       // Simulation Data
       SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::SimulationDataTypeId, "SIMULATION TIME", "NUMBER");
       SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::SimulationDataTypeId, "SIMULATION RATE", "NUMBER");
 
       SimConnect_AddToDataDefinition(hSimConnect, DataTypesID::AcftInfo, "ATC ID", NULL, SIMCONNECT_DATATYPE_STRING32);
+      // SimConnect Input Event Definitions
+      addInputDataDefinition(hSimConnect, 0, Events::Engine1StarterToggled, "TOGGLE_STARTER1", true);
+      addInputDataDefinition(hSimConnect, 0, Events::Engine2StarterToggled, "TOGGLE_STARTER2", true);
 
       std::cout << "FADEC: SimConnect registrations complete." << std::endl;
       return true;
@@ -77,6 +80,35 @@ class FadecGauge {
     std::cout << "FADEC: SimConnect failed." << std::endl;
 
     return false;
+  }
+
+  bool addInputDataDefinition(const HANDLE connectionHandle,
+                              const SIMCONNECT_DATA_DEFINITION_ID groupId,
+                              const SIMCONNECT_CLIENT_EVENT_ID eventId,
+                              const std::string& eventName,
+                              const bool maskEvent) {
+    HRESULT result = SimConnect_MapClientEventToSimEvent(connectionHandle, eventId, eventName.c_str());
+
+    if (result != S_OK) {
+      // failed -> abort
+      return false;
+    }
+
+    result = SimConnect_AddClientEventToNotificationGroup(connectionHandle, groupId, eventId, maskEvent);
+    if (result != S_OK) {
+      // failed -> abort
+      return false;
+    }
+
+    result = SimConnect_SetNotificationGroupPriority(connectionHandle, groupId, SIMCONNECT_GROUP_PRIORITY_HIGHEST_MASKABLE);
+
+    if (result != S_OK) {
+      // failed -> abort
+      return false;
+    }
+
+    // success
+    return true;
   }
 
   bool isRegistrationFound() { return simulationDataLivery.atc_id[0] != 0; }
@@ -105,6 +137,7 @@ class FadecGauge {
   bool onUpdate(double deltaTime) {
     if (isConnected == true) {
       // read simulation data from simconnect
+
       simConnectReadData();
       // detect pause
       if ((simulationData.simulationTime == previousSimulationTime) || (simulationData.simulationTime < 0.2)) {
@@ -181,6 +214,11 @@ class FadecGauge {
         // connection lost
         std::cout << "FADEC: Received SimConnect connection quit message" << std::endl;
         break;
+      case SIMCONNECT_RECV_ID_EVENT:
+        // get event
+        std::cout << "FADEC: Received SimConnect event capture message" << std::endl;
+        simConnectProcessEvent(static_cast<SIMCONNECT_RECV_EVENT*>(pData));
+        break;
 
       case SIMCONNECT_RECV_ID_SIMOBJECT_DATA:
         // process data
@@ -195,6 +233,20 @@ class FadecGauge {
         std::cout << std::endl;
         break;
 
+      default:
+        break;
+    }
+  }
+
+  void simConnectProcessEvent(const SIMCONNECT_RECV_EVENT* event) {
+    switch (event->uEventID) {
+      // we just want to mask the events, not actually do anything with the information
+      case Events::Engine1StarterToggled: {
+        break;
+      }
+      case Events::Engine2StarterToggled: {
+        break;
+      }
       default:
         break;
     }
@@ -360,10 +412,12 @@ class FadecGauge {
   }
 
   /*
-   * This function is to call if some data are needed before initialization of the engine (such as aircraft registration).
-   * This has to be done here due to data fetch feature being available after the first PANEL_SERVICE_PRE_DRAW (from what I have observed)
-   * This problem was observed when engine configuration file was under development
-   * Reach Julian Sebline on Discord if information needed
+   * This function is to call if some data are needed before initialization of
+   * the engine (such as aircraft registration). This has to be done here due to
+   * data fetch feature being available after the first PANEL_SERVICE_PRE_DRAW
+   * (from what I have observed) This problem was observed when engine
+   * configuration file was under development Reach Julian Sebline on Discord if
+   * information needed
    *
    * Modify this function as needed
    *

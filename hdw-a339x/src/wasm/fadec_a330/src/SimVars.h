@@ -10,12 +10,14 @@ enum DataTypesID {
   FuelLeftAux,
   FuelRightAux,
   // FuelTrim,
-  OilTempEngine1,
-  OilTempEngine2,
-  OilPsiEngine1,
-  OilPsiEngine2,
-  StartCN3Engine1,
-  StartCN3Engine2,
+  OilTempLeft,
+  OilTempRight,
+  OilPsiLeft,
+  OilPsiRight,
+  StartCN2Left,
+  StartCN2Right,
+  StartCN3Left,
+  StartCN3Right,
   SimulationDataTypeId,
   AcftInfo,
 };
@@ -27,6 +29,11 @@ struct SimulationData {
 
 struct SimulationDataLivery {
   char atc_id[32] = "";
+};
+
+enum Events {
+  Engine1StarterToggled,
+  Engine2StarterToggled,
 };
 
 /// <summary>
@@ -112,6 +119,7 @@ class SimVars {
   ID Engine1N1;
   ID Engine2N1;
   ID EngineIdleN1;
+  ID EngineIdleN2;
   ID EngineIdleN3;
   ID EngineIdleFF;
   ID EngineIdleEGT;
@@ -119,12 +127,14 @@ class SimVars {
   ID Engine2EGT;
   ID Engine1Oil;
   ID Engine2Oil;
-  ID Engine1TotalOil;
-  ID Engine2TotalOil;
+  ID Engine1OilTotal;
+  ID Engine2OilTotal;
   ID Engine1VibN1;
   ID Engine2VibN1;
   ID Engine1VibN2;
   ID Engine2VibN2;
+  ID Engine1VibN3;
+  ID Engine2VibN3;
   ID Engine1FF;
   ID Engine2FF;
   ID Engine1PreFF;
@@ -132,8 +142,8 @@ class SimVars {
   ID EngineCycleTime;
   ID EngineImbalance;
   ID WingAntiIce;
-  ID FuelUsedEngine1;
-  ID FuelUsedEngine2;
+  ID FuelUsedLeft;
+  ID FuelUsedRight;
   ID FuelLeftPre;
   ID FuelRightPre;
   ID FuelAuxLeftPre;
@@ -148,8 +158,8 @@ class SimVars {
   ID Engine2State;
   ID Engine1Timer;
   ID Engine2Timer;
-  ID PumpStateEngine1;
-  ID PumpStateEngine2;
+  ID PumpStateLeft;
+  ID PumpStateRight;
   ID ThrustLimitType;
   ID ThrustLimitIdle;
   ID ThrustLimitToga;
@@ -158,6 +168,9 @@ class SimVars {
   ID ThrustLimitMct;
   ID PacksState1;
   ID PacksState2;
+  ID Eng1StarterPressurized;
+  ID Eng2StarterPressurized;
+  ID APUrpmPercent;
 
   SimVars() { this->initializeVars(); }
 
@@ -172,6 +185,7 @@ class SimVars {
     Engine1N1 = register_named_variable("A32NX_ENGINE_N1:1");
     Engine2N1 = register_named_variable("A32NX_ENGINE_N1:2");
     EngineIdleN1 = register_named_variable("A32NX_ENGINE_IDLE_N1");
+    EngineIdleN2 = register_named_variable("A32NX_ENGINE_IDLE_N2");
     EngineIdleN3 = register_named_variable("A32NX_ENGINE_IDLE_N3");
     EngineIdleFF = register_named_variable("A32NX_ENGINE_IDLE_FF");
     EngineIdleEGT = register_named_variable("A32NX_ENGINE_IDLE_EGT");
@@ -179,18 +193,22 @@ class SimVars {
     Engine2EGT = register_named_variable("A32NX_ENGINE_EGT:2");
     Engine1Oil = register_named_variable("A32NX_ENGINE_OIL_QTY:1");
     Engine2Oil = register_named_variable("A32NX_ENGINE_OIL_QTY:2");
-    Engine1TotalOil = register_named_variable("A32NX_ENGINE_OIL_TOTAL:1");
-    Engine2TotalOil = register_named_variable("A32NX_ENGINE_OIL_TOTAL:2");
+    Engine1OilTotal = register_named_variable("A32NX_ENGINE_OIL_TOTAL:1");
+    Engine2OilTotal = register_named_variable("A32NX_ENGINE_OIL_TOTAL:2");
     Engine1VibN1 = register_named_variable("A32NX_ENGINE_VIB_N1:1");
     Engine2VibN1 = register_named_variable("A32NX_ENGINE_VIB_N1:2");
+    Engine1VibN2 = register_named_variable("A32NX_ENGINE_VIB_N2:1");
+    Engine2VibN2 = register_named_variable("A32NX_ENGINE_VIB_N2:2");
+    Engine1VibN3 = register_named_variable("A32NX_ENGINE_VIB_N3:1");
+    Engine2VibN3 = register_named_variable("A32NX_ENGINE_VIB_N3:2");
     Engine1FF = register_named_variable("A32NX_ENGINE_FF:1");
     Engine2FF = register_named_variable("A32NX_ENGINE_FF:2");
     Engine1PreFF = register_named_variable("A32NX_ENGINE_PRE_FF:1");
     Engine2PreFF = register_named_variable("A32NX_ENGINE_PRE_FF:2");
     EngineImbalance = register_named_variable("A32NX_ENGINE_IMBALANCE");
     WingAntiIce = register_named_variable("A32NX_PNEU_WING_ANTI_ICE_SYSTEM_ON");
-    FuelUsedEngine1 = register_named_variable("A32NX_FUEL_USED:1");
-    FuelUsedEngine2 = register_named_variable("A32NX_FUEL_USED:2");
+    FuelUsedLeft = register_named_variable("A32NX_FUEL_USED:1");
+    FuelUsedRight = register_named_variable("A32NX_FUEL_USED:2");
     FuelLeftPre = register_named_variable("A32NX_FUEL_LEFT_PRE");
     FuelRightPre = register_named_variable("A32NX_FUEL_RIGHT_PRE");
     FuelAuxLeftPre = register_named_variable("A32NX_FUEL_AUX_LEFT_PRE");
@@ -203,8 +221,11 @@ class SimVars {
     Engine2State = register_named_variable("A32NX_ENGINE_STATE:2");
     Engine1Timer = register_named_variable("A32NX_ENGINE_TIMER:1");
     Engine2Timer = register_named_variable("A32NX_ENGINE_TIMER:2");
-    PumpStateEngine1 = register_named_variable("A32NX_PUMP_STATE:1");
-    PumpStateEngine2 = register_named_variable("A32NX_PUMP_STATE:2");
+    PumpStateLeft = register_named_variable("A32NX_PUMP_STATE:1");
+    PumpStateRight = register_named_variable("A32NX_PUMP_STATE:2");
+    Eng1StarterPressurized = register_named_variable("A32NX_PNEU_ENG_1_STARTER_PRESSURIZED");
+    Eng2StarterPressurized = register_named_variable("A32NX_PNEU_ENG_2_STARTER_PRESSURIZED");
+    APUrpmPercent = register_named_variable("A32NX_APU_N_RAW");
 
     ThrustLimitType = register_named_variable("A32NX_AUTOTHRUST_THRUST_LIMIT_TYPE");
     ThrustLimitIdle = register_named_variable("A32NX_AUTOTHRUST_THRUST_LIMIT_IDLE");
@@ -224,6 +245,7 @@ class SimVars {
     this->setEngine1N1(0);
     this->setEngine2N1(0);
     this->setEngineIdleN1(0);
+    this->setEngineIdleN2(0);
     this->setEngineIdleN3(0);
     this->setEngineIdleFF(0);
     this->setEngineIdleEGT(0);
@@ -231,15 +253,21 @@ class SimVars {
     this->setEngine2EGT(0);
     this->setEngine1Oil(0);
     this->setEngine2Oil(0);
-    this->setEngine1TotalOil(0);
-    this->setEngine2TotalOil(0);
+    this->setEngine1OilTotal(0);
+    this->setEngine2OilTotal(0);
+    this->setEngine1VibN1(0);
+    this->setEngine2VibN1(0);
+    this->setEngine1VibN2(0);
+    this->setEngine2VibN2(0);
+    this->setEngine1VibN3(0);
+    this->setEngine2VibN3(0);
     this->setEngine1FF(0);
     this->setEngine2FF(0);
     this->setEngine1PreFF(0);
     this->setEngine2PreFF(0);
     this->setEngineImbalance(0);
-    this->setFuelUsedEngine1(0);
-    this->setFuelUsedEngine2(0);
+    this->setFuelUsedLeft(0);
+    this->setFuelUsedRight(0);
     this->setFuelLeftPre(0);
     this->setFuelRightPre(0);
     this->setFuelAuxLeftPre(0);
@@ -250,8 +278,8 @@ class SimVars {
     this->setEngine2State(0);
     this->setEngine1Timer(0);
     this->setEngine2Timer(0);
-    this->setPumpStateEngine1(0);
-    this->setPumpStateEngine2(0);
+    this->setPumpStateLeft(0);
+    this->setPumpStateRight(0);
     this->setThrustLimitIdle(0);
     this->setThrustLimitToga(0);
     this->setThrustLimitFlex(0);
@@ -270,6 +298,7 @@ class SimVars {
   void setEngine1N1(FLOAT64 value) { set_named_variable_value(Engine1N1, value); }
   void setEngine2N1(FLOAT64 value) { set_named_variable_value(Engine2N1, value); }
   void setEngineIdleN1(FLOAT64 value) { set_named_variable_value(EngineIdleN1, value); }
+  void setEngineIdleN2(FLOAT64 value) { set_named_variable_value(EngineIdleN2, value); }
   void setEngineIdleN3(FLOAT64 value) { set_named_variable_value(EngineIdleN3, value); }
   void setEngineIdleFF(FLOAT64 value) { set_named_variable_value(EngineIdleFF, value); }
   void setEngineIdleEGT(FLOAT64 value) { set_named_variable_value(EngineIdleEGT, value); }
@@ -277,15 +306,21 @@ class SimVars {
   void setEngine2EGT(FLOAT64 value) { set_named_variable_value(Engine2EGT, value); }
   void setEngine1Oil(FLOAT64 value) { set_named_variable_value(Engine1Oil, value); }
   void setEngine2Oil(FLOAT64 value) { set_named_variable_value(Engine2Oil, value); }
-  void setEngine1TotalOil(FLOAT64 value) { set_named_variable_value(Engine1TotalOil, value); }
-  void setEngine2TotalOil(FLOAT64 value) { set_named_variable_value(Engine2TotalOil, value); }
+  void setEngine1OilTotal(FLOAT64 value) { set_named_variable_value(Engine1OilTotal, value); }
+  void setEngine2OilTotal(FLOAT64 value) { set_named_variable_value(Engine2OilTotal, value); }
+  void setEngine1VibN1(FLOAT64 value) { set_named_variable_value(Engine1VibN1, value); }
+  void setEngine2VibN1(FLOAT64 value) { set_named_variable_value(Engine2VibN1, value); }
+  void setEngine1VibN2(FLOAT64 value) { set_named_variable_value(Engine1VibN2, value); }
+  void setEngine2VibN2(FLOAT64 value) { set_named_variable_value(Engine2VibN2, value); }
+  void setEngine1VibN3(FLOAT64 value) { set_named_variable_value(Engine1VibN3, value); }
+  void setEngine2VibN3(FLOAT64 value) { set_named_variable_value(Engine2VibN3, value); }
   void setEngine1FF(FLOAT64 value) { set_named_variable_value(Engine1FF, value); }
   void setEngine2FF(FLOAT64 value) { set_named_variable_value(Engine2FF, value); }
   void setEngine1PreFF(FLOAT64 value) { set_named_variable_value(Engine1PreFF, value); }
   void setEngine2PreFF(FLOAT64 value) { set_named_variable_value(Engine2PreFF, value); }
   void setEngineImbalance(FLOAT64 value) { set_named_variable_value(EngineImbalance, value); }
-  void setFuelUsedEngine1(FLOAT64 value) { set_named_variable_value(FuelUsedEngine1, value); }
-  void setFuelUsedEngine2(FLOAT64 value) { set_named_variable_value(FuelUsedEngine2, value); }
+  void setFuelUsedLeft(FLOAT64 value) { set_named_variable_value(FuelUsedLeft, value); }
+  void setFuelUsedRight(FLOAT64 value) { set_named_variable_value(FuelUsedRight, value); }
   void setFuelLeftPre(FLOAT64 value) { set_named_variable_value(FuelLeftPre, value); }
   void setFuelRightPre(FLOAT64 value) { set_named_variable_value(FuelRightPre, value); }
   void setFuelAuxLeftPre(FLOAT64 value) { set_named_variable_value(FuelAuxLeftPre, value); }
@@ -296,8 +331,8 @@ class SimVars {
   void setEngine2State(FLOAT64 value) { set_named_variable_value(Engine2State, value); }
   void setEngine1Timer(FLOAT64 value) { set_named_variable_value(Engine1Timer, value); }
   void setEngine2Timer(FLOAT64 value) { set_named_variable_value(Engine2Timer, value); }
-  void setPumpStateEngine1(FLOAT64 value) { set_named_variable_value(PumpStateEngine1, value); }
-  void setPumpStateEngine2(FLOAT64 value) { set_named_variable_value(PumpStateEngine2, value); }
+  void setPumpStateLeft(FLOAT64 value) { set_named_variable_value(PumpStateLeft, value); }
+  void setPumpStateRight(FLOAT64 value) { set_named_variable_value(PumpStateRight, value); }
   void setThrustLimitIdle(FLOAT64 value) { set_named_variable_value(ThrustLimitIdle, value); }
   void setThrustLimitToga(FLOAT64 value) { set_named_variable_value(ThrustLimitToga, value); }
   void setThrustLimitFlex(FLOAT64 value) { set_named_variable_value(ThrustLimitFlex, value); }
@@ -315,6 +350,7 @@ class SimVars {
   FLOAT64 getEngine1N1() { return get_named_variable_value(Engine1N1); }
   FLOAT64 getEngine2N1() { return get_named_variable_value(Engine2N1); }
   FLOAT64 getEngineIdleN1() { return get_named_variable_value(EngineIdleN1); }
+  FLOAT64 getEngineIdleN2() { return get_named_variable_value(EngineIdleN2); }
   FLOAT64 getEngineIdleN3() { return get_named_variable_value(EngineIdleN3); }
   FLOAT64 getEngineIdleFF() { return get_named_variable_value(EngineIdleFF); }
   FLOAT64 getEngineIdleEGT() { return get_named_variable_value(EngineIdleEGT); }
@@ -324,14 +360,20 @@ class SimVars {
   FLOAT64 getEngine2EGT() { return get_named_variable_value(Engine2EGT); }
   FLOAT64 getEngine1Oil() { return get_named_variable_value(Engine1Oil); }
   FLOAT64 getEngine2Oil() { return get_named_variable_value(Engine2Oil); }
-  FLOAT64 getEngine1TotalOil() { return get_named_variable_value(Engine1TotalOil); }
-  FLOAT64 getEngine2TotalOil() { return get_named_variable_value(Engine2TotalOil); }
+  FLOAT64 getEngine1OilTotal() { return get_named_variable_value(Engine1OilTotal); }
+  FLOAT64 getEngine2OilTotal() { return get_named_variable_value(Engine2OilTotal); }
+  FLOAT64 getEngine1VibN1() { return get_named_variable_value(Engine1VibN1); }
+  FLOAT64 getEngine2VibN1() { return get_named_variable_value(Engine2VibN1); }
+  FLOAT64 getEngine1VibN2() { return get_named_variable_value(Engine1VibN2); }
+  FLOAT64 getEngine2VibN2() { return get_named_variable_value(Engine2VibN2); }
+  FLOAT64 getEngine1VibN3() { return get_named_variable_value(Engine1VibN3); }
+  FLOAT64 getEngine2VibN3() { return get_named_variable_value(Engine2VibN3); }
   FLOAT64 getEngine1PreFF() { return get_named_variable_value(Engine1PreFF); }
   FLOAT64 getEngine2PreFF() { return get_named_variable_value(Engine2PreFF); }
   FLOAT64 getEngineImbalance() { return get_named_variable_value(EngineImbalance); }
   FLOAT64 getWAI() { return get_named_variable_value(WingAntiIce); }
-  FLOAT64 getFuelUsedEngine1() { return get_named_variable_value(FuelUsedEngine1); }
-  FLOAT64 getFuelUsedEngine2() { return get_named_variable_value(FuelUsedEngine2); }
+  FLOAT64 getFuelUsedLeft() { return get_named_variable_value(FuelUsedLeft); }
+  FLOAT64 getFuelUsedRight() { return get_named_variable_value(FuelUsedRight); }
   FLOAT64 getFuelLeftPre() { return get_named_variable_value(FuelLeftPre); }
   FLOAT64 getFuelRightPre() { return get_named_variable_value(FuelRightPre); }
   FLOAT64 getFuelAuxLeftPre() { return get_named_variable_value(FuelAuxLeftPre); }
@@ -340,11 +382,16 @@ class SimVars {
   // FLOAT64 getFuelTrimPre() { return get_named_variable_value(FuelTrimPre); }
   FLOAT64 getRefuelRate() { return get_named_variable_value(RefuelRate); }
   FLOAT64 getRefuelStartedByUser() { return get_named_variable_value(RefuelStartedByUser); }
-  FLOAT64 getPumpStateEngine1() { return get_named_variable_value(PumpStateEngine1); }
-  FLOAT64 getPumpStateEngine2() { return get_named_variable_value(PumpStateEngine2); }
+  FLOAT64 getPumpStateLeft() { return get_named_variable_value(PumpStateLeft); }
+  FLOAT64 getPumpStateRight() { return get_named_variable_value(PumpStateRight); }
   FLOAT64 getPacksState1() { return get_named_variable_value(PacksState1); }
   FLOAT64 getPacksState2() { return get_named_variable_value(PacksState2); }
   FLOAT64 getThrustLimitType() { return get_named_variable_value(ThrustLimitType); }
+  FLOAT64 getStarterPressurized(int engine) {
+    return get_named_variable_value(engine == 1 ? Eng1StarterPressurized : Eng2StarterPressurized);
+  }
+  FLOAT64 getRightSystemPressure() { return get_named_variable_value(Eng2StarterPressurized); }
+  FLOAT64 getAPUrpmPercent() { return get_named_variable_value(APUrpmPercent); }
 
   FLOAT64 getCN1(int index) { return aircraft_varget(CorrectedN1, m_Units->Percent, index); }
   FLOAT64 getCN2(int index) { return aircraft_varget(CorrectedN2, m_Units->Percent, index); }

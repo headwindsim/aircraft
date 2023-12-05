@@ -14,6 +14,7 @@ import {
     TriangleFill as Chock,
     Truck,
     VinylFill as Wheel,
+    Fan
 } from 'react-bootstrap-icons';
 import { ActionCreatorWithOptionalPayload } from '@reduxjs/toolkit';
 import { t } from '../../../../translation';
@@ -30,6 +31,7 @@ import {
     setFuelTruckButtonState,
     setGpuButtonState,
     setJetWayButtonState,
+    setAsuButtonState,
 } from '../../../../Store/features/groundServicePage';
 
 interface ServiceButtonWrapperProps {
@@ -59,7 +61,8 @@ enum ServiceButton {
     Gpu,
     CargoDoor,
     BaggageTruck,
-    CateringTruck
+    CateringTruck,
+    AirStarterUnit
 }
 
 // Possible states of buttons
@@ -123,6 +126,7 @@ export const A330Services: React.FC = () => {
     const [cargoDoorOpen] = useSimVar('A:INTERACTIVE POINT OPEN:4', 'Percent over 100', 100);
     const [gpuActive] = useSimVar('A:INTERACTIVE POINT OPEN:5', 'Percent over 100', 100);
     const [fuelingActive] = useSimVar('A:INTERACTIVE POINT OPEN:11', 'Percent over 100', 100);
+    const [asuActive, setAsuActive] = useSimVar('L:A32NX_ASU_TURNED_ON', 'Bool', 100);
 
     // Wheel Chocks and Cones
     const [isGroundEquipmentVisible] = useSimVar('L:A32NX_GND_EQP_IS_VISIBLE', 'bool', 500);
@@ -145,6 +149,7 @@ export const A330Services: React.FC = () => {
     const toggleCateringTruck = () => SimVar.SetSimVarValue('K:REQUEST_CATERING', 'bool', true);
     const toggleFuelTruck = () => SimVar.SetSimVarValue('K:REQUEST_FUEL_KEY', 'bool', true);
     const toggleGpu = () => SimVar.SetSimVarValue('K:REQUEST_POWER_SUPPLY', 'bool', true);
+    const toggleAsu = () => setAsuActive(!asuActive);
 
     // Button states
     const {
@@ -158,6 +163,7 @@ export const A330Services: React.FC = () => {
         gpuButtonState,
         baggageButtonState,
         cateringButtonState,
+        asuButtonState,
     } = useAppSelector((state) => state.groundServicePage);
 
     // Required so these can be used inside the useTimeout callback
@@ -324,6 +330,10 @@ export const A330Services: React.FC = () => {
                 fwdRightDoorOpen);
             toggleCateringTruck();
             break;
+        case ServiceButton.AirStarterUnit:
+            handleSimpleService(ServiceButton.AirStarterUnit, asuButtonState, setAsuButtonState);
+            toggleAsu();
+            break;
         default:
             break;
         }
@@ -451,6 +461,11 @@ export const A330Services: React.FC = () => {
         );
     }, [fwdRightDoorOpen]);
 
+    // Asu
+    useEffect(() => {
+        simpleServiceListenerHandling(asuButtonState, setAsuButtonState, asuActive);
+    }, [asuActive]);
+
     // Pushback or movement start --> disable buttons and close doors
     // Enable buttons if all have been disabled before
     useEffect(() => {
@@ -465,6 +480,8 @@ export const A330Services: React.FC = () => {
             dispatch(setService1DoorButtonState(ServiceButtonState.DISABLED));
             dispatch(setService2DoorButtonState(ServiceButtonState.DISABLED));
             dispatch(setCateringButtonState(ServiceButtonState.DISABLED));
+            dispatch(setAsuButtonState(ServiceButtonState.DISABLED));
+
             if (midLeftDoorOpen === 1) {
                 toggleMidLeftDoor();
             }
@@ -492,7 +509,9 @@ export const A330Services: React.FC = () => {
                 fuelTruckButtonState,
                 gpuButtonState,
                 baggageButtonState,
-                cateringButtonState]
+                cateringButtonState,
+                asuButtonState
+            ]
                 .every((buttonState) => buttonState === ServiceButtonState.DISABLED)
         ) {
             dispatch(setBoarding1DoorButtonState(ServiceButtonState.INACTIVE));
@@ -549,6 +568,15 @@ export const A330Services: React.FC = () => {
                     onClick={() => handleButtonClick(ServiceButton.FuelTruck)}
                 >
                     <Truck size={36} />
+                </GroundServiceButton>
+
+                {/* Air Starter Unit */}
+                <GroundServiceButton
+                    name={t('Ground.Services.AirStarterUnit')}
+                    state={asuButtonState}
+                    onClick={() => handleButtonClick(ServiceButton.AirStarterUnit)}
+                >
+                    <Fan size={36} />
                 </GroundServiceButton>
 
             </ServiceButtonWrapper>

@@ -3105,7 +3105,7 @@ impl A320BlueElectricPumpController {
     }
 
     fn has_overheat_fault(&self) -> bool {
-        self.has_low_level_fault
+        self.has_overheat_fault
     }
 }
 impl PumpController for A320BlueElectricPumpController {
