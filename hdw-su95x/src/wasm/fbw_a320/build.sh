@@ -2,7 +2,7 @@
 
 # get directory of this script relative to root
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-COMMON_DIR="${DIR}/../../../../flybywire/fbw-common/src/wasm/fbw_common"
+COMMON_DIR="${DIR}/../../../../build-su95x-common/src/wasm/fbw_common"
 OUTPUT="${DIR}/../../../../build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fbw.wasm"
 
 if [ "$1" == "--debug" ]; then
