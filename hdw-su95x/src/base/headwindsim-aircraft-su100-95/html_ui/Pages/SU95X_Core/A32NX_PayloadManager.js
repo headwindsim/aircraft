@@ -7,7 +7,7 @@ class A32NX_PayloadConstructor {
                 seats: 18,
                 weight: Math.round(NXUnits.kgToUser(1440)),
                 stationIndex: 0 + 1,
-                position: 15.8,
+                position: 20.8,
                 simVar: "A32NX_PAX_A"
             },
             rows5_8: {
@@ -15,7 +15,7 @@ class A32NX_PayloadConstructor {
                 seats: 20,
                 weight: Math.round(NXUnits.kgToUser(1600)),
                 stationIndex: 1 + 1,
-                position: 5.0,
+                position: 10.0,
                 simVar: "A32NX_PAX_B"
             },
             rows9_12: {
@@ -23,7 +23,7 @@ class A32NX_PayloadConstructor {
                 seats: 20,
                 weight: Math.round(NXUnits.kgToUser(1600)),
                 stationIndex: 2 + 1,
-                position: -6.4,
+                position: -1.4,
                 simVar: "A32NX_PAX_C"
             },
             rows13_16: {
@@ -31,7 +31,7 @@ class A32NX_PayloadConstructor {
                 seats: 20,
                 weight: Math.round(NXUnits.kgToUser(1600)),
                 stationIndex: 3 + 1,
-                position: -16.6,
+                position: -11.6,
                 simVar: "A32NX_PAX_D"
             },
             rows17_20: {
@@ -39,7 +39,7 @@ class A32NX_PayloadConstructor {
                 seats: 20,
                 weight: Math.round(NXUnits.kgToUser(1600)),
                 stationIndex: 4 + 1,
-                position: -27.5,
+                position: -22.5,
                 simVar: "A32NX_PAX_E"
             },
         };
@@ -50,7 +50,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(1947)),
                 load: 0,
                 stationIndex: 5 + 1,
-                position: 12.6,
+                position: 17.6,
                 visible: true,
                 simVar: 'A32NX_CARGO_FWD_BAGGAGE_CONTAINER',
             },
@@ -59,7 +59,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(580)),
                 load: 0,
                 stationIndex: 6 + 1,
-                position: -16.2,
+                position: -11.2,
                 visible: true,
                 simVar: 'A32NX_CARGO_AFT_CONTAINER',
             },
@@ -68,7 +68,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(1213)),
                 load: 0,
                 stationIndex: 7 + 1,
-                position: -23.8,
+                position: -18.8,
                 visible: true,
                 simVar: 'A32NX_CARGO_AFT_BAGGAGE',
             },
@@ -77,7 +77,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(460)),
                 load: 0,
                 stationIndex: 8 + 1,
-                position: -30.6,
+                position: -25.6,
                 visible: true,
                 simVar: 'A32NX_CARGO_AFT_BULK_LOOSE',
             },
@@ -95,11 +95,11 @@ const MAX_SEAT_AVAILABLE = 98;
  */
 function getZfwcg() {
 
-    const leMacZ = -3.900; // Accurate to 3 decimals, replaces debug weight values
+    const leMacZ = 2.990; // Accurate to 3 decimals, replaces debug weight values
     const macSize = 11.950; // Accurate to 3 decimals, replaces debug weight values
 
     const emptyWeight = (SimVar.GetSimVarValue("EMPTY WEIGHT", getUserUnit()));
-    const emptyPosition = -5.66; // Value from flight_model.cfg
+    const emptyPosition = 1.14; // Value from flight_model.cfg
     const emptyMoment = emptyPosition * emptyWeight;
     const PAX_WEIGHT = SimVar.GetSimVarValue("L:A32NX_WB_PER_PAX_WEIGHT", "Number");
 

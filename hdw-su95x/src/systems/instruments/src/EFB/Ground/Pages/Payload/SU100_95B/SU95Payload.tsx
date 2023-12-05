@@ -62,7 +62,7 @@ export const SU95Payload: React.FC<A320Props> = ({
 
     const activeFlags = useMemo(() => [aFlags, bFlags, cFlags, dFlags, eFlags], [aFlags, bFlags, cFlags, dFlags, eFlags]);
     const desiredFlags = useMemo(() => [aFlagsDesired, bFlagsDesired, cFlagsDesired, dFlagsDesired, eFlags], [aFlagsDesired, bFlagsDesired, cFlagsDesired, dFlagsDesired, eFlagsDesired]);
-    const setDesiredFlags = useMemo(() => [setAFlagsDesired, setBFlagsDesired, setCFlagsDesired, setDFlagsDesired], []);
+    const setDesiredFlags = useMemo(() => [setAFlagsDesired, setBFlagsDesired, setCFlagsDesired, setDFlagsDesired, setEFlagsDesired], []);
 
     const [fwdBag] = useSimVar(`L:${Loadsheet.cargoMap[0].simVar}`, 'Number', 719);
     const [aftCont] = useSimVar(`L:${Loadsheet.cargoMap[1].simVar}`, 'Number', 743);

@@ -75,31 +75,31 @@ impl A320Payload {
     const A320_PAX: [PaxInfo<'_>; 5] = [
         PaxInfo {
             max_pax: 18,
-            position: (15.8, 0., 0.4),
+            position: (20.8, 0., 0.4),
             pax_id: "PAX_A",
             payload_id: "PAYLOAD_STATION_1_REQ",
         },
         PaxInfo {
             max_pax: 20,
-            position: (5.0, 0., 0.4),
+            position: (10.0, 0., 0.4),
             pax_id: "PAX_B",
             payload_id: "PAYLOAD_STATION_2_REQ",
         },
         PaxInfo {
             max_pax: 20,
-            position: (-6.4, 0., 0.4),
+            position: (-1.4, 0., 0.4),
             pax_id: "PAX_C",
             payload_id: "PAYLOAD_STATION_3_REQ",
         },
         PaxInfo {
             max_pax: 20,
-            position: (-16.6, 0., 0.4),
+            position: (-11.6, 0., 0.4),
             pax_id: "PAX_D",
             payload_id: "PAYLOAD_STATION_4_REQ",
         },
         PaxInfo {
             max_pax: 20,
-            position: (-27.5, 0., 0.4),
+            position: (-22.5, 0., 0.4),
             pax_id: "PAX_E",
             payload_id: "PAYLOAD_STATION_5_REQ",
         },
@@ -107,26 +107,26 @@ impl A320Payload {
 
     const A320_CARGO: [CargoInfo<'_>; 4] = [
         CargoInfo {
-            max_cargo_kg: 3402.,
-            position: (12.6, 0., -4.1),
+            max_cargo_kg: 1947.,
+            position: (17.6, 0., -4.1),
             cargo_id: "CARGO_FWD_BAGGAGE_CONTAINER",
             payload_id: "PAYLOAD_STATION_6_REQ",
         },
         CargoInfo {
-            max_cargo_kg: 2426.,
-            position: (-16.2, 0., -4.1),
+            max_cargo_kg: 580.,
+            position: (-11.2, 0., -4.1),
             cargo_id: "CARGO_AFT_CONTAINER",
             payload_id: "PAYLOAD_STATION_7_REQ",
         },
         CargoInfo {
-            max_cargo_kg: 2110.,
-            position: (-23.8, 0., -4.1),
+            max_cargo_kg: 1213.,
+            position: (-18.8, 0., -4.1),
             cargo_id: "CARGO_AFT_BAGGAGE",
             payload_id: "PAYLOAD_STATION_8_REQ",
         },
         CargoInfo {
-            max_cargo_kg: 1497.,
-            position: (-30.6, 0., -4.1),
+            max_cargo_kg: 460.,
+            position: (-25.6, 0., -4.1),
             cargo_id: "CARGO_AFT_BULK_LOOSE",
             payload_id: "PAYLOAD_STATION_9_REQ",
         },

@@ -16,11 +16,11 @@ pub struct A320Airframe {
 }
 impl A320Airframe {
     const LOADSHEET: LoadsheetInfo = LoadsheetInfo {
-        operating_empty_weight_kg: 24249.,
-        operating_empty_position: (-5.66, 0., -6.),
+        operating_empty_weight_kg: 27000.,
+        operating_empty_position: (1.14, 0., 0.),
         per_pax_weight_kg: 84.,
-        mean_aerodynamic_chord_size: 13.464,
-        leading_edge_mean_aerodynamic_chord: -5.383,
+        mean_aerodynamic_chord_size: 11.95,
+        leading_edge_mean_aerodynamic_chord: 2.99,
     };
 
     pub fn new(context: &mut InitContext) -> Self {

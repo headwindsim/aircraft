@@ -6,8 +6,7 @@
 import React, { useState } from 'react';
 import { Units, usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
 import { getAirframeType } from '../../../Efb';
-import { A320Payload } from './A320_251N/A320Payload';
-import { A380Payload } from './A380_842/A380Payload';
+import { SU95Payload } from './SU100_95B/SU95Payload';
 import { useAppSelector } from '../../../Store/store';
 import { isSimbriefDataLoaded } from '../../../Store/features/simBrief';
 
@@ -28,28 +27,10 @@ export const Payload = () => {
     const [massUnitForDisplay] = useState(Units.usingMetric ? 'KGS' : 'LBS');
 
     switch (getAirframeType()) {
-    case 'A380_842':
-        return (
-            <A380Payload
-                simbriefUnits={simbriefUnits}
-                simbriefBagWeight={simbriefBagWeight}
-                simbriefPaxWeight={simbriefPaxWeight}
-                simbriefPax={simbriefPax}
-                simbriefBag={simbriefBag}
-                simbriefFreight={simbriefFreight}
-                simbriefDataLoaded={simbriefDataLoaded}
-                massUnitForDisplay={massUnitForDisplay}
-                isOnGround={isOnGround}
-                boardingStarted={boardingStarted}
-                boardingRate={boardingRate}
-                setBoardingStarted={setBoardingStarted}
-                setBoardingRate={setBoardingRate}
-            />
-        );
-    case 'A320_251N':
+    case 'SU100_95B':
     default:
         return (
-            <A320Payload
+            <SU95Payload
                 simbriefUnits={simbriefUnits}
                 simbriefBagWeight={simbriefBagWeight}
                 simbriefPaxWeight={simbriefPaxWeight}
