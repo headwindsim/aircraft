@@ -69,7 +69,7 @@
 
 :root {
   --main-display-colour-background: #030200;
-  --main-display-colour: hsl(0, 0%, 100%);
+  --main-display-colour: hsl(36, 100%, 45%);
   --main-display-colour-inactive: hsl(53, 82%, 0%);
 }
 

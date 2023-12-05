@@ -157,7 +157,7 @@ struct A320Cabin {
 
 impl A320Cabin {
     const FWD_DOOR: &'static str = "INTERACTIVE POINT OPEN:0";
-    const REAR_DOOR: &'static str = "INTERACTIVE POINT OPEN:2";
+    const REAR_DOOR: &'static str = "INTERACTIVE POINT OPEN:3";
 
     fn new(context: &mut InitContext) -> Self {
         Self {
@@ -203,11 +203,11 @@ impl A320Cabin {
     fn update_number_of_passengers(&mut self, number_of_passengers: &impl NumberOfPassengers) {
         self.number_of_passengers[1] =
             (number_of_passengers.number_of_passengers(A320Pax::A.into())
-                + number_of_passengers.number_of_passengers(A320Pax::B.into())
-                + number_of_passengers.number_of_passengers(A320Pax::C.into())) as u8;
+                + number_of_passengers.number_of_passengers(A320Pax::B.into())) as u8;
         self.number_of_passengers[2] =
-            (number_of_passengers.number_of_passengers(A320Pax::D.into())
-                + number_of_passengers.number_of_passengers(A320Pax::E.into())) as u8;
+            (number_of_passengers.number_of_passengers(A320Pax::C.into())
+                + number_of_passengers.number_of_passengers(A320Pax::D.into())
+                 + number_of_passengers.number_of_passengers(A320Pax::E.into())) as u8;
     }
 }
 
@@ -498,6 +498,7 @@ impl OutletAir for A320AirConditioningSystem {
         outlet_air.set_temperature(self.duct_temperature().iter().average());
 
         outlet_air
+
         // TODO: This should use self.trim_air_system.outlet_air()
     }
 }

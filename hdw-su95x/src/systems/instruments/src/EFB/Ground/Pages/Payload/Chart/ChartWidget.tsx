@@ -16,11 +16,11 @@ interface ChartWidgetProps {
 }
 
 export const ChartWidget: React.FC<ChartWidgetProps> = ({
-                                                            width, height, envelope, limits,
-                                                            gw, cg,
-                                                            mldw, mldwCg,
-                                                            zfw, zfwCg,
-                                                        }) => {
+    width, height, envelope, limits,
+    gw, cg,
+    mldw, mldwCg,
+    zfw, zfwCg,
+}) => {
     const { usingMetric } = Units;
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
@@ -33,25 +33,25 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         let secondary = '#84CC16';
         let alt = '#000';
         switch (theme) {
-            case 'dark':
-                base = '#fff';
-                primary = '#3B82F6';
-                secondary = '#84CC16';
-                alt = '#000';
-                break;
-            case 'light':
-                base = '#000';
-                primary = '#3B82F6';
-                secondary = '#84CC16';
-                alt = '#fff';
-                break;
-            case 'orange':
-                base = '#fff';
-                primary = '#e37e28';
-                secondary = '#84CC16';
-                alt = '#000';
-            default:
-                break;
+        case 'dark':
+            base = '#fff';
+            primary = '#3B82F6';
+            secondary = '#84CC16';
+            alt = '#000';
+            break;
+        case 'light':
+            base = '#000';
+            primary = '#3B82F6';
+            secondary = '#84CC16';
+            alt = '#fff';
+            break;
+        case 'orange':
+            base = '#fff';
+            primary = '#e37e28';
+            secondary = '#84CC16';
+            alt = '#000';
+        default:
+            break;
         }
         return [base, primary, secondary, alt];
     };
@@ -263,12 +263,10 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         setWeightRows(wg);
     }, []);
 
-
     const cgAxis = cgRows.map((cgRow, i) => (
         // eslint-disable-next-line react/no-array-index-key
         <p key={`cgRow-${i}`} className="absolute top-0 font-mono font-medium text-md" style={cgRow}>{`${limits.cg.values[i]}%`}</p>
     ));
-
     const weightAxis = weightRows.map((weightRow, i) => (
         // eslint-disable-next-line react/no-array-index-key
         <p key={`weightRow-${i}`} className="absolute top-0 font-mono font-medium text-md" style={weightRow}>{Math.round(Units.kilogramToUser(limits.weight.values[i] * 1000) / 1000)}</p>

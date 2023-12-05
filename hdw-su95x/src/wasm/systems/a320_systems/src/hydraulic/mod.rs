@@ -754,7 +754,7 @@ impl A320RudderFactory {
 
     /// Builds an aileron control surface body for A320 Neo
     fn a320_rudder_body(init_at_center: bool) -> LinearActuatedRigidBodyOnHingeAxis {
-        let size = Vector3::new(0.42, 6.65, 1.8);
+        let size = Vector3::new(0.47, 6.65, 1.8);
         let cg_offset = Vector3::new(0., 0.5 * size[1], -0.5 * size[2]);
         let aero_center = Vector3::new(0., 0.5 * size[1], -0.3 * size[2]);
 

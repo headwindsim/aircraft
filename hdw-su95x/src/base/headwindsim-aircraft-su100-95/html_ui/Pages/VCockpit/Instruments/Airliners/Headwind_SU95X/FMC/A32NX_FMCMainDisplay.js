@@ -268,7 +268,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.casToMachManualCrossoverCurve.add(200, 0.54806);
         this.casToMachManualCrossoverCurve.add(250, 0.67633);
         this.casToMachManualCrossoverCurve.add(300, 0.8);
-        this.casToMachManualCrossoverCurve.add(350, 0.82);
+        this.casToMachManualCrossoverCurve.add(308, 0.81);
 
         // This is used to determine the CAS corresponding to a Mach number at the manual crossover altitude
         // Effectively, the manual crossover altitude is FL305 up to M.80, then decreases linearly to the crossover altitude of (VMO, MMO)
@@ -280,7 +280,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.machToCasManualCrossoverCurve.add(0.54806, 200);
         this.machToCasManualCrossoverCurve.add(0.67633, 250);
         this.machToCasManualCrossoverCurve.add(0.8, 300);
-        this.machToCasManualCrossoverCurve.add(0.82, 350);
+        this.machToCasManualCrossoverCurve.add(0.81, 308);
 
         this.cruiseFlightLevel = SimVar.GetGameVarValue("AIRCRAFT CRUISE ALTITUDE", "feet");
         this.cruiseFlightLevel /= 100;
@@ -723,6 +723,10 @@ class FMCMainDisplay extends BaseAirliners {
 
                 /** Arm preselected speed/mach for next flight phase */
                 this.updatePreSelSpeedMach(this.preSelectedClbSpeed);
+
+                this._rteRsvPercentOOR = false;
+                this._rteReservedWeightEntered = false;
+                this._rteReservedPctEntered = false;
 
                 break;
             }
@@ -2249,7 +2253,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     /**
      * Attempts to calculate trip information. Is dynamic in that it will use liveDistanceTo the destination rather than a
-     * static distance. Works down to 20NM airDistance and FL100 Up to 3100NM airDistance and FL390, anything out of those ranges and values
+     * static distance. Works down to 20NM airDistance and FL100 Up to 3100NM airDistance and FL400, anything out of those ranges and values
      * won't be updated.
      */
     tryUpdateRouteTrip(dynamic = false) {
@@ -2267,7 +2271,7 @@ class FMCMainDisplay extends BaseAirliners {
             altToUse = SimVar.GetSimVarValue("PLANE ALTITUDE", 'Feet') / 100;
         }
 
-        if ((20 <= airDistance && airDistance <= 3100) && (100 <= altToUse && altToUse <= 390)) {
+        if ((20 <= airDistance && airDistance <= 3100) && (100 <= altToUse && altToUse <= 400)) {
             const deviation = (this.zeroFuelWeight + this._routeFinalFuelWeight + this._routeAltFuelWeight - A32NX_FuelPred.refWeight) * A32NX_FuelPred.computeNumbers(airDistance, altToUse, A32NX_FuelPred.computations.CORRECTIONS, false);
 
             this._routeTripFuelWeight = (A32NX_FuelPred.computeNumbers(airDistance, altToUse, A32NX_FuelPred.computations.FUEL, false) + deviation) / 1000;
@@ -2293,16 +2297,14 @@ class FMCMainDisplay extends BaseAirliners {
      * @returns {number}
      */
     tryGetExtraFuel(useFOB = false) {
-        const isFlying = parseInt(SimVar.GetSimVarValue("GROUND VELOCITY", "knots")) > 30;
-
         if (useFOB) {
-            return this.getFOB() - this.getTotalTripFuelCons() - this._minDestFob - this.taxiFuelWeight - (isFlying ? 0 : this.getRouteReservedWeight());
+            return this.getFOB() - this.getTotalTripFuelCons() - this._minDestFob - this.taxiFuelWeight - (this.getRouteReservedWeight());
         } else {
-            return this.blockFuel - this.getTotalTripFuelCons() - this._minDestFob - this.taxiFuelWeight - (isFlying ? 0 : this.getRouteReservedWeight());
+            return this.blockFuel - this.getTotalTripFuelCons() - this._minDestFob - this.taxiFuelWeight - (this.getRouteReservedWeight());
         }
     }
 
-    /**
+    /**getRouteReservedWeight
      * EXPERIMENTAL
      * Attempts to calculate the extra time
      */
@@ -3456,6 +3458,9 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     getRouteReservedWeight() {
+        if (this.isFlying()) {
+            return 0;
+        }
         if (!this.routeReservedEntered() && (this._rteFinalCoeffecient !== 0)) {
             const fivePercentWeight = this._routeReservedPercent * this._routeTripFuelWeight / 100;
             const fiveMinuteHoldingWeight = (5 * this._rteFinalCoeffecient) / 1000;
@@ -3470,6 +3475,9 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     getRouteReservedPercent() {
+        if (this.isFlying()) {
+            return 0;
+        }
         if (isFinite(this._routeReservedWeight) && isFinite(this.blockFuel) && this._routeReservedWeight !== 0) {
             return this._routeReservedWeight / this._routeTripFuelWeight * 100;
         }
@@ -3477,39 +3485,41 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     trySetRouteReservedPercent(s) {
-        if (s) {
-            if (s === FMCMainDisplay.clrValue) {
-                this._rteReservedWeightEntered = false;
-                this._rteReservedPctEntered = false;
-                this._routeReservedWeight = 0;
-                this._routeReservedPercent = 5;
-                this._rteRsvPercentOOR = false;
-                return true;
-            }
-            // Percentage entry must start with '/'
-            if (s.startsWith("/")) {
-                const enteredValue = s.slice(1);
-
-                if (!this.representsDecimalNumber(enteredValue)) {
-                    this.setScratchpadMessage(NXSystemMessages.formatError);
-                    return false;
-                }
-
-                const rteRsvPercent = parseFloat(enteredValue);
-
-                if (!this.isRteRsvPercentInRange(rteRsvPercent)) {
-                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
-                    return false;
-                }
-
-                this._rteRsvPercentOOR = false;
-                this._rteReservedPctEntered = true;
-                this._rteReservedWeightEntered = false;
-
-                if (isFinite(rteRsvPercent)) {
-                    this._routeReservedWeight = NaN;
-                    this._routeReservedPercent = rteRsvPercent;
+        if (!this.isFlying()) {
+            if (s) {
+                if (s === FMCMainDisplay.clrValue) {
+                    this._rteReservedWeightEntered = false;
+                    this._rteReservedPctEntered = false;
+                    this._routeReservedWeight = 0;
+                    this._routeReservedPercent = 5;
+                    this._rteRsvPercentOOR = false;
                     return true;
+                }
+                // Percentage entry must start with '/'
+                if (s.startsWith("/")) {
+                    const enteredValue = s.slice(1);
+
+                    if (!this.representsDecimalNumber(enteredValue)) {
+                        this.setScratchpadMessage(NXSystemMessages.formatError);
+                        return false;
+                    }
+
+                    const rteRsvPercent = parseFloat(enteredValue);
+
+                    if (!this.isRteRsvPercentInRange(rteRsvPercent)) {
+                        this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
+                        return false;
+                    }
+
+                    this._rteRsvPercentOOR = false;
+                    this._rteReservedPctEntered = true;
+                    this._rteReservedWeightEntered = false;
+
+                    if (isFinite(rteRsvPercent)) {
+                        this._routeReservedWeight = NaN;
+                        this._routeReservedPercent = rteRsvPercent;
+                        return true;
+                    }
                 }
             }
         }
@@ -3577,47 +3587,49 @@ class FMCMainDisplay extends BaseAirliners {
     }
 
     trySetRouteReservedFuel(s) {
-        if (s) {
-            if (s === FMCMainDisplay.clrValue) {
-                this._rteReservedWeightEntered = false;
-                this._rteReservedPctEntered = false;
-                this._routeReservedWeight = 0;
-                this._routeReservedPercent = 5;
-                this._rteRsvPercentOOR = false;
-                return true;
-            }
-            // Percentage entry must start with '/'
-            if (s.startsWith("/")) {
-                return this.trySetRouteReservedPercent(s);
-            } else {
-                // If not percentage, try to parse as weight
-                // Weight can be entered with optional trailing slash, if so remove it before parsing the value
-                const enteredValue = s.endsWith("/") ? s.slice(0, -1) : s;
-
-                if (!this.representsDecimalNumber(enteredValue)) {
-                    this.setScratchpadMessage(NXSystemMessages.formatError);
-                    return false;
+        if (!this.isFlying()) {
+            if (s) {
+                if (s === FMCMainDisplay.clrValue) {
+                    this._rteReservedWeightEntered = false;
+                    this._rteReservedPctEntered = false;
+                    this._routeReservedWeight = 0;
+                    this._routeReservedPercent = 5;
+                    this._rteRsvPercentOOR = false;
+                    return true;
                 }
+                // Percentage entry must start with '/'
+                if (s.startsWith("/")) {
+                    return this.trySetRouteReservedPercent(s);
+                } else {
+                    // If not percentage, try to parse as weight
+                    // Weight can be entered with optional trailing slash, if so remove it before parsing the value
+                    const enteredValue = s.endsWith("/") ? s.slice(0, -1) : s;
 
-                const rteRsvWeight = NXUnits.userToKg(parseFloat(enteredValue));
-
-                if (!this.isRteRsvFuelInRange(rteRsvWeight)) {
-                    this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
-                    return false;
-                }
-
-                this._rteReservedWeightEntered = true;
-                this._rteReservedPctEntered = false;
-
-                if (isFinite(rteRsvWeight)) {
-                    this._routeReservedWeight = rteRsvWeight;
-                    this._routeReservedPercent = 0;
-
-                    if (!this.isRteRsvPercentInRange(this.getRouteReservedPercent())) { // Bit of a hacky method due previous tight coupling of weight and percentage calculations
-                        this._rteRsvPercentOOR = true;
+                    if (!this.representsDecimalNumber(enteredValue)) {
+                        this.setScratchpadMessage(NXSystemMessages.formatError);
+                        return false;
                     }
 
-                    return true;
+                    const rteRsvWeight = NXUnits.userToKg(parseFloat(enteredValue));
+
+                    if (!this.isRteRsvFuelInRange(rteRsvWeight)) {
+                        this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
+                        return false;
+                    }
+
+                    this._rteReservedWeightEntered = true;
+                    this._rteReservedPctEntered = false;
+
+                    if (isFinite(rteRsvWeight)) {
+                        this._routeReservedWeight = rteRsvWeight;
+                        this._routeReservedPercent = 0;
+
+                        if (!this.isRteRsvPercentInRange(this.getRouteReservedPercent())) { // Bit of a hacky method due previous tight coupling of weight and percentage calculations
+                            this._rteRsvPercentOOR = true;
+                        }
+
+                        return true;
+                    }
                 }
             }
         }
@@ -3751,7 +3763,7 @@ class FMCMainDisplay extends BaseAirliners {
             return false
         }
 
-        if (spd < 100 || spd > 350) {
+        if (spd < 100 || spd > 308) {
             this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
             return false;
         }
@@ -3788,7 +3800,7 @@ class FMCMainDisplay extends BaseAirliners {
 
         if (v < 1) {
             const mach = Math.round(v * 100) / 100;
-            if (mach < 0.15 || mach > 0.82) {
+            if (mach < 0.15 || mach > 0.81) {
                 this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
@@ -3796,7 +3808,7 @@ class FMCMainDisplay extends BaseAirliners {
             this.preSelectedCrzSpeed = mach;
         } else {
             const spd = Math.round(v);
-            if (spd < 100 || spd > 350) {
+            if (spd < 100 || spd > 308) {
                 this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
@@ -3988,7 +4000,7 @@ class FMCMainDisplay extends BaseAirliners {
                 }
             }
             const limitLo = ldgRwy ? ldgRwy.elevation * 3.28084 : 0;
-            const limitHi = ldgRwy ? ldgRwy.elevation * 3.28084 + 5000 : 39000;
+            const limitHi = ldgRwy ? ldgRwy.elevation * 3.28084 + 5000 : 40000;
             if (value >= limitLo && value <= limitHi) {
                 this.perfApprMDA = value;
                 SimVar.SetSimVarValue("L:AIRLINER_MINIMUM_DESCENT_ALTITUDE", "feet", this.perfApprMDA);
@@ -4848,6 +4860,10 @@ class FMCMainDisplay extends BaseAirliners {
     isOnGround() {
         return SimVar.GetSimVarValue("L:A32NX_LGCIU_1_NOSE_GEAR_COMPRESSED", "Number") === 1 || SimVar.GetSimVarValue("L:A32NX_LGCIU_2_NOSE_GEAR_COMPRESSED", "Number") === 1;
     }
+
+    isFlying() {
+        return this.flightPhaseManager.phase >= FmgcFlightPhases.TAKEOFF && this.flightPhaseManager.phase < FmgcFlightPhases.DONE;
+    }
     /**
      * Returns the maximum cruise FL for ISA temp and GW
      * @param temp {number} ISA in C°
@@ -5131,7 +5147,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (machSlashSpeedMatch !== null /* ".NN/" or "/NNN" entry */) {
             const speed = parseInt(machSlashSpeedMatch[2]);
             if (Number.isFinite(speed)) {
-                if (speed < 100 || speed > 350) {
+                if (speed < 100 || speed > 308) {
                     this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
@@ -5141,7 +5157,7 @@ class FMCMainDisplay extends BaseAirliners {
 
             const mach = Math.round(parseFloat(machSlashSpeedMatch[1]) * 1000) / 1000;
             if (Number.isFinite(mach)) {
-                if (mach < 0.15 || mach > 0.82) {
+                if (mach < 0.15 || mach > 0.81) {
                     this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false
                 }
@@ -5154,7 +5170,7 @@ class FMCMainDisplay extends BaseAirliners {
             // Entry of a Mach number only without a slash is allowed
             const mach = Math.round(parseFloat(value) * 1000) / 1000;
             if (Number.isFinite(mach)) {
-                if (mach < 0.15 || mach > 0.82) {
+                if (mach < 0.15 || mach > 0.81) {
                     this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false
                 }
@@ -5166,7 +5182,7 @@ class FMCMainDisplay extends BaseAirliners {
         } else if (value.match(SPD_REGEX) !== null /* "NNN" */) {
             const speed = parseInt(value);
             if (Number.isFinite(speed)) {
-                if (speed < 100 || speed > 350) {
+                if (speed < 100 || speed > 308) {
                     this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }

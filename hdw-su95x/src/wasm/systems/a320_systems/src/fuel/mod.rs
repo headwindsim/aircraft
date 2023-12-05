@@ -51,7 +51,7 @@ impl A320Fuel {
     pub const A320_FUEL: [FuelInfo<'_>; 5] = [
         FuelInfo {
             fuel_tank_id: "FUEL TANK CENTER QUANTITY",
-            position: (-7.5, 0., -3.3),
+            position: (-7.5, 0., 3.3),
         },
         FuelInfo {
             fuel_tank_id: "FUEL TANK LEFT MAIN QUANTITY",

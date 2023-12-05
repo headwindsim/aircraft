@@ -39,7 +39,7 @@ pub(super) fn payload(builder: &mut MsfsAspectBuilder) -> Result<(), Box<dyn Err
         Variable::aircraft("PAYLOAD STATION WEIGHT", "Pounds", 8),
         Variable::aspect("PAYLOAD_STATION_8_REQ"),
     );
-    builder.copy(
+        builder.copy(
         Variable::aircraft("PAYLOAD STATION WEIGHT", "Pounds", 9),
         Variable::aspect("PAYLOAD_STATION_9_REQ"),
     );
@@ -92,7 +92,7 @@ struct Payload {
     #[name = "PAYLOAD STATION WEIGHT:8"]
     #[unit = "Pounds"]
     payload_station_8: f64,
-
+    
     #[name = "PAYLOAD STATION WEIGHT:9"]
     #[unit = "Pounds"]
     payload_station_9: f64,
