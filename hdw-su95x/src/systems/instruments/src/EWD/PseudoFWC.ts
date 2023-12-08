@@ -1307,10 +1307,10 @@ export class PseudoFWC {
 
         // WARNING these vary for other variants... A320 CFM LEAP values here
         // flap/slat internal signals
-        this.flapsInferiorToPositionA.set(flapsPos.isNormalOperation() && flapsPos.value < 65);
-        this.flapsSuperiorToPositionF.set(flapsPos.isNormalOperation() && flapsPos.value > 179);
-        this.slatsInferiorToPositionD.set(slatsPos.isNormalOperation() && slatsPos.value < 210.46);
-        this.slatsSuperiorToPositionG.set(slatsPos.isNormalOperation() && slatsPos.value > 309.53);
+        this.flapsInferiorToPositionA.set(flapsPos.isNormalOperation() && flapsPos.value < 119);
+        this.flapsSuperiorToPositionF.set(flapsPos.isNormalOperation() && flapsPos.value > 169);
+        this.slatsInferiorToPositionD.set(slatsPos.isNormalOperation() && slatsPos.value < 245.46);
+        this.slatsSuperiorToPositionG.set(slatsPos.isNormalOperation() && slatsPos.value > 336);
 
         // flap, slat and speedbrake config warning logic
         const flapsNotInToPos = this.flapsSuperiorToPositionF.get() || this.flapsInferiorToPositionA.get();
