@@ -59,6 +59,10 @@ cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Registration ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VLivery/Liveries/Registration/A333X
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Printer ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VLivery/Liveries/Printer/A333X
 
+# copy A32NX sound pack to a333x sound folder
+cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.pck ./build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/AirPlanes/Headwind_A330_300/sound
+cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.pck ./build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/AirPlanes/Headwind_A330_300_P2F/sound
+
 # remove fbw submodule
 #rm -rf ./flybywire
 
