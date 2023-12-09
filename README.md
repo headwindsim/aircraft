@@ -46,10 +46,14 @@ For Git Bash/Linux:
 For powershell:
 ```shell
 .\scripts\dev-env\run.cmd ./scripts/copy_a339x.sh
+.\scripts\dev-env\run.cmd ./scripts/copy_a333x.sh
+.\scripts\dev-env\run.cmd ./scripts/copy_su95x.sh
 ```
 For Git Bash/Linux:
 ```shell
 ./scripts/copy_a339x.sh
+./scripts/copy_a333x.sh
+./scripts/copy_su95x.sh
 ```
 
 #### 3. Build all A32NX module by running following command on powershell.
@@ -57,25 +61,17 @@ For Git Bash/Linux:
 For powershell:
 ```shell
 .\scripts\dev-env\run.cmd ./scripts/build_a339x.sh
+.\scripts\dev-env\run.cmd ./scripts/build_a333x.sh
+.\scripts\dev-env\run.cmd ./scripts/build_su95x.sh
 ```
 For Git Bash/Linux:
 ```shell
 ./scripts/dev-env/run.sh ./scripts/build_a339x.sh
+./scripts/dev-env/run.sh ./scripts/build_a333x.sh
+./scripts/dev-env/run.sh ./scripts/build_su95x.sh
 ```
 
 #### 4. The package is now ready to use. Copy the folder "headwind-aircraft-a330-900" to your CommunityPackage folder in MSFS.
-
-#### (Optional) If you want to use the MSFS Dev Tools you can run the following command (after build completed) to copy the files to the PackageSources.
-
-For powershell:
-```shell
-.\scripts\dev-env\run.cmd ./scripts/package.sh
-```
-For Git Bash/Linux:
-```shell
-./scripts/dev-env/run.sh ./scripts/package.sh
-```
-
 
 ## Open source
 Open Source Projects contributing to the realisation of this MSFS A330-900 Neo :
