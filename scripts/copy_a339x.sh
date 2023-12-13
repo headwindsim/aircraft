@@ -33,6 +33,7 @@ cp -ra ./hdw-a339x/src/localization/. ./build-a339x/src/localization
 cp -ra ./hdw-a339x/src/model/. ./build-a339x/src/model
 cp -ra ./hdw-a339x/src/systems/. ./build-a339x/src/systems
 cp -ra ./hdw-a339x/src/wasm/. ./build-a339x/src/wasm
+cp -ra ./hdw-a339x/src/.eslintrc.js ./build-a339x/src/.eslintrc.js
 
 mkdir -p ./build-a339x/out/headwindsim-aircraft-a330-900
 mkdir -p ./build-a339x/out/headwindsim-aircraft-a330-900-lock-highlight

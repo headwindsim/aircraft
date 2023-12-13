@@ -1,0 +1,99 @@
+name: SU95X - PR
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    paths:
+      - '.github/workflows/su95x-pr.yml'
+      - 'hdw-su95x/**'
+      - 'scripts/build-su95x.js'
+      - 'scripts/build-su95x.sh'
+      - 'su95x-igniter.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: install
+        run: sudo ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy_su95x.sh
+      - name: npm run lint
+        run: ./scripts/dev-env/run.sh npm run lint
+      - name: lint-rust.sh
+        run: |
+          ./scripts/dev-env/run.sh scripts/lint-rust.sh
+  test-rust:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy_su95x.sh
+      - name: test-rust.sh
+        run: |
+          ./scripts/dev-env/run.sh scripts/test-rust.sh
+  test-js:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: npm install
+        run: ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: copy sources
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy_su95x.sh
+      - name: npm test
+        run: npm test
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    env:
+      run: |
+        echo A32NX_PRODUCTION_BUILD=1 >> hdw-su95x/.env
+        echo FBW_TYPECHECK=1 >> hdw-su95x/.env
+        echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-su95x/.env
+        echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-su95x/.env
+        echo CHARTFOX_SECRET=\"${{ secrets.CHARTFOX_SECRET }}\" >> hdw-su95x/.env
+        echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-su95x/.env
+        echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
+        echo VITE_BUILD=false >> .env
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Setup Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/setup.sh
+      - name: Copy Sources
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/copy_su95x.sh
+      - name: Build SU95X Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/build_su95x.sh --no-tty -j 4
+          docker system prune -af
+      - name: Generate install.json
+        run: |
+          node ./scripts/fragment-su95x.js
+          cp ./build-su95x/out/build-modules/modules.json ./build-su95x/out/headwindsim-aircraft-su100-95/install.json
+          node ./scripts/install-source-su95x.js
+      - uses: actions/upload-artifact@v2
+        with:
+          name: HEADWIND-SU95X
+          path: ./build-su95x/out/headwindsim-aircraft-su100-95/

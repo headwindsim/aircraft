@@ -1,4 +1,4 @@
-name: PR
+name: A333X - PR
 on:
   pull_request:
     types:
@@ -6,6 +6,14 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+    paths:
+      - '.github/workflows/a333x-pr.yml'
+      - 'hdw-a333x/**'
+      - 'scripts/build-a333x.js'
+      - 'scripts/build-a333x.sh'
+      - 'a333x-igniter.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
 
 jobs:
   lint:
@@ -19,7 +27,7 @@ jobs:
       - name: install
         run: sudo ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: copy sources
-        run: sudo ./scripts/dev-env/run.sh ./scripts/copy_a339x.sh
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy_a333x.sh
       - name: npm run lint
         run: ./scripts/dev-env/run.sh npm run lint
       - name: lint-rust.sh
@@ -34,7 +42,7 @@ jobs:
         with:
           submodules: recursive
       - name: copy sources
-        run: sudo ./scripts/dev-env/run.sh ./scripts/copy.sh
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy_a333x.sh
       - name: test-rust.sh
         run: |
           ./scripts/dev-env/run.sh scripts/test-rust.sh
@@ -49,7 +57,7 @@ jobs:
       - name: npm install
         run: ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: copy sources
-        run: sudo ./scripts/dev-env/run.sh ./scripts/copy_a339x.sh
+        run: sudo ./scripts/dev-env/run.sh ./scripts/copy_a333x.sh
       - name: npm test
         run: npm test
   build:
@@ -57,12 +65,12 @@ jobs:
     if: github.event.pull_request.draft == false
     env:
       run: |
-        echo A32NX_PRODUCTION_BUILD=1 >> hdw-a339x/.env
-        echo FBW_TYPECHECK=1 >> hdw-a339x/.env
-        echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a339x/.env
-        echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a339x/.env
-        echo CHARTFOX_SECRET=\"${{ secrets.CHARTFOX_SECRET }}\" >> hdw-a339x/.env
-        echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a339x/.env
+        echo A32NX_PRODUCTION_BUILD=1 >> hdw-a333x/.env
+        echo FBW_TYPECHECK=1 >> hdw-a333x/.env
+        echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a333x/.env
+        echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a333x/.env
+        echo CHARTFOX_SECRET=\"${{ secrets.CHARTFOX_SECRET }}\" >> hdw-a333x/.env
+        echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a333x/.env
         echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
         echo VITE_BUILD=false >> .env
     steps:
@@ -70,22 +78,23 @@ jobs:
         uses: actions/checkout@v2
         with:
           submodules: recursive
+          lfs: true
       - name: Setup Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/setup.sh
       - name: Copy Sources
         run: |
-          ./scripts/dev-env/run.sh ./scripts/copy_a339x.sh
-      - name: Build A339X Package
+          ./scripts/dev-env/run.sh ./scripts/copy_a333x.sh
+      - name: Build A333X Package
         run: |
-          ./scripts/dev-env/run.sh ./scripts/build_a339x.sh --no-tty -j 4
+          ./scripts/dev-env/run.sh ./scripts/build_a333x.sh --no-tty -j 4
           docker system prune -af
       - name: Generate install.json
         run: |
-          node ./scripts/fragment.js
-          cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
-          node ./scripts/install-source.js
+          node ./scripts/fragment-a333x.js
+          cp ./build-a333x/out/build-modules/modules.json ./build-a333x/out/headwindsim-aircraft-a330-300/install.json
+          node ./scripts/install-source-a333x.js
       - uses: actions/upload-artifact@v2
         with:
-          name: HEADWIND-A339X
-          path: ./build-a339x/out/headwindsim-aircraft-a330-900/
+          name: HEADWIND-A333X
+          path: ./build-a333x/out/headwindsim-aircraft-a330-300/
