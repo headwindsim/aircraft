@@ -5,9 +5,13 @@
     "es2021": true
   },
   "ignorePatterns": [
-    "/flybywire/**",
-    "/src/**",
-    "/hdw-a339x/src/base/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/**"
+    "hdw-a333x/src/base/headwindsim-aircraft-a330-300/html_ui/Pages/VCockpit/Instruments/A333X/**",
+    "hdw-a333x-common/src/typings/**",
+    "hdw-a339x/src/base/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/**",
+    "hdw-a339x-common/src/typings/**",
+    "hdw-su95x/src/base/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/SU95X/**",
+    "hdw-su95x-common/src/typings/**",
+    "build-*/**"
   ],
   // DO NOT CHANGE THIS FILE (unless you are an admin) (if admin, make sure you change the same file in the latest asobo branch as well)
   "rules": {

@@ -28,6 +28,7 @@ cp -ra ./flybywire/fbw-a32nx/src/wasm/. ./build-su95x/src/wasm
 
 cp -ra ./hdw-su95x/.env ./build-su95x/.env
 cp -ra ./hdw-su95x/mach.config.js ./build-su95x/mach.config.js
+cp -ra ./hdw-su95x/src/.eslintrc.js ./build-su95x/src/.eslintrc.js
 
 cp -ra ./hdw-su95x/src/behavior/. ./build-su95x/src/behavior
 cp -ra ./hdw-su95x/src/localization/. ./build-su95x/src/localization
@@ -88,6 +89,9 @@ cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/Air
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/TEXTURE/HONEYWELLJETWAVE_* ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable/
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/TEXTURE/UNTITLED* ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable/
 cp -ra './flybywire/fbw-a32nx/src/textures/decals 4k/A320NEO_COCKPIT_DECALSTEXT_ALBD.TIF-master.dds' ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable/A320NEO_COCKPIT_DECALSTEXT_ALBD.TIF.dds
+
+# copy A32NX sound pack to a333x sound folder
+cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/sound/
 
 chmod +x ./build-su95x/src/wasm/fbw_a320/build.sh
 chmod +x ./build-su95x/src/wasm/fadec_a320/build.sh

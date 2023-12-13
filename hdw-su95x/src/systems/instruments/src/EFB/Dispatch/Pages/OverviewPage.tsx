@@ -17,7 +17,7 @@ interface InformationEntryProps {
 
 const InformationEntry: FC<InformationEntryProps> = ({ children, title, info }) => (
     <div>
-        <div className="flex flex-row items-center space-x-4 text-theme-highlight">
+        <div className="text-theme-highlight flex flex-row items-center space-x-4">
             {children}
             <p className="whitespace-nowrap">{title}</p>
         </div>
@@ -36,18 +36,18 @@ export const OverviewPage = () => {
         const numberWithCommas = (x: number) => x.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
         switch (unitType) {
-            case 'weight':
-                return `${numberWithCommas(Units.kilogramToUser(metricValue))} [${Units.userWeightSuffixEis2}]`;
-            case 'volume':
-                return `${numberWithCommas(Units.litreToUser(metricValue))} [${Units.userVolumeSuffixEis2}]`;
-            case 'distance':
-                return `${numberWithCommas(metricValue)} [nm]`;
-            default: throw new Error('Invalid unit type');
+        case 'weight':
+            return `${numberWithCommas(Units.kilogramToUser(metricValue))} [${Units.userWeightSuffixEis2}]`;
+        case 'volume':
+            return `${numberWithCommas(Units.litreToUser(metricValue))} [${Units.userVolumeSuffixEis2}]`;
+        case 'distance':
+            return `${numberWithCommas(metricValue)} [nm]`;
+        default: throw new Error('Invalid unit type');
         }
     };
 
     const SU100_95B = (
-        <div className="flex flex-row mt-8 space-x-16">
+        <div className="mt-8 flex flex-row space-x-16">
             <div className="flex flex-col space-y-8">
                 <InformationEntry title={t('Dispatch.Overview.Model')} info="SSJ100-95 [SU95]">
                     <IconPlane className="fill-current" size={23} stroke={1.5} strokeLinejoin="miter" />
@@ -97,12 +97,12 @@ export const OverviewPage = () => {
     );
 
     return (
-        <div className="overflow-hidden p-6 mr-3 w-full h-content-section-reduced rounded-lg border-2 border-theme-accent">
+        <div className="h-content-section-reduced border-theme-accent mr-3 w-full overflow-hidden rounded-lg border-2 p-6">
             {airframe === 'SU100_95B' ? <h1 className="font-bold">Sukhoi Superjet 100-95B</h1> : <h1 className="font-bold">Sukhoi Superjet 100-95B</h1>}
             <p>{airline}</p>
 
-            <div className="flex justify-center items-center mt-6">
-                <NoseOutline className="w-full flip-horizontal" />
+            <div className="mt-6 flex items-center justify-center">
+                <NoseOutline className="flip-horizontal w-full" />
             </div>
 
             {airframe === 'SU100_95B' ? SU100_95B : SU100_95B}

@@ -155,7 +155,7 @@ export class FbwAircraftSentryClient {
                 'SU95X - ERROR REPORTING',
                 'Are you willing to help Headwind by enabling anonymous reporting of errors that may occur in the future? '
                 + 'This is 100% optional and we will never collect your personal data, but it will help us diagnose issues quickly.',
-                + 'Critical error reports will also be shared with the FlyByWire Simulations Team.',
+                +'Critical error reports will also be shared with the FlyByWire Simulations Team.',
                 'normal',
                 () => resolve(true),
                 () => resolve(false),

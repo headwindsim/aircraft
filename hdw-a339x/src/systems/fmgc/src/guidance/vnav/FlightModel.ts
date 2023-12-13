@@ -14,14 +14,14 @@ export class FlightModel {
 
     static requiredAccelRateMS2 = 0.684; // in m/s^2
 
-    static gravityConstKNS = 19.0626 // in knots/second
+    static gravityConstKNS = 19.0626; // in knots/second
 
     static gravityConstMS2 = 9.806665; // in m/s^2
 
     // From https://github.com/flybywiresim/a32nx/pull/6903#issuecomment-1073168320
-    static machValues: Mach[] = [0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85]
+    static machValues: Mach[] = [0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85];
 
-    static dragCoefficientCorrections: number[] = [0, 0.0002, 0.0003, 0.0004, 0.0008, 0.0015, 0.01]
+    static dragCoefficientCorrections: number[] = [0, 0.0002, 0.0003, 0.0004, 0.0008, 0.0015, 0.01];
 
     /**
      * Get lift coefficient at given conditions
@@ -51,23 +51,23 @@ export class FlightModel {
         // Values taken at mach 0
         let baseDrag;
         switch (flapConf) {
-            case FlapConf.CLEAN:
-                baseDrag = (0.0211 * Cl ** 3) + (0.0412 * Cl ** 2) - (0.015 * Cl) + 0.0215;
-                break;
-            case FlapConf.CONF_1:
-                baseDrag = (0.0385 * Cl ** 3) + (0.004 * Cl ** 2) + (0.0044 * Cl) + 0.0249;
-                break;
-            case FlapConf.CONF_2:
-                baseDrag = (0.0242 * Cl ** 3) + (0.0013 * Cl ** 2) + (0.003 * Cl) + 0.0485;
-                break;
-            case FlapConf.CONF_3:
-                baseDrag = (0.0221 * Cl ** 3) - (0.0027 * Cl ** 2) + (0.0033 * Cl) + 0.0584;
-                break;
-            case FlapConf.CONF_FULL:
-                baseDrag = (0.0143 * Cl ** 3) + (0.0027 * Cl ** 2) - (0.0038 * Cl) + 0.0919;
-                break;
-            default:
-                break;
+        case FlapConf.CLEAN:
+            baseDrag = (0.0211 * Cl ** 3) + (0.0412 * Cl ** 2) - (0.015 * Cl) + 0.0215;
+            break;
+        case FlapConf.CONF_1:
+            baseDrag = (0.0385 * Cl ** 3) + (0.004 * Cl ** 2) + (0.0044 * Cl) + 0.0249;
+            break;
+        case FlapConf.CONF_2:
+            baseDrag = (0.0242 * Cl ** 3) + (0.0013 * Cl ** 2) + (0.003 * Cl) + 0.0485;
+            break;
+        case FlapConf.CONF_3:
+            baseDrag = (0.0221 * Cl ** 3) - (0.0027 * Cl ** 2) + (0.0033 * Cl) + 0.0584;
+            break;
+        case FlapConf.CONF_FULL:
+            baseDrag = (0.0143 * Cl ** 3) + (0.0027 * Cl ** 2) - (0.0038 * Cl) + 0.0919;
+            break;
+        default:
+            break;
         }
 
         const spdBrkIncrement = spdBrkDeflected ? 0.01008 : 0;

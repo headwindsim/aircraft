@@ -776,7 +776,6 @@ export class PseudoFWC {
             SimVar.SetSimVarValue('L:Generic_Master_Warning_Active', 'Bool', warning);
         });
 
-
         const sub = this.bus.getSubscriber<FuelSystemEvents>();
 
         this.fuelCtrTankModeSelMan.setConsumer(sub.on('fuel_ctr_tk_mode_sel_man'));
@@ -2773,7 +2772,7 @@ export class PseudoFWC {
             sysPage: 5,
             side: 'LEFT',
         },
-    }
+    };
 
     ewdMessageMemos: EWDMessageDict = {
         '0000010': { // T.O MEMO

@@ -10,10 +10,10 @@ export const ServicesPage = () => {
     const [airframe] = useState(getAirframeType());
 
     switch (airframe) {
-        case 'A330_343':
-        default:
-            return (
-                <A330Services />
-            );
+    case 'A330_343':
+    default:
+        return (
+            <A330Services />
+        );
     }
 };

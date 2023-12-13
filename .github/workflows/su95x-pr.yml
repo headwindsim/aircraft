@@ -1,0 +1,66 @@
+name: SU95X - PR
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    paths:
+      - '.github/workflows/su95x-pr.yml'
+      - 'hdw-su95x/**'
+      - 'scripts/build-su95x.js'
+      - 'scripts/build-su95x.sh'
+      - 'su95x-igniter.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    env:
+      run: |
+        echo A32NX_PRODUCTION_BUILD=1 >> hdw-su95x/.env
+        echo FBW_TYPECHECK=1 >> hdw-su95x/.env
+        echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-su95x/.env
+        echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-su95x/.env
+        echo CHARTFOX_SECRET=\"${{ secrets.CHARTFOX_SECRET }}\" >> hdw-su95x/.env
+        echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-su95x/.env
+        echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
+        echo VITE_BUILD=false >> .env
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: false
+      - name: Setup Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/setup.sh --clean
+      - name: Copy Sources
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/copy_su95x.sh
+      - name: Build SU95X Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/build_su95x.sh --no-tty -j 4
+          docker system prune -af
+      - name: Generate install.json
+        run: |
+          node ./scripts/fragment-su95x.js
+          cp ./build-su95x/out/build-modules/modules.json ./build-su95x/out/headwindsim-aircraft-su100-95/install.json
+          node ./scripts/install-source-su95x.js
+      - uses: actions/upload-artifact@v2
+        with:
+          name: HEADWIND-SU95X
+          path: ./build-su95x/out/headwindsim-aircraft-su100-95/

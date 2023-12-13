@@ -1,0 +1,66 @@
+name: A333X - PR
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+    paths:
+      - '.github/workflows/a333x-pr.yml'
+      - 'hdw-a333x/**'
+      - 'scripts/build-a333x.js'
+      - 'scripts/build-a333x.sh'
+      - 'a333x-igniter.config.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    env:
+      run: |
+        echo A32NX_PRODUCTION_BUILD=1 >> hdw-a333x/.env
+        echo FBW_TYPECHECK=1 >> hdw-a333x/.env
+        echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a333x/.env
+        echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a333x/.env
+        echo CHARTFOX_SECRET=\"${{ secrets.CHARTFOX_SECRET }}\" >> hdw-a333x/.env
+        echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a333x/.env
+        echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
+        echo VITE_BUILD=false >> .env
+    steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          lfs: false
+      - name: Setup Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/setup.sh --clean
+      - name: Copy Sources
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/copy_a333x.sh
+      - name: Build A333X Package
+        run: |
+          ./scripts/dev-env/run.sh ./scripts/build_a333x.sh --no-tty -j 4
+          docker system prune -af
+      - name: Generate install.json
+        run: |
+          node ./scripts/fragment-a333x.js
+          cp ./build-a333x/out/build-modules/modules.json ./build-a333x/out/headwindsim-aircraft-a330-300/install.json
+          node ./scripts/install-source-a333x.js
+      - uses: actions/upload-artifact@v2
+        with:
+          name: HEADWIND-A333X
+          path: ./build-a333x/out/headwindsim-aircraft-a330-300/
