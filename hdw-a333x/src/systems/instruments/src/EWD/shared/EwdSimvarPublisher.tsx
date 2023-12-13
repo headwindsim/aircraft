@@ -194,7 +194,7 @@ export class EwdSimvarPublisher extends SimVarPublisher<EwdSimvars> {
         ['ewdLowerRight5', { name: EwdVars.ewdLowerRight5, type: SimVarValueType.Number }],
         ['ewdLowerRight6', { name: EwdVars.ewdLowerRight6, type: SimVarValueType.Number }],
         ['ewdLowerRight7', { name: EwdVars.ewdLowerRight7, type: SimVarValueType.Number }],
-    ])
+    ]);
 
     public constructor(bus: EventBus) {
         super(EwdSimvarPublisher.simvars, bus);

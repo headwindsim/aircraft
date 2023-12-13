@@ -15,7 +15,7 @@ import { t } from '../translation';
 import { TooltipWrapper } from '../UtilComponents/TooltipWrapper';
 
 // @ts-ignore
-import { HdwLogo } from "../UtilComponents/HdwLogo";
+import { HdwLogo } from '../UtilComponents/HdwLogo';
 
 interface ToolBarButtonProps {
     to: string;
@@ -27,7 +27,7 @@ const ToolBarButton: FC<ToolBarButtonProps> = ({ to, tooltipText, children }) =>
         <NavLink
             to={to}
             activeClassName="bg-theme-accent !text-theme-text"
-            className="flex justify-center items-center py-3.5 px-3.5 rounded-md transition duration-100 text-theme-unselected hover:text-theme-text hover:bg-theme-accent"
+            className="text-theme-unselected hover:text-theme-text hover:bg-theme-accent flex items-center justify-center rounded-md p-3.5 transition duration-100"
         >
             {children}
         </NavLink>
@@ -35,10 +35,10 @@ const ToolBarButton: FC<ToolBarButtonProps> = ({ to, tooltipText, children }) =>
 );
 
 export const ToolBar = () => (
-    <nav className="flex flex-col flex-shrink-0 justify-between py-6 w-32">
-        <div className="flex flex-col items-center mt-9 space-y-4">
+    <nav className="flex w-32 shrink-0 flex-col justify-between py-6">
+        <div className="mt-9 flex flex-col items-center space-y-4">
             <ToolBarButton to="/dashboard" tooltipText={t('Dashboard.Title')}>
-                <HdwLogo width={35} height={35} className="text-theme-text" />                
+                <HdwLogo width={35} height={35} className="text-theme-text" />
             </ToolBarButton>
             <ToolBarButton to="/dispatch" tooltipText={t('Dispatch.Title')}>
                 <Clipboard size={35} />
@@ -67,7 +67,7 @@ export const ToolBar = () => (
         </div>
 
         <div className="flex flex-col items-center">
-            <div className="my-4 w-14 h-1.5 rounded-full bg-theme-accent" />
+            <div className="bg-theme-accent my-4 h-1.5 w-14 rounded-full" />
             <ToolBarButton to="/settings" tooltipText={t('Settings.Title')}>
                 <Gear color="currentColor" size={35} />
             </ToolBarButton>

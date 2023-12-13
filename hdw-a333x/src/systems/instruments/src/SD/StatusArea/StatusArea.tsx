@@ -4,8 +4,6 @@ import { useGlobalVar, useSimVar, useArinc429Var, NXLogicConfirmNode, NXLogicMem
 import { Text } from '../Text/Text';
 
 export const StatusArea = () => {
-    const [apuAvail] = useSimVar('L:A32NX_OVHD_APU_START_PB_IS_AVAILABLE', 'Bool', 1000);
-
     const [gwcgDisplayedValue, setGwcgDisplayedValue] = useState('0');
     const [gwDisplayedValue, setGwDisplayedValue] = useState('0');
 
@@ -15,9 +13,6 @@ export const StatusArea = () => {
 
     const [airDataSwitch] = useSimVar('L:A32NX_AIR_DATA_SWITCHING_KNOB', 'enum', 200);
     const [attHdgSwitch] = useSimVar('L:A32NX_ATT_HDG_SWITCHING_KNOB', 'enum', 200);
-
-    const [eng1Running] = useSimVar('ENG COMBUSTION:1', 'bool', 1000);
-    const [eng2Running] = useSimVar('ENG COMBUSTION:2', 'bool', 1000);
 
     const [isaVisible, setIsaVisible] = useState(false);
 
@@ -94,7 +89,7 @@ export const StatusArea = () => {
         const fuelWeight = SimVar.GetSimVarValue('FUEL TOTAL QUANTITY WEIGHT', 'kg');
         const emptyWeight = SimVar.GetSimVarValue('EMPTY WEIGHT', 'kg');
         const payloadCount = SimVar.GetSimVarValue('PAYLOAD STATION COUNT', 'number');
-        const gwgc = SimVar.GetSimVarValue("CG PERCENT", "percent");
+        const gwgc = SimVar.GetSimVarValue('CG PERCENT', 'percent');
 
         const gwUnit = NXUnits.userWeightUnit();
         const payloadWeight = getPayloadWeight(payloadCount);
@@ -103,8 +98,8 @@ export const StatusArea = () => {
         if (loadFactor.isNormalOperation() && gw != null) {
             // Lower EICAS displays GW in increments of 100
             setGwDisplayedValue((Math.floor(gw / 100) * 100).toString());
-            setGwcgDisplayedValue(isNaN(gwgc) ? 25 : gwgc.toFixed(1));
-        } else if (loadFactor.isNoComputedData()){
+            setGwcgDisplayedValue(Number.isNaN(gwgc) ? 25 : gwgc.toFixed(1));
+        } else if (loadFactor.isNoComputedData()) {
             setGwDisplayedValue('--');
             setGwcgDisplayedValue('--');
         } else {
@@ -206,7 +201,7 @@ export const StatusArea = () => {
                                 {gwDisplayedUnit}
                             </Text>
 
-                            <Text title x={470} y={87}  alignEnd>
+                            <Text title x={470} y={87} alignEnd>
                                 GWCG
                             </Text>
                             <Text warning x={512} y={87}>

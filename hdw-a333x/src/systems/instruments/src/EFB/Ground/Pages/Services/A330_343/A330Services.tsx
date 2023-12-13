@@ -14,7 +14,7 @@ import {
     TriangleFill as Chock,
     Truck,
     VinylFill as Wheel,
-    Fan
+    Fan,
 } from 'react-bootstrap-icons';
 import { ActionCreatorWithOptionalPayload } from '@reduxjs/toolkit';
 import { t } from '../../../../translation';
@@ -44,7 +44,7 @@ interface ServiceButtonWrapperProps {
 // This groups buttons and sets a border and divider line
 const ServiceButtonWrapper: FC<ServiceButtonWrapperProps> = ({ children, className, xl, xr, y }) => (
     <div
-        className={`flex flex-col rounded-xl border-2 border-theme-accent divide-y-2 divide-theme-accent overflow-hidden ${className}`}
+        className={`border-theme-accent divide-theme-accent flex flex-col divide-y-2 overflow-hidden rounded-xl border-2 ${className}`}
         style={{ position: 'absolute', left: xl, right: xr, top: y }}
     >
         {children}
@@ -100,11 +100,11 @@ const GroundServiceButton: React.FC<GroundServiceButtonProps> = ({ children, nam
 
     return (
         <div
-            className={`flex flex-row items-center space-x-6 py-6 px-6 cursor-pointer ${buttonsStyles[state]} ${className}`}
+            className={`flex cursor-pointer flex-row items-center space-x-6 p-6${buttonsStyles[state]} ${className}`}
             onClick={state === ServiceButtonState.DISABLED ? undefined : onClick}
         >
             {children}
-            <h1 className="flex-shrink-0 text-2xl font-medium text-current">{name}</h1>
+            <h1 className="shrink-0 text-2xl font-medium text-current">{name}</h1>
         </div>
     );
 };
@@ -510,7 +510,7 @@ export const A330Services: React.FC = () => {
                 gpuButtonState,
                 baggageButtonState,
                 cateringButtonState,
-                asuButtonState
+                asuButtonState,
             ]
                 .every((buttonState) => buttonState === ServiceButtonState.DISABLED)
         ) {
@@ -530,7 +530,7 @@ export const A330Services: React.FC = () => {
     const serviceIndicationCss = 'text-2xl font-bold text-utility-amber w-min';
 
     return (
-        <div className="relative h-content-section-reduced">
+        <div className="h-content-section-reduced relative">
             <GroundServiceOutline
                 fwdLeftStatus={false}
                 fwdRightStatus={fwdRightDoorOpen >= 1.0}
@@ -538,7 +538,7 @@ export const A330Services: React.FC = () => {
                 midRightStatus={midRightDoorOpen >= 1.0}
                 aftLeftStatus={aftLeftDoorOpen >= 1.0}
                 aftRightStatus={false}
-                className="inset-x-0 mx-auto w-full h-full text-theme-text"
+                className="text-theme-text inset-x-0 mx-auto h-full w-full"
             />
 
             <ServiceButtonWrapper xr={930} y={24}>
@@ -578,7 +578,7 @@ export const A330Services: React.FC = () => {
                 >
                     <Fan size={36} />
                 </GroundServiceButton>
-                
+
             </ServiceButtonWrapper>
 
             <ServiceButtonWrapper xl={900} y={24} className="">
@@ -640,7 +640,7 @@ export const A330Services: React.FC = () => {
 
             {/* Wheel Chocks and Security Cones are only visual information. To reuse styling */}
             {/* the ServiceButtonWrapper has been re-used. */}
-            <ServiceButtonWrapper xr={800} y={600} className="border-0 divide-y-0">
+            <ServiceButtonWrapper xr={800} y={600} className="divide-y-0 border-0">
                 {/* CABIN DOOR */}
                 <GroundServiceButton
                     name={t('Ground.Services.DoorAft')}
@@ -650,22 +650,22 @@ export const A330Services: React.FC = () => {
                     <DoorClosedFill size={36} />
                 </GroundServiceButton>
                 {!!wheelChocksEnabled && (
-                    <div className={`flex flex-row items-center space-x-6 py-6 px-6 cursor-pointer ${(wheelChocksVisible) ? 'text-green-500' : 'text-gray-500'}`}>
-                        <div className={`flex justify-center items-end -ml-2 -mr-[2px] ${(wheelChocksVisible) ? 'text-green-500' : 'text-gray-500'}`}>
+                    <div className={`flex cursor-pointer flex-row items-center space-x-6 p-6${(wheelChocksVisible) ? 'text-green-500' : 'text-gray-500'}`}>
+                        <div className={`-ml-2 -mr-[2px] flex items-end justify-center ${(wheelChocksVisible) ? 'text-green-500' : 'text-gray-500'}`}>
                             <Chock size="12" stroke="4" />
                             <Wheel size="36" stroke="5" className="-mx-0.5" />
                             <Chock size="12" stroke="4" />
                         </div>
-                        <h1 className="flex-shrink-0 text-2xl font-medium text-current">
+                        <h1 className="shrink-0 text-2xl font-medium text-current">
                             {t('Ground.Services.WheelChocks')}
                         </h1>
                     </div>
                 )}
 
                 {!!conesEnabled && (
-                    <div className={`flex flex-row items-center space-x-6 py-6 px-6 cursor-pointer ${(conesVisible) ? 'text-green-500' : 'text-gray-500'}`}>
+                    <div className={`flex cursor-pointer flex-row items-center space-x-6 p-6${(conesVisible) ? 'text-green-500' : 'text-gray-500'}`}>
                         <ConeStriped size="38" stroke="1.5" className="mr-2" />
-                        <h1 className="flex-shrink-0 text-2xl font-medium text-current">
+                        <h1 className="shrink-0 text-2xl font-medium text-current">
                             {t('Ground.Services.Cones')}
                         </h1>
                     </div>
@@ -716,22 +716,22 @@ export const A330Services: React.FC = () => {
             {cargoDoorOpen >= 1.0 && (
                 <div>
                     <div
-                        className="text-xl font-bold text-utility-amber"
+                        className="text-utility-amber text-xl font-bold"
                         style={{ position: 'absolute', left: 700, right: 0, top: 155 }}
                     >
                         FWD CARGO
                     </div>
                     <div
-                        className="text-xl font-bold text-utility-amber"
+                        className="text-utility-amber text-xl font-bold"
                         style={{ position: 'absolute', left: 700, right: 0, top: 530 }}
                     >
                         AFT CARGO
                     </div>
                     <div
-                        className="text-xl font-bold text-utility-amber"
+                        className="text-utility-amber text-xl font-bold"
                         style={{ position: 'absolute', left: 700, right: 0, top: 585 }}
                     >
-                    BULK
+                        BULK
                     </div>
                 </div>
             )}

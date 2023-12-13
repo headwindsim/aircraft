@@ -203,29 +203,29 @@ export class Slats extends DisplayComponent<SlatsProps> {
     render(): VNode {
         return (
             <Layer x={539} y={418}>
-                <path d="M0, 0l -18,0 l -4,14 l 28,1 Z" class={this.targetBox} />
+                <path d="M0, 0l -18,0 l -4,14 l 28,1 Z" className={this.targetBox} />
                 <g visibility={this.targetVisible}>
-                    <text class={this.targetClass} x={12} y={83}>{this.targetText}</text>
-                    <text class="Standard Center" x={-101} y={15}>S</text>
-                    <text class="Standard Center" x={105} y={15}>F</text>
+                    <text className={this.targetClass} x={12} y={83}>{this.targetText}</text>
+                    <text className="Standard Center" x={-101} y={15}>S</text>
+                    <text className="Standard Center" x={105} y={15}>F</text>
 
-                    <circle cx="-68" cy="22" r="3" class="DotsSmallWhite" />
-                    <circle cx="-101" cy="33" r="3" class="DotsSmallWhite" />
-                    <path d={this.slatsTargetPath} class="SlatsSmallCyan" />
+                    <circle cx="-68" cy="22" r="3" className="DotsSmallWhite" />
+                    <circle cx="-101" cy="33" r="3" className="DotsSmallWhite" />
+                    <path d={this.slatsTargetPath} className="SlatsSmallCyan" />
 
-                    <circle cx="63" cy="20" r="3" class="DotsSmallWhite" />
-                    <circle cx="100" cy="28" r="3" class="DotsSmallWhite" />
-                    <circle cx="138" cy="36" r="3" class="DotsSmallWhite" />
-                    <circle cx="175" cy="44" r="3" class="DotsSmallWhite" />
-                    <path d={this.flapsTargetPath} class="FlapsSmallCyan" />
+                    <circle cx="63" cy="20" r="3" className="DotsSmallWhite" />
+                    <circle cx="100" cy="28" r="3" className="DotsSmallWhite" />
+                    <circle cx="138" cy="36" r="3" className="DotsSmallWhite" />
+                    <circle cx="175" cy="44" r="3" className="DotsSmallWhite" />
+                    <path d={this.flapsTargetPath} className="FlapsSmallCyan" />
                 </g>
                 <text className="Medium Center GreenPulseNoFill" x={-95} y={-10} visibility={this.alphaLockEngaged.map((v) => (v ? 'visible' : 'hidden'))}>A LOCK</text>
 
-                <path class={this.targetSF} d={this.slatsPath} />
-                <line class="GreenLine" x1={-18} y1={0} x2={this.slatsEndX} y2={this.slatsEndY} />
+                <path className={this.targetSF} d={this.slatsPath} />
+                <line className="GreenLine" x1={-18} y1={0} x2={this.slatsEndX} y2={this.slatsEndY} />
 
-                <path class={this.targetSF} d={this.flapsPath} />
-                <line class="GreenLine" x1={0} y1={0} x2={this.flapsEndX} y2={this.flapsEndY} />
+                <path className={this.targetSF} d={this.flapsPath} />
+                <line className="GreenLine" x1={0} y1={0} x2={this.flapsEndX} y2={this.flapsEndY} />
             </Layer>
         );
     }

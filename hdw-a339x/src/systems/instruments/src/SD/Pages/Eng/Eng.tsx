@@ -258,7 +258,6 @@ const ValveGroup = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) => 
     const precoolerInletPressureTwo = Math.max(0, Math.min(512, 2 * Math.round(precoolerInletPressure / 2)));
     const pressureIndicationAmber = !pressureIsValid || (precoolerInletPressureTwo < LOW_BLEED_PRESSURE_THRESHOLD && n2Percent >= 10 && isValveOpen) || bleedOverpressure;
 
-
     const activeVisibility = fadecOn ? 'visible' : 'hidden';
     const inactiveVisibility = fadecOn ? 'hidden' : 'visible';
 
@@ -353,7 +352,7 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
 
     return (
         <SvgGroup x={x} y={y}>
-            <text x={x} y={y-60} className="FillGreen FontLarge TextCenter">
+            <text x={x} y={y - 60} className="FillGreen FontLarge TextCenter">
                 <tspan className="FontLarge">{n2Percent.toFixed(1).toString().split('.')[0]}</tspan>
                 <tspan className="FontSmall">.</tspan>
                 <tspan className="FontSmall">{n2Percent.toFixed(1).toString().split('.')[1]}</tspan>

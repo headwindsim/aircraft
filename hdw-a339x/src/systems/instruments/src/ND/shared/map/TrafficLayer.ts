@@ -138,7 +138,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
         context.lineTo(DiamondWidth * -0.5, 0);
         context.stroke();
 
-
         // Draw the second polyline
         context.beginPath();
         context.moveTo(-DiamondWidth / 4, DiamondHeight / 2);
@@ -173,7 +172,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
         context.closePath();
         context.stroke();
 
-
         // Draw the line
         context.beginPath();
         context.moveTo(DiamondWidth * -0.20, DiamondHeight * -0.1);
@@ -185,7 +183,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
         context.moveTo(DiamondWidth * 0.20, DiamondHeight * -0.1);
         context.lineTo(DiamondWidth * 0.5, 0);
         context.stroke();
-
 
         // Draw the polyline
         context.beginPath();
@@ -220,7 +217,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
         context.stroke();
         context.closePath();
 
-
         // Draw the line
         context.beginPath();
         context.moveTo(DiamondWidth * -0.20, DiamondHeight * -0.1);
@@ -232,7 +228,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
         context.moveTo(DiamondWidth * 0.20, DiamondHeight * -0.1);
         context.lineTo(DiamondWidth * 0.5, 0);
         context.stroke();
-
 
         // Draw the polyline
         context.beginPath();
@@ -266,7 +261,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
         context.stroke();
         context.closePath();
 
-
         // Draw the line
         context.beginPath();
         context.moveTo(DiamondWidth * -0.20, DiamondHeight * -0.1);
@@ -278,7 +272,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
         context.moveTo(DiamondWidth * 0.20, DiamondHeight * -0.1);
         context.lineTo(DiamondWidth * 0.5, 0);
         context.stroke();
-
 
         // Draw the polyline
         context.beginPath();
