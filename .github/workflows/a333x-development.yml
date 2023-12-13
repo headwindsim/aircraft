@@ -11,6 +11,7 @@ on:
       - 'a333x-igniter.config.mjs'
       - 'package.json'
       - 'package-lock.json'
+      - 'flybywire'
 
 jobs:
   build:
