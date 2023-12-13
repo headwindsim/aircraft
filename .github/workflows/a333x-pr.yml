@@ -30,14 +30,24 @@ jobs:
         echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
         echo VITE_BUILD=false >> .env
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          tool-cache: false
+          android: true
+          dotnet: false
+          haskell: false
+          large-packages: false
+          docker-images: false
+          swap-storage: false
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: recursive
-          lfs: true
+          lfs: false
       - name: Setup Package
         run: |
-          ./scripts/dev-env/run.sh ./scripts/setup.sh
+          ./scripts/dev-env/run.sh ./scripts/setup.sh --clean
       - name: Copy Sources
         run: |
           ./scripts/dev-env/run.sh ./scripts/copy_a333x.sh
