@@ -524,6 +524,7 @@ export const A330Services: React.FC = () => {
             dispatch(setService1DoorButtonState(ServiceButtonState.INACTIVE));
             dispatch(setService2DoorButtonState(ServiceButtonState.INACTIVE));
             dispatch(setCateringButtonState(ServiceButtonState.INACTIVE));
+            dispatch(setAsuButtonState(ServiceButtonState.INACTIVE));
         }
     }, [groundServicesAvailable]);
 
