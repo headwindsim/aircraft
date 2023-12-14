@@ -207,7 +207,7 @@ type TrafficProp = {
     trafficScale: number | undefined
 }
 
-const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, intrusionLevel, trafficHeading, ownHeading, trafficScale }) => {
+const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, intrusionLevel, trafficHeading, ownHeading , trafficScale}) => {
     if (relativeAlt === undefined || vertSpeed === undefined || x === undefined || y === undefined) return <></>;
     let color = '#ffffff';
     switch (intrusionLevel) {
@@ -242,20 +242,17 @@ const TrafficIndicator: FC<TrafficProp> = memo(({ x, y, relativeAlt, vertSpeed, 
                         </tspan>
                     </text>
 
-                    <g transform="translate(14,-19)">
-                        {(vertSpeed <= -500) && (
-                            <>
-                                <svg width="24" height="24" fill={color} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M469.333 128l85.333 0 0 512-85.333 0 0-512z" />
-                                    <path d="M725.333 640l-426.667 0 213.333 256z" />
-                                </svg>
-                            </>
-                        )}
-                        {(vertSpeed >= 500) && (
-                            <>
-                                <svg width="24" height="24" fill={color} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M512 128l-213.333 256 170.667 0 0 512 85.333 0 0-512 170.667 0z" /></svg>
-                            </>
-                        )}
+                    <g transform="translate(14,-19)" >
+                    {(vertSpeed <= -500) && (
+                        <>
+                            <svg width="24" height="24" fill={color} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M469.333 128l85.333 0 0 512-85.333 0 0-512z"  /><path d="M725.333 640l-426.667 0 213.333 256z"  /></svg>
+                        </>
+                    )}
+                    {(vertSpeed >= 500) && (
+                        <>
+                            <svg width="24" height="24" fill={color} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path d="M512 128l-213.333 256 170.667 0 0 512 85.333 0 0-512 170.667 0z"  /></svg>
+                        </>
+                    )}
                     </g>
                 </g>
             </Layer>

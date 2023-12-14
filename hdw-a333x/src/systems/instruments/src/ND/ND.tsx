@@ -60,9 +60,9 @@ export class NDComponent extends DisplayComponent<NDProps> {
 
     private displayPowered = Subject.create(false);
 
-    private readonly pposLatWord = Arinc429RegisterSubject.createEmpty();
+    private readonly pposLatWord = Arinc429RegisterSubject.createEmpty()
 
-    private readonly pposLonWord = Arinc429RegisterSubject.createEmpty();
+    private readonly pposLonWord = Arinc429RegisterSubject.createEmpty()
 
     private readonly isUsingTrackUpMode = Subject.create(false);
 
@@ -102,7 +102,9 @@ export class NDComponent extends DisplayComponent<NDProps> {
 
     private rangeChangeInvalidationTimeout = -1;
 
-    private readonly mapRecomputing = MappedSubject.create(([pageChange, rangeChange]) => pageChange || rangeChange, this.pageChangeInProgress, this.rangeChangeInProgress);
+    private readonly mapRecomputing = MappedSubject.create(([pageChange, rangeChange]) => {
+        return pageChange || rangeChange;
+    }, this.pageChangeInProgress, this.rangeChangeInProgress);
 
     private readonly trkFlagShown = MappedSubject.create(([isUsingTrackUpMode, trackWord, currentPageMode]) => {
         if (currentPageMode === EfisNdMode.PLAN) {
@@ -180,7 +182,9 @@ export class NDComponent extends DisplayComponent<NDProps> {
         });
     }
 
-    private readonly mapFlagShown = MappedSubject.create(([headingWord, latWord, longWord, currentPageMode]) => (!headingWord.isNormalOperation() || !latWord.isNormalOperation() || !longWord.isNormalOperation()) && currentPageMode !== EfisNdMode.PLAN, this.headingWord, this.pposLatWord, this.pposLonWord, this.currentPageMode);
+    private readonly mapFlagShown = MappedSubject.create(([headingWord, latWord, longWord, currentPageMode]) => {
+        return (!headingWord.isNormalOperation() || !latWord.isNormalOperation() || !longWord.isNormalOperation()) && currentPageMode !== EfisNdMode.PLAN;
+    }, this.headingWord, this.pposLatWord, this.pposLonWord, this.currentPageMode);
 
     private readonly planeRotation = MappedSubject.create(([isUsingTrackUpMode, headingWord, trackWord]) => {
         if (isUsingTrackUpMode) {
@@ -268,7 +272,7 @@ export class NDComponent extends DisplayComponent<NDProps> {
         return (
             <DisplayUnit bus={this.props.bus} failed={this.displayFailed} powered={this.displayPowered} brightness={this.displayBrightness} normDmc={getDisplayIndex()}>
                 {/* ND Vector graphics - bottom layer */}
-                <svg className="nd-svg" viewBox="0 0 768 768" style="transform: rotateX(0deg);">
+                <svg class="nd-svg" viewBox="0 0 768 768" style="transform: rotateX(0deg);">
                     <RoseLSPage
                         bus={this.props.bus}
                         ref={this.roseLSPage}
@@ -364,7 +368,7 @@ export class NDComponent extends DisplayComponent<NDProps> {
                 />
 
                 {/* ND Vector graphics - top layer */}
-                <svg className="nd-svg nd-top-layer" viewBox="0 0 768 768" style="transform: rotateX(0deg);">
+                <svg class="nd-svg nd-top-layer" viewBox="0 0 768 768" style="transform: rotateX(0deg);">
                     <Airplane bus={this.props.bus} ndMode={this.currentPageMode} />
 
                     <Chrono bus={this.props.bus} />
@@ -373,7 +377,7 @@ export class NDComponent extends DisplayComponent<NDProps> {
                     <FmMessages bus={this.props.bus} mode={this.currentPageMode} />
                     <CrossTrackError bus={this.props.bus} currentPageMode={this.currentPageMode} isNormalOperation={this.mapFlagShown.map((it) => !it)} />
 
-                    <g id="radio_needles" clipPath={this.currentPageMode.map((m) => (m === EfisNdMode.ARC ? 'url(#arc-mode-map-clip)' : ''))}>
+                    <g id="radio_needles" clip-path={this.currentPageMode.map((m) => (m === EfisNdMode.ARC ? 'url(#arc-mode-map-clip)' : ''))}>
 
                         <RadioNeedle
                             bus={this.props.bus}
@@ -433,10 +437,10 @@ class SpeedIndicator extends DisplayComponent<{ bus: EventBus }> {
     render(): VNode | null {
         return (
             <Layer x={2} y={25}>
-                <text x={0} y={0} className="White FontSmallest">GS</text>
-                <text ref={this.groundSpeedRef} x={89} y={0} className="Green FontIntermediate EndAlign" />
-                <text x={95} y={0} className="White FontSmallest">TAS</text>
-                <text ref={this.trueAirSpeedRef} x={201} y={0} className="Green FontIntermediate EndAlign" />
+                <text x={0} y={0} class="White FontSmallest">GS</text>
+                <text ref={this.groundSpeedRef} x={89} y={0} class="Green FontIntermediate EndAlign" />
+                <text x={95} y={0} class="White FontSmallest">TAS</text>
+                <text ref={this.trueAirSpeedRef} x={201} y={0} class="Green FontIntermediate EndAlign" />
             </Layer>
         );
     }
@@ -456,7 +460,7 @@ class TrueFlag extends DisplayComponent<TrueFlagProps> {
         ([visible, boxed]) => visible && boxed,
         this.props.visible,
         this.props.boxed,
-    );
+    )
 
     private readonly boxX = MappedSubject.create(
         ([x]) => x - 34,
@@ -485,8 +489,8 @@ class TrueFlag extends DisplayComponent<TrueFlagProps> {
                     y={this.boxY}
                     width={68}
                     height={23}
-                    className={this.props.class}
-                    strokeWidth={1.5}
+                    class={this.props.class}
+                    stroke-width={1.5}
                     ref={this.boxRef}
                 />
             </>
@@ -505,19 +509,19 @@ class GridTrack extends DisplayComponent<GridTrackProps> {
     private gridTrackText = MappedSubject.create(
         ([gridTrack]) => gridTrack.toFixed(0).padStart(3, '0'),
         this.props.gridTrack,
-    );
+    )
 
     render(): VNode | null {
         return (
             <Layer x={this.props.x} y={this.props.y} visible={this.props.visible}>
-                <rect x={0} width={94} y={-20} height={23} className="White" strokeWidth={1.5} />
-                <text x={45} className="FontSmallest MiddleAlign">
-                    <tspan className="Green">
+                <rect x={0} width={94} y={-20} height={23} class="White" stroke-width={1.5} />
+                <text x={45} class="FontSmallest MiddleAlign">
+                    <tspan class="Green">
                         ◇
                         {this.gridTrackText}
                     </tspan>
-                    <tspan className="Cyan">
-                        <tspan dx="-5" dy="8" className="FontIntermediate">°</tspan>
+                    <tspan class="Cyan">
+                        <tspan dx="-5" dy="8" class="FontIntermediate">°</tspan>
                         <tspan dy="-8">G</tspan>
                     </tspan>
                 </text>
@@ -552,7 +556,7 @@ class TopMessages extends DisplayComponent<{ bus: EventBus, ndMode: Subscribable
         this.pposLatWord,
         this.pposLonWord,
         this.trueTrackWord,
-    );
+    )
 
     private readonly trueRefVisible = MappedSubject.create(
         ([isTrueRef, isPlanMode]) => isTrueRef && !isPlanMode,
@@ -567,7 +571,7 @@ class TopMessages extends DisplayComponent<{ bus: EventBus, ndMode: Subscribable
         this.trueTrackWord,
         this.approachMessageValue,
         this.trueRefVisible,
-    );
+    )
 
     private readonly trueFlagX = MappedSubject.create(
         ([gridTrack]) => 384 + (gridTrack ? -50 : 4),
@@ -582,7 +586,7 @@ class TopMessages extends DisplayComponent<{ bus: EventBus, ndMode: Subscribable
     private readonly trueFlagBoxed = MappedSubject.create(
         ([apprMsg]) => apprMsg.length === 0,
         this.approachMessageValue,
-    );
+    )
 
     onAfterRender(node: VNode) {
         super.onAfterRender(node);
@@ -621,7 +625,7 @@ class TopMessages extends DisplayComponent<{ bus: EventBus, ndMode: Subscribable
             <>
                 <Layer x={384} y={28}>
                     {/* TODO verify */}
-                    <text className="Green FontIntermediate MiddleAlign">{this.approachMessageValue}</text>
+                    <text class="Green FontIntermediate MiddleAlign">{this.approachMessageValue}</text>
                 </Layer>
                 <TrueFlag x={this.trueFlagX} y={this.trueFlagY} class="Cyan FontSmallest" boxed={this.trueFlagBoxed} visible={this.trueRefVisible} />
                 <GridTrack x={Subject.create(384)} y={this.trueFlagY} visible={this.gridTrackVisible} gridTrack={this.gridTrack} />
@@ -663,7 +667,9 @@ class ToWaypointIndicator extends DisplayComponent<ToWaypointIndicatorProps> {
     private readonly visibleSub = Subject.create(false);
 
     private readonly bearingContainerVisible = MappedSubject.create(
-        ([trueRef, bearing, trueBearing, isNormalOperation]) => isNormalOperation && Number.isFinite(trueRef ? trueBearing : bearing),
+        ([trueRef, bearing, trueBearing, isNormalOperation]) => {
+            return isNormalOperation && Number.isFinite(trueRef ? trueBearing : bearing);
+        },
         this.trueRefActive,
         this.bearing,
         this.trueBearing,
@@ -675,7 +681,7 @@ class ToWaypointIndicator extends DisplayComponent<ToWaypointIndicatorProps> {
         this.trueRefActive,
         this.bearing,
         this.trueBearing,
-    );
+    )
 
     private readonly toWptIdentValue = Subject.create('');
 
@@ -787,29 +793,29 @@ class ToWaypointIndicator extends DisplayComponent<ToWaypointIndicatorProps> {
         return (
             <Layer x={690} y={25} visible={this.visibleSub}>
                 {/* This is always visible */}
-                <text x={-13} y={0} className="White FontIntermediate EndAlign">{this.toWptIdentValue}</text>
+                <text x={-13} y={0} class="White FontIntermediate EndAlign">{this.toWptIdentValue}</text>
 
                 <g visibility={this.bearingContainerVisible.map(this.visibilityFn)}>
-                    <text x={57} y={0} className="Green FontIntermediate EndAlign">{this.bearingText}</text>
-                    <text x={73} y={2} className="Cyan FontIntermediate EndAlign" visibility={this.trueRefActive.map(this.inverseVisibilityFn)}>&deg;</text>
-                    <text x={71} y={-3} className="Cyan FontIntermediate EndAlign" visibility={this.trueRefActive.map(this.visibilityFn)}>T</text>
+                    <text x={57} y={0} class="Green FontIntermediate EndAlign">{this.bearingText}</text>
+                    <text x={73} y={2} class="Cyan FontIntermediate EndAlign" visibility={this.trueRefActive.map(this.inverseVisibilityFn)}>&deg;</text>
+                    <text x={71} y={-3} class="Cyan FontIntermediate EndAlign" visibility={this.trueRefActive.map(this.visibilityFn)}>T</text>
                 </g>
 
                 <g visibility={this.distanceLargeContainerVisible.map(this.visibilityFn)}>
-                    <text ref={this.largeDistanceNumberRef} x={39} y={32} className="Green FontIntermediate EndAlign" />
+                    <text ref={this.largeDistanceNumberRef} x={39} y={32} class="Green FontIntermediate EndAlign" />
                 </g>
 
                 <g visibility={this.distanceSmallContainerVisible.map(this.visibilityFn)}>
-                    <text ref={this.smallDistanceIntegerPartRef} x={6} y={32} className="Green FontIntermediate EndAlign" />
-                    <text x={3} y={32} className="Green FontSmallest StartAlign">.</text>
-                    <text ref={this.smallDistanceDecimalPartRef} x={20} y={32} className="Green FontSmallest StartAlign" />
+                    <text ref={this.smallDistanceIntegerPartRef} x={6} y={32} class="Green FontIntermediate EndAlign" />
+                    <text x={3} y={32} class="Green FontSmallest StartAlign">.</text>
+                    <text ref={this.smallDistanceDecimalPartRef} x={20} y={32} class="Green FontSmallest StartAlign" />
                 </g>
 
-                <text x={72} y={32} className="Cyan FontSmallest EndAlign" visibility={this.distanceNmUnitVisible.map(this.visibilityFn)}>
+                <text x={72} y={32} class="Cyan FontSmallest EndAlign" visibility={this.distanceNmUnitVisible.map(this.visibilityFn)}>
                     NM
                 </text>
 
-                <text x={72} y={66} className="Green FontIntermediate EndAlign">{this.etaValue}</text>
+                <text x={72} y={66} class="Green FontIntermediate EndAlign">{this.etaValue}</text>
             </Layer>
         );
     }

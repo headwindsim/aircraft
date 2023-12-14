@@ -216,7 +216,7 @@ export const AtsuAocPage = () => {
 
             <SettingItem name={t('Settings.AtsuAoc.SimBriefUsernamePilotId')}>
                 <SimpleInput
-                    className="w-30 text-center"
+                    className="text-center w-30"
                     value={simbriefDisplay}
                     onBlur={(value) => handleUsernameInput(value.replace(/\s/g, ''))}
                     onChange={(value) => setSimbriefDisplay(value)}

@@ -82,7 +82,7 @@ const dryRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 20,
             reverserCorrection: -10,
             overweightProcedureCorrection: 640,
-            autoLandCorrection: 180,
+            autoLandCorrection: 180
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 1360,
@@ -95,7 +95,7 @@ const dryRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 20,
             reverserCorrection: -10,
             overweightProcedureCorrection: 740,
-            autoLandCorrection: 160,
+            autoLandCorrection: 160
         },
     },
     [AutobrakeMode.Medium]: {
@@ -110,7 +110,7 @@ const dryRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 20,
             reverserCorrection: 0,
             overweightProcedureCorrection: 70,
-            autoLandCorrection: 180,
+            autoLandCorrection: 180
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 1750,
@@ -123,7 +123,7 @@ const dryRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 20,
             reverserCorrection: 0,
             overweightProcedureCorrection: 70,
-            autoLandCorrection: 160,
+            autoLandCorrection: 160
         },
     },
     [AutobrakeMode.Low]: {
@@ -138,7 +138,7 @@ const dryRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 30,
             reverserCorrection: -20,
             overweightProcedureCorrection: 100,
-            autoLandCorrection: 180,
+            autoLandCorrection: 180
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2340,
@@ -151,7 +151,7 @@ const dryRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 40,
             reverserCorrection: -30,
             overweightProcedureCorrection: 110,
-            autoLandCorrection: 160,
+            autoLandCorrection: 160
         },
     },
 };
@@ -169,7 +169,7 @@ const goodRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 40,
             reverserCorrection: -20,
             overweightProcedureCorrection: 500,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 1700,
@@ -182,7 +182,7 @@ const goodRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 60,
             reverserCorrection: -20,
             overweightProcedureCorrection: 580,
-            autoLandCorrection: 190,
+            autoLandCorrection: 190
         },
     },
     [AutobrakeMode.Medium]: {
@@ -197,7 +197,7 @@ const goodRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 50,
             reverserCorrection: -20,
             overweightProcedureCorrection: 120,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 1870,
@@ -210,7 +210,7 @@ const goodRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 60,
             reverserCorrection: -30,
             overweightProcedureCorrection: 140,
-            autoLandCorrection: 190,
+            autoLandCorrection: 190
         },
     },
     [AutobrakeMode.Low]: {
@@ -225,7 +225,7 @@ const goodRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 30,
             reverserCorrection: -20,
             overweightProcedureCorrection: 100,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2340,
@@ -238,7 +238,7 @@ const goodRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 40,
             reverserCorrection: -30,
             overweightProcedureCorrection: 110,
-            autoLandCorrection: 190,
+            autoLandCorrection: 190
         },
     },
 };
@@ -256,7 +256,7 @@ const goodMediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 60,
             reverserCorrection: -40,
             overweightProcedureCorrection: 570,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 1930,
@@ -269,7 +269,7 @@ const goodMediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 70,
             reverserCorrection: -50,
             overweightProcedureCorrection: 660,
-            autoLandCorrection: 190,
+            autoLandCorrection: 190
         },
     },
     [AutobrakeMode.Medium]: {
@@ -284,7 +284,7 @@ const goodMediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 70,
             reverserCorrection: -60,
             overweightProcedureCorrection: 100,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2100,
@@ -297,7 +297,7 @@ const goodMediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 80,
             reverserCorrection: -60,
             overweightProcedureCorrection: 110,
-            autoLandCorrection: 190,
+            autoLandCorrection: 190
         },
     },
     [AutobrakeMode.Low]: {
@@ -312,7 +312,7 @@ const goodMediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 50,
             reverserCorrection: -20,
             overweightProcedureCorrection: 100,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2350,
@@ -325,7 +325,7 @@ const goodMediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 60,
             reverserCorrection: -30,
             overweightProcedureCorrection: 110,
-            autoLandCorrection: 190,
+            autoLandCorrection: 190
         },
     },
 };
@@ -343,7 +343,7 @@ const mediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 90,
             reverserCorrection: -60,
             overweightProcedureCorrection: 530,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2160,
@@ -356,7 +356,7 @@ const mediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 110,
             reverserCorrection: -70,
             overweightProcedureCorrection: 620,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
     },
     [AutobrakeMode.Medium]: {
@@ -371,7 +371,7 @@ const mediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 100,
             reverserCorrection: -70,
             overweightProcedureCorrection: 110,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2310,
@@ -384,7 +384,7 @@ const mediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 120,
             reverserCorrection: -80,
             overweightProcedureCorrection: 130,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
     },
     [AutobrakeMode.Low]: {
@@ -399,7 +399,7 @@ const mediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 90,
             reverserCorrection: -30,
             overweightProcedureCorrection: 110,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2450,
@@ -412,7 +412,7 @@ const mediumRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 110,
             reverserCorrection: -40,
             overweightProcedureCorrection: 120,
-            autoLandCorrection: 200,
+            autoLandCorrection: 200
         },
     },
 };
@@ -430,7 +430,7 @@ const mediumPoorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 150,
             reverserCorrection: -70,
             overweightProcedureCorrection: 370,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2580,
@@ -443,7 +443,7 @@ const mediumPoorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 190,
             reverserCorrection: -90,
             overweightProcedureCorrection: 430,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
     },
     [AutobrakeMode.Medium]: {
@@ -458,7 +458,7 @@ const mediumPoorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 150,
             reverserCorrection: -90,
             overweightProcedureCorrection: 170,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2650,
@@ -471,7 +471,7 @@ const mediumPoorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 200,
             reverserCorrection: -100,
             overweightProcedureCorrection: 190,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
     },
     [AutobrakeMode.Low]: {
@@ -486,7 +486,7 @@ const mediumPoorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 160,
             reverserCorrection: -50,
             overweightProcedureCorrection: 160,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 2710,
@@ -499,7 +499,7 @@ const mediumPoorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 210,
             reverserCorrection: -80,
             overweightProcedureCorrection: 180,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
     },
 };
@@ -517,7 +517,7 @@ const poorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 720,
             reverserCorrection: -200,
             overweightProcedureCorrection: 360,
-            autoLandCorrection: 230,
+            autoLandCorrection: 230
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 3970,
@@ -530,7 +530,7 @@ const poorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 850,
             reverserCorrection: -240,
             overweightProcedureCorrection: 430,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
     },
     [AutobrakeMode.Medium]: {
@@ -545,7 +545,7 @@ const poorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 730,
             reverserCorrection: -210,
             overweightProcedureCorrection: 170,
-            autoLandCorrection: 230,
+            autoLandCorrection: 230
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 4050,
@@ -558,7 +558,7 @@ const poorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 860,
             reverserCorrection: -250,
             overweightProcedureCorrection: 190,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
     },
     [AutobrakeMode.Low]: {
@@ -573,7 +573,7 @@ const poorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 720,
             reverserCorrection: -220,
             overweightProcedureCorrection: 160,
-            autoLandCorrection: 230,
+            autoLandCorrection: 230
         },
         [LandingFlapsConfig.Conf3]: {
             refDistance: 4100,
@@ -586,7 +586,7 @@ const poorRunwayLandingData: AutobrakeConfigLandingData = {
             slopeCorrection: 860,
             reverserCorrection: -260,
             overweightProcedureCorrection: 180,
-            autoLandCorrection: 240,
+            autoLandCorrection: 240
         },
     },
 };
@@ -641,7 +641,7 @@ const getInterpolatedVlsTableValue = (mass: number, vlsSpeedTable: number[]): nu
     const upper = vlsSpeedTable[index];
 
     const oneTonSpeedIncrement = (upper - lower) / step;
-    if (mass % step === 0) return upper;
+   	if(mass % step == 0) return upper;
     return lower + oneTonSpeedIncrement * (mass % step);
 };
 
@@ -744,7 +744,7 @@ export class LandingCalculator {
             tailWind = 0;
         }
 
-        const weightDifference = Math.floor(((weight / 1000) - 190) / 10);
+        const weightDifference = Math.floor(((weight / 1000) - 190)/10);
         let weightCorrection: number;
         if (weightDifference < 0) {
             weightCorrection = landingData.weightCorrectionBelow * Math.abs(weightDifference);

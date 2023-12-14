@@ -29,7 +29,7 @@ export const AircraftOptionsPinProgramsPage = () => {
     const [isisMetricAltitude, setIsisMetricAltitude] = usePersistentNumberProperty('ISIS_METRIC_ALTITUDE', 0);
     const [vhfSpacing, setVhfSpacing] = usePersistentProperty('RMP_VHF_SPACING_25KHZ', '0');
     const [latLonExtended, setLatLonExtended] = usePersistentProperty('LATLON_EXT_FMT', '1');
-    // const [satcomEnabled, setsatcomEnabled] = usePersistentNumberProperty('MODEL_SATCOM_ENABLED', 1);
+    const [satcomEnabled, setsatcomEnabled] = usePersistentNumberProperty('MODEL_SATCOM_ENABLED', 1);
 
     const handleSetThrustReductionAlt = (value: string) => {
         setThrustReductionHeightSetting(value);
@@ -92,7 +92,7 @@ export const AircraftOptionsPinProgramsPage = () => {
                 <SettingsPage name={t('Settings.AircraftOptionsPinPrograms.Title')}>
                     <SettingItem name={`${t('Settings.AircraftOptionsPinPrograms.ThrustReductionHeight')}`}>
                         <SimpleInput
-                            className="w-30 text-center"
+                            className="text-center w-30"
                             placeholder={thrustReductionHeight}
                             value={thrustReductionHeightSetting}
                             min={400}
@@ -102,7 +102,7 @@ export const AircraftOptionsPinProgramsPage = () => {
                     </SettingItem>
                     <SettingItem name={`${t('Settings.AircraftOptionsPinPrograms.AccelerationHeight')}`}>
                         <SimpleInput
-                            className="w-30 text-center"
+                            className="text-center w-30"
                             placeholder={accelerationHeight}
                             value={accelerationHeightSetting}
                             min={400}
@@ -112,7 +112,7 @@ export const AircraftOptionsPinProgramsPage = () => {
                     </SettingItem>
                     <SettingItem name={`${t('Settings.AircraftOptionsPinPrograms.EngineOutAccelerationHeight')}`}>
                         <SimpleInput
-                            className="w-30 text-center"
+                            className="text-center w-30"
                             placeholder={accelerationOutHeight}
                             value={accelerationOutHeightSetting}
                             min={400}
@@ -198,8 +198,8 @@ export const AircraftOptionsPinProgramsPage = () => {
                     <SettingItem name={t('Settings.AutomaticCallOuts.Title')}>
                         <Link
                             to={`${basePinProgRoute}/${pathify('Automatic Call Outs')}`}
-                            className="text-theme-body hover:text-theme-highlight bg-theme-highlight hover:bg-theme-body border-theme-highlight
-                                rounded-md border-2 px-5 py-2.5 transition duration-100"
+                            className="py-2.5 px-5 text-theme-body hover:text-theme-highlight bg-theme-highlight
+                                hover:bg-theme-body rounded-md border-2 border-theme-highlight transition duration-100"
                         >
                             {t('Settings.AircraftOptionsPinPrograms.Select')}
                         </Link>

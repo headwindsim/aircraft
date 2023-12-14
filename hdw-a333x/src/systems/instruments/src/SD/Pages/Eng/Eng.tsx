@@ -352,7 +352,7 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
 
     return (
         <SvgGroup x={x} y={y}>
-            <text x={x} y={y - 60} className="FillGreen FontLarge TextCenter">
+            <text x={x} y={y-60} className="FillGreen FontLarge TextCenter">
                 <tspan className="FontLarge">{n2Percent.toFixed(1).toString().split('.')[0]}</tspan>
                 <tspan className="FontSmall">.</tspan>
                 <tspan className="FontSmall">{n2Percent.toFixed(1).toString().split('.')[1]}</tspan>

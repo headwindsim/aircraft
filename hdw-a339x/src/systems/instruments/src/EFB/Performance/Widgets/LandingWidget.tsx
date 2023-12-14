@@ -435,9 +435,9 @@ export const LandingWidget = () => {
             <div className="w-full">
                 <div className="flex h-full w-full flex-col justify-between">
                     <div className="mb-4">
-                        <div className="mb-8 mt-4">
+                    <div className="mb-8 mt-4">
                             <p>{t('Performance.Landing.AirportIcao')}</p>
-                            <div className="mt-4 flex flex-row justify-between">
+                            <div className="flex flex-row justify-between mt-4">
                                 <SimpleInput className="w-64 uppercase" value={icao} placeholder="ICAO" onChange={handleICAOChange} maxLength={4} />
                                 <div className="flex flex-row">
                                     <TooltipWrapper text={fillDataTooltip()}>

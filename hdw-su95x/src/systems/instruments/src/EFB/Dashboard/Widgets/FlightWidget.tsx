@@ -17,8 +17,8 @@ interface InformationEntryProps {
 }
 
 const InformationEntry = ({ title, info }: InformationEntryProps) => (
-    <div className="justify-content flex w-full flex-col items-center">
-        <h3 className="text-center font-light">{title}</h3>
+    <div className="flex flex-col items-center w-full justify-content">
+        <h3 className="font-light text-center">{title}</h3>
         <h2 className="font-bold">{info}</h2>
     </div>
 );
@@ -30,8 +30,8 @@ interface NoSimBriefDataOverlayProps {
 }
 
 const NoSimBriefDataOverlay = ({ simbriefDataLoaded, simbriefDataPending, fetchData }: NoSimBriefDataOverlayProps) => (
-    <div className={`bg-theme-body absolute inset-0 transition duration-200 ${simbriefDataLoaded ? 'pointer-events-none opacity-0' : 'opacity-100'}`}>
-        <h1 className="flex h-full w-full items-center justify-center">
+    <div className={`absolute inset-0 transition duration-200 bg-theme-body ${simbriefDataLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+        <h1 className="flex justify-center items-center w-full h-full">
             {simbriefDataPending ? (
                 <CloudArrowDown className="animate-bounce" size={40} />
             ) : (
@@ -48,7 +48,7 @@ const NoSimBriefDataOverlay = ({ simbriefDataLoaded, simbriefDataPending, fetchD
                             <button
                                 type="button"
                                 onClick={fetchData}
-                                className="text-theme-body hover:text-theme-highlight bg-theme-highlight hover:bg-theme-body border-theme-highlight flex w-full items-center justify-center space-x-4 rounded-md border-2 p-2 transition duration-100"
+                                className="flex justify-center items-center p-2 space-x-4 w-full rounded-md border-2 transition duration-100 text-theme-body hover:text-theme-highlight bg-theme-highlight hover:bg-theme-body border-theme-highlight"
                             >
                                 <CloudArrowDown size={26} />
                                 <p className="text-current">{t('Dashboard.YourFlight.ImportSimBriefData')}</p>
@@ -66,6 +66,7 @@ export const FlightWidget = () => {
     const [simbriefDataPending, setSimbriefDataPending] = useState(false);
     const [navigraphUsername] = usePersistentProperty('NAVIGRAPH_USERNAME');
     const [overrideSimBriefUserID] = usePersistentProperty('CONFIG_OVERRIDE_SIMBRIEF_USERID');
+    const [airframe] = useState(getAirframeType());
 
     const {
         schedIn,
@@ -124,7 +125,7 @@ export const FlightWidget = () => {
 
     return (
         <div className="w-1/2">
-            <div className="mb-4 flex flex-row items-center justify-between">
+            <div className="flex flex-row justify-between items-center mb-4">
                 <h1 className="font-bold">{t('Dashboard.YourFlight.Title')}</h1>
                 {simbriefDataLoaded && (
                     <h1>
@@ -136,8 +137,8 @@ export const FlightWidget = () => {
                     </h1>
                 )}
             </div>
-            <div className="h-content-section-reduced border-theme-accent relative w-full overflow-hidden rounded-lg border-2 p-6">
-                <div className="flex h-full flex-col justify-between">
+            <div className="overflow-hidden relative p-6 w-full rounded-lg border-2 h-content-section-reduced border-theme-accent">
+                <div className="flex flex-col justify-between h-full">
                     <div className="space-y-8">
                         <div className="flex flex-row justify-between">
                             <div>
@@ -145,47 +146,47 @@ export const FlightWidget = () => {
                                 <p className="w-52 text-sm">{departingName}</p>
                             </div>
                             <div>
-                                <h1 className="text-right text-4xl font-bold">{arrivingAirport}</h1>
-                                <p className="w-52 text-right text-sm">{arrivingName}</p>
+                                <h1 className="text-4xl font-bold text-right">{arrivingAirport}</h1>
+                                <p className="w-52 text-sm text-right">{arrivingName}</p>
                             </div>
                         </div>
                         <div>
-                            <div className="flex w-full flex-row items-center">
+                            <div className="flex flex-row items-center w-full">
                                 <p className={`font-body ${flightPlanProgress > 1 ? 'text-theme-highlight' : 'text-theme-text'}`}>
                                     {schedOutParsed}
                                 </p>
-                                <div className="relative mx-6 flex h-1 w-full flex-row">
-                                    <div className="border-theme-text absolute inset-x-0 border-b-4 border-dashed" />
+                                <div className="flex relative flex-row mx-6 w-full h-1">
+                                    <div className="absolute inset-x-0 border-b-4 border-dashed border-theme-text" />
 
-                                    <div className="bg-theme-highlight relative w-full" style={{ width: `${flightPlanProgress}%` }}>
+                                    <div className="relative w-full bg-theme-highlight" style={{ width: `${flightPlanProgress}%` }}>
                                         {!!flightPlanProgress && (
                                             <IconPlane
-                                                className="text-theme-highlight absolute right-0 -translate-y-1/2 translate-x-1/2 fill-current"
+                                                className="absolute right-0 transform translate-x-1/2 -translate-y-1/2 fill-current text-theme-highlight"
                                                 size={50}
                                                 strokeLinejoin="miter"
                                             />
                                         )}
                                     </div>
                                 </div>
-                                <p className={`font-body text-right ${Math.round(flightPlanProgress) >= 98 ? 'text-theme-highlight' : 'text-theme-text'}`}>
+                                <p className={`text-right font-body ${Math.round(flightPlanProgress) >= 98 ? 'text-theme-highlight' : 'text-theme-text'}`}>
                                     {schedInParsed}
                                 </p>
                             </div>
                         </div>
                         <div>
-                            <div className="mb-4 flex flex-row justify-around">
+                            <div className="flex flex-row justify-around mb-4">
                                 <InformationEntry title={t('Dashboard.YourFlight.Alternate')} info={altIcao ?? 'NONE'} />
-                                <div className="bg-theme-accent mx-4 my-auto h-8 w-1" />
+                                <div className="my-auto mx-4 w-1 h-8 bg-theme-accent" />
                                 <InformationEntry title={t('Dashboard.YourFlight.CompanyRoute')} info={departingIata + arrivingIata} />
-                                <div className="bg-theme-accent mx-4 my-auto h-8 w-1" />
+                                <div className="my-auto mx-4 w-1 h-8 bg-theme-accent" />
                                 <InformationEntry title={t('Dashboard.YourFlight.ZFW')} info={estimatedZfw} />
                             </div>
-                            <div className="bg-theme-accent my-auto h-0.5 w-full" />
-                            <div className="mt-4 flex flex-row justify-around">
+                            <div className="my-auto w-full h-0.5 bg-theme-accent" />
+                            <div className="flex flex-row justify-around mt-4">
                                 <InformationEntry title={t('Dashboard.YourFlight.CostIndex')} info={costInd} />
-                                <div className="bg-theme-accent mx-4 my-auto h-8 w-1" />
+                                <div className="my-auto mx-4 w-1 h-8 bg-theme-accent" />
                                 <InformationEntry title={t('Dashboard.YourFlight.AverageWind')} info={avgWind} />
-                                <div className="bg-theme-accent mx-4 my-auto h-8 w-1" />
+                                <div className="my-auto mx-4 w-1 h-8 bg-theme-accent" />
                                 <InformationEntry title={t('Dashboard.YourFlight.CruiseAlt')} info={crzAlt} />
                             </div>
                         </div>
@@ -193,7 +194,7 @@ export const FlightWidget = () => {
                             <h5 className="mb-2 text-2xl font-bold">{t('Dashboard.YourFlight.Route')}</h5>
                             <ScrollableContainer height={15}>
                                 <p className="font-mono text-2xl">
-                                    <span className="text-theme-highlight text-2xl">
+                                    <span className="text-2xl text-theme-highlight">
                                         {departingAirport}
                                         /
                                         {departingRunway}
@@ -201,7 +202,7 @@ export const FlightWidget = () => {
                                     {' '}
                                     {route}
                                     {' '}
-                                    <span className="text-theme-highlight text-2xl">
+                                    <span className="text-2xl text-theme-highlight">
                                         {arrivingAirport}
                                         /
                                         {arrivingRunway}
@@ -213,7 +214,7 @@ export const FlightWidget = () => {
                     <button
                         type="button"
                         onClick={fetchData}
-                        className="text-theme-body hover:text-theme-highlight bg-theme-highlight hover:bg-theme-body border-theme-highlight flex w-full items-center justify-center space-x-4 rounded-lg border-2 p-2 transition duration-100"
+                        className="flex justify-center items-center p-2 space-x-4 w-full rounded-lg border-2 transition duration-100 text-theme-body hover:text-theme-highlight bg-theme-highlight hover:bg-theme-body border-theme-highlight"
                     >
                         <CloudArrowDown size={26} />
                         <p className="text-current">{t('Dashboard.YourFlight.ImportSimBriefData')}</p>

@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Units, usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
 import { getAirframeType } from '../../../Efb';
 import { A330Payload } from './A330_941/A330Payload';
-import { ACJ330Payload } from './ACJ330_941/A330Payload';
+import { ACJ330Payload} from './ACJ330_941/A330Payload';
 import { useAppSelector } from '../../../Store/store';
 import { isSimbriefDataLoaded } from '../../../Store/features/simBrief';
 
@@ -28,42 +28,42 @@ export const Payload = () => {
     const [massUnitForDisplay] = useState(Units.usingMetric ? 'KGS' : 'LBS');
 
     switch (getAirframeType()) {
-    case 'ACJ330_941':
-        return (
-            <ACJ330Payload
-                simbriefUnits={simbriefUnits}
-                simbriefBagWeight={simbriefBagWeight}
-                simbriefPaxWeight={simbriefPaxWeight}
-                simbriefPax={simbriefPax}
-                simbriefBag={simbriefBag}
-                simbriefFreight={simbriefFreight}
-                simbriefDataLoaded={simbriefDataLoaded}
-                massUnitForDisplay={massUnitForDisplay}
-                isOnGround={isOnGround}
-                boardingStarted={boardingStarted}
-                boardingRate={boardingRate}
-                setBoardingStarted={setBoardingStarted}
-                setBoardingRate={setBoardingRate}
-            />
-        );
-    case 'A330_941':
-    default:
-        return (
-            <A330Payload
-                simbriefUnits={simbriefUnits}
-                simbriefBagWeight={simbriefBagWeight}
-                simbriefPaxWeight={simbriefPaxWeight}
-                simbriefPax={simbriefPax}
-                simbriefBag={simbriefBag}
-                simbriefFreight={simbriefFreight}
-                simbriefDataLoaded={simbriefDataLoaded}
-                massUnitForDisplay={massUnitForDisplay}
-                isOnGround={isOnGround}
-                boardingStarted={boardingStarted}
-                boardingRate={boardingRate}
-                setBoardingStarted={setBoardingStarted}
-                setBoardingRate={setBoardingRate}
-            />
-        );
+        case 'ACJ330_941':
+            return (
+                <ACJ330Payload
+                    simbriefUnits={simbriefUnits}
+                    simbriefBagWeight={simbriefBagWeight}
+                    simbriefPaxWeight={simbriefPaxWeight}
+                    simbriefPax={simbriefPax}
+                    simbriefBag={simbriefBag}
+                    simbriefFreight={simbriefFreight}
+                    simbriefDataLoaded={simbriefDataLoaded}
+                    massUnitForDisplay={massUnitForDisplay}
+                    isOnGround={isOnGround}
+                    boardingStarted={boardingStarted}
+                    boardingRate={boardingRate}
+                    setBoardingStarted={setBoardingStarted}
+                    setBoardingRate={setBoardingRate}
+                />
+            );
+        case 'A330_941':
+        default:
+            return (
+                <A330Payload
+                    simbriefUnits={simbriefUnits}
+                    simbriefBagWeight={simbriefBagWeight}
+                    simbriefPaxWeight={simbriefPaxWeight}
+                    simbriefPax={simbriefPax}
+                    simbriefBag={simbriefBag}
+                    simbriefFreight={simbriefFreight}
+                    simbriefDataLoaded={simbriefDataLoaded}
+                    massUnitForDisplay={massUnitForDisplay}
+                    isOnGround={isOnGround}
+                    boardingStarted={boardingStarted}
+                    boardingRate={boardingRate}
+                    setBoardingStarted={setBoardingStarted}
+                    setBoardingRate={setBoardingRate}
+                />
+            );
     }
 };

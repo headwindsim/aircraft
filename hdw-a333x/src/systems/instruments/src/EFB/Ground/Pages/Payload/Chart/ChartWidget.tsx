@@ -16,11 +16,11 @@ interface ChartWidgetProps {
 }
 
 export const ChartWidget: React.FC<ChartWidgetProps> = ({
-    width, height, envelope, limits,
-    gw, cg,
-    mldw, mldwCg,
-    zfw, zfwCg,
-}) => {
+                                                            width, height, envelope, limits,
+                                                            gw, cg,
+                                                            mldw, mldwCg,
+                                                            zfw, zfwCg,
+                                                        }) => {
     const { usingMetric } = Units;
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [ctx, setCtx] = useState<CanvasRenderingContext2D | null>(null);
@@ -33,26 +33,25 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         let secondary = '#84CC16';
         let alt = '#000';
         switch (theme) {
-        case 'dark':
-            base = '#fff';
-            primary = '#3B82F6';
-            secondary = '#84CC16';
-            alt = '#000';
-            break;
-        case 'light':
-            base = '#000';
-            primary = '#3B82F6';
-            secondary = '#84CC16';
-            alt = '#fff';
-            break;
-        case 'orange':
-            base = '#fff';
-            primary = '#e37e28';
-            secondary = '#84CC16';
-            alt = '#000';
-            break;
-        default:
-            break;
+            case 'dark':
+                base = '#fff';
+                primary = '#3B82F6';
+                secondary = '#84CC16';
+                alt = '#000';
+                break;
+            case 'light':
+                base = '#000';
+                primary = '#3B82F6';
+                secondary = '#84CC16';
+                alt = '#fff';
+                break;
+            case 'orange':
+                base = '#fff';
+                primary = '#e37e28';
+                secondary = '#84CC16';
+                alt = '#000';
+            default:
+                break;
         }
         return [base, primary, secondary, alt];
     };
@@ -264,14 +263,15 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
         setWeightRows(wg);
     }, []);
 
+
     const cgAxis = cgRows.map((cgRow, i) => (
         // eslint-disable-next-line react/no-array-index-key
-        <p key={`cgRow-${i}`} className="text-md absolute top-0 font-mono font-medium" style={cgRow}>{`${limits.cg.values[i]}%`}</p>
+        <p key={`cgRow-${i}`} className="absolute top-0 font-mono font-medium text-md" style={cgRow}>{`${limits.cg.values[i]}%`}</p>
     ));
 
     const weightAxis = weightRows.map((weightRow, i) => (
         // eslint-disable-next-line react/no-array-index-key
-        <p key={`weightRow-${i}`} className="text-md absolute top-0 font-mono font-medium" style={weightRow}>{Math.round(Units.kilogramToUser(limits.weight.values[i] * 1000) / 1000)}</p>
+        <p key={`weightRow-${i}`} className="absolute top-0 font-mono font-medium text-md" style={weightRow}>{Math.round(Units.kilogramToUser(limits.weight.values[i] * 1000) / 1000)}</p>
     ));
 
     return (
@@ -280,9 +280,9 @@ export const ChartWidget: React.FC<ChartWidgetProps> = ({
             {cgAxis}
             {weightAxis}
             <p key="wu" className="absolute top-0 font-mono text-sm font-medium" style={weightUnits}>{usingMetric ? 'x 1000 kgs' : 'x 1000 lbs'}</p>
-            <p key="mtow" className="text-theme-highlight absolute top-0 font-mono font-medium drop-shadow" style={mtow}>{flightPhase <= 1 || flightPhase >= 7 ? 'MTOW' : 'FLIGHT'}</p>
+            <p key="mtow" className="absolute top-0 font-mono font-medium drop-shadow text-theme-highlight" style={mtow}>{flightPhase <= 1 || flightPhase >= 7 ? 'MTOW' : 'FLIGHT'}</p>
             <p key="mldw" className="absolute top-0 font-mono font-medium text-lime-500" style={mlw}>MLDW</p>
-            <p key="mzfw" className="text-theme-text absolute top-0 font-mono font-medium" style={mzfw}>MZFW</p>
+            <p key="mzfw" className="absolute top-0 font-mono font-medium text-theme-text" style={mzfw}>MZFW</p>
         </div>
     );
 };

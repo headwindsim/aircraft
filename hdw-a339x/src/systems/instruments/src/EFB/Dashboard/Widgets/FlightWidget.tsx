@@ -66,6 +66,7 @@ export const FlightWidget = () => {
     const [simbriefDataPending, setSimbriefDataPending] = useState(false);
     const [navigraphUsername] = usePersistentProperty('NAVIGRAPH_USERNAME');
     const [overrideSimBriefUserID] = usePersistentProperty('CONFIG_OVERRIDE_SIMBRIEF_USERID');
+    const [airframe] = useState(getAirframeType());
 
     const {
         schedIn,

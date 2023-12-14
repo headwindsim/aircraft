@@ -2765,7 +2765,7 @@ export class PseudoFWC {
             sysPage: 5,
             side: 'LEFT',
         },
-    };
+    }
 
     ewdMessageMemos: EWDMessageDict = {
         '0000010': { // T.O MEMO
