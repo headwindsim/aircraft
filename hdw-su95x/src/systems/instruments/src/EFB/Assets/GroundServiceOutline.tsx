@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import * as React from 'react';
 // viewBox="0 0 777 814"
-export const GroundServiceOutline = ({ className, fwdLeftStatus, fwdRightStatus, midLeftStatus, midRightStatus, aftLeftStatus, aftRightStatus }: {className: string, fwdLeftStatus: boolean, fwdRightStatus: boolean, midLeftStatus: boolean, midRightStatus: boolean, aftLeftStatus: boolean, aftRightStatus: boolean}) => (
+export const GroundServiceOutline = ({ className, fwdLeftStatus, fwdRightStatus, aftLeftStatus, aftRightStatus }: {className: string, fwdLeftStatus: boolean, fwdRightStatus: boolean, aftLeftStatus: boolean, aftRightStatus: boolean}) => (
     <svg
         id="SVG"
         className={className}

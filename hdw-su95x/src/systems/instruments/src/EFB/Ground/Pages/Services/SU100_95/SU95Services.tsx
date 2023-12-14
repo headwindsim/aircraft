@@ -52,10 +52,10 @@ const ServiceButtonWrapper: FC<ServiceButtonWrapperProps> = ({ children, classNa
 );
 
 enum ServiceButton {
+    FwdLeftDoor,
     FwdRightDoor,
-    MidLeftDoor,
-    MidRightDoor,
     AftLeftDoor,
+    AftRightDoor,
     JetBridge,
     FuelTruck,
     Gpu,
@@ -119,10 +119,10 @@ export const SU95Services: React.FC = () => {
     const groundServicesAvailable = simOnGround && aircraftIsStationary && !pushBackAttached;
 
     // Ground Services
-    const [midLeftDoorOpen] = useSimVar('A:INTERACTIVE POINT OPEN:0', 'Percent over 100', 100);
+    const [fwdLeftDoorOpen] = useSimVar('A:INTERACTIVE POINT OPEN:0', 'Percent over 100', 100);
     const [fwdRightDoorOpen] = useSimVar('A:INTERACTIVE POINT OPEN:1', 'Percent over 100', 100);
     const [aftLeftDoorOpen] = useSimVar('A:INTERACTIVE POINT OPEN:2', 'Percent over 100', 100);
-    const [midRightDoorOpen] = useSimVar('A:INTERACTIVE POINT OPEN:3', 'Percent over 100', 100);
+    const [aftRightDoorOpen] = useSimVar('A:INTERACTIVE POINT OPEN:3', 'Percent over 100', 100);
     const [cargoDoorOpen] = useSimVar('A:INTERACTIVE POINT OPEN:4', 'Percent over 100', 100);
     const [gpuActive] = useSimVar('A:INTERACTIVE POINT OPEN:5', 'Percent over 100', 100);
     const [fuelingActive] = useSimVar('A:INTERACTIVE POINT OPEN:11', 'Percent over 100', 100);
@@ -136,10 +136,10 @@ export const SU95Services: React.FC = () => {
     const conesVisible = conesEnabled && isGroundEquipmentVisible;
 
     // Service events
-    const toggleMidLeftDoor = () => SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT', 'enum', 1);
+    const toggleFwdLeftDoor = () => SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT', 'enum', 1);
     const toggleFwdRightDoor = () => SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT', 'enum', 2);
     const toggleAftLeftDoor = () => SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT', 'enum', 3);
-    const toggleMidRightDoor = () => SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT', 'enum', 4);
+    const toggleAftRightDoor = () => SimVar.SetSimVarValue('K:TOGGLE_AIRCRAFT_EXIT', 'enum', 4);
     const toggleJetBridgeAndStairs = () => {
         SimVar.SetSimVarValue('K:TOGGLE_JETWAY', 'bool', false);
         SimVar.SetSimVarValue('K:TOGGLE_RAMPTRUCK', 'bool', false);
@@ -281,21 +281,21 @@ export const SU95Services: React.FC = () => {
     // Centralized handler for managing clicks to any button
     const handleButtonClick = (id: ServiceButton) => {
         switch (id) {
-        case ServiceButton.MidLeftDoor:
+        case ServiceButton.FwdLeftDoor:
             handleDoors(boarding1DoorButtonState, setBoarding1DoorButtonState);
-            toggleMidLeftDoor();
+            toggleFwdLeftDoor();
             break;
         case ServiceButton.FwdRightDoor:
             handleDoors(service1DoorButtonState, setService1DoorButtonState);
             toggleFwdRightDoor();
             break;
-        case ServiceButton.MidRightDoor:
-            handleDoors(service2DoorButtonState, setService2DoorButtonState);
-            toggleMidRightDoor();
-            break;
         case ServiceButton.AftLeftDoor:
             handleDoors(boarding2DoorButtonState, setBoarding2DoorButtonState);
             toggleAftLeftDoor();
+            break;
+        case ServiceButton.AftRightDoor:
+            handleDoors(service2DoorButtonState, setService2DoorButtonState);
+            toggleAftRightDoor();
             break;
         case ServiceButton.CargoDoor:
             handleDoors(cargo1DoorButtonState, setCargo1DoorButtonState);
@@ -313,7 +313,7 @@ export const SU95Services: React.FC = () => {
             handleComplexService(ServiceButton.JetBridge,
                 jetWayButtonStateRef, setJetWayButtonState,
                 boarding1DoorButtonState, setBoarding1DoorButtonState,
-                midLeftDoorOpen);
+                aftLeftDoorOpen);
             toggleJetBridgeAndStairs();
             break;
         case ServiceButton.BaggageTruck:
@@ -411,12 +411,12 @@ export const SU95Services: React.FC = () => {
 
     // Doors
     useEffect(() => {
-        simpleServiceListenerHandling(boarding1DoorButtonState, setBoarding1DoorButtonState, midLeftDoorOpen);
+        simpleServiceListenerHandling(boarding1DoorButtonState, setBoarding1DoorButtonState, fwdLeftDoorOpen);
         simpleServiceListenerHandling(boarding2DoorButtonState, setBoarding2DoorButtonState, aftLeftDoorOpen);
         simpleServiceListenerHandling(service1DoorButtonState, setService1DoorButtonState, fwdRightDoorOpen);
-        simpleServiceListenerHandling(service2DoorButtonState, setService2DoorButtonState, midRightDoorOpen);
+        simpleServiceListenerHandling(service2DoorButtonState, setService2DoorButtonState, aftRightDoorOpen);
         simpleServiceListenerHandling(cargo1DoorButtonState, setCargo1DoorButtonState, cargoDoorOpen);
-    }, [midLeftDoorOpen, aftLeftDoorOpen, fwdRightDoorOpen, midRightDoorOpen, cargoDoorOpen]);
+    }, [fwdLeftDoorOpen, aftLeftDoorOpen, fwdRightDoorOpen, aftRightDoorOpen, cargoDoorOpen]);
 
     // Fuel
     useEffect(() => {
@@ -435,9 +435,9 @@ export const SU95Services: React.FC = () => {
             setJetWayButtonState,
             boarding1DoorButtonState,
             setBoarding1DoorButtonState,
-            midLeftDoorOpen,
+            fwdLeftDoorOpen,
         );
-    }, [midLeftDoorOpen]);
+    }, [fwdLeftDoorOpen]);
 
     // Cargo Door listener for Baggage Button
     useEffect(() => {
@@ -482,17 +482,17 @@ export const SU95Services: React.FC = () => {
             dispatch(setCateringButtonState(ServiceButtonState.DISABLED));
             dispatch(setAsuButtonState(ServiceButtonState.DISABLED));
 
-            if (midLeftDoorOpen === 1) {
-                toggleMidLeftDoor();
+            if (fwdLeftDoorOpen === 1) {
+                toggleFwdLeftDoor();
             }
             if (fwdRightDoorOpen === 1) {
                 toggleFwdRightDoor();
             }
-            if (midRightDoorOpen === 1) {
-                toggleMidRightDoor();
-            }
             if (aftLeftDoorOpen === 1) {
                 toggleAftLeftDoor();
+            }
+            if (aftRightDoorOpen === 1) {
+                toggleAftRightDoor();
             }
             if (cargoDoorOpen === 1) {
                 toggleCargoDoor();
@@ -532,12 +532,10 @@ export const SU95Services: React.FC = () => {
     return (
         <div className="relative h-content-section-reduced">
             <GroundServiceOutline
-                fwdLeftStatus={false}
+                fwdLeftStatus={fwdLeftDoorOpen >= 1.0}
                 fwdRightStatus={fwdRightDoorOpen >= 1.0}
-                midLeftStatus={midLeftDoorOpen >= 1.0}
-                midRightStatus={midRightDoorOpen >= 1.0}
                 aftLeftStatus={aftLeftDoorOpen >= 1.0}
-                aftRightStatus={false}
+                aftRightStatus={aftRightDoorOpen >= 1.0}
                 className="inset-x-0 mx-auto w-full h-full text-theme-text"
             />
 
@@ -547,7 +545,7 @@ export const SU95Services: React.FC = () => {
                 <GroundServiceButton
                     name={t('Ground.Services.DoorFwd')}
                     state={boarding1DoorButtonState}
-                    onClick={() => handleButtonClick(ServiceButton.MidLeftDoor)}
+                    onClick={() => handleButtonClick(ServiceButton.FwdLeftDoor)}
                 >
                     <DoorClosedFill size={36} />
                 </GroundServiceButton>
@@ -615,7 +613,7 @@ export const SU95Services: React.FC = () => {
                 <GroundServiceButton
                     name={t('Ground.Services.DoorFwd')}
                     state={service2DoorButtonState}
-                    onClick={() => handleButtonClick(ServiceButton.MidRightDoor)}
+                    onClick={() => handleButtonClick(ServiceButton.AftRightDoor)}
                 >
                     <DoorClosedFill size={36} />
                 </GroundServiceButton>
@@ -689,7 +687,7 @@ export const SU95Services: React.FC = () => {
                     CABIN
                 </div>
             )}
-            {midLeftDoorOpen >= 1.0 && (
+            {fwdLeftDoorOpen >= 1.0 && (
                 <div
                     className={serviceIndicationCss}
                     style={{ position: 'absolute', left: 500, right: 0, top: 227 }}
@@ -697,7 +695,7 @@ export const SU95Services: React.FC = () => {
                     CABIN
                 </div>
             )}
-            {midRightDoorOpen >= 1.0 && (
+            {aftRightDoorOpen >= 1.0 && (
                 <div
                     className={serviceIndicationCss}
                     style={{ position: 'absolute', left: 700, right: 0, top: 227 }}
