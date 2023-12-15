@@ -1,9 +1,14 @@
-import { NdTraffic } from '@shared/NavigationDisplay';
-// import { MathUtils } from '@flybywiresim/fbw-sdk';
-import { TaRaIntrusion } from '@tcas/lib/TcasConstants';
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
+import { NdTraffic } from '@flybywiresim/fbw-sdk';
 import { MapLayer } from './MapLayer';
 import { PaintUtils } from './PaintUtils';
 import { CanvasMap } from './CanvasMap';
+
+// TODO move this somewhere better, need to move TCAS stuff into fbw-sdk
+declare enum TaRaIntrusion { TRAFFIC = 0, PROXIMITY = 1, TA = 2, RA = 3 }
 
 const DiamondHeight = 18 * 2;
 const DiamondWidth = 12 * 2;

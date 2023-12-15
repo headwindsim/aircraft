@@ -1,6 +1,11 @@
-import { A320Failure, FailuresConsumer } from '@failures';
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import { ClockEvents, ComponentProps, DisplayComponent, FSComponent, Subject, VNode } from '@microsoft/msfs-sdk';
-import { Arinc429Register, Arinc429Word, Arinc429WordData } from '@flybywiresim/fbw-sdk';
+import { ArincEventBus, Arinc429Register, Arinc429Word, Arinc429WordData } from '@flybywiresim/fbw-sdk';
+
+import { A320Failure, FailuresConsumer } from '@failures';
 import { DmcLogicEvents } from '../MsfsAvionicsCommon/providers/DmcPublisher';
 import { LagFilter } from './PFDUtils';
 import { Arinc429Values } from './shared/ArincValueProvider';
@@ -16,7 +21,6 @@ import { LinearDeviationIndicator } from './LinearDeviationIndicator';
 import { AirspeedIndicator, AirspeedIndicatorOfftape, MachNumber } from './SpeedIndicator';
 import { VerticalSpeedIndicator } from './VerticalSpeedIndicator';
 import { PFDSimvars } from './shared/PFDSimvarPublisher';
-import { ArincEventBus } from '../MsfsAvionicsCommon/ArincEventBus';
 
 export const getDisplayIndex = () => {
     const url = document.getElementsByTagName('a333x-pfd')[0].getAttribute('url');

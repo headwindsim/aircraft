@@ -1,6 +1,6 @@
 {
     "extends": "../../../tsconfig.json",
-
+  
     "compilerOptions": {
       "incremental": false /* Enables incremental builds */,
       "target": "es2017" /* Specifies the ES2017 target, compatible with Coherent GT */,
@@ -27,8 +27,8 @@
         "@shared/*": ["./shared/src/*"],
         "@tcas/*": ["./tcas/src/*"],
         "@typings/*": ["../../../build-a339x-common/src/typings/*"],
-        "@flybywiresim/fbw-sdk": ["../../../build-a339x-common/src/systems/index-no-react.ts"],
-        "@flybywiresim/navigation-display": ["../../../build-a339x-common/src/systems/instruments/src/ND/index.ts"]
+        "@flybywiresim/fbw-sdk": ["../../../build-a339x-common/src/systems/index-no-react.ts"]
       }
     }
   }
+  

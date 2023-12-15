@@ -27,7 +27,8 @@
         "@shared/*": ["./shared/src/*"],
         "@tcas/*": ["./tcas/src/*"],
         "@typings/*": ["../../../build-a333x-common/src/typings/*"],
-        "@flybywiresim/fbw-sdk": ["../../../build-a333x-common/src/systems/index-no-react.ts"]
+        "@flybywiresim/fbw-sdk": ["../../../build-a333x-common/src/systems/index-no-react.ts"],
+        "@flybywiresim/navigation-display": ["../../../build-a333x-common/src/systems/instruments/src/ND/index.ts"]
       }
     }
   }
