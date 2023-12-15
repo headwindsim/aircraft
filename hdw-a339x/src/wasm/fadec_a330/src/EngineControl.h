@@ -380,6 +380,7 @@ class EngineControl {
       shutdownEgtFbw = poly->shutdownEGT(preEgtFbw, ambientTemp, deltaTime);
 
       simVars->setEngine2N3(newN3Fbw);
+      simVars->setEngine2N2(newN3Fbw + 0.7);
       simVars->setEngine2N1(poly->startN1(newN3Fbw, idleN3 - n3Imbalance, idleN1));
       simVars->setEngine2FF(poly->startFF(newN3Fbw, idleN3 - n3Imbalance, idleFF - ffImbalance));
 
