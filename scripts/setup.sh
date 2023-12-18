@@ -16,4 +16,4 @@ for arg in "$@"; do
   fi
 done
 
-npm ci
+pnpm i
