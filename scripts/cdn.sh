@@ -1,7 +1,7 @@
 #!/bin/bash
 
-CDN_URL="https://worker.headwindsim.net"
-CDN_PURGE_LINK="https://worker.headwindsim.net/purgeCache"
+CDN_URL="https://cdn.headwindsim.net"
+CDN_PURGE_LINK="https://cdn.headwindsim.net/purgeCache?url=https://cdn.headwindsim.net"
 CDN_DIR=${1:-"addons/a339x/test-3"}
 LOCAL_DIR=${2:-"./build-modules"}
 
@@ -31,4 +31,9 @@ done
 
 # Purge after all uploads that the files are somewhat in sync
 echo "Purging cache"
-curl -X GET -H "X-HDW-Access-Key: $CLOUDFLARE_WORKER_PASSWORD" -H "Content-Length: 0" "$CDN_PURGE_LINK"
+for FILE in "${LOCAL_DIR}"/*; do
+    DEST="$CDN_PURGE_LINK/$CDN_DIR/$(basename -- "$FILE")"
+    echo "Purging cache for file: $FILE"
+    echo "Purge URL: $DEST"
+    curl -X GET -H "X-HDW-Access-Key: $CLOUDFLARE_WORKER_PASSWORD" -H "Content-Length: 0" "$DEST"
+done
