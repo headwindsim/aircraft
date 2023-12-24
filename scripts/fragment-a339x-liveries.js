@@ -7,7 +7,8 @@ const execute = async () => {
             packOptions: { splitFileSize: 102_760_448, keepCompleteModulesAfterSplit: false },
             baseDir: './hdw-a339x-liveries/out/headwindsim-a339x-livery-package',
             outDir: './hdw-a339x-liveries/out/build-modules',
-            modules: [{
+            modules: [
+            {
                 name: 'AirBelgium',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo_AirBelgium'
             }, {
@@ -34,6 +35,9 @@ const execute = async () => {
             }, {
                 name: 'TAPStar',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo_TAP_STAR'
+            }, {
+                name: 'Headwind_XMAS',
+                sourceDir: './SimObjects/Airplanes/_Headwind_A330neo-Livery_XMAS'
             }]
         });
         console.log(result);
