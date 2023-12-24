@@ -26,6 +26,9 @@ const execute = async () => {
                 name: 'Livery',
                 sourceDir: './SimObjects/Airplanes/_Headwind_A330neo-LIVERY'
             }, {
+                name: 'Livery_XMAS',
+                sourceDir: './SimObjects/Airplanes/_Headwind_A330neo-Livery_XMAS'
+            }, {
                 name: 'Sound',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo/sound'
             }, {
