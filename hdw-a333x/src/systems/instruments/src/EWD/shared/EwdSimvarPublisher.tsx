@@ -19,6 +19,7 @@ export type EwdSimvars = {
     engine1EGT: number;
     engine1Fadec: boolean;
     engine1FF: number;
+    engine1Master: number;
     engine1N1: number;
     engine1N2: number;
     engine1N3: number;
@@ -29,6 +30,7 @@ export type EwdSimvars = {
     engine2EGT: number;
     engine2Fadec: boolean;
     engine2FF: number;
+    engine2Master: number;
     engine2N1: number;
     engine2N2: number;
     engine2N3: number;
@@ -149,6 +151,7 @@ export class EwdSimvarPublisher extends SimVarPublisher<EwdSimvars> {
         ['engine1AntiIce', { name: EwdVars.engine1AntiIce, type: SimVarValueType.Bool }],
         ['engine1EGT', { name: EwdVars.engine1EGT, type: SimVarValueType.Number }],
         ['engine1Fadec', { name: EwdVars.engine1Fadec, type: SimVarValueType.Bool }],
+        ['engine1Master', { name: 'A:FUELSYSTEM VALVE SWITCH:1', type: SimVarValueType.Bool }],
         ['engine1FF', { name: EwdVars.engine1FF, type: SimVarValueType.Number }],
         ['engine1N1', { name: EwdVars.engine1N1, type: SimVarValueType.Number }],
         ['engine1N2', { name: EwdVars.engine1N2, type: SimVarValueType.Number }],
@@ -160,6 +163,7 @@ export class EwdSimvarPublisher extends SimVarPublisher<EwdSimvars> {
         ['engine2EGT', { name: EwdVars.engine2EGT, type: SimVarValueType.Number }],
         ['engine2Fadec', { name: EwdVars.engine2Fadec, type: SimVarValueType.Bool }],
         ['engine2FF', { name: EwdVars.engine2FF, type: SimVarValueType.Number }],
+        ['engine2Master', { name: 'A:FUELSYSTEM VALVE SWITCH:2', type: SimVarValueType.Bool }],
         ['engine2N1', { name: EwdVars.engine2N1, type: SimVarValueType.Number }],
         ['engine2N2', { name: EwdVars.engine2N2, type: SimVarValueType.Number }],
         ['engine2N3', { name: EwdVars.engine2N2, type: SimVarValueType.Number }],
