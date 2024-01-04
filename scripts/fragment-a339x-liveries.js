@@ -21,6 +21,9 @@ const execute = async () => {
                 name: 'CondorSea',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo_Condor_Sea'
             }, {
+                name: 'CondorSea_DT',
+                sourceDir: './SimObjects/Airplanes/Headwind_A330neo_Condor_Sea_DT'
+            }, {
                 name: 'Corsair',
                 sourceDir: './SimObjects/Airplanes/Headwind_A330neo_Corsair'
             }, {
