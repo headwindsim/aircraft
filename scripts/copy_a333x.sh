@@ -72,4 +72,4 @@ cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/Air
 
 chmod +x ./build-a333x/src/wasm/fbw_a320/build.sh
 chmod +x ./build-a333x/src/wasm/fadec_a330/build.sh
-chmod +x ./build-a333x/src/wasm/flypad-backend/build.sh
+#chmod +x ./build-a333x/src/wasm/flypad-backend/build.sh

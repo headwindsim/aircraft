@@ -10,6 +10,7 @@ export default new TaskOfTasks("all", [
                 //new ExecTask("textures-cockpit", "npm run build-su95x:copy-textures-cockpit"),
                 //new ExecTask("textures-fuselage", "npm run build-su95x:copy-textures-fuselage"),
                 new ExecTask("cargo-config", "npm run build-su95x:copy-cargo-config"),
+                new ExecTask("cmake-config", "npm run build-su95x:copy-cmake-config"),
             ], true),
             new TaskOfTasks("localization", [
                 new ExecTask("efb-translation", "npm run build-su95x:efb-translation"),
@@ -129,19 +130,19 @@ export default new TaskOfTasks("all", [
                         "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fbw.wasm"
                     ]),
                 new ExecTask("systems-terronnd", [
-                    "build-su95x-common/src/wasm/terronnd/build.sh",
-                    "wasm-opt -O1 --signext-lowering -o build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/terronnd.wasm build-su95x-common/src/wasm/terronnd/out/terronnd.wasm"
+                    "npm run build-su95x:terronnd",
                 ], [
                     "build-su95x-common/src/wasm/terronnd",
                     "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/terronnd.wasm",
                     "build-su95x-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
-                new ExecTask("flypad-backend",
-                    "npm run build-su95x:flypad-backend",
+                new ExecTask("extra-backend",
+                    "npm run build-su95x:cpp-wasm-cmake",
                     [
-                        "build-su95x/src/wasm/flypad-backend",
-                        "build-su95x-common/src/wasm/fbw_common",
-                        "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/flypad-backend.wasm"
+                        "build-su95x-common/src/wasm/cpp-msfs-framework",
+                        "build-su95x-common/src/wasm/extra-backend",
+                        "build-su95x/src/wasm/extra-backend-a32nx",
+                        "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/extra-backend-a32nx.wasm"
                     ])
             ], true),
         ]),

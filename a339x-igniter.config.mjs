@@ -10,6 +10,7 @@ export default new TaskOfTasks("all", [
                 new ExecTask("textures-cockpit", "npm run build-a339x:copy-textures-cockpit"),
                 new ExecTask("textures-fuselage", "npm run build-a339x:copy-textures-fuselage"),
                 new ExecTask("cargo-config", "npm run build-a339x:copy-cargo-config"),
+                new ExecTask("cmake-config", "npm run build-a339x:copy-cmake-config"),
             ], true),
             new TaskOfTasks("localization", [
                 new ExecTask("efb-translation", "npm run build-a339x:efb-translation"),
@@ -129,19 +130,19 @@ export default new TaskOfTasks("all", [
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm"
                     ]),
                 new ExecTask("systems-terronnd", [
-                    "build-a339x-common/src/wasm/terronnd/build.sh",
-                    "wasm-opt -O1 --signext-lowering -o build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm build-a339x-common/src/wasm/terronnd/out/terronnd.wasm"
+                    "npm run build-a339x:terronnd",
                 ], [
                     "build-a339x-common/src/wasm/terronnd",
                     "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm",
                     "build-a339x-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
-                new ExecTask("flypad-backend",
-                    "npm run build-a339x:flypad-backend",
+                new ExecTask("extra-backend",
+                    "npm run build-a339x:cpp-wasm-cmake",
                     [
-                        "build-a339x/src/wasm/flypad-backend",
-                        "build-a339x-common/src/wasm/fbw_common",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/flypad-backend.wasm"
+                        "build-a339x-common/src/wasm/cpp-msfs-framework",
+                        "build-a339x-common/src/wasm/extra-backend",
+                        "build-a339x/src/wasm/extra-backend-a32nx",
+                        "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a32nx.wasm"
                     ])
             ], true),
         ]),
