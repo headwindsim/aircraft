@@ -351,7 +351,7 @@ void LateralNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_T
   }
 
   rtb_Saturation_f = Vias * 0.5144;
-  LateralNormalLaw_RateLimiter(0.814 / std::sqrt(3.924E+6 / (398.12500000000006 * (rtb_Saturation_f * rtb_Saturation_f)))
+  LateralNormalLaw_RateLimiter(0.814 / std::sqrt(3.924E+6 / (455.70000000000005 * (rtb_Saturation_f * rtb_Saturation_f)))
     * (rtb_input_V_ias_kn * rtb_Gain), LateralNormalLaw_rtP.RateLimiterVariableTs1_up,
     LateralNormalLaw_rtP.RateLimiterVariableTs1_lo, rtu_In_time_dt,
     LateralNormalLaw_rtP.RateLimiterVariableTs1_InitialCondition, &Vias, &LateralNormalLaw_DWork.sf_RateLimiter_d);
@@ -364,7 +364,7 @@ void LateralNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_T
   rtb_Divide = (rtb_Gain - LateralNormalLaw_DWork.Delay_DSTATE) / *rtu_In_time_dt;
   rtb_input_V_ias_kn = std::fmax(*rtu_In_V_ias_kn, 80.0) * 0.5144;
   Vias_tmp = rtb_input_V_ias_kn * rtb_input_V_ias_kn * 0.6125;
-  L_xi = Vias_tmp * 325.0 * 32.0 * -0.3272492347489368 / 1.446E+7;
+  L_xi = Vias_tmp * 372.0 * 32.0 * -0.3272492347489368 / 1.446E+7;
   if (*rtu_In_V_ias_kn > 400.0) {
     r = 2.0;
   } else if (*rtu_In_V_ias_kn < -1.0) {
@@ -454,7 +454,7 @@ void LateralNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_T
   rtb_Saturation2 = std::fmax(rtb_input_p_V_tas_kn * 0.5144, 60.0);
   rtb_Saturation_f = rtb_beDot * 0.5144;
   if (rtb_beDot >= 60.0) {
-    rtb_beDot = (rtb_Saturation_f * rtb_Saturation_f * 0.6125 * 325.0 / (200000.0 * rtb_Saturation2) * 3.172 *
+    rtb_beDot = (rtb_Saturation_f * rtb_Saturation_f * 0.6125 * 372.0 / (200000.0 * rtb_Saturation2) * 3.172 *
                  -rtb_uDLookupTable_n * 3.1415926535897931 / 180.0 + (rtb_Divide * 3.1415926535897931 / 180.0 * (9.81 /
       rtb_Saturation2) + -(Vias * 3.1415926535897931 / 180.0))) * 180.0 / 3.1415926535897931;
   } else {
@@ -538,8 +538,8 @@ void LateralNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_T
   rtb_Saturation2 = look1_binlxpw(*rtu_In_V_ias_kn, LateralNormalLaw_rtP.ScheduledGain1_BreakpointsForDimension1_i,
     LateralNormalLaw_rtP.ScheduledGain1_Table_d, 3U);
   rtb_Saturation2 *= *rtu_In_r_deg_s;
-  rtb_input_p_V_tas_kn = Vias_tmp * 325.0 * 32.0;
-  u0 = -(Vias_tmp / rtb_input_V_ias_kn * 325.0 * 1024.0 * -0.10100220381291185 / 2.612E+7 + std::sqrt
+  rtb_input_p_V_tas_kn = Vias_tmp * 372.0 * 32.0;
+  u0 = -(Vias_tmp / rtb_input_V_ias_kn * 372.0 * 1024.0 * -0.10100220381291185 / 2.612E+7 + std::sqrt
          (rtb_input_p_V_tas_kn * 0.0035255650890285459 / 2.612E+7) * 1.414) / (rtb_input_p_V_tas_kn *
     -0.018936822384138473 / 2.612E+7) * (LateralNormalLaw_rtP.Gain1_Gain_k * rtb_uDLookupTable_n) *
     LateralNormalLaw_rtP.Gain_Gain_b;
@@ -560,7 +560,7 @@ void LateralNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_T
   rtb_Saturation2 = LateralNormalLaw_rtP.Gain1_Gain_c * *rtu_In_pk_deg_s;
   Vias = look1_binlxpw(*rtu_In_time_dt, LateralNormalLaw_rtP.ScheduledGain_BreakpointsForDimension1_j,
                        LateralNormalLaw_rtP.ScheduledGain_Table_i, 4U);
-  LateralNormalLaw_DWork.Delay_DSTATE_e = ((-(Vias_tmp / rtb_input_V_ias_kn * 325.0 * 1024.0 * -0.75 / 1.446E+7 + 1.414 *
+  LateralNormalLaw_DWork.Delay_DSTATE_e = ((-(Vias_tmp / rtb_input_V_ias_kn * 372.0 * 1024.0 * -0.75 / 1.446E+7 + 1.414 *
     r) / L_xi * rtb_Saturation2 + k_phi * rtb_Saturation_f) + LateralNormalLaw_rtP.Gain1_Gain_n * rtb_Divide * -k_phi) *
     Vias * LateralNormalLaw_rtP.Gain_Gain_p;
   if (rtb_Y_i > LateralNormalLaw_rtP.Saturation1_UpperSat_e) {
