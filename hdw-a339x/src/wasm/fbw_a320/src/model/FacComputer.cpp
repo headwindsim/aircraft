@@ -531,7 +531,7 @@ void FacComputer::step()
         rtb_y_f5 = FacComputer_P.Constant_Value_n;
       }
 
-      rtb_beDot = (rtb_beDot * rtb_beDot * 0.6125 * 325.0 / (200000.0 * rtb_Switch4_f) * 3.172 *
+      rtb_beDot = (rtb_beDot * rtb_beDot * 0.6125 * 372.0 / (200000.0 * rtb_Switch4_f) * 3.172 *
                    (FacComputer_P.Gain_Gain_h * rtb_y_f5) * 3.1415926535897931 / 180.0 + (rtb_phi * 3.1415926535897931 /
         180.0 * (9.81 / rtb_Switch4_f) + -(rtb_r * 3.1415926535897931 / 180.0))) * 180.0 / 3.1415926535897931;
     } else {
