@@ -52,7 +52,7 @@ export class FlightModel {
         let baseDrag;
         switch (flapConf) {
         case FlapConf.CLEAN:
-            baseDrag = (0.0211 * Cl ** 3) + (0.0412 * Cl ** 2) - (0.015 * Cl) + 0.0215;
+            baseDrag = (0.04356 * Cl ** 3) - (0.00687 * Cl ** 2) - (0.00951 * Cl) + 0.03627;
             break;
         case FlapConf.CONF_1:
             baseDrag = (0.0385 * Cl ** 3) + (0.004 * Cl ** 2) + (0.0044 * Cl) + 0.0249;
