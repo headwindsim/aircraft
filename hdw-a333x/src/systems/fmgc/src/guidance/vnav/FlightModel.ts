@@ -2,13 +2,13 @@ import { MathUtils } from '@flybywiresim/fbw-sdk';
 import { Common, FlapConf } from './common';
 
 export class FlightModel {
-    static Cd0 = 0.026;
+    static Cd0 = 0.0260;
 
-    static wingSpan = 197.83;
+    static wingSpan = 209.97;
 
-    static wingArea = 3892.23;
+    static wingArea = 4000;
 
-    static wingEffcyFactor = 0.9199;
+    static wingEffcyFactor = 0.72;
 
     static requiredAccelRateKNS = 1.33; // in knots/second
 
@@ -52,7 +52,7 @@ export class FlightModel {
         let baseDrag;
         switch (flapConf) {
         case FlapConf.CLEAN:
-            baseDrag = (0.0211 * Cl ** 3) + (0.0412 * Cl ** 2) - (0.015 * Cl) + 0.0215;
+            baseDrag = (0.04356 * Cl ** 3) - (0.00687 * Cl ** 2) - (0.00951 * Cl) + 0.03627;
             break;
         case FlapConf.CONF_1:
             baseDrag = (0.0385 * Cl ** 3) + (0.004 * Cl ** 2) + (0.0044 * Cl) + 0.0249;

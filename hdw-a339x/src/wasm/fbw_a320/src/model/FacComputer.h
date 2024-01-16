@@ -48,8 +48,8 @@ class FacComputer final
     real_T pU;
     real_T takeoff_config;
     real_T sAlphaFloor;
-    uint8_T is_c15_FacComputer;
     uint8_T is_active_c15_FacComputer;
+    uint8_T is_c15_FacComputer;
     boolean_T Memory_PreviousInput;
     boolean_T icLoad;
     boolean_T pY_not_empty;
