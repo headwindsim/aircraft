@@ -26,6 +26,7 @@ use systems::{
             AutobrakeDecelerationGovernor, AutobrakeMode, AutobrakePanel,
             BrakeAccumulatorCharacteristics, BrakeCircuit, BrakeCircuitController,
         },
+        bypass_pin::BypassPin,
         cargo_doors::{CargoDoor, HydraulicDoorController},
         electrical_generator::{GeneratorControlUnit, HydraulicGeneratorMotor},
         flap_slat::FlapSlatAssembly,
@@ -36,8 +37,7 @@ use systems::{
             LinearActuator, LinearActuatorCharacteristics, LinearActuatorMode,
         },
         nose_steering::{
-            Pushback, SteeringActuator, SteeringAngleLimiter, SteeringController,
-            SteeringRatioToAngle,
+            SteeringActuator, SteeringAngleLimiter, SteeringController, SteeringRatioToAngle,
         },
         pumps::PumpCharacteristics,
         pushback::PushbackTug,
@@ -1501,6 +1501,8 @@ pub(super) struct A320Hydraulic {
 
     pushback_tug: PushbackTug,
 
+    bypass_pin: BypassPin,
+
     ram_air_turbine: RamAirTurbine,
     ram_air_turbine_controller: A320RamAirTurbineController,
 
@@ -1697,6 +1699,7 @@ impl A320Hydraulic {
             ),
 
             pushback_tug: PushbackTug::new(context),
+            bypass_pin: BypassPin::new(context),
 
             ram_air_turbine: RamAirTurbine::new(context, PumpCharacteristics::a320_rat()),
             ram_air_turbine_controller: A320RamAirTurbineController::new(
@@ -1954,7 +1957,7 @@ impl A320Hydraulic {
 
     #[cfg(test)]
     fn nose_wheel_steering_pin_is_inserted(&self) -> bool {
-        self.pushback_tug.is_nose_wheel_steering_pin_inserted()
+        self.bypass_pin.is_nose_wheel_steering_pin_inserted()
     }
 
     #[cfg(test)]
@@ -2112,6 +2115,7 @@ impl A320Hydraulic {
             self.yellow_circuit.system_section(),
             &self.brake_steer_computer,
             &self.pushback_tug,
+            &self.bypass_pin,
         );
 
         // Process brake logic (which circuit brakes) and send brake demands (how much)
@@ -2138,6 +2142,7 @@ impl A320Hydraulic {
         );
 
         self.pushback_tug.update(context);
+        self.bypass_pin.update(&self.pushback_tug);
 
         self.braking_force.update_forces(
             context,
@@ -2145,7 +2150,7 @@ impl A320Hydraulic {
             &self.braking_circuit_altn,
             engine1,
             engine2,
-            &self.pushback_tug,
+            &self.bypass_pin,
         );
 
         self.slats_flaps_complex
@@ -2342,7 +2347,7 @@ impl A320Hydraulic {
             overhead_panel,
             &self.forward_cargo_door_controller,
             &self.aft_cargo_door_controller,
-            &self.pushback_tug,
+            &self.bypass_pin,
             lgciu2,
             self.green_circuit.reservoir(),
             self.yellow_circuit.reservoir(),
@@ -2587,6 +2592,7 @@ impl SimulationElement for A320Hydraulic {
         self.aft_cargo_door.accept(visitor);
 
         self.pushback_tug.accept(visitor);
+        self.bypass_pin.accept(visitor);
 
         self.ram_air_turbine.accept(visitor);
         self.ram_air_turbine_controller.accept(visitor);
@@ -3362,7 +3368,7 @@ impl A320PowerTransferUnitController {
         overhead_panel: &A320HydraulicOverheadPanel,
         forward_cargo_door_controller: &HydraulicDoorController,
         aft_cargo_door_controller: &HydraulicDoorController,
-        pushback_tug: &PushbackTug,
+        bypass_pin: &BypassPin,
         lgciu2: &impl LgciuInterface,
         reservoir_left_side: &Reservoir,
         reservoir_right_side: &Reservoir,
@@ -3381,7 +3387,7 @@ impl A320PowerTransferUnitController {
                 || self.eng_1_master_on && self.eng_2_master_on
                 || !self.eng_1_master_on && !self.eng_2_master_on
                 || (!self.parking_brake_lever_pos
-                    && !pushback_tug.is_nose_wheel_steering_pin_inserted()))
+                    && !bypass_pin.is_nose_wheel_steering_pin_inserted()))
             && !ptu_inhibited;
 
         // When there is no power, the PTU is always ON.
@@ -3971,7 +3977,7 @@ impl A320BrakingForce {
         altn_brakes: &BrakeCircuit,
         engine1: &impl Engine,
         engine2: &impl Engine,
-        pushback_tug: &PushbackTug,
+        bypass_pin: &BypassPin,
     ) {
         // Base formula for output force is output_force[0:1] = 50 * sqrt(current_pressure) / Max_brake_pressure
         // This formula gives a bit more punch for lower brake pressures (like 1000 psi alternate braking), as linear formula
@@ -3993,7 +3999,7 @@ impl A320BrakingForce {
 
         self.correct_with_flaps_state(context);
 
-        self.update_chocks_braking(context, engine1, engine2, pushback_tug);
+        self.update_chocks_braking(context, engine1, engine2, bypass_pin);
     }
 
     fn correct_with_flaps_state(&mut self, context: &UpdateContext) {
@@ -4023,12 +4029,12 @@ impl A320BrakingForce {
         context: &UpdateContext,
         engine1: &impl Engine,
         engine2: &impl Engine,
-        pushback_tug: &PushbackTug,
+        bypass_pin: &BypassPin,
     ) {
         let chocks_on_wheels = context.is_on_ground()
             && engine1.corrected_n1().get::<percent>() < 3.5
             && engine2.corrected_n1().get::<percent>() < 3.5
-            && !pushback_tug.is_nose_wheel_steering_pin_inserted()
+            && !bypass_pin.is_nose_wheel_steering_pin_inserted()
             && !self.is_light_beacon_on;
 
         if self.is_chocks_enabled && chocks_on_wheels {
