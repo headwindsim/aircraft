@@ -34,6 +34,7 @@ Cargo.toml
 
 !hdw-a339x/src/base/manifest-base.json
 !package.json
+!pnpm-lock.yaml
 
 !jest.config.js
 !/jest/**
