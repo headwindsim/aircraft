@@ -72,8 +72,10 @@ class SimVars {
   /// </summary>
   ENUM CorrectedN1 = get_aircraft_var_enum("TURB ENG CORRECTED N1");
   ENUM CorrectedN2 = get_aircraft_var_enum("TURB ENG CORRECTED N2");
+  ENUM CorrectedN3 = get_aircraft_var_enum("TURB ENG CORRECTED N2");
   ENUM N1 = get_aircraft_var_enum("TURB ENG N1");
   ENUM N2 = get_aircraft_var_enum("TURB ENG N2");
+  ENUM N3 = get_aircraft_var_enum("TURB ENG N2");
   ENUM OilPSI = get_aircraft_var_enum("GENERAL ENG OIL PRESSURE");
   ENUM OilTemp = get_aircraft_var_enum("GENERAL ENG OIL TEMPERATURE");
   ENUM Thrust = get_aircraft_var_enum("TURB ENG JET THRUST");
@@ -395,8 +397,10 @@ class SimVars {
 
   FLOAT64 getCN1(int index) { return aircraft_varget(CorrectedN1, m_Units->Percent, index); }
   FLOAT64 getCN2(int index) { return aircraft_varget(CorrectedN2, m_Units->Percent, index); }
+  FLOAT64 getCN3(int index) { return aircraft_varget(CorrectedN3, m_Units->Percent, index); }
   FLOAT64 getN1(int index) { return aircraft_varget(N1, m_Units->Percent, index); }
   FLOAT64 getN2(int index) { return aircraft_varget(N2, m_Units->Percent, index); }
+  FLOAT64 getN3(int index) { return aircraft_varget(N3, m_Units->Percent, index); }
   FLOAT64 getOilPsi(int index) { return aircraft_varget(OilPSI, m_Units->Psi, index); }
   FLOAT64 getOilTemp(int index) { return aircraft_varget(OilTemp, m_Units->Celsius, index); }
   FLOAT64 getThrust(int index) { return aircraft_varget(Thrust, m_Units->Pounds, index); }
