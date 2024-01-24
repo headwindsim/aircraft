@@ -1928,18 +1928,18 @@
                 </UseTemplate>
 
                 <!-- run the MSFS jet "pump" depending on which valves are open -->
-                <UseTemplate Name="FBW_JET_PUMP">
-                    <PUMP_INDEX>1</PUMP_INDEX>
+<!--                 <UseTemplate Name="FBW_JET_PUMP">
+                    <PUMP_INDEX>8</PUMP_INDEX>
                     <JUNCTION_INDEX>4</JUNCTION_INDEX>
                     <AUTO_VALVE_INDEX>11</AUTO_VALVE_INDEX>
                     <DISABLE_VALVE_INDEX>9</DISABLE_VALVE_INDEX>
                 </UseTemplate>
                 <UseTemplate Name="FBW_JET_PUMP">
-                    <PUMP_INDEX>4</PUMP_INDEX>
+                    <PUMP_INDEX>9</PUMP_INDEX>
                     <JUNCTION_INDEX>5</JUNCTION_INDEX>
                     <AUTO_VALVE_INDEX>12</AUTO_VALVE_INDEX>
                     <DISABLE_VALVE_INDEX>10</DISABLE_VALVE_INDEX>
-                </UseTemplate>
+                </UseTemplate> -->
             </Component>
 
             <!-- FLT CTL -->
@@ -5115,13 +5115,13 @@
             <!-- Windshield Left -->
             <UseTemplate Name="FBW_Windshield_Wiped">
                 <SIDE>CAPT</SIDE>
-                <CIRCUIT_ID_WIPERS>77</CIRCUIT_ID_WIPERS>
+                <CIRCUIT_ID_WIPERS>91</CIRCUIT_ID_WIPERS>
             </UseTemplate>
 
             <!-- Windshield Right -->
             <UseTemplate Name="FBW_Windshield_Wiped">
                 <SIDE>FO</SIDE>
-                <CIRCUIT_ID_WIPERS>80</CIRCUIT_ID_WIPERS>
+                <CIRCUIT_ID_WIPERS>96</CIRCUIT_ID_WIPERS>
             </UseTemplate>
 
             <!-- Hide Asobo Windshield -->

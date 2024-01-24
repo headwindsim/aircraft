@@ -19,7 +19,7 @@
 #define CONFIGURATION_SECTION_FUEL_RIGHT_QUANTITY "FUEL_RIGHT_QUANTITY"
 #define CONFIGURATION_SECTION_FUEL_LEFT_AUX_QUANTITY "FUEL_LEFT_AUX_QUANTITY"
 #define CONFIGURATION_SECTION_FUEL_RIGHT_AUX_QUANTITY "FUEL_RIGHT_AUX_QUANTITY"
-#define CONFIGURATION_SECTION_FUEL_TRIM_QTY "FUEL_TRIM_QTY"
+#define CONFIGURATION_SECTION_FUEL_TRIM_QUANTITY "FUEL_TRIM_QUANTITY"
 
 /* Values in gallons */
 struct Configuration {
@@ -676,18 +676,18 @@ class EngineControl {
     bool uiFuelTamper = false;
     double pumpStateLeft = simVars->getPumpStateLeft();
     double pumpStateRight = simVars->getPumpStateRight();
-    bool xfrCenterLeftManual = simVars->getJunctionSetting(4) > 1.5;
-    bool xfrCenterRightManual = simVars->getJunctionSetting(5) > 1.5;
-    bool xfrCenterLeftAuto = simVars->getValve(11) > 0.0 && !xfrCenterLeftManual;
-    bool xfrCenterRightAuto = simVars->getValve(12) > 0.0 && !xfrCenterRightManual;
-    bool xfrValveCenterLeftOpen = simVars->getValve(9) > 0.0 && (xfrCenterLeftAuto || xfrCenterLeftManual);
-    bool xfrValveCenterRightOpen = simVars->getValve(10) > 0.0 && (xfrCenterRightAuto || xfrCenterRightManual);
+    // bool xfrCenterLeftManual = simVars->getJunctionSetting(4) > 1.5;
+    // bool xfrCenterRightManual = simVars->getJunctionSetting(5) > 1.5;
+    // bool xfrCenterLeftAuto = simVars->getValve(11) > 0.0 && !xfrCenterLeftManual;
+    // bool xfrCenterRightAuto = simVars->getValve(12) > 0.0 && !xfrCenterRightManual;
+    // bool xfrValveCenterLeftOpen = simVars->getValve(9) > 0.0 && (xfrCenterLeftAuto || xfrCenterLeftManual);
+    // bool xfrValveCenterRightOpen = simVars->getValve(10) > 0.0 && (xfrCenterRightAuto || xfrCenterRightManual);
     double xfrValveOuterLeft1 = simVars->getValve(6);
-    double xfrValveOuterLeft2 = simVars->getValve(4);
+    double xfrValveOuterLeft2 = simVars->getValve(8);
     double xfrValveOuterRight1 = simVars->getValve(7);
-    double xfrValveOuterRight2 = simVars->getValve(5);
-    double lineLeftToCenterFlow = simVars->getLineFlow(27);
-    double lineRightToCenterFlow = simVars->getLineFlow(28);
+    double xfrValveOuterRight2 = simVars->getValve(9);
+    // double lineLeftToCenterFlow = simVars->getLineFlow(27);
+    // double lineRightToCenterFlow = simVars->getLineFlow(28);
     double lineFlowRatio = 0;
 
     double engine1PreFF = simVars->getEngine1PreFF();  // KG/H
@@ -722,19 +722,21 @@ class EngineControl {
     double xfrCenterToRight = 0;
     double xfrAuxLeft = 0;
     double xfrAuxRight = 0;
-    double fuelTotalActual = leftQuantity + rightQuantity + leftAuxQuantity + rightAuxQuantity + centerQuantity;  // LBS
-    double fuelTotalPre = fuelLeftPre + fuelRightPre + fuelAuxLeftPre + fuelAuxRightPre + fuelCenterPre;          // LBS
-    double deltaFuelRate = abs(fuelTotalActual - fuelTotalPre) / (fuelWeightGallon * deltaTimeSeconds);           // LBS/ sec
+    double fuelTotalActual = leftQuantity + rightQuantity + leftAuxQuantity + rightAuxQuantity + centerQuantity + trimQuantity;  // LBS
+    double fuelTotalPre = fuelLeftPre + fuelRightPre + fuelAuxLeftPre + fuelAuxRightPre + fuelCenterPre + fuelTrimPre;           // LBS
+    double deltaFuelRate = abs(fuelTotalActual - fuelTotalPre) / (fuelWeightGallon * deltaTimeSeconds);                          // LBS/ sec
 
     double engine1State = simVars->getEngine1State();
     double engine2State = simVars->getEngine2State();
 
     int isTankClosed = 0;
     double xFeedValve = simVars->getValve(3);
-    double leftPump1 = simVars->getPump(2);
-    double leftPump2 = simVars->getPump(5);
-    double rightPump1 = simVars->getPump(3);
-    double rightPump2 = simVars->getPump(6);
+    double leftPumpStandby = simVars->getPump(1);
+    double leftPumpL1 = simVars->getPump(3);
+    double leftPumpL2 = simVars->getPump(5);
+    double rightPumpStandby = simVars->getPump(2);
+    double rightPumpR1 = simVars->getPump(4);
+    double rightPumpR2 = simVars->getPump(6);
 
     double apuNpercent = simVars->getAPUrpmPercent();
 
@@ -834,11 +836,11 @@ class EngineControl {
       // isTankClosed = 3, left & right tanks do not supply fuel
       // isTankClosed = 4, both tanks supply fuel
       if (xFeedValve > 0.0) {
-        if (leftPump1 == 0 && leftPump2 == 0 && rightPump1 == 0 && rightPump2 == 0)
+        if (leftPumpStandby == 0 && leftPumpL1 == 0 && leftPumpL2 == 0 && rightPumpStandby == 0 && rightPumpR1 == 0 && rightPumpR2 == 0)
           isTankClosed = 3;
-        else if (leftPump1 == 0 && leftPump2 == 0)
+        else if (leftPumpStandby == 0 && leftPumpL1 == 0 && leftPumpL2 == 0)
           isTankClosed = 1;
-        else if (rightPump1 == 0 && rightPump2 == 0)
+        else if (rightPumpStandby == 0 && rightPumpR1 == 0 && rightPumpR2 == 0)
           isTankClosed = 2;
         else
           isTankClosed = 4;
@@ -880,7 +882,7 @@ class EngineControl {
       }
 
       /// apu fuel consumption for this frame in pounds
-      double apuFuelConsumption = simVars->getLineFlow(18) * fuelWeightGallon * deltaTime;
+      double apuFuelConsumption = simVars->getLineFlow(41) * fuelWeightGallon * deltaTime;
 
       // check if APU is actually running instead of just the ASU which doesnt consume fuel
       if (apuNpercent <= 0.0) {
@@ -926,18 +928,18 @@ class EngineControl {
 
       //--------------------------------------------
       // Center Tank transfer routine
-      if (xfrValveCenterLeftOpen && xfrValveCenterRightOpen) {
-        if (lineLeftToCenterFlow < 0.1 && lineRightToCenterFlow < 0.1)
-          lineFlowRatio = 0.5;
-        else
-          lineFlowRatio = lineLeftToCenterFlow / (lineLeftToCenterFlow + lineRightToCenterFlow);
+      // if (xfrValveCenterLeftOpen && xfrValveCenterRightOpen) {
+      //   if (lineLeftToCenterFlow < 0.1 && lineRightToCenterFlow < 0.1)
+      //     lineFlowRatio = 0.5;
+      //   else
+      //     lineFlowRatio = lineLeftToCenterFlow / (lineLeftToCenterFlow + lineRightToCenterFlow);
 
-        xfrCenterToLeft = (fuelCenterPre - centerQuantity) * lineFlowRatio;
-        xfrCenterToRight = (fuelCenterPre - centerQuantity) * (1 - lineFlowRatio);
-      } else if (xfrValveCenterLeftOpen)
-        xfrCenterToLeft = fuelCenterPre - centerQuantity;
-      else if (xfrValveCenterRightOpen)
-        xfrCenterToRight = fuelCenterPre - centerQuantity;
+      //   xfrCenterToLeft = (fuelCenterPre - centerQuantity) * lineFlowRatio;
+      //   xfrCenterToRight = (fuelCenterPre - centerQuantity) * (1 - lineFlowRatio);
+      // } else if (xfrValveCenterLeftOpen)
+      //   xfrCenterToLeft = fuelCenterPre - centerQuantity;
+      // else if (xfrValveCenterRightOpen)
+      //   xfrCenterToRight = fuelCenterPre - centerQuantity;
 
       //--------------------------------------------
       // Final Fuel levels for left and right inner tanks
@@ -1335,7 +1337,7 @@ class EngineControl {
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_RIGHT_QUANTITY, 1645.0),
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_LEFT_AUX_QUANTITY, 228.0),
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_RIGHT_AUX_QUANTITY, 228.0),
-        mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_TRIM_QTY, 1617.0),
+        mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_TRIM_QUANTITY, 1617.0),
     };
   }
 
@@ -1351,7 +1353,7 @@ class EngineControl {
     stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_RIGHT_QUANTITY] = std::to_string(configuration.fuelRight);
     stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_LEFT_AUX_QUANTITY] = std::to_string(configuration.fuelLeftAux);
     stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_RIGHT_AUX_QUANTITY] = std::to_string(configuration.fuelRightAux);
-    stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_TRIM_QTY] = std::to_string(configuration.fuelTrim);
+    stInitStructure[CONFIGURATION_SECTION_FUEL][CONFIGURATION_SECTION_FUEL_TRIM_QUANTITY] = std::to_string(configuration.fuelTrim);
 
     if (!iniFile.write(stInitStructure, true)) {
       std::cout << "EngineControl: failed to write engine conf " << confFilename << " due to error \"" << strerror(errno) << "\""
