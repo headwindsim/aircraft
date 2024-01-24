@@ -6,6 +6,8 @@ members = [
     "build-a339x/src/wasm/systems/a320_systems",
     "build-a339x/src/wasm/systems/a320_systems_wasm",
     "build-a339x/src/wasm/systems/a320_hydraulic_simulation_graphs",
+    "build-a339x/src/wasm/systems/a330_systems",
+    "build-a339x/src/wasm/systems/a330_systems_wasm",
     "build-a339x-acj/src/wasm/systems/a320_systems",
     "build-a339x-acj/src/wasm/systems/a320_systems_wasm",
     "build-a339x-acj/src/wasm/systems/a320_hydraulic_simulation_graphs",
