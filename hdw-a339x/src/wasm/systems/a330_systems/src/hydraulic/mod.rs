@@ -279,7 +279,7 @@ impl A330CargoDoorFactory {
     const FLOW_CONTROL_INTEGRAL_GAIN: f64 = 5.;
     const FLOW_CONTROL_FORCE_GAIN: f64 = 200000.;
 
-    fn A330_cargo_door_actuator(
+    fn a330_cargo_door_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -310,7 +310,7 @@ impl A330CargoDoorFactory {
     }
 
     /// Builds a cargo door body for A330 Neo
-    fn A330_cargo_door_body(is_locked: bool) -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_cargo_door_body(is_locked: bool) -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(100. / 1000., 1855. / 1000., 2025. / 1000.);
         let cg_offset = Vector3::new(0., -size[1] / 2., 0.);
 
@@ -336,24 +336,24 @@ impl A330CargoDoorFactory {
 
     /// Builds a cargo door assembly consisting of the door physical rigid body and the hydraulic actuator connected
     /// to it
-    fn A330_cargo_door_assembly(context: &mut InitContext) -> HydraulicLinearActuatorAssembly<1> {
-        let cargo_door_body = Self::A330_cargo_door_body(true);
-        let cargo_door_actuator = Self::A330_cargo_door_actuator(context, &cargo_door_body);
+    fn a330_cargo_door_assembly(context: &mut InitContext) -> HydraulicLinearActuatorAssembly<1> {
+        let cargo_door_body = Self::a330_cargo_door_body(true);
+        let cargo_door_actuator = Self::a330_cargo_door_actuator(context, &cargo_door_body);
         HydraulicLinearActuatorAssembly::new([cargo_door_actuator], cargo_door_body)
     }
 
-    fn new_A330_cargo_door(context: &mut InitContext, id: &str) -> CargoDoor {
-        let assembly = Self::A330_cargo_door_assembly(context);
+    fn new_a330_cargo_door(context: &mut InitContext, id: &str) -> CargoDoor {
+        let assembly = Self::a330_cargo_door_assembly(context);
         CargoDoor::new(
             context,
             id,
             assembly,
-            Self::new_A330_cargo_door_aero_model(),
+            Self::new_a330_cargo_door_aero_model(),
         )
     }
 
-    fn new_A330_cargo_door_aero_model() -> AerodynamicModel {
-        let body = Self::A330_cargo_door_body(false);
+    fn new_a330_cargo_door_aero_model() -> AerodynamicModel {
+        let body = Self::a330_cargo_door_body(false);
         AerodynamicModel::new(
             &body,
             Some(Vector3::new(1., 0., 0.)),
@@ -373,7 +373,7 @@ impl A330AileronFactory {
     const MAX_DAMPING_CONSTANT_FOR_SLOW_DAMPING: f64 = 3500000.;
     const MAX_FLOW_PRECISION_PER_ACTUATOR_PERCENT: f64 = 1.;
 
-    fn A330_aileron_actuator(
+    fn a330_aileron_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -416,7 +416,7 @@ impl A330AileronFactory {
     }
 
     /// Builds an aileron control surface body for A330 Neo
-    fn A330_aileron_body(init_drooped_down: bool) -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_aileron_body(init_drooped_down: bool) -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(3.325, 0.16, 0.58);
 
         // CG at half the size
@@ -450,14 +450,14 @@ impl A330AileronFactory {
 
     /// Builds an aileron assembly consisting of the aileron physical rigid body and two hydraulic actuators connected
     /// to it
-    fn A330_aileron_assembly(
+    fn a330_aileron_assembly(
         context: &mut InitContext,
         init_drooped_down: bool,
     ) -> HydraulicLinearActuatorAssembly<2> {
-        let aileron_body = Self::A330_aileron_body(init_drooped_down);
+        let aileron_body = Self::a330_aileron_body(init_drooped_down);
 
-        let aileron_actuator_outward = Self::A330_aileron_actuator(context, &aileron_body);
-        let aileron_actuator_inward = Self::A330_aileron_actuator(context, &aileron_body);
+        let aileron_actuator_outward = Self::a330_aileron_actuator(context, &aileron_body);
+        let aileron_actuator_inward = Self::a330_aileron_actuator(context, &aileron_body);
 
         HydraulicLinearActuatorAssembly::new(
             [aileron_actuator_outward, aileron_actuator_inward],
@@ -467,12 +467,12 @@ impl A330AileronFactory {
 
     fn new_aileron(context: &mut InitContext, id: ActuatorSide) -> AileronAssembly {
         let init_drooped_down = !context.is_in_flight();
-        let assembly = Self::A330_aileron_assembly(context, init_drooped_down);
-        AileronAssembly::new(context, id, assembly, Self::new_A330_aileron_aero_model())
+        let assembly = Self::a330_aileron_assembly(context, init_drooped_down);
+        AileronAssembly::new(context, id, assembly, Self::new_a330_aileron_aero_model())
     }
 
-    fn new_A330_aileron_aero_model() -> AerodynamicModel {
-        let body = Self::A330_aileron_body(true);
+    fn new_a330_aileron_aero_model() -> AerodynamicModel {
+        let body = Self::a330_aileron_body(true);
 
         // Aerodynamic object has a little rotation from horizontal direction so that at X°
         // of wing AOA the aileron gets some X°+Y° AOA as the overwing pressure sucks the aileron up
@@ -496,7 +496,7 @@ impl A330SpoilerFactory {
 
     const MAX_FLOW_PRECISION_PER_ACTUATOR_PERCENT: f64 = 3.;
 
-    fn A330_spoiler_actuator(
+    fn a330_spoiler_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -537,7 +537,7 @@ impl A330SpoilerFactory {
     }
 
     /// Builds a spoiler control surface body for A330 Neo
-    fn A330_spoiler_body() -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_spoiler_body() -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(1.785, 0.1, 0.685);
         let cg_offset = Vector3::new(0., 0., -0.5 * size[2]);
         let aero_center = Vector3::new(0., 0., -0.4 * size[2]);
@@ -562,20 +562,20 @@ impl A330SpoilerFactory {
     }
 
     /// Builds a spoiler assembly consisting of the spoiler physical rigid body and one hydraulic actuator
-    fn A330_spoiler_assembly(context: &mut InitContext) -> HydraulicLinearActuatorAssembly<1> {
-        let spoiler_body = Self::A330_spoiler_body();
+    fn a330_spoiler_assembly(context: &mut InitContext) -> HydraulicLinearActuatorAssembly<1> {
+        let spoiler_body = Self::a330_spoiler_body();
 
-        let spoiler_actuator = Self::A330_spoiler_actuator(context, &spoiler_body);
+        let spoiler_actuator = Self::a330_spoiler_actuator(context, &spoiler_body);
 
         HydraulicLinearActuatorAssembly::new([spoiler_actuator], spoiler_body)
     }
 
-    fn new_A330_spoiler_group(context: &mut InitContext, id: ActuatorSide) -> SpoilerGroup {
-        let spoiler_1 = Self::new_A330_spoiler_element(context, id, 1);
-        let spoiler_2 = Self::new_A330_spoiler_element(context, id, 2);
-        let spoiler_3 = Self::new_A330_spoiler_element(context, id, 3);
-        let spoiler_4 = Self::new_A330_spoiler_element(context, id, 4);
-        let spoiler_5 = Self::new_A330_spoiler_element(context, id, 5);
+    fn new_a330_spoiler_group(context: &mut InitContext, id: ActuatorSide) -> SpoilerGroup {
+        let spoiler_1 = Self::new_a330_spoiler_element(context, id, 1);
+        let spoiler_2 = Self::new_a330_spoiler_element(context, id, 2);
+        let spoiler_3 = Self::new_a330_spoiler_element(context, id, 3);
+        let spoiler_4 = Self::new_a330_spoiler_element(context, id, 4);
+        let spoiler_5 = Self::new_a330_spoiler_element(context, id, 5);
 
         match id {
             ActuatorSide::Left => SpoilerGroup::new(
@@ -591,23 +591,23 @@ impl A330SpoilerFactory {
         }
     }
 
-    fn new_A330_spoiler_element(
+    fn new_a330_spoiler_element(
         context: &mut InitContext,
         id: ActuatorSide,
         id_number: usize,
     ) -> SpoilerElement {
-        let assembly = Self::A330_spoiler_assembly(context);
+        let assembly = Self::a330_spoiler_assembly(context);
         SpoilerElement::new(
             context,
             id,
             id_number,
             assembly,
-            Self::new_A330_spoiler_aero_model(),
+            Self::new_a330_spoiler_aero_model(),
         )
     }
 
-    fn new_A330_spoiler_aero_model() -> AerodynamicModel {
-        let body = Self::A330_spoiler_body();
+    fn new_a330_spoiler_aero_model() -> AerodynamicModel {
+        let body = Self::a330_spoiler_body();
 
         // Lift vector and normal are rotated 10° to acount for air supposedly following
         // wing profile that is 10° from horizontal
@@ -631,7 +631,7 @@ impl A330ElevatorFactory {
     const MAX_DAMPING_CONSTANT_FOR_SLOW_DAMPING: f64 = 15000000.;
     const MAX_FLOW_PRECISION_PER_ACTUATOR_PERCENT: f64 = 1.;
 
-    fn A330_elevator_actuator(
+    fn a330_elevator_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -669,7 +669,7 @@ impl A330ElevatorFactory {
     }
 
     /// Builds an aileron control surface body for A330 Neo
-    fn A330_elevator_body(init_drooped_down: bool) -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_elevator_body(init_drooped_down: bool) -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(6., 0.405, 1.125);
         let cg_offset = Vector3::new(0., 0., -0.5 * size[2]);
         let aero_center = Vector3::new(0., 0., -0.3 * size[2]);
@@ -701,14 +701,14 @@ impl A330ElevatorFactory {
 
     /// Builds an aileron assembly consisting of the aileron physical rigid body and two hydraulic actuators connected
     /// to it
-    fn A330_elevator_assembly(
+    fn a330_elevator_assembly(
         context: &mut InitContext,
         init_drooped_down: bool,
     ) -> HydraulicLinearActuatorAssembly<2> {
-        let elevator_body = Self::A330_elevator_body(init_drooped_down);
+        let elevator_body = Self::a330_elevator_body(init_drooped_down);
 
-        let elevator_actuator_outboard = Self::A330_elevator_actuator(context, &elevator_body);
-        let elevator_actuator_inbord = Self::A330_elevator_actuator(context, &elevator_body);
+        let elevator_actuator_outboard = Self::a330_elevator_actuator(context, &elevator_body);
+        let elevator_actuator_inbord = Self::a330_elevator_actuator(context, &elevator_body);
 
         HydraulicLinearActuatorAssembly::new(
             [elevator_actuator_outboard, elevator_actuator_inbord],
@@ -718,12 +718,12 @@ impl A330ElevatorFactory {
 
     fn new_elevator(context: &mut InitContext, id: ActuatorSide) -> ElevatorAssembly {
         let init_drooped_down = !context.is_in_flight();
-        let assembly = Self::A330_elevator_assembly(context, init_drooped_down);
-        ElevatorAssembly::new(context, id, assembly, Self::new_A330_elevator_aero_model())
+        let assembly = Self::a330_elevator_assembly(context, init_drooped_down);
+        ElevatorAssembly::new(context, id, assembly, Self::new_a330_elevator_aero_model())
     }
 
-    fn new_A330_elevator_aero_model() -> AerodynamicModel {
-        let body = Self::A330_elevator_body(true);
+    fn new_a330_elevator_aero_model() -> AerodynamicModel {
+        let body = Self::a330_elevator_body(true);
         AerodynamicModel::new(
             &body,
             Some(Vector3::new(0., 1., 0.)),
@@ -743,7 +743,7 @@ impl A330RudderFactory {
     const MAX_DAMPING_CONSTANT_FOR_SLOW_DAMPING: f64 = 1000000.;
     const MAX_FLOW_PRECISION_PER_ACTUATOR_PERCENT: f64 = 1.;
 
-    fn A330_rudder_actuator(
+    fn a330_rudder_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -781,7 +781,7 @@ impl A330RudderFactory {
     }
 
     /// Builds an aileron control surface body for A330 Neo
-    fn A330_rudder_body(init_at_center: bool) -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_rudder_body(init_at_center: bool) -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(0.42, 6.65, 1.8);
         let cg_offset = Vector3::new(0., 0.5 * size[1], -0.5 * size[2]);
         let aero_center = Vector3::new(0., 0.5 * size[1], -0.3 * size[2]);
@@ -813,15 +813,15 @@ impl A330RudderFactory {
 
     /// Builds an aileron assembly consisting of the aileron physical rigid body and two hydraulic actuators connected
     /// to it
-    fn A330_rudder_assembly(
+    fn a330_rudder_assembly(
         context: &mut InitContext,
         init_at_center: bool,
     ) -> HydraulicLinearActuatorAssembly<3> {
-        let rudder_body = Self::A330_rudder_body(init_at_center);
+        let rudder_body = Self::a330_rudder_body(init_at_center);
 
-        let rudder_actuator_green = Self::A330_rudder_actuator(context, &rudder_body);
-        let rudder_actuator_blue = Self::A330_rudder_actuator(context, &rudder_body);
-        let rudder_actuator_yellow = Self::A330_rudder_actuator(context, &rudder_body);
+        let rudder_actuator_green = Self::a330_rudder_actuator(context, &rudder_body);
+        let rudder_actuator_blue = Self::a330_rudder_actuator(context, &rudder_body);
+        let rudder_actuator_yellow = Self::a330_rudder_actuator(context, &rudder_body);
 
         HydraulicLinearActuatorAssembly::new(
             [
@@ -838,12 +838,12 @@ impl A330RudderFactory {
             || context.start_state() == StartState::Runway
             || context.is_in_flight();
 
-        let assembly = Self::A330_rudder_assembly(context, init_at_center);
-        RudderAssembly::new(context, assembly, Self::new_A330_rudder_aero_model())
+        let assembly = Self::a330_rudder_assembly(context, init_at_center);
+        RudderAssembly::new(context, assembly, Self::new_a330_rudder_aero_model())
     }
 
-    fn new_A330_rudder_aero_model() -> AerodynamicModel {
-        let body = Self::A330_rudder_body(true);
+    fn new_a330_rudder_aero_model() -> AerodynamicModel {
+        let body = Self::a330_rudder_body(true);
         AerodynamicModel::new(
             &body,
             Some(Vector3::new(1., 0., 0.)),
@@ -856,11 +856,11 @@ impl A330RudderFactory {
 
 struct A330GearDoorFactory {}
 impl A330GearDoorFactory {
-    fn A330_nose_gear_door_aerodynamics() -> AerodynamicModel {
+    fn a330_nose_gear_door_aerodynamics() -> AerodynamicModel {
         // Faking the single door by only considering right door aerodynamics.
         // Will work with headwind, but will cause strange behaviour with massive crosswind.
         AerodynamicModel::new(
-            &Self::A330_nose_gear_door_body(),
+            &Self::a330_nose_gear_door_body(),
             Some(Vector3::new(0., 1., 0.)),
             Some(Vector3::new(0., -0.2, 1.)),
             Some(Vector3::new(0., -1., -0.2)),
@@ -868,9 +868,9 @@ impl A330GearDoorFactory {
         )
     }
 
-    fn A330_left_gear_door_aerodynamics() -> AerodynamicModel {
+    fn a330_left_gear_door_aerodynamics() -> AerodynamicModel {
         AerodynamicModel::new(
-            &Self::A330_left_gear_door_body(),
+            &Self::a330_left_gear_door_body(),
             Some(Vector3::new(0., 1., 0.)),
             Some(Vector3::new(0., -0.1, 1.)),
             Some(Vector3::new(0., 1., 0.1)),
@@ -878,9 +878,9 @@ impl A330GearDoorFactory {
         )
     }
 
-    fn A330_right_gear_door_aerodynamics() -> AerodynamicModel {
+    fn a330_right_gear_door_aerodynamics() -> AerodynamicModel {
         AerodynamicModel::new(
-            &Self::A330_right_gear_door_body(),
+            &Self::a330_right_gear_door_body(),
             Some(Vector3::new(0., 1., 0.)),
             Some(Vector3::new(0., -0.1, 1.)),
             Some(Vector3::new(0., 1., 0.1)),
@@ -888,7 +888,7 @@ impl A330GearDoorFactory {
         )
     }
 
-    fn A330_nose_gear_door_actuator(
+    fn a330_nose_gear_door_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -932,7 +932,7 @@ impl A330GearDoorFactory {
         )
     }
 
-    fn A330_main_gear_door_actuator(
+    fn a330_main_gear_door_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -976,7 +976,7 @@ impl A330GearDoorFactory {
         )
     }
 
-    fn A330_left_gear_door_body() -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_left_gear_door_body() -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(-1.73, 0.02, 1.7);
         let cg_offset = Vector3::new(2. / 3. * size[0], 0.1, 0.);
 
@@ -999,7 +999,7 @@ impl A330GearDoorFactory {
         )
     }
 
-    fn A330_right_gear_door_body() -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_right_gear_door_body() -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(1.73, 0.02, 1.7);
         let cg_offset = Vector3::new(2. / 3. * size[0], 0.1, 0.);
 
@@ -1022,7 +1022,7 @@ impl A330GearDoorFactory {
         )
     }
 
-    fn A330_nose_gear_door_body() -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_nose_gear_door_body() -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(0.4, 0.02, 1.5);
         let cg_offset = Vector3::new(-0.5 * size[0], 0., 0.);
 
@@ -1045,19 +1045,19 @@ impl A330GearDoorFactory {
         )
     }
 
-    fn A330_gear_door_assembly(
+    fn a330_gear_door_assembly(
         context: &mut InitContext,
         wheel_id: GearWheel,
     ) -> HydraulicLinearActuatorAssembly<1> {
         let gear_door_body = match wheel_id {
-            GearWheel::NOSE => Self::A330_nose_gear_door_body(),
-            GearWheel::LEFT => Self::A330_left_gear_door_body(),
-            GearWheel::RIGHT => Self::A330_right_gear_door_body(),
+            GearWheel::NOSE => Self::a330_nose_gear_door_body(),
+            GearWheel::LEFT => Self::a330_left_gear_door_body(),
+            GearWheel::RIGHT => Self::a330_right_gear_door_body(),
         };
         let gear_door_actuator = match wheel_id {
-            GearWheel::NOSE => Self::A330_nose_gear_door_actuator(context, &gear_door_body),
+            GearWheel::NOSE => Self::a330_nose_gear_door_actuator(context, &gear_door_body),
             GearWheel::LEFT | GearWheel::RIGHT => {
-                Self::A330_main_gear_door_actuator(context, &gear_door_body)
+                Self::a330_main_gear_door_actuator(context, &gear_door_body)
             }
         };
 
@@ -1067,9 +1067,9 @@ impl A330GearDoorFactory {
 
 struct A330GearFactory {}
 impl A330GearFactory {
-    fn A330_nose_gear_aerodynamics() -> AerodynamicModel {
+    fn a330_nose_gear_aerodynamics() -> AerodynamicModel {
         AerodynamicModel::new(
-            &Self::A330_nose_gear_body(true),
+            &Self::a330_nose_gear_body(true),
             Some(Vector3::new(0., 0., 1.)),
             None,
             None,
@@ -1077,9 +1077,9 @@ impl A330GearFactory {
         )
     }
 
-    fn A330_right_gear_aerodynamics() -> AerodynamicModel {
+    fn a330_right_gear_aerodynamics() -> AerodynamicModel {
         AerodynamicModel::new(
-            &Self::A330_right_gear_body(true),
+            &Self::a330_right_gear_body(true),
             Some(Vector3::new(0., 0., 1.)),
             Some(Vector3::new(0.3, 0., 1.)),
             Some(Vector3::new(1., 0., -0.3)),
@@ -1087,9 +1087,9 @@ impl A330GearFactory {
         )
     }
 
-    fn A330_left_gear_aerodynamics() -> AerodynamicModel {
+    fn a330_left_gear_aerodynamics() -> AerodynamicModel {
         AerodynamicModel::new(
-            &Self::A330_left_gear_body(true),
+            &Self::a330_left_gear_body(true),
             Some(Vector3::new(0., 0., 1.)),
             Some(Vector3::new(-0.3, 0., 1.)),
             Some(Vector3::new(-1., 0., -0.3)),
@@ -1097,7 +1097,7 @@ impl A330GearFactory {
         )
     }
 
-    fn A330_nose_gear_actuator(
+    fn a330_nose_gear_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -1141,7 +1141,7 @@ impl A330GearFactory {
         )
     }
 
-    fn A330_main_gear_actuator(
+    fn a330_main_gear_actuator(
         context: &mut InitContext,
         bounded_linear_length: &impl BoundedLinearLength,
     ) -> LinearActuator {
@@ -1185,7 +1185,7 @@ impl A330GearFactory {
         )
     }
 
-    fn A330_left_gear_body(init_downlocked: bool) -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_left_gear_body(init_downlocked: bool) -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(0.3, 3.453, 0.3);
         let cg_offset = Vector3::new(0., -3. / 4. * size[1], 0.);
 
@@ -1212,7 +1212,7 @@ impl A330GearFactory {
         )
     }
 
-    fn A330_right_gear_body(init_downlocked: bool) -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_right_gear_body(init_downlocked: bool) -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(0.3, 3.453, 0.3);
         let cg_offset = Vector3::new(0., -3. / 4. * size[1], 0.);
 
@@ -1239,7 +1239,7 @@ impl A330GearFactory {
         )
     }
 
-    fn A330_nose_gear_body(init_downlocked: bool) -> LinearActuatedRigidBodyOnHingeAxis {
+    fn a330_nose_gear_body(init_downlocked: bool) -> LinearActuatedRigidBodyOnHingeAxis {
         let size = Vector3::new(0.3, 2.453, 0.3);
         let cg_offset = Vector3::new(0., -2. / 3. * size[1], 0.);
 
@@ -1266,24 +1266,24 @@ impl A330GearFactory {
         )
     }
 
-    fn A330_gear_assembly(
+    fn a330_gear_assembly(
         context: &mut InitContext,
         wheel_id: GearWheel,
         init_downlocked: bool,
     ) -> HydraulicLinearActuatorAssembly<1> {
         let gear_body = match wheel_id {
-            GearWheel::NOSE => Self::A330_nose_gear_body(init_downlocked),
+            GearWheel::NOSE => Self::a330_nose_gear_body(init_downlocked),
 
-            GearWheel::LEFT => Self::A330_left_gear_body(init_downlocked),
+            GearWheel::LEFT => Self::a330_left_gear_body(init_downlocked),
 
-            GearWheel::RIGHT => Self::A330_right_gear_body(init_downlocked),
+            GearWheel::RIGHT => Self::a330_right_gear_body(init_downlocked),
         };
 
         let gear_actuator = match wheel_id {
-            GearWheel::NOSE => Self::A330_nose_gear_actuator(context, &gear_body),
+            GearWheel::NOSE => Self::a330_nose_gear_actuator(context, &gear_body),
 
             GearWheel::LEFT | GearWheel::RIGHT => {
-                Self::A330_main_gear_actuator(context, &gear_body)
+                Self::a330_main_gear_actuator(context, &gear_body)
             }
         };
 
@@ -1293,19 +1293,19 @@ impl A330GearFactory {
 
 struct A330GearSystemFactory {}
 impl A330GearSystemFactory {
-    fn A330_gear_system(context: &mut InitContext) -> HydraulicGearSystem {
+    fn a330_gear_system(context: &mut InitContext) -> HydraulicGearSystem {
         let init_downlocked = context.start_gear_down();
 
-        let nose_door = A330GearDoorFactory::A330_gear_door_assembly(context, GearWheel::NOSE);
-        let left_door = A330GearDoorFactory::A330_gear_door_assembly(context, GearWheel::LEFT);
-        let right_door = A330GearDoorFactory::A330_gear_door_assembly(context, GearWheel::RIGHT);
+        let nose_door = A330GearDoorFactory::a330_gear_door_assembly(context, GearWheel::NOSE);
+        let left_door = A330GearDoorFactory::a330_gear_door_assembly(context, GearWheel::LEFT);
+        let right_door = A330GearDoorFactory::a330_gear_door_assembly(context, GearWheel::RIGHT);
 
         let nose_gear =
-            A330GearFactory::A330_gear_assembly(context, GearWheel::NOSE, init_downlocked);
+            A330GearFactory::a330_gear_assembly(context, GearWheel::NOSE, init_downlocked);
         let left_gear =
-            A330GearFactory::A330_gear_assembly(context, GearWheel::LEFT, init_downlocked);
+            A330GearFactory::a330_gear_assembly(context, GearWheel::LEFT, init_downlocked);
         let right_gear =
-            A330GearFactory::A330_gear_assembly(context, GearWheel::RIGHT, init_downlocked);
+            A330GearFactory::a330_gear_assembly(context, GearWheel::RIGHT, init_downlocked);
 
         HydraulicGearSystem::new(
             context,
@@ -1315,12 +1315,12 @@ impl A330GearSystemFactory {
             nose_gear,
             left_gear,
             right_gear,
-            A330GearDoorFactory::A330_left_gear_door_aerodynamics(),
-            A330GearDoorFactory::A330_right_gear_door_aerodynamics(),
-            A330GearDoorFactory::A330_nose_gear_door_aerodynamics(),
-            A330GearFactory::A330_left_gear_aerodynamics(),
-            A330GearFactory::A330_right_gear_aerodynamics(),
-            A330GearFactory::A330_nose_gear_aerodynamics(),
+            A330GearDoorFactory::a330_left_gear_door_aerodynamics(),
+            A330GearDoorFactory::a330_right_gear_door_aerodynamics(),
+            A330GearDoorFactory::a330_nose_gear_door_aerodynamics(),
+            A330GearFactory::a330_left_gear_aerodynamics(),
+            A330GearFactory::a330_right_gear_aerodynamics(),
+            A330GearFactory::a330_nose_gear_aerodynamics(),
         )
     }
 }
@@ -1651,7 +1651,7 @@ impl A330Hydraulic {
             engine_driven_pump_1: EngineDrivenPump::new(
                 context,
                 AirbusEngineDrivenPumpId::Green,
-                PumpCharacteristics::A330_edp(),
+                PumpCharacteristics::a330_edp(),
             ),
             engine_driven_pump_1_controller: A330EngineDrivenPumpController::new(
                 context,
@@ -1662,7 +1662,7 @@ impl A330Hydraulic {
             engine_driven_pump_2: EngineDrivenPump::new(
                 context,
                 AirbusEngineDrivenPumpId::Yellow,
-                PumpCharacteristics::A330_edp(),
+                PumpCharacteristics::a330_edp(),
             ),
             engine_driven_pump_2_controller: A330EngineDrivenPumpController::new(
                 context,
@@ -1678,7 +1678,7 @@ impl A330Hydraulic {
                 AirbusElectricPumpId::Blue,
                 Self::BLUE_ELEC_PUMP_SUPPLY_POWER_BUS,
                 ElectricCurrent::new::<ampere>(Self::ELECTRIC_PUMP_MAX_CURRENT_AMPERE),
-                PumpCharacteristics::A330_electric_pump(),
+                PumpCharacteristics::a330_electric_pump(),
             ),
             blue_electric_pump_controller: A330BlueElectricPumpController::new(
                 context,
@@ -1690,7 +1690,7 @@ impl A330Hydraulic {
                 AirbusElectricPumpId::Yellow,
                 Self::YELLOW_ELEC_PUMP_SUPPLY_POWER_BUS,
                 ElectricCurrent::new::<ampere>(Self::ELECTRIC_PUMP_MAX_CURRENT_AMPERE),
-                PumpCharacteristics::A330_electric_pump(),
+                PumpCharacteristics::a330_electric_pump(),
             ),
             yellow_electric_pump_controller: A330YellowElectricPumpController::new(
                 context,
@@ -1701,7 +1701,7 @@ impl A330Hydraulic {
             pushback_tug: PushbackTug::new(context),
             bypass_pin: BypassPin::new(context),
 
-            ram_air_turbine: RamAirTurbine::new(context, PumpCharacteristics::A330_rat()),
+            ram_air_turbine: RamAirTurbine::new(context, PumpCharacteristics::a330_rat()),
             ram_air_turbine_controller: A330RamAirTurbineController::new(
                 Self::RAT_CONTROL_SOLENOID1_POWER_BUS,
                 Self::RAT_CONTROL_SOLENOID2_POWER_BUS,
@@ -1769,7 +1769,7 @@ impl A330Hydraulic {
 
             emergency_gen: HydraulicGeneratorMotor::new(context, Volume::new::<cubic_inch>(0.19)),
 
-            forward_cargo_door: A330CargoDoorFactory::new_A330_cargo_door(
+            forward_cargo_door: A330CargoDoorFactory::new_a330_cargo_door(
                 context,
                 Self::FORWARD_CARGO_DOOR_ID,
             ),
@@ -1778,7 +1778,7 @@ impl A330Hydraulic {
                 Self::FORWARD_CARGO_DOOR_ID,
             ),
 
-            aft_cargo_door: A330CargoDoorFactory::new_A330_cargo_door(
+            aft_cargo_door: A330CargoDoorFactory::new_a330_cargo_door(
                 context,
                 Self::AFT_CARGO_DOOR_ID,
             ),
@@ -1798,15 +1798,15 @@ impl A330Hydraulic {
             rudder_mechanical_assembly: RudderSystemHydraulicController::new(context),
             rudder: A330RudderFactory::new_rudder(context),
 
-            left_spoilers: A330SpoilerFactory::new_A330_spoiler_group(context, ActuatorSide::Left),
-            right_spoilers: A330SpoilerFactory::new_A330_spoiler_group(
+            left_spoilers: A330SpoilerFactory::new_a330_spoiler_group(context, ActuatorSide::Left),
+            right_spoilers: A330SpoilerFactory::new_a330_spoiler_group(
                 context,
                 ActuatorSide::Right,
             ),
 
             gear_system_gravity_extension_controller: A330GravityExtension::new(context),
             gear_system_hydraulic_controller: A330GearHydraulicController::new(),
-            gear_system: A330GearSystemFactory::A330_gear_system(context),
+            gear_system: A330GearSystemFactory::a330_gear_system(context),
 
             ptu_high_pitch_sound_active: DelayedFalseLogicGate::new(
                 Self::HIGH_PITCH_PTU_SOUND_DURATION,
@@ -6041,7 +6041,7 @@ impl SimulationElement for A330TiltingGears {
 mod tests {
     use super::*;
 
-    mod A330_hydraulics {
+    mod a330_hydraulics {
         use super::*;
         use systems::{
             electrical::{

@@ -9,7 +9,7 @@ enum DataTypesID {
   FuelCenterMain,
   FuelLeftAux,
   FuelRightAux,
-  // FuelTrim,
+  FuelTrim,
   OilTempLeft,
   OilTempRight,
   OilPsiLeft,
@@ -151,7 +151,7 @@ class SimVars {
   ID FuelAuxLeftPre;
   ID FuelAuxRightPre;
   ID FuelCenterPre;
-  // ID FuelTrimPre;
+  ID FuelTrimPre;
   ID RefuelRate;
   ID RefuelStartedByUser;
   ID FuelOverflowLeft;
@@ -216,7 +216,7 @@ class SimVars {
     FuelAuxLeftPre = register_named_variable("A32NX_FUEL_AUX_LEFT_PRE");
     FuelAuxRightPre = register_named_variable("A32NX_FUEL_AUX_RIGHT_PRE");
     FuelCenterPre = register_named_variable("A32NX_FUEL_CENTER_PRE");
-    // FuelTrimPre = register_named_variable("A32NX_FUEL_TRIM_PRE");
+    FuelTrimPre = register_named_variable("A32NX_FUEL_TRIM_PRE");
     RefuelRate = register_named_variable("A32NX_EFB_REFUEL_RATE_SETTING");
     RefuelStartedByUser = register_named_variable("A32NX_REFUEL_STARTED_BY_USR");
     Engine1State = register_named_variable("A32NX_ENGINE_STATE:1");
@@ -275,7 +275,7 @@ class SimVars {
     this->setFuelAuxLeftPre(0);
     this->setFuelAuxRightPre(0);
     this->setFuelCenterPre(0);
-    // this->setFuelTrimPre(0);
+    this->setFuelTrimPre(0);
     this->setEngine1State(0);
     this->setEngine2State(0);
     this->setEngine1Timer(0);
@@ -328,7 +328,7 @@ class SimVars {
   void setFuelAuxLeftPre(FLOAT64 value) { set_named_variable_value(FuelAuxLeftPre, value); }
   void setFuelAuxRightPre(FLOAT64 value) { set_named_variable_value(FuelAuxRightPre, value); }
   void setFuelCenterPre(FLOAT64 value) { set_named_variable_value(FuelCenterPre, value); }
-  // void setFuelTrimPre(FLOAT64 value) { set_named_variable_value(FuelTrimPre, value); };
+  void setFuelTrimPre(FLOAT64 value) { set_named_variable_value(FuelTrimPre, value); };
   void setEngine1State(FLOAT64 value) { set_named_variable_value(Engine1State, value); }
   void setEngine2State(FLOAT64 value) { set_named_variable_value(Engine2State, value); }
   void setEngine1Timer(FLOAT64 value) { set_named_variable_value(Engine1Timer, value); }
@@ -381,7 +381,7 @@ class SimVars {
   FLOAT64 getFuelAuxLeftPre() { return get_named_variable_value(FuelAuxLeftPre); }
   FLOAT64 getFuelAuxRightPre() { return get_named_variable_value(FuelAuxRightPre); }
   FLOAT64 getFuelCenterPre() { return get_named_variable_value(FuelCenterPre); }
-  // FLOAT64 getFuelTrimPre() { return get_named_variable_value(FuelTrimPre); }
+  FLOAT64 getFuelTrimPre() { return get_named_variable_value(FuelTrimPre); }
   FLOAT64 getRefuelRate() { return get_named_variable_value(RefuelRate); }
   FLOAT64 getRefuelStartedByUser() { return get_named_variable_value(RefuelStartedByUser); }
   FLOAT64 getPumpStateLeft() { return get_named_variable_value(PumpStateLeft); }

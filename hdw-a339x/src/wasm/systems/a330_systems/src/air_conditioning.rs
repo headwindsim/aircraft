@@ -39,9 +39,9 @@ use uom::si::{
 use crate::payload::A330Pax;
 
 pub(super) struct A330AirConditioning {
-    A330_cabin: A330Cabin,
-    A330_air_conditioning_system: A330AirConditioningSystem,
-    A330_pressurization_system: A330PressurizationSystem,
+    a330_cabin: A330Cabin,
+    a330_air_conditioning_system: A330AirConditioningSystem,
+    a330_pressurization_system: A330PressurizationSystem,
 
     pressurization_updater: MaxStepLoop,
 }
@@ -54,9 +54,9 @@ impl A330AirConditioning {
             [ZoneType::Cockpit, ZoneType::Cabin(1), ZoneType::Cabin(2)];
 
         Self {
-            A330_cabin: A330Cabin::new(context),
-            A330_air_conditioning_system: A330AirConditioningSystem::new(context, &cabin_zones),
-            A330_pressurization_system: A330PressurizationSystem::new(context),
+            a330_cabin: A330Cabin::new(context),
+            a330_air_conditioning_system: A330AirConditioningSystem::new(context, &cabin_zones),
+            a330_pressurization_system: A330PressurizationSystem::new(context),
 
             pressurization_updater: MaxStepLoop::new(Self::PRESSURIZATION_SIM_MAX_TIME_STEP),
         }
@@ -75,14 +75,14 @@ impl A330AirConditioning {
     ) {
         self.pressurization_updater.update(context);
 
-        self.A330_air_conditioning_system.update(
+        self.a330_air_conditioning_system.update(
             context,
             adirs,
-            &self.A330_cabin,
+            &self.a330_cabin,
             engines,
             engine_fire_push_buttons,
             pneumatic,
-            &self.A330_pressurization_system,
+            &self.a330_pressurization_system,
             pressurization_overhead,
             lgciu,
         );
@@ -91,27 +91,27 @@ impl A330AirConditioning {
         self.update_pressurization_ambient_conditions(context, adirs);
 
         for cur_time_step in self.pressurization_updater {
-            self.A330_cabin.update(
+            self.a330_cabin.update(
                 &context.with_delta(cur_time_step),
-                &self.A330_air_conditioning_system,
+                &self.a330_air_conditioning_system,
                 lgciu,
                 number_of_passengers,
-                &self.A330_pressurization_system,
+                &self.a330_pressurization_system,
             );
 
-            self.A330_pressurization_system.update(
+            self.a330_pressurization_system.update(
                 &context.with_delta(cur_time_step),
                 adirs,
                 pressurization_overhead,
                 engines,
                 lgciu,
-                &self.A330_cabin,
+                &self.a330_cabin,
             );
         }
     }
 
     pub fn mix_packs_air_update(&mut self, pack_container: &mut [impl PneumaticContainer; 2]) {
-        self.A330_air_conditioning_system
+        self.a330_air_conditioning_system
             .mix_packs_air_update(pack_container);
     }
 
@@ -120,7 +120,7 @@ impl A330AirConditioning {
         context: &UpdateContext,
         adirs: &impl AdirsToAirCondInterface,
     ) {
-        self.A330_pressurization_system
+        self.a330_pressurization_system
             .update_ambient_conditions(context, adirs);
     }
 }
@@ -130,16 +130,16 @@ impl PackFlowControllers for A330AirConditioning {
         <A330AirConditioningSystem as PackFlowControllers>::PackFlowControllerSignal;
 
     fn pack_flow_controller(&self, pack_id: usize) -> &Self::PackFlowControllerSignal {
-        self.A330_air_conditioning_system
+        self.a330_air_conditioning_system
             .pack_flow_controller(pack_id)
     }
 }
 
 impl SimulationElement for A330AirConditioning {
     fn accept<T: SimulationElementVisitor>(&mut self, visitor: &mut T) {
-        self.A330_cabin.accept(visitor);
-        self.A330_air_conditioning_system.accept(visitor);
-        self.A330_pressurization_system.accept(visitor);
+        self.a330_cabin.accept(visitor);
+        self.a330_air_conditioning_system.accept(visitor);
+        self.a330_pressurization_system.accept(visitor);
 
         visitor.visit(self);
     }
@@ -1453,7 +1453,7 @@ mod tests {
     }
 
     struct TestAircraft {
-        A330_cabin_air: A330AirConditioning,
+        a330_cabin_air: A330AirConditioning,
         adirs: TestAdirs,
         engine_1: TestEngine,
         engine_2: TestEngine,
@@ -1485,7 +1485,7 @@ mod tests {
 
         fn new(context: &mut InitContext) -> Self {
             let mut test_aircraft = Self {
-                A330_cabin_air: A330AirConditioning::new(context),
+                a330_cabin_air: A330AirConditioning::new(context),
                 adirs: TestAdirs::new(),
                 engine_1: TestEngine::new(Ratio::default()),
                 engine_2: TestEngine::new(Ratio::default()),
@@ -1519,8 +1519,8 @@ mod tests {
                 dc_bat_bus: ElectricalBus::new(context, ElectricalBusType::DirectCurrentBattery),
             };
             test_aircraft
-                .A330_cabin_air
-                .A330_pressurization_system
+                .a330_cabin_air
+                .a330_pressurization_system
                 .active_system = 1;
             test_aircraft
         }
@@ -1581,10 +1581,10 @@ mod tests {
         fn update_after_power_distribution(&mut self, context: &UpdateContext) {
             self.pneumatic.update(
                 context,
-                &self.A330_cabin_air,
+                &self.a330_cabin_air,
                 [&self.engine_1, &self.engine_2],
             );
-            self.A330_cabin_air.update(
+            self.a330_cabin_air.update(
                 context,
                 &self.adirs,
                 [&self.engine_1, &self.engine_2],
@@ -1598,7 +1598,7 @@ mod tests {
     }
     impl SimulationElement for TestAircraft {
         fn accept<V: SimulationElementVisitor>(&mut self, visitor: &mut V) {
-            self.A330_cabin_air.accept(visitor);
+            self.a330_cabin_air.accept(visitor);
             self.pneumatic.accept(visitor);
             self.pressurization_overhead.accept(visitor);
 
@@ -1878,13 +1878,13 @@ mod tests {
         }
 
         fn cabin_altitude(&self) -> Length {
-            self.query(|a| a.A330_cabin_air.A330_pressurization_system.cpc[0].cabin_altitude())
+            self.query(|a| a.a330_cabin_air.a330_pressurization_system.cpc[0].cabin_altitude())
         }
 
         fn cabin_pressure(&self) -> Pressure {
             self.query(|a| {
-                a.A330_cabin_air
-                    .A330_cabin
+                a.a330_cabin_air
+                    .a330_cabin
                     .cabin_air_simulation
                     .cabin_pressure()
             })
@@ -1892,8 +1892,8 @@ mod tests {
 
         fn cabin_temperature(&self) -> ThermodynamicTemperature {
             self.query(|a| {
-                a.A330_cabin_air
-                    .A330_cabin
+                a.a330_cabin_air
+                    .a330_cabin
                     .cabin_air_simulation
                     .cabin_temperature()[1]
             })
@@ -1901,35 +1901,35 @@ mod tests {
 
         fn cabin_vs(&self) -> Velocity {
             self.query(|a| {
-                a.A330_cabin_air.A330_pressurization_system.cpc[0].cabin_vertical_speed()
+                a.a330_cabin_air.a330_pressurization_system.cpc[0].cabin_vertical_speed()
             })
         }
 
         fn cabin_delta_p(&self) -> Pressure {
-            self.query(|a| a.A330_cabin_air.A330_pressurization_system.cpc[0].cabin_delta_p())
+            self.query(|a| a.a330_cabin_air.a330_pressurization_system.cpc[0].cabin_delta_p())
         }
 
         fn active_system(&self) -> usize {
-            self.query(|a| a.A330_cabin_air.A330_pressurization_system.active_system)
+            self.query(|a| a.a330_cabin_air.a330_pressurization_system.active_system)
         }
 
         fn outflow_valve_open_amount(&self) -> Ratio {
             self.query(|a| {
-                a.A330_cabin_air.A330_pressurization_system.outflow_valve[0].open_amount()
+                a.a330_cabin_air.a330_pressurization_system.outflow_valve[0].open_amount()
             })
         }
 
         fn safety_valve_open_amount(&self) -> Ratio {
             self.query(|a| {
-                a.A330_cabin_air
-                    .A330_pressurization_system
+                a.a330_cabin_air
+                    .a330_pressurization_system
                     .safety_valve
                     .open_amount()
             })
         }
 
         fn landing_elevation(&self) -> Length {
-            self.query(|a| a.A330_cabin_air.A330_pressurization_system.cpc[0].landing_elevation())
+            self.query(|a| a.a330_cabin_air.a330_pressurization_system.cpc[0].landing_elevation())
         }
 
         fn is_mode_sel_pb_auto(&mut self) -> bool {
@@ -1938,15 +1938,15 @@ mod tests {
 
         fn cabin_air_in(&self) -> MassRate {
             self.query(|a| {
-                a.A330_cabin_air
-                    .A330_air_conditioning_system
+                a.a330_cabin_air
+                    .a330_air_conditioning_system
                     .outlet_air()
                     .flow_rate()
             })
         }
 
         fn reference_pressure(&self) -> Pressure {
-            self.query(|a| a.A330_cabin_air.A330_pressurization_system.cpc[0].reference_pressure())
+            self.query(|a| a.a330_cabin_air.a330_pressurization_system.cpc[0].reference_pressure())
         }
     }
     impl TestBed for CabinAirTestBed {
