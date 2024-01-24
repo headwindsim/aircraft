@@ -160,7 +160,7 @@ export default new TaskOfTasks("all", [
                     "npm run build-a339x-revamp:copy-texture"
                 ),
                 new ExecTask("a330-systems",
-                    "npm run build-a339x:systems",
+                    "npm run build-a339x-revamp:a330-systems",
                     [
                         "build-a339x/src/wasm/systems",
                         "build-a339x-common/src/wasm/systems",
