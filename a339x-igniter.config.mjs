@@ -153,6 +153,12 @@ export default new TaskOfTasks("all", [
                 new ExecTask("copy-wasm",
                     "npm run build-a339x-revamp:copy-wasm"
                     ),
+                new ExecTask("copy-model",
+                    "npm run build-a339x-revamp:copy-model"
+                ),
+                new ExecTask("copy-texture",
+                    "npm run build-a339x-revamp:copy-texture"
+                ),
                 new ExecTask("a330-systems",
                     "npm run build-a339x:systems",
                     [
