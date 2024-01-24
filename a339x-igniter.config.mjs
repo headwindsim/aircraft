@@ -147,6 +147,24 @@ export default new TaskOfTasks("all", [
             ], true),
         ]),
 
+        new TaskOfTasks("A330-941_revamp", [
+            // Group all WASM build tasks together but separate from the rest of the tasks as build run more stable like this.
+            new TaskOfTasks("wasm", [
+                new ExecTask("copy-wasm",
+                    "npm run build-a339x-revamp:copy-wasm"
+                    ),
+                new ExecTask("a330-systems",
+                    "npm run build-a339x:systems",
+                    [
+                        "build-a339x/src/wasm/systems",
+                        "build-a339x-common/src/wasm/systems",
+                        "Cargo.lock",
+                        "Cargo.toml",
+                        "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo_revamp/panel/systems.wasm"
+                    ]),
+            ], true),
+        ]),
+
         new TaskOfTasks("ACJ330neo", [
             // Group all WASM build tasks together but separate from the rest of the tasks as build run more stable like this.
             new TaskOfTasks("wasm", [
