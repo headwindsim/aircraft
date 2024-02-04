@@ -95,7 +95,7 @@
     "build-su95x:copy-base-files": "npm run build-su95x:copy-base-package && npm run build-su95x:copy-base-lock-highlight-package",
     "build-su95x:efb-translation": "cd build-su95x/src/localization && node build-flypad-translation.js",
     "build-su95x:locPak-translation": "cd build-su95x/src/localization && node build-locPak-translation.js",
-    "build-su95x:model": "node build-su95x/src/model/build.js",
+    "build-su95x:model": "node build-su95x/src/model/buildv2.js && node build-su95x/src/model/build.js",
     "build-su95x:behavior": "node build-su95x/src/behavior/build.js",
     "build-su95x:atsu-common": "node build-su95x/src/systems/atsu/common/build.js",
     "build-su95x:atsu-fms-client": "node build-su95x/src/systems/atsu/fmsclient/build.js",

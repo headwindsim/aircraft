@@ -402,7 +402,7 @@ function addParentNode(gltfPath, outputPath, node) {
     fs.writeFileSync(outputPath, data);
 }
 
-const models = JSON.parse(fs.readFileSync(path.join(__dirname, 'models.json'), 'utf8'));
+const models = JSON.parse(fs.readFileSync(path.join(__dirname, 'modelsv2.json'), 'utf8'));
 const p = (n) => path.resolve(__dirname, n);
 for (const model of models) {
     for (let i = 0; i < model.gltf.length; i += 1) {
