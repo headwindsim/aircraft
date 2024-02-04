@@ -121,6 +121,7 @@ animation: pulsingS 1s step-end infinite;
       stroke: $display-grey;
       stroke-width: 4;
       fill: none;
+      stroke-linecap: round;
     }
 
     .AmberLine {

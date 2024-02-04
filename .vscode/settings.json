@@ -10,27 +10,27 @@
   },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[javascript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[typescript]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
@@ -40,7 +40,7 @@
   "files.trimFinalNewlines": true,
   "[cpp]": {
     "editor.defaultFormatter": "ms-vscode.cpptools",
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "editor.formatOnPaste": false
   },
   "cmake.configureOnOpen": false,
