@@ -19,7 +19,7 @@ jobs:
     env:
       A32NX_PRODUCTION_BUILD: 1
       A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: headwindsim-aircraft-a330-900-dev.zip
+      ZIP_NAME: headwindsim-aircraft-a330-900-exp.zip
       BUILD_DIR_NAME: experimental
       CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
       CDN_BUCKET_DESTINATION: addons/a339x/experimental
