@@ -33,7 +33,7 @@ while [ $# -gt 0 ]; do
 shift
 done
 
-A339X_WASM_OUT_DIR="../build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel"
+A339X_WASM_OUT_DIR="../build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330_900/panel"
 if [ ! -d "$A339X_WASM_OUT_DIR" ]; then
   echo "$A339X_WASM_OUT_DIR directory does not exist."
   mkdir -p $A339X_WASM_OUT_DIR

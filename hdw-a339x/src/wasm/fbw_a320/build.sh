@@ -7,7 +7,7 @@
 # get directory of this script relative to root
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 COMMON_DIR="${DIR}/../../../../build-a339x-common/src/wasm/fbw_common"
-OUTPUT="${DIR}/../../../../build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm"
+OUTPUT="${DIR}/../../../../build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330_900/panel/fbw.wasm"
 
 if [ "$1" == "--debug" ]; then
   WASMLD_ARGS=""

@@ -18,22 +18,22 @@ const execute = async () => {
                 sourceDir: './ModelBehaviorDefs'
             }, {
                 name: 'Textures',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330_900/texture'
             }, {
                 name: 'TextureAIB',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/texture.AIB'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330_900/texture.AIB'
             }, {
                 name: 'Livery',
-                sourceDir: './SimObjects/Airplanes/_Headwind_A330neo-LIVERY'
+                sourceDir: './SimObjects/Airplanes/_Headwind_A330_900-LIVERY'
             }, {
                 name: 'Sound',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/sound'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330_900/sound'
             }, {
                 name: 'Model',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/model'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330_900/model'
             }, {
                 name: 'Panels',
-                sourceDir: './SimObjects/Airplanes/Headwind_A330neo/panel'
+                sourceDir: './SimObjects/Airplanes/Headwind_A330_900/panel'
             }, {
                 name: 'ACJModel',
                 sourceDir: './SimObjects/Airplanes/Headwind_ACJ330_900/model'

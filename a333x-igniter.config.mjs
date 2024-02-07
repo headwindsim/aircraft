@@ -142,7 +142,7 @@ export default new TaskOfTasks("all", [
                         "build-a333x-common/src/wasm/cpp-msfs-framework",
                         "build-a333x-common/src/wasm/extra-backend",
                         "build-a333x/src/wasm/extra-backend-a32nx",
-                        "build-a333x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a32nx.wasm"                    
+                        "build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/extra-backend-a32nx.wasm"
                     ])
             ], true),
         ]),

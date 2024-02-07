@@ -99,8 +99,8 @@ CMakeLists.txt
 !/hdw-su95x/src/**
 
 /hdw-a339x/out
-/hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.bin
-/hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.gltf
+/hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330_900/model/*.bin
+/hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330_900/model/*.gltf
 /hdw-a339x/src/systems/instruments/aceBundles
 /hdw-a339x/src/systems/instruments/buildSrc/custom/*
 
