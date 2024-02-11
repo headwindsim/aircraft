@@ -66,6 +66,9 @@ add_executable(flybywire-a32nx-fbw
     src/model/look1_binlxpw.cpp
     src/model/look2_binlcpw.cpp
     src/model/look2_binlxpw.cpp
+    src/model/binsearch_u32d.cpp"
+    src/model/intrp3d_l_pw.cpp"
+    src/model/plook_binx.cpp"
     src/model/mod_2RcCQkwc.cpp
     src/model/MultiWordIor.cpp
     src/model/rt_modd.cpp
