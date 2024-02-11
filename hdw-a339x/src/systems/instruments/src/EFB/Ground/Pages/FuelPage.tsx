@@ -148,9 +148,6 @@ export const FuelPage = () => {
             }
             return `(${t('Ground.Fuel.ReadyToStart')})`;
         }
-        if (refuelStartedByUser) {
-            setRefuelStartedByUser(false);
-        }
         if (gsxFuelSyncEnabled === 1) {
             if (!gsxRefuelActive()) {
                 return `(${t('Ground.Fuel.GSXFuelSyncEnabled')})`;
@@ -164,9 +161,6 @@ export const FuelPage = () => {
     const formatRefuelStatusClass = () => {
         if (airplaneCanRefuel()) {
             if (round(totalTarget) === totalCurrentGallon() || !refuelStartedByUser) {
-                if (refuelStartedByUser) {
-                    setRefuelStartedByUser(false);
-                }
                 return 'text-theme-highlight';
             }
             return ((totalTarget) > (totalCurrentGallon())) ? 'text-green-500' : 'text-yellow-500';
