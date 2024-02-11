@@ -38,13 +38,13 @@ const BATTERY_DURATION_CHARGE_MIN = 180;
 const BATTERY_DURATION_DISCHARGE_MIN = 540;
 
 const LoadingScreen = () => (
-    <div className="bg-theme-statusbar flex h-screen w-screen items-center justify-center">
+    <div className="flex h-screen w-screen items-center justify-center bg-theme-statusbar">
         <HdwLogo width={128} height={120} className="text-theme-text" />
     </div>
 );
 
 const EmptyBatteryScreen = () => (
-    <div className="bg-theme-statusbar flex h-screen w-screen items-center justify-center">
+    <div className="flex h-screen w-screen items-center justify-center bg-theme-statusbar">
         <Battery size={128} className="text-utility-red" />
     </div>
 );
@@ -73,7 +73,9 @@ interface BatteryStatus {
 
 export const usePower = () => React.useContext(PowerContext);
 
-export const getAirframeType = () => new URL(document.querySelectorAll('vcockpit-panel > *')[0].getAttribute('url')).searchParams.get('Airframe');
+export const getAirframeType = () => new URL(
+    document.querySelectorAll('vcockpit-panel > *')[0].getAttribute('url'),
+).searchParams.get('Airframe');
 
 const Efb = () => {
     const [powerState, setPowerState] = useState<PowerStates>(PowerStates.SHUTOFF);
