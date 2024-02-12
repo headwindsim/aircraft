@@ -1811,13 +1811,13 @@
                     <ON_TOOLTIP>COCKPIT.TOOLTIPS.FUEL_XFEED_TURN_OFF</ON_TOOLTIP>
                 </UseTemplate>
 
-                <!-- FUEL L TK PUMPS 1 -->
+                <!-- FUEL L TK PUMPS L1 -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_Airbus_Fuel_Pump</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_OVHD_FUEL_LTKPUMPS1</NODE_ID>
                     <PART_ID>OVHD_FUEL_LTKPUMPS1</PART_ID>
-                    <ID>2</ID>
+                    <ID>3</ID>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                     <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                     <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
@@ -1826,7 +1826,7 @@
                     <ON_TOOLTIP>COCKPIT.TOOLTIPS.ENG_1_L_TK_PUMP1_ON</ON_TOOLTIP>
                 </UseTemplate>
 
-                <!-- FUEL L TK PUMPS 2 -->
+                <!-- FUEL L TK PUMPS L2 -->
                     <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_Airbus_Fuel_Pump</ANIM_TEMPLATE>
@@ -1841,13 +1841,13 @@
                     <ON_TOOLTIP>COCKPIT.TOOLTIPS.ENG_1_L_TK_PUMP2_ON</ON_TOOLTIP>
                 </UseTemplate>
 
-                <!-- Centre Tank Transfer (Jet Pump) Valve L -->
+                <!-- Centre Tank Pump L -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_Airbus_Fuel_Jet_Pump</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_OVHD_FUEL_PUMP1</NODE_ID>
                     <PART_ID>OVHD_FUEL_PUMP1</PART_ID>
-                    <ID>9</ID>
+                    <ID>8</ID>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                     <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                     <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
@@ -1856,13 +1856,13 @@
                     <ON_TOOLTIP>COCKPIT.TOOLTIPS.CTR_TK_PUMP_1_ON</ON_TOOLTIP>
                 </UseTemplate>
 
-                <!-- Centre Tank Transfer (Jet Pump) Valve R -->
+                <!-- Centre Tank Pump R -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_Airbus_Fuel_Jet_Pump</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_OVHD_FUEL_PUMP2</NODE_ID>
                     <PART_ID>OVHD_FUEL_PUMP2</PART_ID>
-                    <ID>10</ID>
+                    <ID>9</ID>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                     <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                     <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
@@ -1871,13 +1871,13 @@
                     <ON_TOOLTIP>COCKPIT.TOOLTIPS.CTR_TK_PUMP_2_ON</ON_TOOLTIP>
                 </UseTemplate>
 
-                <!-- FUEL R TK PUMPS 1 -->
+                <!-- FUEL R TK PUMPS R1 -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_Airbus_Fuel_Pump</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_OVHD_FUEL_RTKPUMPS1</NODE_ID>
                     <PART_ID>OVHD_FUEL_RTKPUMPS1</PART_ID>
-                    <ID>3</ID>
+                    <ID>4</ID>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                     <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
                     <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
@@ -1886,7 +1886,7 @@
                     <ON_TOOLTIP>COCKPIT.TOOLTIPS.ENG_2_R_TK_PUMP1_ON</ON_TOOLTIP>
                 </UseTemplate>
 
-                <!-- FUEL R TK PUMPS 2 -->
+                <!-- FUEL R TK PUMPS R2 -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_Airbus_Fuel_Pump</ANIM_TEMPLATE>
@@ -1928,18 +1928,18 @@
                 </UseTemplate>
 
                 <!-- run the MSFS jet "pump" depending on which valves are open -->
-                <UseTemplate Name="FBW_JET_PUMP">
-                    <PUMP_INDEX>1</PUMP_INDEX>
+<!--                 <UseTemplate Name="FBW_JET_PUMP">
+                    <PUMP_INDEX>8</PUMP_INDEX>
                     <JUNCTION_INDEX>4</JUNCTION_INDEX>
                     <AUTO_VALVE_INDEX>11</AUTO_VALVE_INDEX>
                     <DISABLE_VALVE_INDEX>9</DISABLE_VALVE_INDEX>
                 </UseTemplate>
                 <UseTemplate Name="FBW_JET_PUMP">
-                    <PUMP_INDEX>4</PUMP_INDEX>
+                    <PUMP_INDEX>9</PUMP_INDEX>
                     <JUNCTION_INDEX>5</JUNCTION_INDEX>
                     <AUTO_VALVE_INDEX>12</AUTO_VALVE_INDEX>
                     <DISABLE_VALVE_INDEX>10</DISABLE_VALVE_INDEX>
-                </UseTemplate>
+                </UseTemplate> -->
             </Component>
 
             <!-- FLT CTL -->
@@ -2896,7 +2896,7 @@
                         <ANIM_TEMPLATE>FBW_Airbus_Wiper_Knob</ANIM_TEMPLATE>
                         <NODE_ID>HANDLING_Switch_Wiper_left</NODE_ID>
                         <ANIM_NAME>HANDLING_Switch_Wiper_left</ANIM_NAME>
-                        <CIRCUIT_ID_WIPERS>77</CIRCUIT_ID_WIPERS>
+                        <CIRCUIT_ID_WIPERS>91</CIRCUIT_ID_WIPERS>
                         <PART_ID>HANDLING_Switch_Wipers_left</PART_ID>
                         <ANIMTIP_0>Set left wiper to OFF</ANIMTIP_0>
                         <ANIMTIP_1>Set left wiper to SLOW</ANIMTIP_1>
@@ -2909,7 +2909,7 @@
                         <ANIM_TEMPLATE>FBW_Airbus_Wiper_Knob</ANIM_TEMPLATE>
                         <NODE_ID>HANDLING_Switch_Wiper_right</NODE_ID>
                         <ANIM_NAME>HANDLING_Switch_Wiper_right</ANIM_NAME>
-                        <CIRCUIT_ID_WIPERS>80</CIRCUIT_ID_WIPERS>
+                        <CIRCUIT_ID_WIPERS>96</CIRCUIT_ID_WIPERS>
                         <PART_ID>HANDLING_Switch_Wipers_right</PART_ID>
                         <ANIMTIP_0>Set right wiper to OFF</ANIMTIP_0>
                         <ANIMTIP_1>Set right wiper to SLOW</ANIMTIP_1>
@@ -5115,13 +5115,13 @@
             <!-- Windshield Left -->
             <UseTemplate Name="FBW_Windshield_Wiped">
                 <SIDE>CAPT</SIDE>
-                <CIRCUIT_ID_WIPERS>77</CIRCUIT_ID_WIPERS>
+                <CIRCUIT_ID_WIPERS>91</CIRCUIT_ID_WIPERS>
             </UseTemplate>
 
             <!-- Windshield Right -->
             <UseTemplate Name="FBW_Windshield_Wiped">
                 <SIDE>FO</SIDE>
-                <CIRCUIT_ID_WIPERS>80</CIRCUIT_ID_WIPERS>
+                <CIRCUIT_ID_WIPERS>96</CIRCUIT_ID_WIPERS>
             </UseTemplate>
 
             <!-- Hide Asobo Windshield -->

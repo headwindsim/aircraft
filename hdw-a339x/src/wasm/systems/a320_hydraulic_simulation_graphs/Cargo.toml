@@ -10,7 +10,7 @@ doc = false
 
 [dependencies]
 systems = { path = "../../../../../build-a339x-common/src/wasm/systems/systems" }
-a320_systems = { path = "../a320_systems" }
+a330_systems = { path = "../a330_systems" }
 uom = "0.33.0"
 rand = "0.8.0"
 ntest = "0.7.2"
