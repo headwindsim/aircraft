@@ -897,7 +897,6 @@ export class PseudoFWC {
 
     /**
      * Periodic update
-     * @param deltaTime Time since the last update in ms
      */
     onUpdate() {
         const deltaTime = this.instrument.deltaTime;
@@ -1670,11 +1669,9 @@ export class PseudoFWC {
                     }
 
                     if (value.failure === 3) {
-                        console.log(`Playing Master warning Source:${key}`);
                         this.masterWarning.set(true);
                     }
                     if (value.failure === 2) {
-                        console.log(`Playing Master caution Source:${key}`);
                         this.masterCaution.set(true);
                     }
                 }
