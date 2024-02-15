@@ -8,11 +8,11 @@
 export function getAircraftType(): string {
     const aircraftName :string = SimVar.GetSimVarValue('TITLE', 'string');
     let aircraft: string;
-    if (aircraftName.includes('A330-941')) {
+    if (aircraftName.includes('A330-900neo')) {
         aircraft = 'a339x';
-    } else if (aircraftName.includes('A330-343')) {
+    } else if (aircraftName.includes('A330-300ceo')) {
         aircraft = 'a333x';
-    } else if (aircraftName.includes('SU100')) {
+    } else if (aircraftName.includes('Sukhoi')) {
         aircraft = 'su95x';
     } else {
         aircraft = 'other';
