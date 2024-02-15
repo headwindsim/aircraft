@@ -5,7 +5,7 @@ import type {
     ManagedFlightPlan as ManagedFlightPlan_,
     getFlightPhaseManager as getFlightPhaseManager_,
     EfisSymbols as EfisSymbols_,
-} from "../../../hdw-a339x/src/systems/fmgc/src";
+} from "../../../build-a339x/src/systems/fmgc/src";
 import { a320EfisRangeSettings as a320EfisRangeSettings_ } from "../systems/instruments/src/NavigationDisplay"
 
 declare global {
