@@ -813,6 +813,8 @@ class FMCMainDisplay extends BaseAirliners {
 
                 Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.AUTO).catch(console.error).catch(console.error);
 
+                this.triggerCheckSpeedModeMessage(undefined);
+
                 this.cruiseFlightLevel = undefined;
 
                 break;
@@ -3819,6 +3821,12 @@ class FMCMainDisplay extends BaseAirliners {
             return true;
         }
 
+        const SPD_REGEX = /\d{1,3}/;
+        if (s.match(SPD_REGEX) === null) {
+            this.setScratchpadMessage(NXSystemMessages.formatError);
+            return false;
+        }
+
         const spd = parseInt(s);
         if (!Number.isFinite(spd)) {
             this.setScratchpadMessage(NXSystemMessages.formatError);
@@ -3847,6 +3855,7 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
+
         const MACH_OR_SPD_REGEX = /^(\.\d{1,2}|\d{1,3})$/;
         if (s.match(MACH_OR_SPD_REGEX) === null) {
             this.setScratchpadMessage(NXSystemMessages.formatError);
@@ -5129,10 +5138,6 @@ class FMCMainDisplay extends BaseAirliners {
 
     getPreSelectedCruiseSpeed() {
         return this.preSelectedCrzSpeed;
-    }
-
-    getPreSelectedDescentSpeed() {
-        return this.preSelectedDesSpeed;
     }
 
     getTakeoffFlapsSetting() {
