@@ -1,3 +1,7 @@
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import { EventBus, DisplayComponent, FSComponent, Subject, VNode } from '@microsoft/msfs-sdk';
 import { NXDataStore } from '@flybywiresim/fbw-sdk';
 import { AFloor } from './AFloor';

@@ -1939,6 +1939,12 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
 
   0.0,
 
+  1.7,
+
+  -1.7,
+
+  0.0,
+
   1.0,
 
   5.0,
@@ -2106,6 +2112,8 @@ FacComputer::Parameters_FacComputer_T FacComputer::FacComputer_P{
   0.0,
 
   0.0,
+
+  200.0F,
 
   0.1101F,
 

@@ -523,9 +523,9 @@ export class PseudoFWC {
 
     private readonly brakesHot = Subject.create(false);
 
-    private readonly landingLight2Retracted = Subject.create(false);
+    private readonly landingLight2 = Subject.create(false);
 
-    private readonly landingLight3Retracted = Subject.create(false);
+    private readonly landingLight3 = Subject.create(false);
 
     private readonly lgciu1Fault = Subject.create(false);
 
@@ -1060,8 +1060,8 @@ export class PseudoFWC {
         this.antiskidActive.set(SimVar.GetSimVarValue('ANTISKID BRAKES ACTIVE', 'bool'));
         this.brakeFan.set(SimVar.GetSimVarValue('L:A32NX_BRAKE_FAN', 'bool'));
         this.brakesHot.set(SimVar.GetSimVarValue('L:A32NX_BRAKES_HOT', 'bool'));
-        this.landingLight2Retracted.set(SimVar.GetSimVarValue('L:LANDING_2_Retracted', 'bool'));
-        this.landingLight3Retracted.set(SimVar.GetSimVarValue('L:LANDING_3_Retracted', 'bool'));
+        this.landingLight2.set(SimVar.GetSimVarValue('LIGHT LANDING ON:2', 'bool'));
+        this.landingLight3.set(SimVar.GetSimVarValue('LIGHT LANDING ON:3', 'bool'));
         this.lgciu1Fault.set(SimVar.GetSimVarValue('L:A32NX_LGCIU_1_FAULT', 'bool'));
         this.lgciu2Fault.set(SimVar.GetSimVarValue('L:A32NX_LGCIU_2_FAULT', 'bool'));
         this.lgciu1DiscreteWord1.setFromSimVar('L:A32NX_LGCIU_1_DISCRETE_WORD_1');
@@ -3234,7 +3234,7 @@ export class PseudoFWC {
         '0000190': { // LDG LT
             flightPhaseInhib: [],
             simVarIsActive: MappedSubject.create(
-                ([landingLight2Retracted, landingLight3Retracted]) => !landingLight2Retracted || !landingLight3Retracted, this.landingLight2Retracted, this.landingLight3Retracted,
+                ([landingLight2, landingLight3]) => landingLight2 || landingLight3, this.landingLight2, this.landingLight3,
             ),
             whichCodeToReturn: () => [0],
             codesToReturn: ['000019001'],

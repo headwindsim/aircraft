@@ -1,3 +1,7 @@
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 class FMCMainDisplay extends BaseAirliners {
     constructor() {
         super(...arguments);
@@ -228,9 +232,14 @@ class FMCMainDisplay extends BaseAirliners {
         this.dataManager = new FMCDataManager(this);
 
         this.guidanceManager = new Fmgc.GuidanceManager(this.flightPlanManager);
-        this.guidanceController = new Fmgc.GuidanceController(this.flightPlanManager, this.guidanceManager, this);
+        this.guidanceController = new Fmgc.GuidanceController(this.flightPlanManager, this.guidanceManager, Fmgc.a320EfisRangeSettings, this);
         this.navigation = new Fmgc.Navigation(this.flightPlanManager, this.facilityLoader);
-        this.efisSymbols = new Fmgc.EfisSymbols(this.flightPlanManager, this.guidanceController, this.navigation.getNavaidTuner());
+        this.efisSymbols = new Fmgc.EfisSymbols(
+            this.flightPlanManager,
+            this.guidanceController,
+            this.navigation.getNavaidTuner(),
+            Fmgc.a320EfisRangeSettings,
+        );
 
         Fmgc.initFmgcLoop(this, this.flightPlanManager);
 
@@ -804,6 +813,8 @@ class FMCMainDisplay extends BaseAirliners {
 
                 Coherent.call("GENERAL_ENG_THROTTLE_MANAGED_MODE_SET", ThrottleMode.AUTO).catch(console.error).catch(console.error);
 
+                this.triggerCheckSpeedModeMessage(undefined);
+
                 this.cruiseFlightLevel = undefined;
 
                 break;
@@ -1128,7 +1139,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (!this.managedSpeedCruiseIsPilotEntered) {
             this.managedSpeedCruise = this.getCrzManagedSpeedFromCostIndex();
         }
-        
+
         this.managedSpeedDescend = this.getDesManagedSpeedFromCostIndex();
     }
 
@@ -3809,7 +3820,13 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
-        
+
+        const SPD_REGEX = /\d{1,3}/;
+        if (s.match(SPD_REGEX) === null) {
+            this.setScratchpadMessage(NXSystemMessages.formatError);
+            return false;
+        }
+
         const spd = parseInt(s);
         if (!Number.isFinite(spd)) {
             this.setScratchpadMessage(NXSystemMessages.formatError);
@@ -3838,6 +3855,7 @@ class FMCMainDisplay extends BaseAirliners {
             }
             return true;
         }
+
         const MACH_OR_SPD_REGEX = /^(\.\d{1,2}|\d{1,3})$/;
         if (s.match(MACH_OR_SPD_REGEX) === null) {
             this.setScratchpadMessage(NXSystemMessages.formatError);
@@ -5120,10 +5138,6 @@ class FMCMainDisplay extends BaseAirliners {
 
     getPreSelectedCruiseSpeed() {
         return this.preSelectedCrzSpeed;
-    }
-
-    getPreSelectedDescentSpeed() {
-        return this.preSelectedDesSpeed;
     }
 
     getTakeoffFlapsSetting() {
