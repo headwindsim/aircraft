@@ -101,8 +101,8 @@ export const PushbackMap = () => {
     // Source: https://www.airbus.com/sites/g/files/jlcbta136/files/2021-11/Airbus-Commercial-Aircraft-AC-A320.pdf
     // Source: https://www.airbus.com/sites/g/files/jlcbta136/files/2022-02/Airbus-A380-Facts-and-Figures-February-2022.pdf
     // Source: https://www.airbus.com/sites/g/files/jlcbta136/files/2021-11/Airbus-Commercial-Aircraft-AC-A330.pdf
-    const aircraftWheelBase = getAirframeType() === 'SU95_100B' ? 11.25 : 12.64;
-    const aircraftLengthMeter = getAirframeType() === 'SU95_100B' ? 29.94 : 37.57;
+    const aircraftWheelBase = getAirframeType() === 'SU100_95B' ? 11.25 : 12.64;
+    const aircraftLengthMeter = getAirframeType() === 'SU100_95B' ? 29.94 : 37.57;
 
     // Map
     const [mouseDown, setMouseDown] = useState(false);
@@ -266,8 +266,8 @@ export const PushbackMap = () => {
                                 className="absolute"
                                 style={{
                                     transform: `rotate(-90deg)
-                                    scaleX(${tugCmdSpdFactor >= 0 ? 1 : -1}) 
-                                    scaleY(${tugCmdHdgFactor >= 0 ? 1 : -1}) 
+                                    scaleX(${tugCmdSpdFactor >= 0 ? 1 : -1})
+                                    scaleY(${tugCmdHdgFactor >= 0 ? 1 : -1})
                                     translateY(${turningRadius}px)`,
                                 }}
                             >
