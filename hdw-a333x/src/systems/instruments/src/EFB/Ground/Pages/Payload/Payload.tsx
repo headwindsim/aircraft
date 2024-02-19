@@ -6,7 +6,8 @@
 import React, { useState } from 'react';
 import { Units, usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
 import { getAirframeType } from '../../../Efb';
-import { A330Payload } from './A330_343/A330Payload';
+import { A330Payload } from './A330_941/A330Payload';
+import { ACJ330Payload} from './ACJ330_941/A330Payload';
 import { useAppSelector } from '../../../Store/store';
 import { isSimbriefDataLoaded } from '../../../Store/features/simBrief';
 
@@ -27,9 +28,9 @@ export const Payload = () => {
     const [massUnitForDisplay] = useState(Units.usingMetric ? 'KGS' : 'LBS');
 
     switch (getAirframeType()) {
-        case 'A330_343':
+        case 'ACJ330_941':
             return (
-                <A330Payload
+                <ACJ330Payload
                     simbriefUnits={simbriefUnits}
                     simbriefBagWeight={simbriefBagWeight}
                     simbriefPaxWeight={simbriefPaxWeight}
@@ -45,6 +46,7 @@ export const Payload = () => {
                     setBoardingRate={setBoardingRate}
                 />
             );
+        case 'A330_941':
         default:
             return (
                 <A330Payload

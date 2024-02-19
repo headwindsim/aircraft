@@ -1,17 +1,15 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React from 'react';
 import { round } from 'lodash';
 import { CloudArrowDown, PlayFill, StopCircleFill } from 'react-bootstrap-icons';
 import { useSimVar, Units, usePersistentNumberProperty, usePersistentProperty } from '@flybywiresim/fbw-sdk';
 import Slider from 'rc-slider';
-import { t } from '../../translation';
-import { TooltipWrapper } from '../../UtilComponents/TooltipWrapper';
-import { isSimbriefDataLoaded } from '../../Store/features/simBrief';
-import { useAppSelector } from '../../Store/store';
-import { SelectGroup, SelectItem } from '../../UtilComponents/Form/Select';
-import { ProgressBar } from '../../UtilComponents/Progress/Progress';
-import { SimpleInput } from '../../UtilComponents/Form/SimpleInput/SimpleInput';
-import { OverWingOutline } from '../../Assets/OverWingOutline';
+import { t } from '../../../../translation';
+import { TooltipWrapper } from '../../../../UtilComponents/TooltipWrapper';
+import { SelectGroup, SelectItem } from '../../../../UtilComponents/Form/Select';
+import { ProgressBar } from '../../../../UtilComponents/Progress/Progress';
+import { SimpleInput } from '../../../../UtilComponents/Form/SimpleInput/SimpleInput';
+import { OverWingOutline } from '../../../../Assets/OverWingOutline';
 
 interface TankReadoutProps {
     title: string;
@@ -48,30 +46,37 @@ const TankReadoutWidget = ({ title, current, target, capacity, currentUnit, tank
     );
 };
 
-export const FuelPage = () => {
-    const [totalFuelGallons] = useSimVar('FUEL TOTAL CAPACITY', 'Gallons', 1_000);
-    const [outerCellGallons] = useSimVar('FUEL TANK LEFT AUX CAPACITY', 'Gallons', 1_000);
-    const [innerCellGallons] = useSimVar('FUEL TANK LEFT MAIN CAPACITY', 'Gallons', 1_000);
-    const [centerTankGallons] = useSimVar('FUEL TANK CENTER CAPACITY', 'Gallons', 1_000);
+interface FuelProps {
+    simbriefDataLoaded: boolean,
+    simbriefPlanRamp: number,
+    simbriefUnits: string,
+    massUnitForDisplay: string,
+    convertUnit: number,
+    isOnGround: boolean,
+}
+export const SU95Fuel: React.FC<FuelProps> = ({
+    simbriefDataLoaded,
+    simbriefPlanRamp,
+    simbriefUnits,
+    massUnitForDisplay,
+    convertUnit,
+    isOnGround,
+}) => {
+    const [TOTAL_FUEL_GALLONS] = useSimVar('FUEL TOTAL CAPACITY', 'Gallons', 1_000);
+    const [OUTER_CELL_GALLONS] = useSimVar('FUEL TANK LEFT AUX CAPACITY', 'Gallons', 1_000);
+    const [INNER_CELL_GALLONS] = useSimVar('FUEL TANK LEFT MAIN CAPACITY', 'Gallons', 1_000);
+    const [CENTER_TANK_GALLONS] = useSimVar('FUEL TANK CENTER CAPACITY', 'Gallons', 1_000);
 
-    const wingTotalRefuelTimeSeconds = 1300;
-    const CenterTotalRefuelTimeSeconds = 180;
-
-    const { usingMetric } = Units;
-    const [currentUnit] = useState(usingMetric ? 'KG' : 'LB');
-    const [convertUnit] = useState(usingMetric ? 1 : (1 / 0.4535934));
+    const wingTotalRefuelTimeSeconds = 624;
+    const CenterTotalRefuelTimeSeconds = 336;
 
     const [galToKg] = useSimVar('FUEL WEIGHT PER GALLON', 'kilograms', 1_000);
-    const outerCell = () => outerCellGallons * galToKg * convertUnit;
+    const outerCell = () => OUTER_CELL_GALLONS * galToKg * convertUnit;
     const outerCells = () => outerCell() * 2;
-    const innerCell = () => innerCellGallons * galToKg * convertUnit;
+    const innerCell = () => INNER_CELL_GALLONS * galToKg * convertUnit;
     const innerCells = () => innerCell() * 2;
-    const centerTank = () => centerTankGallons * galToKg * convertUnit;
+    const centerTank = () => CENTER_TANK_GALLONS * galToKg * convertUnit;
     const totalFuel = () => centerTank() + innerCells() + outerCells();
-    const [busDC2] = useSimVar('L:A32NX_ELEC_DC_2_BUS_IS_POWERED', 'Bool', 1_000);
-    const [busDCHot1] = useSimVar('L:A32NX_ELEC_DC_HOT_1_BUS_IS_POWERED', 'Bool', 1_000);
-    const [simGroundSpeed] = useSimVar('GPS GROUND SPEED', 'knots', 1_000);
-    const [isOnGround] = useSimVar('SIM ON GROUND', 'Bool', 1_000);
     const [eng1Running] = useSimVar('ENG COMBUSTION:1', 'Bool', 1_000);
     const [eng2Running] = useSimVar('ENG COMBUSTION:2', 'Bool', 1_000);
     const [refuelRate, setRefuelRate] = usePersistentProperty('REFUEL_RATE_SETTING');
@@ -95,17 +100,13 @@ export const FuelPage = () => {
     const [gsxFuelHoseConnected] = useSimVar('L:FSDT_GSX_FUELHOSE_CONNECTED', 'Number');
     const [gsxRefuelState] = useSimVar('L:FSDT_GSX_REFUELING_STATE', 'Number');
 
-    const { units } = useAppSelector((state) => state.simbrief.data);
-    const { planRamp } = useAppSelector((state) => state.simbrief.data.fuels);
-    const simbriefDataLoaded = isSimbriefDataLoaded();
-
     const gsxRefuelActive = () => (gsxRefuelState === 4 || gsxRefuelState === 5);
 
-    const isAirplaneCnD = () => !(simGroundSpeed > 0.1 || eng1Running || eng2Running || !isOnGround || (!busDC2 && !busDCHot1));
+    const canRefuel = () => !(eng1Running || eng2Running || !isOnGround);
 
     const airplaneCanRefuel = () => {
         if (refuelRate !== '2') {
-            if (!isAirplaneCnD()) {
+            if (!canRefuel()) {
                 setRefuelRate('2');
             }
         }
@@ -116,9 +117,8 @@ export const FuelPage = () => {
             }
 
             // In-flight refueling with GSX Sync enabled
-            return !isAirplaneCnD() && refuelRate === '2';
+            return !canRefuel() && refuelRate === '2';
         }
-
         return true;
     };
 
@@ -132,7 +132,7 @@ export const FuelPage = () => {
             return inputValue;
         }
         const val = round(totalCurrentGallon() * getFuelMultiplier());
-        if (centerCurrent > 0 && centerCurrent < centerTankGallons) {
+        if (centerCurrent > 0 && centerCurrent < CENTER_TANK_GALLONS) {
             return round(val + convertUnit);
         }
         return val;
@@ -187,15 +187,15 @@ export const FuelPage = () => {
         if (curr < 1) {
             return 0;
         }
-        if (curr === centerTankGallons) {
+        if (curr === CENTER_TANK_GALLONS) {
             return convertFuelValue(curr);
         }
         return round(convertFuelValue(curr) + convertUnit);
     };
 
     const setDesiredFuel = (fuel: number) => {
-        fuel -= (outerCellGallons) * 2;
-        const outerTank = (((outerCellGallons) * 2) + Math.min(fuel, 0)) / 2;
+        fuel -= (OUTER_CELL_GALLONS) * 2;
+        const outerTank = (((OUTER_CELL_GALLONS) * 2) + Math.min(fuel, 0)) / 2;
         setLOutTarget(outerTank);
         setROutTarget(outerTank);
         if (fuel <= 0) {
@@ -204,8 +204,8 @@ export const FuelPage = () => {
             setCenterTarget(0);
             return;
         }
-        fuel -= (innerCellGallons) * 2;
-        const innerTank = (((innerCellGallons) * 2) + Math.min(fuel, 0)) / 2;
+        fuel -= (INNER_CELL_GALLONS) * 2;
+        const innerTank = (((INNER_CELL_GALLONS) * 2) + Math.min(fuel, 0)) / 2;
         setLInnTarget(innerTank);
         setRInnTarget(innerTank);
         if (fuel <= 0) {
@@ -226,11 +226,11 @@ export const FuelPage = () => {
             }
             setInputValue(originalFuel);
         }
-        if (fuel > totalFuelGallons) {
-            fuel = totalFuelGallons + 2;
+        if (fuel > TOTAL_FUEL_GALLONS) {
+            fuel = TOTAL_FUEL_GALLONS + 2;
         }
         setTotalTarget(fuel);
-        setSliderValue((fuel / totalFuelGallons) * 100);
+        setSliderValue((fuel / TOTAL_FUEL_GALLONS) * 100);
         setDesiredFuel(fuel);
     };
 
@@ -248,11 +248,11 @@ export const FuelPage = () => {
             return ' 0';
         }
         let estimatedTimeSeconds = 0;
-        const totalWingFuel = totalFuelGallons - centerTankGallons;
+        const totalWingFuel = TOTAL_FUEL_GALLONS - CENTER_TANK_GALLONS;
         const differentialFuelWings = Math.abs(currentWingFuel() - targetWingFuel());
         const differentialFuelCenter = Math.abs(centerTarget - centerCurrent);
         estimatedTimeSeconds += (differentialFuelWings / totalWingFuel) * wingTotalRefuelTimeSeconds;
-        estimatedTimeSeconds += (differentialFuelCenter / centerTankGallons) * CenterTotalRefuelTimeSeconds;
+        estimatedTimeSeconds += (differentialFuelCenter / CENTER_TANK_GALLONS) * CenterTotalRefuelTimeSeconds;
         if (refuelRate === '1') { // fast
             estimatedTimeSeconds /= 5;
         }
@@ -271,16 +271,16 @@ export const FuelPage = () => {
     const handleFuelAutoFill = () => {
         let fuelToLoad = -1;
 
-        if (usingMetric) {
-            if (units === 'kgs') {
-                fuelToLoad = roundUpNearest100(planRamp);
+        if (Units.usingMetric) {
+            if (simbriefUnits === 'kgs') {
+                fuelToLoad = roundUpNearest100(simbriefPlanRamp);
             } else {
-                fuelToLoad = roundUpNearest100(Units.poundToKilogram(planRamp));
+                fuelToLoad = roundUpNearest100(Units.poundToKilogram(simbriefPlanRamp));
             }
-        } else if (units === 'kgs') {
-            fuelToLoad = roundUpNearest100(Units.kilogramToPound(planRamp));
+        } else if (simbriefUnits === 'kgs') {
+            fuelToLoad = roundUpNearest100(Units.kilogramToPound(simbriefPlanRamp));
         } else {
-            fuelToLoad = roundUpNearest100(planRamp);
+            fuelToLoad = roundUpNearest100(simbriefPlanRamp);
         }
 
         updateDesiredFuel(fuelToLoad.toString());
@@ -297,7 +297,7 @@ export const FuelPage = () => {
                         current={totalCurrent()}
                         target={totalTarget}
                         capacity={totalFuel()}
-                        currentUnit={currentUnit}
+                        currentUnit={massUnitForDisplay}
                         tankValue={totalFuel()}
                         convertedFuelValue={totalCurrent()}
                         className="border-theme-accent overflow-hidden rounded-2xl border-2"
@@ -308,8 +308,8 @@ export const FuelPage = () => {
                         title={t('Ground.Fuel.CenterTank')}
                         current={centerCurrent}
                         target={centerTarget}
-                        capacity={centerTankGallons}
-                        currentUnit={currentUnit}
+                        capacity={CENTER_TANK_GALLONS}
+                        currentUnit={massUnitForDisplay}
                         tankValue={centerTank()}
                         convertedFuelValue={convertFuelValueCenter(centerCurrent)}
                         className="border-theme-accent overflow-hidden rounded-2xl border-2"
@@ -323,8 +323,8 @@ export const FuelPage = () => {
                             title={t('Ground.Fuel.LeftInnerTank')}
                             current={LInnCurrent}
                             target={LInnTarget}
-                            capacity={innerCellGallons}
-                            currentUnit={currentUnit}
+                            capacity={INNER_CELL_GALLONS}
+                            currentUnit={massUnitForDisplay}
                             tankValue={innerCell()}
                             convertedFuelValue={convertFuelValue(LInnCurrent)}
                         />
@@ -332,8 +332,8 @@ export const FuelPage = () => {
                             title={t('Ground.Fuel.LeftOuterTank')}
                             current={LOutCurrent}
                             target={LOutTarget}
-                            capacity={outerCellGallons}
-                            currentUnit={currentUnit}
+                            capacity={OUTER_CELL_GALLONS}
+                            currentUnit={massUnitForDisplay}
                             tankValue={outerCell()}
                             convertedFuelValue={convertFuelValueCenter(LOutCurrent)}
                         />
@@ -343,8 +343,8 @@ export const FuelPage = () => {
                             title={t('Ground.Fuel.RightInnerTank')}
                             current={RInnCurrent}
                             target={RInnTarget}
-                            capacity={innerCellGallons}
-                            currentUnit={currentUnit}
+                            capacity={INNER_CELL_GALLONS}
+                            currentUnit={massUnitForDisplay}
                             tankValue={innerCell()}
                             convertedFuelValue={convertFuelValueCenter(RInnCurrent)}
                         />
@@ -352,8 +352,8 @@ export const FuelPage = () => {
                             title={t('Ground.Fuel.RightOuterTank')}
                             current={ROutCurrent}
                             target={ROutTarget}
-                            capacity={outerCellGallons}
-                            currentUnit={currentUnit}
+                            capacity={OUTER_CELL_GALLONS}
+                            currentUnit={massUnitForDisplay}
                             tankValue={outerCell()}
                             convertedFuelValue={convertFuelValueCenter(ROutCurrent)}
                         />
@@ -367,23 +367,23 @@ export const FuelPage = () => {
 
                     <div
                         className="absolute z-20"
-                        style={{ width: '137px', height: '110px', bottom: '243px', left: '572px', background: formatFuelFilling(centerCurrent, centerTankGallons) }}
+                        style={{ width: '137px', height: '110px', bottom: '243px', left: '572px', background: formatFuelFilling(centerCurrent, CENTER_TANK_GALLONS) }}
                     />
                     <div
                         className="absolute z-0"
-                        style={{ width: '310px', height: '215px', bottom: '140px', left: '260px', background: formatFuelFilling(LInnCurrent, innerCellGallons) }}
+                        style={{ width: '310px', height: '215px', bottom: '140px', left: '260px', background: formatFuelFilling(LInnCurrent, INNER_CELL_GALLONS) }}
                     />
                     <div
                         className="absolute z-0"
-                        style={{ width: '310px', height: '215px', bottom: '140px', right: '260px', background: formatFuelFilling(RInnCurrent, innerCellGallons) }}
+                        style={{ width: '310px', height: '215px', bottom: '140px', right: '260px', background: formatFuelFilling(RInnCurrent, INNER_CELL_GALLONS) }}
                     />
                     <div
                         className="absolute z-0"
-                        style={{ width: '122px', height: '98px', bottom: '100px', left: '138px', background: formatFuelFilling(LOutCurrent, outerCellGallons) }}
+                        style={{ width: '122px', height: '98px', bottom: '100px', left: '138px', background: formatFuelFilling(LOutCurrent, OUTER_CELL_GALLONS) }}
                     />
                     <div
                         className="absolute z-0"
-                        style={{ width: '122px', height: '98px', bottom: '100px', right: '138px', background: formatFuelFilling(ROutCurrent, outerCellGallons) }}
+                        style={{ width: '122px', height: '98px', bottom: '100px', right: '138px', background: formatFuelFilling(ROutCurrent, OUTER_CELL_GALLONS) }}
                     />
                     {/* tl overlay */}
                     <div
@@ -433,7 +433,7 @@ export const FuelPage = () => {
                                         value={inputValue}
                                         onChange={(x) => updateDesiredFuel(x)}
                                     />
-                                    <div className="absolute right-4 top-2 text-lg text-gray-400">{currentUnit}</div>
+                                    <div className="absolute right-4 top-2 text-lg text-gray-400">{massUnitForDisplay}</div>
                                 </div>
                                 {simbriefDataLoaded && (
                                     <TooltipWrapper text={t('Ground.Fuel.TT.FillBlockFuelFromSimBrief')}>
@@ -466,17 +466,17 @@ export const FuelPage = () => {
                     <h2 className="flex font-medium">{t('Ground.Fuel.RefuelTime')}</h2>
 
                     <SelectGroup>
-                        <SelectItem selected={isAirplaneCnD() ? refuelRate === '2' : !isAirplaneCnD()} onSelect={() => setRefuelRate('2')}>{t('Settings.Instant')}</SelectItem>
+                        <SelectItem selected={canRefuel() ? refuelRate === '2' : !canRefuel()} onSelect={() => setRefuelRate('2')}>{t('Settings.Instant')}</SelectItem>
 
-                        <TooltipWrapper text={`${!isAirplaneCnD() && t('Ground.Fuel.TT.AircraftMustBeColdAndDarkToChangeRefuelTimes')}`}>
+                        <TooltipWrapper text={`${!canRefuel() && t('Ground.Fuel.TT.AircraftMustBeColdAndDarkToChangeRefuelTimes')}`}>
                             <div>
-                                <SelectItem className={`${!isAirplaneCnD() && 'opacity-20'}`} disabled={!isAirplaneCnD()} selected={refuelRate === '1'} onSelect={() => setRefuelRate('1')}>{t('Settings.Fast')}</SelectItem>
+                                <SelectItem className={`${!canRefuel() && 'opacity-20'}`} disabled={!canRefuel()} selected={refuelRate === '1'} onSelect={() => setRefuelRate('1')}>{t('Settings.Fast')}</SelectItem>
                             </div>
                         </TooltipWrapper>
 
-                        <TooltipWrapper text={`${!isAirplaneCnD() && t('Ground.Fuel.TT.AircraftMustBeColdAndDarkToChangeRefuelTimes')}`}>
+                        <TooltipWrapper text={`${!canRefuel() && t('Ground.Fuel.TT.AircraftMustBeColdAndDarkToChangeRefuelTimes')}`}>
                             <div>
-                                <SelectItem className={`${!isAirplaneCnD() && 'opacity-20'}`} disabled={!isAirplaneCnD()} selected={refuelRate === '0'} onSelect={() => setRefuelRate('0')}>{t('Settings.Real')}</SelectItem>
+                                <SelectItem className={`${!canRefuel() && 'opacity-20'}`} disabled={!canRefuel()} selected={refuelRate === '0'} onSelect={() => setRefuelRate('0')}>{t('Settings.Real')}</SelectItem>
                             </div>
                         </TooltipWrapper>
                     </SelectGroup>

@@ -3,17 +3,18 @@
 
 /* eslint-disable no-console */
 import React, { useState } from 'react';
-import { A330Services } from './Services/A330_343/A330Services';
+import { A330Services } from './Services/A330_941/A330Services';
 import { getAirframeType } from '../../Efb';
 
 export const ServicesPage = () => {
     const [airframe] = useState(getAirframeType());
 
     switch (airframe) {
-        case 'A330_343':
-        default:
-            return (
-                <A330Services />
-            );
+    case 'ACJ330_941':
+    case 'A330_941':
+    default:
+        return (
+            <A330Services />
+        );
     }
 };

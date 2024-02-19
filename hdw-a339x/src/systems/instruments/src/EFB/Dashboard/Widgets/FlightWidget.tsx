@@ -10,6 +10,7 @@ import { useAppSelector, useAppDispatch } from '../../Store/store';
 import { ScrollableContainer } from '../../UtilComponents/ScrollableContainer';
 import { t } from '../../translation';
 import { getAirframeType } from '../../Efb';
+import { AC_TYPE } from '../../Enum/Airframe';
 
 interface InformationEntryProps {
     title: string;
@@ -133,7 +134,7 @@ export const FlightWidget = () => {
                         {' '}
                         |
                         {' '}
-                        A330-941
+                        {(airframe !== null ? AC_TYPE[airframe] : 'A330-941')}
                     </h1>
                 )}
             </div>

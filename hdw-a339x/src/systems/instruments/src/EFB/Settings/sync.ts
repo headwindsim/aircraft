@@ -1,3 +1,7 @@
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import { NXDataStore } from '@flybywiresim/fbw-sdk';
 import { DEFAULT_RADIO_AUTO_CALL_OUTS } from '@shared/AutoCallOuts';
 
@@ -16,7 +20,6 @@ function syncEnumSetting(simVarEnum: SimVarEnum, propertyName: string) {
         SimVar.SetSimVarValue(simVarEnum[0], simVarEnum[1], mapValue).catch((e) => console.log(propertyName, e));
     }, simVarEnum[2]);
 }
-
 /**
  * This contains a list of NXDataStore settings that must be synced to simvars on plane load
  */
@@ -44,6 +47,7 @@ const settingsToSync: Map<string, SimVar> = new Map([
     ['CONFIG_USING_METRIC_UNIT', ['L:A32NX_EFB_USING_METRIC_UNIT', 'bool', '1']],
     ['CONFIG_A32NX_FWC_RADIO_AUTO_CALL_OUT_PINS', ['L:A32NX_FWC_RADIO_AUTO_CALL_OUT_PINS', 'number', DEFAULT_RADIO_AUTO_CALL_OUTS.toString()]],
     ['CONFIG_USING_PORTABLE_DEVICES', ['L:A32NX_CONFIG_USING_PORTABLE_DEVICES', 'bool', '1']],
+    ['REFUEL_RATE_SETTING', ['L:A32NX_EFB_REFUEL_RATE_SETTING', 'number', '0']],
 ]);
 
 const settingEnumToSync: Map<string, SimVarEnum> = new Map([

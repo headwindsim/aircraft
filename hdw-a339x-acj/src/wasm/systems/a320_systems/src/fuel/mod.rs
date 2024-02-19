@@ -52,22 +52,27 @@ impl A320Fuel {
         FuelInfo {
             fuel_tank_id: "FUEL TANK CENTER QUANTITY",
             position: (-20.3, 0., 4.),
+            total_capacity_gallons: 12625.,
         },
         FuelInfo {
             fuel_tank_id: "FUEL TANK LEFT MAIN QUANTITY",
             position: (-25.5, -33.8, 1.3),
+            total_capacity_gallons: 11095.,
         },
         FuelInfo {
             fuel_tank_id: "FUEL TANK LEFT AUX QUANTITY",
             position: (-41.0, -70.0, 6.1),
+            total_capacity_gallons: 964.,
         },
         FuelInfo {
             fuel_tank_id: "FUEL TANK RIGHT MAIN QUANTITY",
             position: (-25.5, 33.8, 1.3),
+            total_capacity_gallons: 11095.,
         },
         FuelInfo {
             fuel_tank_id: "FUEL TANK RIGHT AUX QUANTITY",
             position: (-41.0, 70.0, 6.1),
+            total_capacity_gallons: 964.,
         },
     ];
 
@@ -77,6 +82,7 @@ impl A320Fuel {
                 context,
                 f.fuel_tank_id,
                 Vector3::new(f.position.0, f.position.1, f.position.2),
+                false
             )
         });
         A320Fuel {
