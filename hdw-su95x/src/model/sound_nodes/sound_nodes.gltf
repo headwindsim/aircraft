@@ -1,0 +1,1170 @@
+{
+    "accessors": [
+        {
+            "bufferView": 1,
+            "byteOffset": 28,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_BLOWER_EXTRACT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 16,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_BLOWER_EXTRACT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-0.9999998807907104, -1, -0.9999995231628418],
+            "max": [0.9999998807907104, 1, 1.0000004768371582],
+            "type": "VEC3",
+            "name": "SOUND_BLOWER_EXTRACT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 12,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_BLOWER_EXTRACT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 20,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_BLOWER_EXTRACT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 24,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_BLOWER_EXTRACT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_BLOWER_EXTRACT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 892,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_AFT_LEFT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 880,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_AFT_LEFT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 864,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-0.999908447265625, -1, -1],
+            "max": [1.000091552734375, 1, 1],
+            "type": "VEC3",
+            "name": "SOUND_DOOR_AFT_LEFT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 876,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_AFT_LEFT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 884,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_DOOR_AFT_LEFT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 888,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_DOOR_AFT_LEFT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 72,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_DOOR_AFT_LEFT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 1756,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_AFT_RIGHT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 1744,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_AFT_RIGHT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 1728,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-1, -1, -0.999755859375],
+            "max": [1, 1, 1.000244140625],
+            "type": "VEC3",
+            "name": "SOUND_DOOR_AFT_RIGHT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 1740,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_AFT_RIGHT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 1748,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_DOOR_AFT_RIGHT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 1752,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_DOOR_AFT_RIGHT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 144,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_DOOR_AFT_RIGHT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 2620,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_FWD_LEFT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 2608,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_FWD_LEFT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 2592,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-1, -1, -1],
+            "max": [1, 1, 1],
+            "type": "VEC3",
+            "name": "SOUND_DOOR_FWD_LEFT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 2604,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_FWD_LEFT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 2612,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_DOOR_FWD_LEFT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 2616,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_DOOR_FWD_LEFT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 216,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_DOOR_FWD_LEFT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 3484,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_FWD_RIGHT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 3472,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_FWD_RIGHT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 3456,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-1.000030517578125, -1, -1],
+            "max": [0.999969482421875, 1, 1],
+            "type": "VEC3",
+            "name": "SOUND_DOOR_FWD_RIGHT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 3468,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_DOOR_FWD_RIGHT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 3476,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_DOOR_FWD_RIGHT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 3480,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_DOOR_FWD_RIGHT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 288,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_DOOR_FWD_RIGHT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 4348,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_ENGINE_LEFT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 4336,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_ENGINE_LEFT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 4320,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-1, -1.0000076293945312, -1.0000152587890625],
+            "max": [1, 0.9999923706054688, 0.9999847412109375],
+            "type": "VEC3",
+            "name": "SOUND_ENGINE_LEFT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 4332,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_ENGINE_LEFT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 4340,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_ENGINE_LEFT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 4344,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_ENGINE_LEFT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 360,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_ENGINE_LEFT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 5212,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_ENGINE_RIGHT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 5200,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_ENGINE_RIGHT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 5184,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-1, -1, -1],
+            "max": [1, 1, 1],
+            "type": "VEC3",
+            "name": "SOUND_ENGINE_RIGHT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 5196,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_ENGINE_RIGHT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 5204,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_ENGINE_RIGHT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 5208,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_ENGINE_RIGHT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 432,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_ENGINE_RIGHT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6076,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_PACK_OUTFLOW_LEFT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6064,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_PACK_OUTFLOW_LEFT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6048,
+            "componentType": 5126,
+            "count": 24,
+            "min": [
+                -1.000152587890625,
+                -0.99993896484375,
+                -1.0001220703125
+            ],
+            "max": [
+                0.99981689453125,
+                1.00006103515625,
+                0.9998779296875
+            ],
+            "type": "VEC3",
+            "name": "SOUND_PACK_OUTFLOW_LEFT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6060,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_PACK_OUTFLOW_LEFT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6068,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_PACK_OUTFLOW_LEFT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6072,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_PACK_OUTFLOW_LEFT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 504,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_PACK_OUTFLOW_LEFT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6940,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_PACK_OUTFLOW_RIGHT_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6928,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_PACK_OUTFLOW_RIGHT_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6912,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-1, -1, -1],
+            "max": [0.999969482421875, 1, 1],
+            "type": "VEC3",
+            "name": "SOUND_PACK_OUTFLOW_RIGHT_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6924,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_PACK_OUTFLOW_RIGHT_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6932,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_PACK_OUTFLOW_RIGHT_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 6936,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_PACK_OUTFLOW_RIGHT_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 576,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_PACK_OUTFLOW_RIGHT_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 7804,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_AFT_GALLEY_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 7792,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_AFT_GALLEY_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 7776,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-1, -1, -1],
+            "max": [1, 1, 1],
+            "type": "VEC3",
+            "name": "SOUND_AFT_GALLEY_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 7788,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_AFT_GALLEY_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 7796,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_AFT_GALLEY_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 7800,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_AFT_GALLEY_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 648,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_AFT_GALLEY_indices#0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 8668,
+            "componentType": 5123,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_FWD_GALLEY_vertices#0_COLOR_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 8656,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_FWD_GALLEY_vertices#0_NORMAL"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 8640,
+            "componentType": 5126,
+            "count": 24,
+            "min": [-1, -1, -1],
+            "max": [1, 1, 1],
+            "type": "VEC3",
+            "name": "SOUND_FWD_GALLEY_vertices#0_POSITION"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 8652,
+            "componentType": 5120,
+            "count": 24,
+            "type": "VEC4",
+            "name": "SOUND_FWD_GALLEY_vertices#0_TANGENT"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 8660,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_FWD_GALLEY_vertices#0_TEXCOORD_0"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 8664,
+            "componentType": 5122,
+            "count": 24,
+            "type": "VEC2",
+            "name": "SOUND_FWD_GALLEY_vertices#0_TEXCOORD_1"
+        },
+        {
+            "bufferView": 0,
+            "byteOffset": 720,
+            "componentType": 5123,
+            "count": 36,
+            "type": "SCALAR",
+            "name": "SOUND_FWD_GALLEY_indices#0"
+        }
+    ],
+    "asset": {
+        "generator": "Khronos glTF Blender I/O v1.7.5",
+        "version": "2.0",
+        "extensions": {
+            "ASOBO_asset_optimized": {
+                "BoundingBoxMax": [
+                    1.000091552734375,
+                    1.00006103515625,
+                    1.000244140625
+                ],
+                "BoundingBoxMin": [
+                    -1.000152587890625,
+                    -1.0000076293945312,
+                    -1.0001220703125
+                ],
+                "MajorVersion": 4,
+                "MinorVersion": 2
+            },
+            "ASOBO_normal_map_convention": {
+                "tangent_space_convention": "DirectX"
+            }
+        }
+    },
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteLength": 792,
+            "byteOffset": 0,
+            "target": 34963,
+            "name": "BufferViewIndex"
+        },
+        {
+            "buffer": 0,
+            "byteLength": 9504,
+            "byteStride": 36,
+            "byteOffset": 792,
+            "target": 34962,
+            "name": "BufferViewVertexND"
+        }
+    ],
+    "extensionsUsed": [
+        "ASOBO_asset_optimized",
+        "ASOBO_normal_map_convention",
+        "ASOBO_material_invisible"
+    ],
+    "materials": [
+        {
+            "name": "SOUND_NODE_INVISIBLE",
+            "pbrMetallicRoughness": {},
+            "extensions": {
+                "ASOBO_material_invisible": {}
+            }
+        }
+    ],
+    "meshes": [
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 0,
+                        "NORMAL": 1,
+                        "POSITION": 2,
+                        "TANGENT": 3,
+                        "TEXCOORD_0": 4,
+                        "TEXCOORD_1": 5
+                    },
+                    "indices": 6,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_BLOWER_EXTRACT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 7,
+                        "NORMAL": 8,
+                        "POSITION": 9,
+                        "TANGENT": 10,
+                        "TEXCOORD_0": 11,
+                        "TEXCOORD_1": 12
+                    },
+                    "indices": 13,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_DOOR_AFT_LEFT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 14,
+                        "NORMAL": 15,
+                        "POSITION": 16,
+                        "TANGENT": 17,
+                        "TEXCOORD_0": 18,
+                        "TEXCOORD_1": 19
+                    },
+                    "indices": 20,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_DOOR_AFT_RIGHT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 21,
+                        "NORMAL": 22,
+                        "POSITION": 23,
+                        "TANGENT": 24,
+                        "TEXCOORD_0": 25,
+                        "TEXCOORD_1": 26
+                    },
+                    "indices": 27,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_DOOR_FWD_LEFT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 28,
+                        "NORMAL": 29,
+                        "POSITION": 30,
+                        "TANGENT": 31,
+                        "TEXCOORD_0": 32,
+                        "TEXCOORD_1": 33
+                    },
+                    "indices": 34,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_DOOR_FWD_RIGHT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 35,
+                        "NORMAL": 36,
+                        "POSITION": 37,
+                        "TANGENT": 38,
+                        "TEXCOORD_0": 39,
+                        "TEXCOORD_1": 40
+                    },
+                    "indices": 41,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_ENGINE_LEFT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 42,
+                        "NORMAL": 43,
+                        "POSITION": 44,
+                        "TANGENT": 45,
+                        "TEXCOORD_0": 46,
+                        "TEXCOORD_1": 47
+                    },
+                    "indices": 48,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_ENGINE_RIGHT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 49,
+                        "NORMAL": 50,
+                        "POSITION": 51,
+                        "TANGENT": 52,
+                        "TEXCOORD_0": 53,
+                        "TEXCOORD_1": 54
+                    },
+                    "indices": 55,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_PACK_OUTFLOW_LEFT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 56,
+                        "NORMAL": 57,
+                        "POSITION": 58,
+                        "TANGENT": 59,
+                        "TEXCOORD_0": 60,
+                        "TEXCOORD_1": 61
+                    },
+                    "indices": 62,
+                    "material": 0,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_PACK_OUTFLOW_RIGHT"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 63,
+                        "NORMAL": 64,
+                        "POSITION": 65,
+                        "TANGENT": 66,
+                        "TEXCOORD_0": 67,
+                        "TEXCOORD_1": 68
+                    },
+                    "indices": 69,
+                    "material": 1,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_AFT_GALLEY"
+        },
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "COLOR_0": 70,
+                        "NORMAL": 71,
+                        "POSITION": 72,
+                        "TANGENT": 73,
+                        "TEXCOORD_0": 74,
+                        "TEXCOORD_1": 75
+                    },
+                    "indices": 76,
+                    "material": 1,
+                    "mode": 4,
+                    "extras": {
+                        "ASOBO_primitive": {
+                            "BaseVertexIndex": null,
+                            "PrimitiveCount": 12,
+                            "StartIndex": null,
+                            "VertexType": "VTX",
+                            "VertexVersion": 2
+                        }
+                    }
+                }
+            ],
+            "name": "SOUND_FWD_GALLEY"
+        }
+    ],
+    "nodes": [
+        {
+            "translation": [
+                -1.260140061378479,
+                -0.23086783289909363,
+                6.838709831237793
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 0,
+            "name": "SOUND_BLOWER_EXTRACT"
+        },
+        {
+            "translation": [
+                1.7605443000793457,
+                2.025949239730835,
+                -16.110319137573242
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 1,
+            "name": "SOUND_DOOR_AFT_LEFT"
+        },
+        {
+            "translation": [
+                -1.7605373859405518,
+                2.025952100753784,
+                -16.11031723022461
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 2,
+            "name": "SOUND_DOOR_AFT_RIGHT"
+        },
+        {
+            "translation": [
+                1.82533860206604,
+                1.934011459350586,
+                8.49927043914795
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 3,
+            "name": "SOUND_DOOR_FWD_LEFT"
+        },
+        {
+            "translation": [
+                -1.8253324031829834,
+                1.93401038646698,
+                8.499269485473633
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 4,
+            "name": "SOUND_DOOR_FWD_RIGHT"
+        },
+        {
+            "translation": [
+                5.778567790985107,
+                -0.8929270505905151,
+                1.8223490715026855
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 5,
+            "name": "SOUND_ENGINE_LEFT"
+        },
+        {
+            "translation": [
+                -5.778567790985107,
+                -0.8929262757301331,
+                1.8223490715026855
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 6,
+            "name": "SOUND_ENGINE_RIGHT"
+        },
+        {
+            "translation": [
+                0.6404037475585938,
+                -0.8167171478271484,
+                -1.7589778900146484
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 7,
+            "name": "SOUND_PACK_OUTFLOW_LEFT"
+        },
+        {
+            "translation": [
+                -1.4455249309539795,
+                -0.7894369959831238,
+                -1.7732065916061401
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 8,
+            "name": "SOUND_PACK_OUTFLOW_RIGHT"
+        },
+        {
+            "translation": [
+                -0.16739243268966675,
+                2.028637409210205,
+                -16.635637283325195
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 9,
+            "name": "SOUND_AFT_GALLEY"
+        },
+        {
+            "translation": [
+                0.3075818717479706,
+                2.028637409210205,
+                8.999751091003418
+            ],
+            "scale": [
+                0.010036978870630264,
+                0.010036978870630264,
+                0.010036978870630264
+            ],
+            "mesh": 10,
+            "name": "SOUND_FWD_GALLEY"
+        }
+    ],
+    "scene": 0,
+    "scenes": [
+        {
+            "name": "Scene",
+            "nodes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 10296,
+            "uri": "sound_nodes.bin"
+        }
+    ]
+}

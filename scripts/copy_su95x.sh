@@ -22,7 +22,7 @@ mkdir -p ./build-su95x/out
 cp -ra ./flybywire/fbw-a32nx/src/behavior/. ./build-su95x/src/behavior
 cp -ra ./flybywire/fbw-a32nx/src/fonts/. ./build-su95x/src/fonts
 cp -ra ./flybywire/fbw-a32nx/src/localization/. ./build-su95x/src/localization
-cp -rv ./flybywire/fbw-a32nx/src/model/. ./build-su95x/src/model
+# cp -rv ./flybywire/fbw-a32nx/src/model/. ./build-su95x/src/model
 cp -ra ./flybywire/fbw-a32nx/src/systems/. ./build-su95x/src/systems
 cp -ra ./flybywire/fbw-a32nx/src/wasm/. ./build-su95x/src/wasm
 
@@ -70,13 +70,13 @@ cp -ra ./hdw-su95x/src/base/headwindsim-aircraft-su100-95/. ./build-su95x/out/he
 cp -ra ./hdw-su95x/src/base/headwindsim-aircraft-su100-95-lock-highlight/. ./build-su95x/out/headwindsim-aircraft-su100-95-lock-highlight
 
 # copy A32NX default texture
-mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable
-cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/TEXTURE/. ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable/
-cp -ra './flybywire/fbw-a32nx/src/textures/decals 4k/A320NEO_COCKPIT_DECALSTEXT_ALBD.TIF-master.dds' ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable/A320NEO_COCKPIT_DECALSTEXT_ALBD.TIF.dds
+# mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable
+# cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/TEXTURE/. ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable/
+# cp -ra './flybywire/fbw-a32nx/src/textures/decals 4k/A320NEO_COCKPIT_DECALSTEXT_ALBD.TIF-master.dds' ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable/A320NEO_COCKPIT_DECALSTEXT_ALBD.TIF.dds
 
 # copy cockpit model
-mkdir -p ./build-su95x/src/model/a320-interior-unmodified
-cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/model/A320_NEO_INTERIOR_LOD00.* ./build-su95x/src/model/a320-interior-unmodified/
+# mkdir -p ./build-su95x/src/model/a320-interior-unmodified
+# cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/model/A320_NEO_INTERIOR_LOD00.* ./build-su95x/src/model/a320-interior-unmodified/
 
 # copy A32NX sound pack to a333x sound folder
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/sound/
