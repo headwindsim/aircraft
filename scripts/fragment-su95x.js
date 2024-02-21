@@ -20,9 +20,6 @@ const execute = async () => {
                 name: 'Textures',
                 sourceDir: './SimObjects/Airplanes/Headwind_SU95/texture'
             }, {
-                name: 'Texture-Stable',
-                sourceDir: './SimObjects/Airplanes/Headwind_SU95/texture.A32NX_Stable'
-            }, {
                 name: 'Livery',
                 sourceDir: './SimObjects/Airplanes/_Headwind_SU95-Livery'
             }, {
