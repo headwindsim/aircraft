@@ -1,3 +1,7 @@
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import { usePersistentNumberProperty, usePersistentProperty } from '@flybywiresim/fbw-sdk';
 import React, { useState } from 'react';
 import { Link, Route, Switch } from 'react-router-dom';
@@ -198,8 +202,8 @@ export const AircraftOptionsPinProgramsPage = () => {
                     <SettingItem name={t('Settings.AutomaticCallOuts.Title')}>
                         <Link
                             to={`${basePinProgRoute}/${pathify('Automatic Call Outs')}`}
-                            className="text-theme-body hover:text-theme-highlight bg-theme-highlight hover:bg-theme-body border-theme-highlight
-                                rounded-md border-2 px-5 py-2.5 transition duration-100"
+                            className="py-2.5 px-5 text-theme-body hover:text-theme-highlight bg-theme-highlight
+                                hover:bg-theme-body rounded-md border-2 border-theme-highlight transition duration-100"
                         >
                             {t('Settings.AircraftOptionsPinPrograms.Select')}
                         </Link>

@@ -213,15 +213,6 @@ export const AtsuAocPage = () => {
                     onChange={(value) => setHoppieUserId(value)}
                 />
             </SettingItem>
-
-            <SettingItem name={t('Settings.AtsuAoc.SimBriefUsernamePilotId')}>
-                <SimpleInput
-                    className="text-center w-30"
-                    value={simbriefDisplay}
-                    onBlur={(value) => handleUsernameInput(value.replace(/\s/g, ''))}
-                    onChange={(value) => setSimbriefDisplay(value)}
-                />
-            </SettingItem>
         </SettingsPage>
     );
 };
