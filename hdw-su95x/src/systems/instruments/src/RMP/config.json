@@ -1,0 +1,9 @@
+{
+  "index": "./index.tsx",
+  "isInteractive": false,
+  "name": "RMP",
+  "dimensions": {
+    "width": 432,
+    "height": 512
+  }
+}
