@@ -26,6 +26,7 @@
       "@typings/*": ["../../../build-a339x-common/src/typings/*"],
       "@flybywiresim/fbw-sdk": ["../../../build-a339x-common/src/systems/index.ts"],
       "@flybywiresim/clock": ["../../../build-a339x-common/src/systems/instruments/src/Clock/index.ts"],
+      "@flybywiresim/bat": ["../../../build-a339x-common/src/systems/instruments/src/BAT/index.ts"]
     }
   },
 }

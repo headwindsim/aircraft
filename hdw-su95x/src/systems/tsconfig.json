@@ -26,6 +26,7 @@
       "@typings/*": ["../../../build-su95x-common/src/typings/*"],
       "@flybywiresim/fbw-sdk": ["../../../build-su95x-common/src/systems/index.ts"],
       "@flybywiresim/clock": ["../../../build-su95x-common/src/systems/instruments/src/Clock/index.ts"],
+      "@flybywiresim/bat": ["../../../build-su95x-common/src/systems/instruments/src/BAT/index.ts"]
     }
   },
 }
