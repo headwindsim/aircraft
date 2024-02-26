@@ -49,14 +49,17 @@ CMakeLists.txt
 !/textures/**
 
 /hdw-a333x-common/*
+/hdw-a333x-common/src/systems/instruments/src/EFB/Localization/data/downloaded/*.json
 !/hdw-a333x-common/src/
 !/hdw-a333x-common/src/**
 
 /hdw-a339x-common/*
+/hdw-a339x-common/src/systems/instruments/src/EFB/Localization/data/downloaded/*.json
 !/hdw-a339x-common/src/
 !/hdw-a339x-common/src/**
 
 /hdw-su95x-common/*
+/hdw-su95x-common/src/systems/instruments/src/EFB/Localization/data/downloaded/*.json
 !/hdw-su95x-common/src/
 !/hdw-su95x-common/src/**
 
@@ -104,7 +107,6 @@ CMakeLists.txt
 /hdw-a339x/src/systems/instruments/aceBundles
 /hdw-a339x/src/systems/instruments/buildSrc/custom/*
 
-/hdw-a339x/src/localization/flypad/downloaded/*.json
 /hdw-a339x/src/localization/msfs/downloaded/*.locPak
 /hdw-a339x/src/systems/instruments/src/EFB/dist
 /hdw-a339x/src/systems/instruments/src/EFB/web/

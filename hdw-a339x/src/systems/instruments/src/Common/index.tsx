@@ -1,7 +1,10 @@
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { FbwAircraftSentryClient } from '@sentry/FbwAircraftSentryClient';
-import { getRenderTarget } from '@flybywiresim/fbw-sdk';
+import { getRenderTarget, FbwAircraftSentryClient } from '@flybywiresim/fbw-sdk';
 
 declare const process: any;
 
