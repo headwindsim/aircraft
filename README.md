@@ -29,7 +29,7 @@ The present aircraft setup is either being simulated or targeted. It's important
 
 
 ## How to build
-Make sure docker are isntalled. Prefferably with WSL2 backend.
+Make sure docker are installed. Prefferably with WSL2 backend.
 
 #### 1. First, run following command on powershell. This will install the A32NX docker images and node modules.
 
