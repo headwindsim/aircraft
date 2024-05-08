@@ -153,6 +153,7 @@ obj/
 cmake-build*/
 *.tgz
 *.wasm
+*.bak
 
 /build-a333x/
 /build-a339x/
