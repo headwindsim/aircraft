@@ -24,7 +24,6 @@ cp -ra ./flybywire/fbw-a32nx/src/fonts/. ./build-a339x/src/fonts
 cp -ra ./flybywire/fbw-a32nx/src/localization/. ./build-a339x/src/localization
 cp -ra ./flybywire/fbw-a32nx/src/systems/. ./build-a339x/src/systems
 cp -ra ./flybywire/fbw-a32nx/src/wasm/. ./build-a339x/src/wasm
-cp -ra ./flybywire/fbw-a32nx/src/wasm/fadec_a32nx/. ./build-a339x/src/wasm/fadec_a339x
 
 cp -ra ./hdw-a339x/.env ./build-a339x/.env
 cp -ra ./hdw-a339x/mach.config.js ./build-a339x/mach.config.js
