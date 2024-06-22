@@ -24,6 +24,7 @@ cp -ra ./flybywire/fbw-a32nx/src/fonts/. ./build-a339x/src/fonts
 cp -ra ./flybywire/fbw-a32nx/src/localization/. ./build-a339x/src/localization
 cp -ra ./flybywire/fbw-a32nx/src/systems/. ./build-a339x/src/systems
 cp -ra ./flybywire/fbw-a32nx/src/wasm/. ./build-a339x/src/wasm
+cp -ra ./flybywire/fbw-a32nx/src/wasm/fadec_a32nx/. ./build-a339x/src/wasm/fadec_a339x
 
 cp -ra ./hdw-a339x/.env ./build-a339x/.env
 cp -ra ./hdw-a339x/mach.config.js ./build-a339x/mach.config.js
@@ -71,11 +72,6 @@ cp -ra ./hdw-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight/. ./bui
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/sound
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/sound
 
-chmod +x ./build-a339x/src/wasm/fbw_a320/build.sh
-chmod +x ./build-a339x/src/wasm/fadec_a320/build.sh
-chmod +x ./build-a339x/src/wasm/fadec_a330/build.sh
-# chmod +x ./build-a339x/src/wasm/flypad-backend/build.sh
-
 ##### ACJ330neo
 
 # remove directory if it exist
@@ -95,7 +91,3 @@ cp -ra ./hdw-a339x-acj/src/wasm/. ./build-a339x-acj/src/wasm
 
 # copy base of A339X to out
 #cp -ra ./hdw-a339x-acj/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/headwindsim-aircraft-a330-900
-
-#chmod +x ./build-a339x-acj/src/wasm/fbw_a320/build.sh
-#chmod +x ./build-a339x-acj/src/wasm/fadec_a320/build.sh
-#chmod +x ./build-a339x-acj/src/wasm/flypad-backend/build.sh

@@ -114,14 +114,6 @@ export default new TaskOfTasks("all", [
                         "Cargo.toml",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm"
                     ]),
-                new ExecTask("systems-fadec",
-                    "npm run build-a339x:fadec",
-                    [
-                        "build-a339x/src/wasm/fadec_a330",
-                        "build-a339x-common/src/wasm/fbw_common",
-                        "build-a339x-common/src/wasm/fadec_common",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec.wasm"
-                    ]),
                 new ExecTask("systems-fbw",
                     "npm run build-a339x:fbw",
                     [
@@ -136,13 +128,16 @@ export default new TaskOfTasks("all", [
                     "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm",
                     "build-a339x-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
-                new ExecTask("extra-backend",
+                new ExecTask("cpp-wasm-cmake",
                     "npm run build-a339x:cpp-wasm-cmake",
                     [
-                        "build-a339x-common/src/wasm/cpp-msfs-framework",
-                        "build-a339x-common/src/wasm/extra-backend",
-                        "build-a339x/src/wasm/extra-backend-a32nx",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a32nx.wasm"
+                        'build-a339x-common/src/wasm/cpp-msfs-framework',
+                        'build-a339x-common/src/wasm/extra-backend',
+                        'build-a339x-common/src/wasm/fadec_common_v2',
+                        'build-a339x/src/wasm/extra-backend-a32nx',
+                        'build-a339x/src/wasm/fadec_a339x',
+                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a32nx.wasm',
+                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec-a32nx.wasm'
                     ])
             ], true),
         ]),
@@ -161,7 +156,7 @@ export default new TaskOfTasks("all", [
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/systems.wasm"
-                    ])
+                    ]),
             ], true),
         ]),
 
@@ -175,7 +170,7 @@ export default new TaskOfTasks("all", [
     // A339X Livery Package Task
     new TaskOfTasks("a339x-livery-package", [
         // Prepare the out folder and any other pre tasks.
-        // Currently, these can be run in parallel but in the future, we may need to run them in sequence if there are any dependencies.
+        // Currently, these can be run in parallel, but in the future, we may need to run them in sequence if there are any dependencies.
         new TaskOfTasks("preparation", [
             new ExecTask("copy-base-files", "npm run build-a339x-livery-package:copy-base-files")
         ], true),
