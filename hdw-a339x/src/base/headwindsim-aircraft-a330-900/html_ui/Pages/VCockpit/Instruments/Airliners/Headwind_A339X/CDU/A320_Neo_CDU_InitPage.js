@@ -412,7 +412,9 @@ class CDUInitPage {
             if (value === "") {
                 let zfw = undefined;
                 let zfwCg = undefined;
-                if (!!SimVar.GetSimVarValue("L:A32NX_BOARDING_STARTED_BY_USR", "bool")) {
+                let aircraftBoarding = SimVar.GetSimVarValue("L:A32NX_BOARDING_STARTED_BY_USR", "bool");
+                let gsxBoarding = SimVar.GetSimVarValue("L:FSDT_GSX_BOARDING_STATE", "number");
+                if (aircraftBoarding || (gsxBoarding >= 4 && gsxBoarding < 6)) {
                     zfw = SimVar.GetSimVarValue("L:A32NX_AIRFRAME_ZFW_DESIRED", "number");
                     zfwCg = SimVar.GetSimVarValue("L:A32NX_AIRFRAME_ZFW_CG_PERCENT_MAC_DESIRED", "number");
                 } else if (isFinite(getZfw()) && isFinite(getZfwcg())) {
