@@ -4689,7 +4689,6 @@
                 <NODE_ID>PUSH_GLARE_MASTERWARN_L</NODE_ID>
                 <PART_ID>MASTERWARN_L</PART_ID>
                 <LEFT_SINGLE_CODE>
-                    0 (&gt;L:A32NX_MASTER_WARNING)
                     1 (&gt;L:PUSH_AUTOPILOT_MASTERAWARN_L)
                 </LEFT_SINGLE_CODE>
                 <LEFT_LEAVE_CODE>
@@ -4709,7 +4708,6 @@
                 <NODE_ID>PUSH_GLARE_MASTERCAUT_L</NODE_ID>
                 <PART_ID>MASTERCAUT_L</PART_ID>
                 <LEFT_SINGLE_CODE>
-                    0 (&gt;L:A32NX_MASTER_CAUTION)
                     1 (&gt;L:PUSH_AUTOPILOT_MASTERCAUT_L)
                 </LEFT_SINGLE_CODE>
                 <LEFT_LEAVE_CODE>
@@ -4729,7 +4727,6 @@
                 <NODE_ID>PUSH_GLARE_MASTERWARN_R</NODE_ID>
                 <PART_ID>MASTERWARN_R</PART_ID>
                 <LEFT_SINGLE_CODE>
-                    0 (&gt;L:A32NX_MASTER_WARNING)
                     1 (&gt;L:PUSH_AUTOPILOT_MASTERAWARN_L)
                 </LEFT_SINGLE_CODE>
                 <LEFT_LEAVE_CODE>
@@ -4749,7 +4746,6 @@
                 <NODE_ID>PUSH_GLARE_MASTERCAUT_R</NODE_ID>
                 <PART_ID>MASTERCAUT_R</PART_ID>
                 <LEFT_SINGLE_CODE>
-                    0 (&gt;L:A32NX_MASTER_CAUTION)
                     1 (&gt;L:PUSH_AUTOPILOT_MASTERCAUT_L)
                 </LEFT_SINGLE_CODE>
                 <LEFT_LEAVE_CODE>
