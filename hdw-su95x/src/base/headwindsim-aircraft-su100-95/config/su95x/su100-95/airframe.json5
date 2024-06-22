@@ -1,0 +1,98 @@
+// Copyright (c) 2024 FlyByWire Simulations
+// SPDX-License-Identifier: GPL-3.0
+// =======================================================================================
+// This is the base airframe configuration file for SU100-95
+// Any keys prefixed by underscore (_) should be considered read-only and not overwritable.
+//
+// NOTE: * This is currently a WIP * ! The override functionality has not been completed yet !
+//
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+//
+// Please follow the instructions in the documentation to create a new configuration file!
+// =======================================================================================
+// Last updated: 22 June 2024
+{
+    "configMajorVersion": 0,
+    "configMinorVersion": 1,
+    "_variant": "SU100-95",
+    "_icao": "SU95",
+    "_name": "Sukhoi Superjet 100-95",
+    "_engines": "RR TRENT 7000",
+    "_developer": "Headwind Simulations",
+    "msnReference": "MSN XXXX",
+    "weightVariant": "WV900",
+    "designLimits": {
+        "weights": {
+            "maxGw": 45880,     // kg
+            "maxZfw": 40000,    // kg
+            "minZfw": 27000,    // kg
+            "maxGwCg": 35,      // %CG MAC
+            "maxZfwCg": 35,     // %CG MAC
+            "maxCargo": 4200,   // kg
+            "maxFuel": 19046,   // kg
+        },
+        "endurance": {
+            "range": 2472,   // nm
+            "mmo": "0.81",   // mach
+        },
+        "performanceEnvelope": {
+            "mlw": [
+                [ 32.5, 37500 ],
+                [ 31.5, 36800 ],
+                [ 31.0, 32600 ],
+                [ 28.5, 29200 ],
+                [ 17.0, 27400 ],
+                [ 14.0, 27400 ],
+                [ 12.5, 27900 ],
+                [ 12.0, 41000 ],
+                [ 33.0, 41000 ],
+                [ 32.5, 37500 ]
+            ],
+            "mzfw": [
+                [ 32.5, 37500 ],
+                [ 31.5, 36800 ],
+                [ 31.0, 32600 ],
+                [ 28.5, 29200 ],
+                [ 17.0, 27400 ],
+                [ 14.0, 27400 ],
+                [ 12.5, 27900 ],
+                [ 12.0, 40000 ],
+                [ 33.0, 40000 ],
+                [ 32.5, 37500 ]
+            ],
+            "mtow": [
+                [ 32.5, 37500 ],
+                [ 31.5, 36800 ],
+                [ 31.0, 32600 ],
+                [ 28.5, 29200 ],
+                [ 17.0, 27400 ],
+                [ 14.0, 27400 ],
+                [ 12.5, 27900 ],
+                [ 12.0, 49450 ],
+                [ 25.0, 49450 ],
+                [ 33.0, 42000 ],
+                [ 32.5, 37500 ]
+            ],
+            "flight": [
+                [ 32.5, 37500 ],
+                [ 31.5, 36800 ],
+                [ 31.0, 32600 ],
+                [ 28.5, 29200 ],
+                [ 17.0, 27400 ],
+                [ 14.0, 27400 ],
+                [ 12.5, 27900 ],
+                [ 12.0, 49450 ],
+                [ 25.0, 49450 ],
+                [ 33.0, 42000 ],
+                [ 32.5, 37500 ]
+            ]
+        }
+    },
+    "_dimensions": {
+        "aircraftWheelBase": 11.25,
+        "aircraftLengthMeter": 29.94
+    }
+}

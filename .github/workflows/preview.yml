@@ -14,6 +14,8 @@ jobs:
       BUILD_DIR_NAME: staging
       CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
       CDN_BUCKET_DESTINATION: addons/a339x/preview
+      AIRCRAFT_PROJECT_PREFIX: a339x
+      AIRCRAFT_VARIANT: a330-941
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@main
@@ -38,6 +40,8 @@ jobs:
           echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a339x/.env
           echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a339x/.env
           echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a339x/.env
+          echo AIRCRAFT_PROJECT_PREFIX=${{ env.AIRCRAFT_PROJECT_PREFIX }} >> hdw-a339x/.env
+          echo AIRCRAFT_VARIANT=${{ env.AIRCRAFT_VARIANT }} >> hdw-a339x/.env
           echo BUILD_DIR_NAME=${{ env.BUILD_DIR_NAME }} >> .env
           echo LOCALAZY_READ_KEY=${{ secrets.LOCALAZY_READ_KEY }} >> .env
           echo VITE_BUILD=false >> .env
