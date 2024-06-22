@@ -26,7 +26,7 @@ struct Configuration {
   double fuelCenter = 0;
   double fuelLeft = 1645.0;
   double fuelRight = fuelLeft;
-  double fuelLeftAux = 228.0;
+  double fuelLeftAux = 0;
   double fuelRightAux = fuelLeftAux;
   // double fuelTrim = 1617.0;
 };
@@ -1176,12 +1176,30 @@ class EngineControl {
     simVars->setEngine2Timer(0);
 
     // Initialize Fuel Tanks
-    simVars->setFuelLeftPre(configuration.fuelLeft * simVars->getFuelWeightGallon());          // in LBS
-    simVars->setFuelRightPre(configuration.fuelRight * simVars->getFuelWeightGallon());        // in LBS
-    simVars->setFuelAuxLeftPre(configuration.fuelLeftAux * simVars->getFuelWeightGallon());    // in LBS
-    simVars->setFuelAuxRightPre(configuration.fuelRightAux * simVars->getFuelWeightGallon());  // in LBS
-    simVars->setFuelCenterPre(configuration.fuelCenter * simVars->getFuelWeightGallon());      // in LBS
-    // simVars->setFuelTrimPre(configuration.fuelTrim * simVars->getFuelWeightGallon());
+    double centerQuantity = simVars->getFuelTankQuantity(1);    // gal
+    double leftQuantity = simVars->getFuelTankQuantity(2);      // gal
+    double rightQuantity = simVars->getFuelTankQuantity(3);     // gal
+    double leftAuxQuantity = simVars->getFuelTankQuantity(4);   // gal
+    double rightAuxQuantity = simVars->getFuelTankQuantity(5);  // gal
+
+    double fuelWeightGallon = simVars->getFuelWeightGallon();  // weight of gallon of jet A in lbs
+
+    if (simVars->getStartState() == 2) {                                           // only loads saved fuel quantity on C/D spawn
+      simVars->setFuelCenterPre(configuration.fuelCenter * fuelWeightGallon);      // in LBS
+      simVars->setFuelLeftPre(configuration.fuelLeft * fuelWeightGallon);          // in LBS
+      simVars->setFuelRightPre(configuration.fuelRight * fuelWeightGallon);        // in LBS
+      simVars->setFuelAuxLeftPre(configuration.fuelLeftAux * fuelWeightGallon);    // in LBS
+      simVars->setFuelAuxRightPre(configuration.fuelRightAux * fuelWeightGallon);  // in LBS
+      // simVars->setFuelTrimPre(configuration.fuelTrim * simVars->getFuelWeightGallon());
+    } else {
+      simVars->setFuelCenterPre(centerQuantity * fuelWeightGallon);      // in LBS
+      simVars->setFuelLeftPre(leftQuantity * fuelWeightGallon);          // in LBS
+      simVars->setFuelRightPre(rightQuantity * fuelWeightGallon);        // in LBS
+      simVars->setFuelAuxLeftPre(leftAuxQuantity * fuelWeightGallon);    // in LBS
+      simVars->setFuelAuxRightPre(rightAuxQuantity * fuelWeightGallon);  // in LBS
+      // simVars->setFuelTrimPre(configuration.fuelTrim * simVars->getFuelWeightGallon());
+    }
+
 
     // Initialize Pump State
     simVars->setPumpStateLeft(0);
@@ -1334,8 +1352,8 @@ class EngineControl {
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_CENTER_QUANTITY, 0),
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_LEFT_QUANTITY, 1645.0),
         mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_RIGHT_QUANTITY, 1645.0),
-        mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_LEFT_AUX_QUANTITY, 228.0),
-        mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_RIGHT_AUX_QUANTITY, 228.0),
+        mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_LEFT_AUX_QUANTITY, 0),
+        mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_RIGHT_AUX_QUANTITY, 0),
         // mINI::INITypeConversion::getDouble(structure, CONFIGURATION_SECTION_FUEL, CONFIGURATION_SECTION_FUEL_TRIM_QTY, 1617.0),
     };
   }

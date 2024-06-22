@@ -66,7 +66,7 @@ export const A330Fuel: React.FC<FuelProps> = ({
     const [CENTER_TANK_GALLONS] = useSimVar('FUEL TANK CENTER CAPACITY', 'Gallons', 1_000);;
     
     const wingTotalRefuelTimeSeconds = 1300;
-    const CenterTotalRefuelTimeSeconds = 180;
+    const CenterTotalRefuelTimeSeconds = 1200;
 
     const [galToKg] = useSimVar('FUEL WEIGHT PER GALLON', 'kilograms', 1_000);
     const outerCell = () => OUTER_CELL_GALLONS * galToKg * convertUnit;
@@ -249,8 +249,10 @@ export const A330Fuel: React.FC<FuelProps> = ({
         const totalWingFuel = TOTAL_FUEL_GALLONS - CENTER_TANK_GALLONS;
         const differentialFuelWings = Math.abs(currentWingFuel() - targetWingFuel());
         const differentialFuelCenter = Math.abs(centerTarget - centerCurrent);
-        estimatedTimeSeconds += (differentialFuelWings / totalWingFuel) * wingTotalRefuelTimeSeconds;
-        estimatedTimeSeconds += (differentialFuelCenter / CENTER_TANK_GALLONS) * CenterTotalRefuelTimeSeconds;
+
+        const estimatedTimeSecondsWing = (differentialFuelWings / totalWingFuel) * wingTotalRefuelTimeSeconds;
+        const estimatedTimeSecondsCenter = (differentialFuelCenter / CENTER_TANK_GALLONS) * CenterTotalRefuelTimeSeconds;
+        estimatedTimeSeconds = Math.max(estimatedTimeSecondsWing, estimatedTimeSecondsCenter);
         if (refuelRate === '1') { // fast
             estimatedTimeSeconds /= 5;
         }
@@ -316,7 +318,7 @@ export const A330Fuel: React.FC<FuelProps> = ({
                     />
                 </div>
                 <div className="absolute inset-x-0 top-40 flex flex-row justify-between">
-                    <div className="border-theme-accent divide-theme-accent w-min divide-y overflow-hidden rounded-2xl border-2">
+                    <div className="divide-theme-accent border-theme-accent w-min divide-y overflow-hidden rounded-2xl border-2">
                         <TankReadoutWidget
                             title={t('Ground.Fuel.LeftInnerTank')}
                             current={LInnCurrent}
@@ -336,7 +338,7 @@ export const A330Fuel: React.FC<FuelProps> = ({
                             convertedFuelValue={convertFuelValueCenter(LOutCurrent)}
                         />
                     </div>
-                    <div className="border-theme-accent divide-theme-accent w-min divide-y overflow-hidden rounded-2xl border-2">
+                    <div className="divide-theme-accent border-theme-accent w-min divide-y overflow-hidden rounded-2xl border-2">
                         <TankReadoutWidget
                             title={t('Ground.Fuel.RightInnerTank')}
                             current={RInnCurrent}
@@ -385,22 +387,22 @@ export const A330Fuel: React.FC<FuelProps> = ({
                     />
                     {/* tl overlay */}
                     <div
-                        className="bottom-overlay-t-y left-overlay-tl bg-theme-body -rotate-26.5 absolute z-10"
+                        className="bottom-overlay-t-y left-overlay-tl -rotate-26.5 bg-theme-body absolute z-10"
                         style={{ transform: 'rotate(-26.5deg)', width: '490px', height: '140px', bottom: '240px', left: '82px' }}
                     />
                     {/* tr overlay */}
                     <div
-                        className="right-overlay-tr bottom-overlay-t-y bg-theme-body rotate-26.5 absolute z-10"
+                        className="bottom-overlay-t-y right-overlay-tr rotate-26.5 bg-theme-body absolute z-10"
                         style={{ transform: 'rotate(26.5deg)', width: '490px', height: '140px', bottom: '240px', right: '82px' }}
                     />
                     {/* bl overlay */}
                     <div
-                        className="bottom-overlay-b-y left-overlay-bl bg-theme-body -rotate-18.5 absolute z-10"
+                        className="bottom-overlay-b-y left-overlay-bl -rotate-18.5 bg-theme-body absolute z-10"
                         style={{ transform: 'rotate(-18.5deg)', width: '484px', height: '101px', bottom: '78px', left: '144px' }}
                     />
                     {/* br overlay */}
                     <div
-                        className="right-overlay-br bottom-overlay-b-y bg-theme-body rotate-18.5 absolute z-10"
+                        className="bottom-overlay-b-y right-overlay-br rotate-18.5 bg-theme-body absolute z-10"
                         style={{ transform: 'rotate(18.5deg)', width: '484px', height: '101px', bottom: '78px', right: '144px' }}
                     />
                 </div>
@@ -436,7 +438,7 @@ export const A330Fuel: React.FC<FuelProps> = ({
                                 {simbriefDataLoaded && (
                                     <TooltipWrapper text={t('Ground.Fuel.TT.FillBlockFuelFromSimBrief')}>
                                         <div
-                                            className="text-theme-body hover:text-theme-highlight bg-theme-highlight hover:bg-theme-body border-theme-highlight flex h-auto items-center justify-center rounded-md rounded-l-none border-2 px-2 transition duration-100"
+                                            className="border-theme-highlight bg-theme-highlight text-theme-body hover:bg-theme-body hover:text-theme-highlight flex h-auto items-center justify-center rounded-md rounded-l-none border-2 px-2 transition duration-100"
                                             onClick={simbriefDataLoaded ? handleFuelAutoFill : undefined}
                                         >
                                             <CloudArrowDown size={26} />
