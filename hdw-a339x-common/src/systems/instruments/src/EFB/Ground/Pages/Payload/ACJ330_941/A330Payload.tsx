@@ -5,7 +5,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { CloudArrowDown } from 'react-bootstrap-icons';
 import { SeatFlags, Units, usePersistentNumberProperty, usePersistentProperty, useSeatFlags, useSimVar } from '@flybywiresim/fbw-sdk';
-import { Card, t, TooltipWrapper, SelectGroup, SelectItem, PromptModal, useModals } from '@flybywiresim/flypad';
+import { setPayloadImported, useAppDispatch, Card, t, TooltipWrapper, SelectGroup, SelectItem, PromptModal, useModals } from '@flybywiresim/flypad';
 import { SeatOutlineBg } from '../../../../Assets/SeatOutlineBg';
 import { BoardingInput, MiscParamsInput, PayloadInputTable } from '../PayloadElements';
 import { CargoWidget } from './CargoWidget';
@@ -24,6 +24,7 @@ interface A320Props {
     simbriefBag: number,
     simbriefFreight: number,
     simbriefDataLoaded: boolean,
+    payloadImported: boolean,
     massUnitForDisplay: string,
     isOnGround: boolean,
 
@@ -40,6 +41,7 @@ export const ACJ330Payload: React.FC<A320Props> = ({
     simbriefBag,
     simbriefFreight,
     simbriefDataLoaded,
+    payloadImported,
     massUnitForDisplay,
     isOnGround,
     boardingStarted,
@@ -128,6 +130,7 @@ export const ACJ330Payload: React.FC<A320Props> = ({
     const [_, setGsxNumPassengers] = useSimVar('L:FSDT_GSX_NUMPASSENGERS', 'Number', 223);
     const [gsxBoardingState] = useSimVar('L:FSDT_GSX_BOARDING_STATE', 'Number', 227);
     const [gsxDeBoardingState] = useSimVar('L:FSDT_GSX_DEBOARDING_STATE', 'Number', 229);
+    const gsxInProgress = () => gsxDeBoardingState >= 4 && gsxDeBoardingState < 6 || gsxBoardingState >= 4 && gsxBoardingState < 6;
     const gsxStates = {
         AVAILABLE: 1,
         NOT_AVAILABLE: 2,
@@ -136,6 +139,15 @@ export const ACJ330Payload: React.FC<A320Props> = ({
         PERFORMING: 5,
         COMPLETED: 6,
     };
+
+    const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if (simbriefDataLoaded === true && payloadImported === false) {
+            setSimBriefValues();
+            dispatch(setPayloadImported(true));
+        }
+    }, []);
 
     const setSimBriefValues = () => {
         if (simbriefUnits === 'kgs') {
@@ -240,15 +252,18 @@ export const ACJ330Payload: React.FC<A320Props> = ({
     }, [emptyWeight, paxWeight, paxBagWeight, maxPax, maxCargo, gw, zfw]);
 
     const onClickCargo = useCallback((cargoStation, e) => {
-        if (gsxPayloadSyncEnabled === 1 && boardingStarted) {
+        if (gsxInProgress() || boardingStarted) {
             return;
         }
         const cargoPercent = Math.min(Math.max(0, e.nativeEvent.offsetX / cargoMap[cargoStation].progressBarWidth), 1);
         setCargoDesired[cargoStation](Math.round(cargoMap[cargoStation].weight * cargoPercent));
-    }, [cargoMap]);
+    }, [cargoMap, boardingStarted,
+        gsxBoardingState,
+        gsxDeBoardingState,
+        gsxPayloadSyncEnabled]);
 
     const onClickSeat = useCallback((stationIndex: number, seatId: number) => {
-        if (gsxPayloadSyncEnabled === 1 && boardingStarted) {
+        if (gsxInProgress() || boardingStarted) {
             return;
         }
 
@@ -272,6 +287,10 @@ export const ACJ330Payload: React.FC<A320Props> = ({
         ...cargoDesired,
         ...desiredFlags,
         totalPaxDesired,
+        boardingStarted,
+        gsxBoardingState,
+        gsxDeBoardingState,
+        gsxPayloadSyncEnabled,
     ]);
 
     const handleDeboarding = useCallback(() => {
@@ -375,35 +394,11 @@ export const ACJ330Payload: React.FC<A320Props> = ({
 
     useEffect(() => {
         if (gsxPayloadSyncEnabled === 1) {
-            switch (gsxBoardingState) {
-            // If boarding has been requested, performed or completed
-            case gsxStates.REQUESTED:
-            case gsxStates.PERFORMING:
-            case gsxStates.COMPLETED:
-                setBoardingStarted(true);
-                break;
-            default:
-                break;
-            }
-        }
-    }, [gsxBoardingState]);
-
-    useEffect(() => {
-        if (gsxPayloadSyncEnabled === 1) {
             switch (gsxDeBoardingState) {
             case gsxStates.REQUESTED:
                 // If Deboarding has been requested, set target pax to 0 for boarding backend
                 setTargetPax(0);
                 setTargetCargo(0, 0);
-                setBoardingStarted(true);
-                break;
-            case gsxStates.PERFORMING:
-                // If deboarding is being performed
-                setBoardingStarted(true);
-                break;
-            case gsxStates.COMPLETED:
-                // If deboarding is completed
-                setBoardingStarted(false);
                 break;
             default:
                 break;
@@ -433,16 +428,11 @@ export const ACJ330Payload: React.FC<A320Props> = ({
             );
         }
 
-        if (gsxPayloadSyncEnabled === 1) {
-            if (boardingStarted) {
-                setShowSimbriefButton(false);
-                return;
-            }
-
+        if (gsxInProgress() || boardingStarted) {
+            setShowSimbriefButton(false);
+        } else {
             setShowSimbriefButton(simbriefStatus);
-            return;
         }
-        setShowSimbriefButton(simbriefStatus);
     }, [
         simbriefUnits,
         simbriefFreight,
@@ -491,26 +481,25 @@ export const ACJ330Payload: React.FC<A320Props> = ({
 
     return (
         <div>
-            <div className="relative h-content-section-reduced">
+            <div className="h-content-section-reduced relative">
                 <div className="mb-10">
-                    <div className="flex relative flex-col">
+                    <div className="relative flex flex-col">
                         <SeatOutlineBg stroke={getTheme(theme)[0]} highlight="#69BD45" />
                         <SeatMapWidget seatMap={seatMap} desiredFlags={desiredFlags} activeFlags={activeFlags} onClickSeat={onClickSeat} theme={getTheme(theme)} isMainDeck canvasX={243} canvasY={78} />
                     </div>
                 </div>
                 <CargoWidget cargo={cargo} cargoDesired={cargoDesired} cargoMap={cargoMap} onClickCargo={onClickCargo} />
 
-                <div className="flex relative right-0 flex-row justify-between px-4 mt-16">
-                    <div className="flex flex-col flex-grow pr-24">
-                        <div className="flex flex-row w-full">
-                            <Card className="w-full col-1" childrenContainerClassName={`w-full ${simbriefDataLoaded ? 'rounded-r-none' : ''}`}>
+                <div className="relative right-0 mt-16 flex flex-row justify-between px-4">
+                    <div className="flex grow flex-col pr-24">
+                        <div className="flex w-full flex-row">
+                            <Card className="col-1 w-full" childrenContainerClassName={`w-full ${simbriefDataLoaded ? 'rounded-r-none' : ''}`}>
                                 <PayloadInputTable
                                     loadsheet={Loadsheet}
                                     emptyWeight={emptyWeight}
                                     massUnitForDisplay={massUnitForDisplay}
-                                    gsxPayloadSyncEnabled={gsxPayloadSyncEnabled === 1}
                                     displayZfw={displayZfw}
-                                    boardingStarted={boardingStarted}
+                                    BoardingInProgress={gsxInProgress() || boardingStarted}
                                     totalPax={totalPax}
                                     totalPaxDesired={totalPaxDesired}
                                     maxPax={maxPax}
@@ -532,9 +521,9 @@ export const ACJ330Payload: React.FC<A320Props> = ({
                                     setDisplayZfw={setDisplayZfw}
                                 />
                                 <hr className="mb-4 border-gray-700" />
-                                <div className="flex flex-row justify-start items-center">
+                                <div className="flex flex-row items-center justify-start">
                                     <MiscParamsInput
-                                        disable={gsxPayloadSyncEnabled === 1 && boardingStarted}
+                                        disable={gsxInProgress() || boardingStarted}
                                         minPaxWeight={Math.round(Loadsheet.specs.pax.minPaxWeight)}
                                         maxPaxWeight={Math.round(Loadsheet.specs.pax.maxPaxWeight)}
                                         defaultPaxWeight={Math.round(Loadsheet.specs.pax.defaultPaxWeight)}
@@ -556,9 +545,9 @@ export const ACJ330Payload: React.FC<A320Props> = ({
                                 && (
                                     <TooltipWrapper text={t('Ground.Payload.TT.FillPayloadFromSimbrief')}>
                                         <div
-                                            className={`flex justify-center items-center px-2 h-auto text-theme-body
-                                                       hover:text-theme-highlight bg-theme-highlight hover:bg-theme-body
-                                                       rounded-md rounded-l-none border-2 border-theme-highlight transition duration-100`}
+                                            className={`border-theme-highlight bg-theme-highlight text-theme-body hover:bg-theme-body hover:text-theme-highlight flex
+                                                h-auto items-center justify-center
+                                                rounded-md rounded-l-none border-2 px-2 transition duration-100`}
                                             onClick={setSimBriefValues}
                                         >
                                             <CloudArrowDown size={26} />
@@ -567,12 +556,12 @@ export const ACJ330Payload: React.FC<A320Props> = ({
                                 )}
                         </div>
                         {(gsxPayloadSyncEnabled !== 1) && (
-                            <div className="flex flex-row mt-4">
-                                <Card className="w-full h-full" childrenContainerClassName="flex flex-col w-full h-full">
-                                    <div className="flex flex-row justify-between items-center">
+                            <div className="mt-4 flex flex-row">
+                                <Card className="h-full w-full" childrenContainerClassName="flex flex-col w-full h-full">
+                                    <div className="flex flex-row items-center justify-between">
                                         <div className="flex font-medium">
                                             {t('Ground.Payload.BoardingTime')}
-                                            <span className="flex relative flex-row items-center ml-2 text-sm font-light">
+                                            <span className="relative ml-2 flex flex-row items-center text-sm font-light">
                                                 (
                                                 {remainingTimeString()}
                                                 )
@@ -616,12 +605,12 @@ export const ACJ330Payload: React.FC<A320Props> = ({
                             </div>
                         )}
                         {gsxPayloadSyncEnabled === 1 && (
-                            <div className="pt-6 pl-2">
+                            <div className="pl-2 pt-6">
                                 {t('Ground.Payload.GSXPayloadSyncEnabled')}
                             </div>
                         )}
                     </div>
-                    <div className="border border-theme-accent col-1">
+                    <div className="col-1 border-theme-accent border">
                         <ChartWidget
                             width={525}
                             height={511}
