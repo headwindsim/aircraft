@@ -7,6 +7,9 @@
 # Use set +x and set +v to turn off the above settings
 #set -x
 
+# exit early with status if the script fails
+set -e
+
 # get directory of this script relative to root
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 pushd "${DIR}" || exit
