@@ -19,7 +19,8 @@
         "@shared/*": ["../../../build-a339x/src/systems/shared/src/*"],
         "@typings/*": ["../typings/*"],
         "@flybywiresim/fbw-sdk": ["./index.ts"],
-        "@flybywiresim/flypad": ["./instruments/src/EFB/index.ts"]
+        "@flybywiresim/flypad": ["./instruments/src/EFB/index.ts"],
+        "@flybywiresim/checklists": ["./shared/src/checklists/index.ts"]
       }
     }
   }
