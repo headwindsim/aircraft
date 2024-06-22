@@ -15,7 +15,7 @@ export function getAircraftType(): string {
     } else if (aircraftName.includes('Sukhoi')) {
         aircraft = 'su95x';
     } else {
-        aircraft = 'other';
+        aircraft = 'a32nx';
     }
     return aircraft;
 }
