@@ -8,10 +8,16 @@ module.exports = {
       // Babel assumes isolated modules, therefore enable it here as well.
       // This also speeds up the unit testing performance.
       isolatedModules: true,
-      diagnostics: { ignoreCodes: ['TS151001'] },
+      diagnostics: {
+        ignoreCodes: ['TS151001'],
+      },
     },
   },
   // disable fmsv2 tests until they are fixed
-  modulePathIgnorePatterns: ['fbw-a380x/src/systems/fmgc/src/flightplanning'],
-  moduleNameMapper: { '@flybywiresim/fbw-sdk': '<rootDir>/hdw-**-common/src/systems/index.ts' },
+  modulePathIgnorePatterns: [
+    'hdw-**/src/systems/fmgc/src/flightplanning',
+  ],
+  moduleNameMapper: {
+    '@flybywiresim/fbw-sdk': '<rootDir>/hdw-**-common/src/systems/index.ts',
+  },
 };

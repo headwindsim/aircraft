@@ -898,11 +898,7 @@ void EngineControl_A330X::updateThrustLimits(double simulationTime,
   if (isTransitionActive) {
     double timeDifference = (std::max)(0.0, (simulationTime - transitionStartTime) - TRANSITION_WAIT_TIME);
     if (timeDifference > 0 && clb > flex) {
-      deltaThrust = (std::min)(clb - flex, timeDifference * transitionFactor);
-    }
-    if (flex + deltaThrust >= clb) {
       wasFlexActive = false;
-      isTransitionActive = false;
     }
   }
 
@@ -940,9 +936,9 @@ void EngineControl_A330X::updateThrustLimits(double simulationTime,
   simData.thrustLimitClimb->set(clb);
   simData.thrustLimitMct->set(mct);
 
-#ifdef PROFILING
-  profilerUpdateThrustLimits.stop();
-#endif
+  #ifdef PROFILING
+    profilerUpdateThrustLimits.stop();
+  #endif
 }
 
 /*
