@@ -9,22 +9,22 @@
 
 #include "logging.h"
 
-#include "FuelConfiguration_A32NX.h"
+#include "FuelConfiguration_A330X.h"
 
-void FuelConfiguration_A32NX::loadConfigurationFromIni() {
+void FuelConfiguration_A330X::loadConfigurationFromIni() {
   if (configFilename.empty()) {
-    LOG_ERROR("Fadec::FuelConfiguration_A32NX: no configuration file specified -> using default fuel"
+    LOG_ERROR("Fadec::FuelConfiguration_A330X: no configuration file specified -> using default fuel"
               " quantities. Use setConfigFilename() to set the configuration file)");
     return;
   }
 
-  LOG_INFO("Fadec::FuelConfiguration_A32NX: loading configuration file " + configFilename);
+  LOG_INFO("Fadec::FuelConfiguration_A330X: loading configuration file " + configFilename);
 
   mINI::INIStructure ini;
   mINI::INIFile iniFile(configFilename);
 
   if (!iniFile.read(ini)) {
-    LOG_ERROR("Fadec::FuelConfiguration_A32NX: failed to read configuration file \"" + configFilename + "\" due to error \"" +
+    LOG_ERROR("Fadec::FuelConfiguration_A330X: failed to read configuration file \"" + configFilename + "\" due to error \"" +
               strerror(errno) + "\" -> using default fuel quantities.");
     return;
   }
@@ -34,13 +34,14 @@ void FuelConfiguration_A32NX::loadConfigurationFromIni() {
   fuelRight = mINI::INITypeConversion::getDouble(ini, INI_SECTION_FUEL, INI_SECTION_FUEL_RIGHT_QUANTITY, fuelRightDefault);
   fuelLeftAux = mINI::INITypeConversion::getDouble(ini, INI_SECTION_FUEL, INI_SECTION_FUEL_LEFT_AUX_QUANTITY, fuelLeftAuxDefault);
   fuelRightAux = mINI::INITypeConversion::getDouble(ini, INI_SECTION_FUEL, INI_SECTION_FUEL_RIGHT_AUX_QUANTITY, fuelRightAuxDefault);
+  //fuelTrimGallons       = mINI::INITypeConversion::getDouble(ini, INI_SECTION_FUEL, INI_SECTION_FUEL_TRIM_QTY, fuelTrimDefault);
 
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: loaded fuel configuration from " + configFilename + " with the following values:");
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: " + this->toString());
+  LOG_DEBUG("Fadec::FuelConfiguration_A330X: loaded fuel configuration from " + configFilename + " with the following values:");
+  LOG_DEBUG("Fadec::FuelConfiguration_A330X: " + this->toString());
 }
 
-void FuelConfiguration_A32NX::saveConfigurationToIni() {
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: saving configuration file " + configFilename);
+void FuelConfiguration_A330X::saveConfigurationToIni() {
+  LOG_DEBUG("Fadec::FuelConfiguration_A330X: saving configuration file " + configFilename);
 
   mINI::INIStructure ini;
   mINI::INIFile iniFile(configFilename);
@@ -53,25 +54,27 @@ void FuelConfiguration_A32NX::saveConfigurationToIni() {
   ini[INI_SECTION_FUEL][INI_SECTION_FUEL_RIGHT_QUANTITY] = std::to_string(this->fuelRight);
   ini[INI_SECTION_FUEL][INI_SECTION_FUEL_LEFT_AUX_QUANTITY] = std::to_string(this->fuelLeftAux);
   ini[INI_SECTION_FUEL][INI_SECTION_FUEL_RIGHT_AUX_QUANTITY] = std::to_string(this->fuelRightAux);
+  //ini[INI_SECTION_FUEL][INI_SECTION_FUEL_TRIM_QTY]        = std::to_string(this->fuelTrimGallons);
 
   if (!iniFile.write(ini, true)) {
-    LOG_ERROR("Fadec::FuelConfiguration_A32NX: failed to write engine conf " + configFilename + " due to error \"" + strerror(errno) +
+    LOG_ERROR("Fadec::FuelConfiguration_A330X: failed to write engine conf " + configFilename + " due to error \"" + strerror(errno) +
               "\"");
     return;
   }
 
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: saved fuel configuration to " + configFilename + " with the following values:");
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: " + this->toString());
+  LOG_DEBUG("Fadec::FuelConfiguration_A330X: saved fuel configuration to " + configFilename + " with the following values:");
+  LOG_DEBUG("Fadec::FuelConfiguration_A330X: " + this->toString());
 }
 
-std::string FuelConfiguration_A32NX::toString() const {
+std::string FuelConfiguration_A330X::toString() const {
   std::ostringstream oss;
-  oss << "FuelConfiguration_A32NX: { "
+  oss << "FuelConfiguration_A330X: { "
       << "fuelCenter: " << fuelCenter        //
       << ", fuelLeft: " << fuelLeft          //
       << ", fuelRight: " << fuelRight        //
       << ", fuelLeftAux: " << fuelLeftAux    //
       << ", fuelRightAux: " << fuelRightAux  //
+      // << ", fuelTrimGallons: " << fuelTrimGallons  //
       << " }";
   return oss.str();
 }

@@ -1,8 +1,8 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A330X_HPP
+#define FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A330X_HPP
 
 #include <MSFS/Legacy/gauges.h>
 
@@ -10,39 +10,40 @@
 
 // Make access to variables more readable
 enum EngineAndSide {
-  L        = 0,  //
-  E1       = L,  //
-  ENGINE_1 = L,  //
-  R        = 1,  //
-  E2       = R,  //
-  ENGINE_2 = R,  //
+  L        = 0,   //
+  E1       = L,   //
+  ENGINE_1 = L,   //
+  R        = 1,   //
+  E2       = R,   //
+  ENGINE_2 = R,   //
 };
 
 /**
- * @class FadecSimData_A32NX
+ * @class FadecSimData_A330X
  * @brief This class manages the simulation data for the FADEC (Full Authority Digital Engine Control)
- *        simulation for the A32NX aircraft.
+ *        simulation for the A330X aircraft.
  */
-class FadecSimData_A32NX {
+class FadecSimData_A330X {
  public:
   // Notification groups for events
   enum NotificationGroup { NOTIFICATION_GROUP_0 };
 
   struct AtcIdData {
-    char atcID[32];  // MSFS docs say this is max 10 chars - we use 32 for safety
+    char atcID[32]; // MSFS docs say this is max 10 chars - we use 32 for safety
   };
   DataDefinitionVector atcIdDataDef = {
       {"ATC ID", 0, UNITS.None, SIMCONNECT_DATATYPE_STRING32}  //
   };
   /**
-   * @struct AtcID
+   * @var atcIdDataPtr
    * @brief This struct represents the ATC ID of the aircraft which we use to create the filename to store and load the fuel configuration.
-   * @var char atcID[32] The ATC ID of the aircraft.
+   * @data char atcID[32] The ATC ID of the aircraft.
    * @note MSFS docs say that the ATC ID is a string of max 10 characters. We use 32 for safety.
    * @see https://docs.flightsimulator.com/html/Programming_Tools/SimVars/Aircraft_SimVars/Aircraft_RadioNavigation_Variables.htm#ATC%20ID
    */
   DataDefinitionVariablePtr<AtcIdData> atcIdDataPtr;
 
+  // Fuel Feed Tank Data in one Data Definition as they are read and updated together
   struct FuelFeedTankData {
     FLOAT64 fuelLeftMain;   // Gallons
     FLOAT64 fuelRightMain;  // Gallons
@@ -51,39 +52,54 @@ class FadecSimData_A32NX {
       {"FUEL TANK LEFT MAIN QUANTITY",  0, UNITS.Gallons}, //
       {"FUEL TANK RIGHT MAIN QUANTITY", 0, UNITS.Gallons}  //
   };
-  DataDefinitionVariablePtr<FuelFeedTankData> fuelFeedTankDataPtr;
+  DataDefinitionVariablePtr<FuelFeedTankData> fuelFeedTankDataPtr;  // in Gallons
 
+  // Fuel Tank Data in one Data Definition as they are read and updated together
   struct FuelTankData {
-    FLOAT64 fuelCenter;    // Gallons
-    FLOAT64 fuelLeftAux;   // Gallons
-    FLOAT64 fuelRightAux;  // Gallons
+    FLOAT64 fuelCenter;     // Gallons
+    FLOAT64 fuelLeftAux;    // Gallons
+    FLOAT64 fuelRightAux;   // Gallons
+    //FLOAT64 fuelSystemTrim; // in Gallons
   };
   DataDefinitionVector fuelCandAuxDataDef = {
       {"FUEL TANK CENTER QUANTITY",    0, UNITS.Gallons}, //
       {"FUEL TANK LEFT AUX QUANTITY",  0, UNITS.Gallons}, //
       {"FUEL TANK RIGHT AUX QUANTITY", 0, UNITS.Gallons}  //
   };
-  DataDefinitionVariablePtr<FuelTankData> fuelCandAuxDataPtr;
+  DataDefinitionVariablePtr<FuelTankData> fuelCandAuxDataPtr;  // in Gallons
 
   // Oil Temp Data in separate Data Definitions as they are updated separately
   // clang-format off
-  struct OliTempData {
-    FLOAT64 oilTemp; // Celsius
+  struct OilTempData {
+    FLOAT64 oilTemp; // in Celsius
   };
-  DataDefinitionVector oilTempE1DataDef = { {"GENERAL ENG OIL TEMPERATURE", 1, UNITS.Celsius}  };
-  DataDefinitionVector oilTempE2DataDef = { {"GENERAL ENG OIL TEMPERATURE", 2, UNITS.Celsius}  };
-  DataDefinitionVariablePtr<OliTempData> oilTempDataPtr[2];
+  DataDefinitionVector oilTempE1DataDef = { {"GENERAL ENG OIL TEMPERATURE", 1, UNITS.Celsius} };
+  DataDefinitionVector oilTempE2DataDef = { {"GENERAL ENG OIL TEMPERATURE", 2, UNITS.Celsius} };
+  DataDefinitionVariablePtr<OilTempData> oilTempDataPtr[2];
+  // clang-format on
 
-// Oil Psi Data in separate Data Definitions as they are updated separately
+  // Oil Psi Data in separate Data Definitions as they are updated separately
+  // clang-format off
   struct OilPsiData {
-    FLOAT64 oilPsi; // Psi
+    FLOAT64 oilPsi; // in Psi
   };
   DataDefinitionVector oilPsiE1DataDef = { {"GENERAL ENG OIL PRESSURE", 1, UNITS.Psi} };
   DataDefinitionVector oilPsiE2DataDef = { {"GENERAL ENG OIL PRESSURE", 2, UNITS.Psi} };
   DataDefinitionVariablePtr<OilPsiData> oilPsiDataPtr[2];
   // clang-format on
 
-  // Various simvars we require each tick
+  // Corrected N3 Data in separate Data Definitions as they are updated separately
+  // Note: the sim does not have a direct N3 value, so we use N2 as a proxy
+  // clang-format off
+  struct CorrectedN3Data {
+    FLOAT64 correctedN3; // in Percent
+  };
+  DataDefinitionVector engine1CN3DataDef = { {"TURB ENG CORRECTED N2", 1, UNITS.Percent} };
+  DataDefinitionVector engine2CN3DataDef = { {"TURB ENG CORRECTED N2", 2, UNITS.Percent} };
+  DataDefinitionVariablePtr<CorrectedN3Data> engineCorrectedN3DataPtr[2];
+  // clang-format on
+
+  // SimVars Data in one Data Definition as they are read together and never updated
   struct SimVarsData {
     FLOAT64 airSpeedMach;              // Mach
     FLOAT64 ambientPressure;           // Millibars
@@ -91,8 +107,8 @@ class FadecSimData_A32NX {
     FLOAT64 animationDeltaTime;        // Seconds
     FLOAT64 apuFuelConsumption;        // Gallons per hour
     FLOAT64 engineAntiIce[2];          // Bool
-    FLOAT64 engineCorrectedN1[2];      // Percent
-    FLOAT64 engineCorrectedN2[2];      // Percent
+    FLOAT64 simEngineCorrectedN1[2];      // Percent
+    FLOAT64 simEngineCorrectedN2[2];      // Percent
     FLOAT64 engineFuelValveOpen[2];    // Number
     FLOAT64 engineIgniter[2];          // Number
     FLOAT64 engineStarter[2];          // Bool
@@ -103,7 +119,7 @@ class FadecSimData_A32NX {
     FLOAT64 fuelTankQuantityLeftAux;   // Gallons
     FLOAT64 fuelTankQuantityRight;     // Gallons
     FLOAT64 fuelTankQuantityRightAux;  // Gallons
-    FLOAT64 fuelWeightPerGallon;       // Pounds
+    FLOAT64 fuelWeightLbsPerGallon;    // Pounds
     FLOAT64 lineToCenterFlow[2];       // Gallons per hour
     FLOAT64 pressureAltitude;          // Feet
     FLOAT64 simEngineN1[2];            // Percent
@@ -165,6 +181,7 @@ class FadecSimData_A32NX {
   DataDefinitionVariablePtr<SimVarsData> simVarsDataPtr;
 
   // Client events
+  // TODO: not yet used in this A330X implementation but kept for future use
   ClientEventPtr toggleEngineStarter1Event;
   ClientEventPtr toggleEngineStarter2Event;
   CallbackID     toggleEngineStarter1EventCallback{};
@@ -185,10 +202,11 @@ class FadecSimData_A32NX {
   NamedVariablePtr engineIdleEGT;
   NamedVariablePtr engineIdleFF;
   NamedVariablePtr engineIdleN1;
-  NamedVariablePtr engineIdleN2;
+  NamedVariablePtr engineIdleN3;  // Percent
   NamedVariablePtr engineImbalance;
   NamedVariablePtr engineN1[2];
   NamedVariablePtr engineN2[2];
+  NamedVariablePtr engineN3[2];
   NamedVariablePtr engineOilTotal[2];
   NamedVariablePtr engineOil[2];
   NamedVariablePtr enginePreFF[2];
@@ -199,6 +217,7 @@ class FadecSimData_A32NX {
   NamedVariablePtr fuelAuxRightPre;  // Pounds
   NamedVariablePtr fuelCenterPre;    // Pounds
   NamedVariablePtr fuelLeftPre;      // Pounds
+  //NamedVariablePtr fuelTrimPre;        // Pounds
   NamedVariablePtr fuelPumpState[2];
   NamedVariablePtr fuelRightPre;
   NamedVariablePtr packsState[2];
@@ -216,26 +235,30 @@ class FadecSimData_A32NX {
   // ===============================================================================================
 
   /**
-   * @brief Initializes the FadecSimData_A32NX object.
-   * @param dm Pointer to the DataManager object. This object is used to create the data definition
-   *           variable for the ATC ID data.
+   * @brief Initializes the FadecSimData_A330X object.
+   * @param dm Pointer to the DataManager object that is used to manage the data definitions and variables.
    */
   void initialize(DataManager* dm) {
     initDataDefinitions(dm);
     initEvents(dm);
     initSimvars(dm);
     initLvars(dm);
-    LOG_INFO("Fadec::FadecSimData_A32NX initialized");
+    LOG_INFO("Fadec::FadecSimData_A330X initialized");
   }
 
   void initDataDefinitions(DataManager* dm) {
-    atcIdDataPtr        = dm->make_datadefinition_var<AtcIdData>("ATC ID DATA", atcIdDataDef, NO_AUTO_UPDATE);
+    atcIdDataPtr = dm->make_datadefinition_var<AtcIdData>("ATC ID DATA", atcIdDataDef, NO_AUTO_UPDATE);
     fuelFeedTankDataPtr = dm->make_datadefinition_var<FuelFeedTankData>("FUEL LR DATA", fuelLRDataDef, NO_AUTO_UPDATE);
     fuelCandAuxDataPtr  = dm->make_datadefinition_var<FuelTankData>("FUEL CAND AUX DATA", fuelCandAuxDataDef, NO_AUTO_UPDATE);
-    oilTempDataPtr[L]   = dm->make_datadefinition_var<OliTempData>("OIL TEMP LEFT DATA", oilTempE1DataDef, NO_AUTO_UPDATE);
-    oilTempDataPtr[R]   = dm->make_datadefinition_var<OliTempData>("OIL TEMP RIGHT DATA", oilTempE2DataDef, NO_AUTO_UPDATE);
+
+    oilTempDataPtr[L]   = dm->make_datadefinition_var<OilTempData>("OIL TEMP LEFT DATA", oilTempE1DataDef, NO_AUTO_UPDATE);
+    oilTempDataPtr[R]   = dm->make_datadefinition_var<OilTempData>("OIL TEMP RIGHT DATA", oilTempE2DataDef, NO_AUTO_UPDATE);
     oilPsiDataPtr[L]    = dm->make_datadefinition_var<OilPsiData>("OIL PSI LEFT DATA", oilPsiE1DataDef, NO_AUTO_UPDATE);
     oilPsiDataPtr[R]    = dm->make_datadefinition_var<OilPsiData>("OIL PSI RIGHT DATA", oilPsiE2DataDef, NO_AUTO_UPDATE);
+
+    // TURB ENG CN2 is used as a proxy for N3 as the sim does not have a direct N3 value
+    engineCorrectedN3DataPtr[L] = dm->make_datadefinition_var<CorrectedN3Data>("TURB ENG CN2 1", engine1CN3DataDef, NO_AUTO_UPDATE);
+    engineCorrectedN3DataPtr[R] = dm->make_datadefinition_var<CorrectedN3Data>("TURB ENG CN2 2", engine2CN3DataDef, NO_AUTO_UPDATE);
 
     simVarsDataPtr = dm->make_datadefinition_var<SimVarsData>("SIMVARS DATA", simVarsDataDef);
     simVarsDataPtr->requestPeriodicDataFromSim(SIMCONNECT_PERIOD_VISUAL_FRAME);
@@ -251,7 +274,7 @@ class FadecSimData_A32NX {
 
     setStarterHeldEvent[L] = dm->make_client_event("SET_STARTER1_HELD", true, NOTIFICATION_GROUP_0);
     setStarterHeldEvent[R] = dm->make_client_event("SET_STARTER2_HELD", true, NOTIFICATION_GROUP_0);
-
+    
     setStarterEvent[L] = dm->make_client_event("STARTER1_SET", true, NOTIFICATION_GROUP_0);
     setStarterEvent[R] = dm->make_client_event("STARTER2_SET", true, NOTIFICATION_GROUP_0);
   }
@@ -269,6 +292,23 @@ class FadecSimData_A32NX {
     // TODO: consider DataDefinition for the groups tha are read/write each tick
     startState = dm->make_named_var("A32NX_START_STATE", UNITS.Number, NO_AUTO_UPDATE);
 
+    engineIdleN1  = dm->make_named_var("A32NX_ENGINE_IDLE_N1", UNITS.Number, AUTO_READ_WRITE);
+    engineIdleN3  = dm->make_named_var("A32NX_ENGINE_IDLE_N3", UNITS.Number, AUTO_READ_WRITE);
+    engineIdleEGT = dm->make_named_var("A32NX_ENGINE_IDLE_EGT", UNITS.Number, AUTO_READ_WRITE);
+    engineIdleFF  = dm->make_named_var("A32NX_ENGINE_IDLE_FF", UNITS.Number, AUTO_READ_WRITE);
+
+    engineState[L] = dm->make_named_var("A32NX_ENGINE_STATE:1", UNITS.Number, AUTO_READ_WRITE);
+    engineState[R] = dm->make_named_var("A32NX_ENGINE_STATE:2", UNITS.Number, AUTO_READ_WRITE);
+
+    engineN1[L] = dm->make_named_var("A32NX_ENGINE_N1:1", UNITS.Number, AUTO_READ_WRITE);
+    engineN1[R] = dm->make_named_var("A32NX_ENGINE_N1:2", UNITS.Number, AUTO_READ_WRITE);
+
+    engineN2[L] = dm->make_named_var("A32NX_ENGINE_N2:1", UNITS.Number, AUTO_READ_WRITE);
+    engineN2[R] = dm->make_named_var("A32NX_ENGINE_N2:2", UNITS.Number, AUTO_READ_WRITE);
+
+    engineN3[L] = dm->make_named_var("A32NX_ENGINE_N3:1", UNITS.Number, AUTO_READ_WRITE);
+    engineN3[R] = dm->make_named_var("A32NX_ENGINE_N3:2", UNITS.Number, AUTO_READ_WRITE);
+
     engineEgt[L] = dm->make_named_var("A32NX_ENGINE_EGT:1", UNITS.Number, AUTO_READ_WRITE);
     engineEgt[R] = dm->make_named_var("A32NX_ENGINE_EGT:2", UNITS.Number, AUTO_READ_WRITE);
 
@@ -278,20 +318,6 @@ class FadecSimData_A32NX {
     engineFuelUsed[L] = dm->make_named_var("A32NX_FUEL_USED:1", UNITS.Number, AUTO_READ_WRITE);
     engineFuelUsed[R] = dm->make_named_var("A32NX_FUEL_USED:2", UNITS.Number, AUTO_READ_WRITE);
 
-    engineIdleEGT = dm->make_named_var("A32NX_ENGINE_IDLE_EGT", UNITS.Number, AUTO_READ_WRITE);
-    engineIdleFF  = dm->make_named_var("A32NX_ENGINE_IDLE_FF", UNITS.Number, AUTO_READ_WRITE);
-
-    engineIdleN1 = dm->make_named_var("A32NX_ENGINE_IDLE_N1", UNITS.Number, AUTO_READ_WRITE);
-    engineIdleN2 = dm->make_named_var("A32NX_ENGINE_IDLE_N2", UNITS.Number, AUTO_READ_WRITE);
-
-    engineImbalance = dm->make_named_var("A32NX_ENGINE_IMBALANCE", UNITS.Number, AUTO_READ_WRITE);
-
-    engineN1[L] = dm->make_named_var("A32NX_ENGINE_N1:1", UNITS.Number, AUTO_READ_WRITE);
-    engineN1[R] = dm->make_named_var("A32NX_ENGINE_N1:2", UNITS.Number, AUTO_READ_WRITE);
-
-    engineN2[L] = dm->make_named_var("A32NX_ENGINE_N2:1", UNITS.Number, AUTO_READ_WRITE);
-    engineN2[R] = dm->make_named_var("A32NX_ENGINE_N2:2", UNITS.Number, AUTO_READ_WRITE);
-
     engineOil[L] = dm->make_named_var("A32NX_ENGINE_OIL_QTY:1", UNITS.Number, AUTO_READ_WRITE);
     engineOil[R] = dm->make_named_var("A32NX_ENGINE_OIL_QTY:2", UNITS.Number, AUTO_READ_WRITE);
 
@@ -300,9 +326,6 @@ class FadecSimData_A32NX {
 
     enginePreFF[L] = dm->make_named_var("A32NX_ENGINE_PRE_FF:1", UNITS.Number, AUTO_READ_WRITE);
     enginePreFF[R] = dm->make_named_var("A32NX_ENGINE_PRE_FF:2", UNITS.Number, AUTO_READ_WRITE);
-
-    engineState[L] = dm->make_named_var("A32NX_ENGINE_STATE:1", UNITS.Number, AUTO_READ_WRITE);
-    engineState[R] = dm->make_named_var("A32NX_ENGINE_STATE:2", UNITS.Number, AUTO_READ_WRITE);
 
     engineTimer[L] = dm->make_named_var("A32NX_ENGINE_TIMER:1", UNITS.Number, AUTO_READ_WRITE);
     engineTimer[R] = dm->make_named_var("A32NX_ENGINE_TIMER:2", UNITS.Number, AUTO_READ_WRITE);
@@ -317,6 +340,7 @@ class FadecSimData_A32NX {
     fuelPumpState[L] = dm->make_named_var("A32NX_PUMP_STATE:1", UNITS.Number, AUTO_READ_WRITE);
     fuelPumpState[R] = dm->make_named_var("A32NX_PUMP_STATE:2", UNITS.Number, AUTO_READ_WRITE);
     fuelRightPre     = dm->make_named_var("A32NX_FUEL_RIGHT_PRE", UNITS.Number, AUTO_READ_WRITE);
+    //fuelTrimPre       = dm->make_named_var("A32NX_FUEL_TRIM_PRE", UNITS.Number, AUTO_READ_WRITE);
 
     thrustLimitType  = dm->make_named_var("A32NX_AUTOTHRUST_THRUST_LIMIT_TYPE", UNITS.Number, AUTO_READ);
     thrustLimitIdle  = dm->make_named_var("A32NX_AUTOTHRUST_THRUST_LIMIT_IDLE", UNITS.Number, AUTO_WRITE);
@@ -343,8 +367,7 @@ class FadecSimData_A32NX {
     engineIdleEGT->setAndWriteToSim(0);
     engineIdleFF->setAndWriteToSim(0);
     engineIdleN1->setAndWriteToSim(0);
-    engineIdleN2->setAndWriteToSim(0);
-    engineImbalance->setAndWriteToSim(0);
+    engineIdleN3->setAndWriteToSim(0);
     engineN1[L]->setAndWriteToSim(0);
     engineN1[R]->setAndWriteToSim(0);
     engineN2[L]->setAndWriteToSim(0);
@@ -374,4 +397,4 @@ class FadecSimData_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A330X_HPP

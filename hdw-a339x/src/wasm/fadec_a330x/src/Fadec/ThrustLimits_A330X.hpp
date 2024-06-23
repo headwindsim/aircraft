@@ -1,22 +1,25 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A330X_HPP
+#define FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A330X_HPP
 
 #include <algorithm>
-#include <cmath>
+#include <map>
+#include <sstream>
+
+#include "logging.h"
 
 #include "EngineRatios.hpp"
 #include "Fadec.h"
 
 /**
- * @class ThrustLimits_A32NX
- * @brief A static class that provides methods for calculating various engine thrust limits for the A33NX aircraft.
+ * @class ThrustLimits_A3800X
+ * @brief Static class containing the thrust limits for the A330X.
  *
  * TODO: extract the reusable code to a common library
  */
-class ThrustLimits_A32NX {
+class ThrustLimits_A330X {
   /**
    * @brief A 2D array representing various engine thrust limits.
    *
@@ -128,35 +131,13 @@ class ThrustLimits_A32NX {
   }
 
   /**
-   * @brief Structure to store the bleed values for different types of limits.
-   *
-   * This structure contains three members, each representing a specific bleed value:
-   * - `n1Packs`: A double representing the bleed value for the packs.
-   * - `n1Nai`: A double representing the bleed value for the nacelle anti-ice.
-   * - `n1Wai`: A double representing the bleed value for the wing anti-ice.
-   */
-  struct BleedValues {
-    double n1Packs;
-    double n1Nai;
-    double n1Wai;
-  };
-
-  /**
-   * @brief Lookup table for bleed values based on limit type.
-   *
-   * This map stores the bleed values for different types of limits. The key is an integer
-   * representing the type of limit (0-TO, 1-GA, 2-CLB, 3-MCT),
-   * and the value is a `BleedValues` structure containing the values for `n1Packs`, `n1Nai`, and `n1Wai`.
-   */
-  static std::map<int, BleedValues> bleedValuesLookup;  // see below for initialization
-
-  /**
    * @brief Calculates the total bleed for the engine.
    *
    * @param type The type of operation (0-TO, 1-GA, 2-CLB, 3-MCT).
    * @param altitude The current altitude of the aircraft in feet.
    * @param oat The outside air temperature in degrees Celsius.
-   * @param cp The corner point - the temperature below which the engine can operate at full thrust without any restrictions (in degrees Celsius).
+   * @param cp The corner point - the temperature below which the engine can operate at full thrust without any restrictions (in degrees
+   * Celsius).
    * @param lp The limit point - the temperature above which the engine thrust starts to be limited (in degrees Celsius).
    * @param flexTemp The flex temperature in degrees Celsius.
    * @param packs The status of the air conditioning (0 for off, 1 for on).
@@ -213,30 +194,31 @@ class ThrustLimits_A32NX {
   }
 
   /**
-   * @brief Calculates the N1 limit for the engine.
+   * @brief Calculates the N1 limit based on the given parameters.
    *
-   * This function calculates the N1 limit for the engine based on various parameters such as the
-   * type of operation, altitude, ambient temperature, ambient pressure, flex temperature, and the
-   * status of the air conditioning (AC), nacelle anti-ice (nacelle), and wing anti-ice (wing).
+   * This function calculates the N1 limit based on the type of limit, altitude, ambient temperature,
+   * ambient pressure, flex temperature, and the status of the air conditioning, nacelle anti-ice,
+   * and wing anti-ice. It uses a series of calculations and interpolations
+   * to determine the N1 limit.
    *
-   * @param type The type of operation (0-TO, 1-GA, 2-CLB, 3-MCT).
-   * @param altitude The current altitude of the aircraft.
-   * @param ambientTemp The ambient temperature.
-   * @param ambientPressure The ambient pressure.
-   * @param flexTemp The flex temperature.
-   * @param packs The status of the air conditioning (0 for off, 1 for on).
-   * @param nacelle The status of the nacelle anti-ice (0 for off, 1 for on).
-   * @param wing The status of the wing anti-ice (0 for off, 1 for on).
-   * @return The N1 limit for the engine.
+   * @param type An integer representing the type of limit (0-TO, 1-GA, 2-CLB, 3-MCT).
+   * @param altitude A double representing the altitude.
+   * @param ambientTemp A double representing the ambient temperature.
+   * @param ambientPressure A double representing the ambient pressure.
+   * @param flexTemp A double representing the flex temperature.
+   * @param packs A double representing the air conditioning status.
+   * @param nacelle A double representing the nacelle anti-ice status.
+   * @param wing A double representing the wing anti-ice status.
+   * @return The N1 limit as a double.
    */
   static double limitN1(int type,                //
                         double altitude,         //
                         double ambientTemp,      //
                         double ambientPressure,  //
                         double flexTemp,         //
-                        int packs,               //
-                        int nacelle,             //
-                        int wing                 //
+                        double packs,            //
+                        double nacelle,          //
+                        double wing              //
   ) {
     int rowMin = 0;
     int rowMax = 0;
@@ -326,4 +308,4 @@ class ThrustLimits_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A330X_HPP

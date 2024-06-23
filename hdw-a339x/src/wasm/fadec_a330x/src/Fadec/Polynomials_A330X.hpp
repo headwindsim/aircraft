@@ -1,5 +1,5 @@
-#ifndef FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A330X_HPP
+#define FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A330X_HPP
 
 #include <algorithm>
 #include <cmath>
@@ -13,25 +13,25 @@
  * and Oil Pressure during different engine states such as shutdown and startup. The class also
  * includes methods for calculating corrected EGT and Fuel Flow, as well as Oil Gulping percentage.
  */
-class Polynomial_A32NX {
+class Polynomial_A330X {
  public:
   /**
-   * @brief Calculates the N2 percentage during engine start-up using real-life modeled polynomials.
+   * @brief Calculates the N3 value during engine startup using real-life modeled polynomials.
    *
-   * @param n2 The current N2 percentage.
-   * @param preN2 The previous N2 percentage.
-   * @param idleN2 The idle N2 percentage.
-   * @return The calculated N2 percentage.
+   * @param currentSimN3 The current N3 value in percent (taken from the sim's N2 value).
+   * @param previousN3 The previous N3 value in percent.
+   * @param idleN3 The idle N3 value in percent.
+   * @return The calculated N3 value in percent.
    */
-  static double startN2(double n2, double preN2, double idleN2) {
-    // Normalize the current N2 percentage by scaling it with the idle N2
+  static double startN3(double currentSimN3, double previousN3, double idleN3) {
+    // Normalize the current N3 percentage by scaling it with the idle N3
     // percentage and a constant factor.
     // The constant factor 68.2 is likely derived from empirical data or a mathematical model of the
     // engine's behavior.
-    double normalN2 = n2 * 68.2 / idleN2;
+    double normalizedN3 = currentSimN3 * 68.2 / idleN3;
 
     // Coefficients for the polynomial used to calculate the N2 percentage.
-    constexpr double c_N2[16] = {
+    constexpr double coefficients[16] = {
         4.03649879e+00,   // coefficient for x^0
         -9.41981960e-01,  // coefficient for x^1
         1.98426614e-01,   // coefficient for x^2
@@ -50,31 +50,39 @@ class Polynomial_A32NX {
         4.31033031e-23    // coefficient for x^15
     };
 
-    // Calculate the N2 percentage using the polynomial equation.
-    double outN2 = 0.0;
-    for (int i = 0; i < 16; ++i) {
-      outN2 += c_N2[i] * (std::pow)(normalN2, i);
+    // Calculate the N3 value during engine startup using a polynomial model
+    double outN3 = 0;
+    for (int i = 0; i < 16; i++) {
+      outN3 += coefficients[i] * (std::pow)(normalizedN3, i);
+    }
+    outN3 *= currentSimN3;
+
+    // Ensure the calculated N3 value is within the expected range
+    if (outN3 < previousN3) {
+      outN3 = previousN3 + 0.002;
+    }
+    if (outN3 >= idleN3 + 0.1) {
+      outN3 = idleN3 + 0.05;
     }
 
-    outN2 *= n2;
-    outN2 = (std::max)(outN2, preN2 + 0.002);
-    return (std::min)(outN2, idleN2 + 0.1);
+    // Return the calculated N3 value
+    return outN3;
   }
 
   /**
-   * @brief Calculates the N1 percentage during engine start-up.
+   * @brief Calculates the N1 value during engine startup.
    *
-   * @param fbwN2 The current custom N2 percentage.
-   * @param idleN2 The idle N2 percentage.
-   * @param idleN1 The idle N1 percentage.
-   * @return The calculated N1 percentage.
+   * @param fbwN3 The current custom N3 value in percent.
+   * @param idleN3 The idle N3 value in percent.
+   * @param idleN1 The idle N1 value in percent.
+   * @return The calculated N1 value in percent.
    */
-  static double startN1(double fbwN2, double idleN2, double idleN1) {
-    // Normalize the current N2 percentage by dividing it with the idle N2 percentage.
-    const double normalN2 = fbwN2 / idleN2;
+  static double startN1(double fbwN3, double idleN3, double idleN1) {
+    // Normalize the current N3 value
+    double normalizedN3 = fbwN3 / idleN3;
 
     // Coefficients for the polynomial used to calculate the N1 percentage.
-    constexpr double c_N1[9] = {
+    constexpr double coefficients[9] = {
         -2.2812156e-12,  // coefficient for x^0
         -5.9830374e+01,  // coefficient for x^1
         7.0629094e+02,   // coefficient for x^2
@@ -85,41 +93,40 @@ class Polynomial_A32NX {
         -6.2099935e+03,  // coefficient for x^7
         1.2733071e+03    // coefficient for x^8
     };
-
-    // Calculate the N1 percentage using the polynomial equation.
-    const double normalN1pre = (-2.4698087 * (std::pow)(normalN2, 3))   //
-                               + (0.9662026 * (std::pow)(normalN2, 2))  //
-                               + (0.0701367 * normalN2);                //
-
-    // Calculate the N2 percentage using the polynomial equation.
-    double normalN1post = 0.0;
-    for (int i = 0; i < 9; ++i) {
-      normalN1post += c_N1[i] * (std::pow)(normalN2, i);
+    
+    // Calculate the N1 value during engine startup using a polynomial model
+    double normalN1pre =
+        (-2.4698087 * (std::pow)(normalizedN3, 3)) + (0.9662026 * (std::pow)(normalizedN3, 2)) + (0.0701367 * normalizedN3);
+    double normalN1post = 0;
+    for (int i = 0; i < 9; i++) {
+      normalN1post += coefficients[i] * (std::pow)(normalizedN3, i);
     }
 
-    // Return the calculated N1 percentage, ensuring it is within the range [normalN1pre, normalN1post]
-    // and then multiplied by idleN1.
-    return (normalN1post >= normalN1pre ? normalN1post : normalN1pre) * idleN1;
+    // Return the calculated N1 value
+    if (normalN1post >= normalN1pre) {
+      return normalN1post * idleN1;
+    } else {
+      return normalN1pre * idleN1;
+    }
   }
 
   /**
-   * @brief Calculates the Fuel Flow (FF) during engine start-up using real-life modeled polynomials.
+   * @brief Calculates the Fuel Flow (Kg/hr) during engine startup using real-life modeled polynomials.
    *
-   * @param fbwN2 The current N2 percentage.
-   * @param idleN2 The idle N2 percentage.
-   * @param idleFF The idle FF.
-   * @return The calculated FF.
+   * @param fbwN3 The current N3 value in percent.
+   * @param idleN3 The idle N3 value in percent.
+   * @param idleFF The idle Fuel Flow value in Kg/hr.
+   * @return The calculated Fuel Flow value in Kg/hr.
    */
-  static double startFF(double fbwN2, double idleN2, double idleFF) {
-    const double normalN2 = fbwN2 / idleN2;
-    double normalFF = 0;
+  static double startFF(double fbwN3, double idleN3, double idleFF) {
+    // Normalize the current N3 value
+    double normalizedN3 = fbwN3 / idleN3;
 
-    // If the normalized N2 percentage is less than or equal to 0.37, the FF is 0.
-    if (normalN2 <= 0.37) {
-      normalFF = 0;
-    } else {
-      // Coefficients for the polynomial used to calculate the FF.
-      constexpr double c_FF[9] = {
+    // Initialize the normalized Fuel Flow value
+    double normalizedFF = 0;
+
+    // Coefficients for the polynomial calculation
+    constexpr double coefficients[9] = {
           3.1110282e-12,   // coefficient for x^0
           1.0804331e+02,   // coefficient for x^1
           -1.3972629e+03,  // coefficient for x^2
@@ -129,44 +136,47 @@ class Polynomial_A32NX {
           -3.5093994e+04,  // coefficient for x^6
           1.8573033e+04,   // coefficient for x^7
           -4.1220062e+03   // coefficient for x^8
-      };
-      // Calculate the FF using the polynomial equation.
-      for (int i = 0; i < 9; ++i) {
-        normalFF += c_FF[i] * (std::pow)(normalN2, i);
+    };
+
+    // Calculate the normalized Fuel Flow value using a polynomial model if the normalized N3 value is greater than 0.37
+    if (normalizedN3 > 0.37) {
+      for (int i = 0; i < 9; i++) {
+        normalizedFF += coefficients[i] * (std::pow)(normalizedN3, i);
       }
     }
 
-    // Return the calculated FF, ensuring it is not less than 0.0 and then multiplied by idleFF.
-    return (std::max)(normalFF, 0.0) * idleFF;
+    // Ensure the calculated normalized Fuel Flow value is non-negative
+    if (normalizedFF < 0) {
+      normalizedFF = 0;
+    }
+
+    // Return the calculated Fuel Flow value
+    return normalizedFF * idleFF;  
   }
 
   /**
-   * @brief Calculates the Exhaust Gas Temperature (EGT) during engine start-up using real-life modeled polynomials.
+   * @brief Calculates the Exhaust Gas Temperature (EGT) during engine startup using real-life modeled polynomials.
    *
-   * @param fbwN2 The current N2 percentage.
-   * @param idleN2 The idle N2 percentage.
-   * @param ambientTemp The ambient temperature.
-   * @param idleEGT The idle EGT.
-   * @return The calculated EGT.
+   * @param fbwN3 The current N3 value in percent.
+   * @param idleN3 The idle N3 value in percent.
+   * @param ambientTemp The ambient temperature in degrees Celsius.
+   * @param idleEGT The idle EGT value in degrees Celsius.
+   * @return The calculated EGT value in degrees Celsius.
    */
-  static double startEGT(double fbwN2, double idleN2, double ambientTemp, double idleEGT) {
-    // Normalize the current N2 percentage by dividing it with the idle N2 percentage.
-    const double normalizedN2 = fbwN2 / idleN2;
+  static double startEGT(double fbwN3, double idleN3, double ambientTemp, double idleEGT) {
+    // Normalize the current N3 value
+    double normalizedN3 = fbwN3 / idleN3;
 
 
-    // Calculate the normalized EGT value based on the normalized N2 value
-    double normalizedEGT;
-    if (normalizedN2 < 0.17) {
+    // Calculate the normalized EGT value based on the normalized N3 value
+    double normalizedEGT = 0;
+    if (normalizedN3 < 0.17) {
       normalizedEGT = 0;
-    }
-    // If the normalized N2 percentage is less than or equal to 0.4, the EGT is calculated using a linear equation.
-    else if (normalizedN2 <= 0.4) {
-      normalizedEGT = (0.04783 * normalizedN2) - 0.00813;
-    }
-    // If the normalized N2 percentage is greater than 0.4, the EGT is calculated using a polynomial equation.
-    else {
-      // Coefficients for the polynomial used to calculate the EGT.
-      constexpr double c_EGT[9] = {
+    } else if (normalizedN3 <= 0.4) {
+      normalizedEGT = (0.04783 * normalizedN3) - 0.00813;
+    } else {
+      // Coefficients for the polynomial calculation
+      double egtCoefficients[9] = {
           -6.8725167e+02,  // coefficient for x^0
           7.7548864e+03,   // coefficient for x^1
           -3.7507098e+04,  // coefficient for x^2
@@ -178,59 +188,58 @@ class Polynomial_A32NX {
           -5.7912600e+03   // coefficient for x^8
       };
 
-      // Calculate the EGT using the polynomial equation.
-      normalizedEGT = 0.0;
-      for (int i = 0; i < 9; ++i) {
-        normalizedEGT += c_EGT[i] * (std::pow)(normalizedN2, i);
+      // Calculate the normalized EGT value using a polynomial model
+      for (int i = 0; i < 9; i++) {
+        normalizedEGT += egtCoefficients[i] * (std::pow)(normalizedN3, i);
       }
     }
 
-    // Return the calculated EGT, ensuring it is within the range [ambientTemp, idleEGT].
-    return (normalizedEGT * (idleEGT - (ambientTemp))) + (ambientTemp);
+    // Calculate and return the EGT value
+    return (normalizedEGT * (idleEGT - ambientTemp)) + ambientTemp;
   }
 
   /**
    * @brief Calculates the Oil Temperature during engine start-up.
    *
-   * @param fbwN2 The current custom N2 percentage.
-   * @param idleN2 The custom idle N2 percentage.
+   * @param fbwN3 The current custom N3 percentage.
+   * @param idleN3 The custom idle N3 percentage.
    * @param ambientTemperature The ambient temperature.
    * @return The calculated Oil Temperature.
    */
-  static double startOilTemp(double fbwN2, double idleN2, double ambientTemperature) {
-    if (fbwN2 < 0.79 * idleN2) {
+  static double startOilTemp(double fbwN3, double idleN3, double ambientTemperature) {
+    if (fbwN3 < 0.79 * idleN3) {
       return ambientTemperature;
     }
-    if (fbwN2 < 0.98 * idleN2) {
+    if (fbwN3 < 0.98 * idleN3) {
       return ambientTemperature + 5;
     }
     return ambientTemperature + 10;
   }
 
   /**
-   * @brief Calculates the N2 percentage during engine shutdown.
+   * @brief Calculates the N3 value during engine shutdown.
    *
-   * @param previousN2 The previous N2 percentage.
-   * @param deltaTime The elapsed time since the last calculation in seconds.
-   * @return The calculated N2 percentage.
+   * @param previousN3 The previous N3 value in percent.
+   * @param deltaTime The elapsed time since the last update in seconds.
+   * @return The calculated N3 value in percent.
    */
-  static double shutdownN2(double previousN2, double deltaTime) {
-    // The decayRate is used to model the rate at which the N2 percentage decreases during the engine
+  static double shutdownN3(double previousN3, double deltaTime) {
+    // The decayRate is used to model the rate at which the N3 percentage decreases during the engine
     // shutdown process.
     // The specific values -0.0515 and -0.08183 are likely derived from empirical
     // data or a mathematical model of the engine's behavior.
     // The choice to use a different decay rate for 'previousN2' values below 30 suggests that the
     // engine's shutdown behavior changes at this threshold.
-    double decayRate = previousN2 < 30 ? -0.0515 : -0.08183;
-    return previousN2 * (std::exp)(decayRate * deltaTime);
+    double decayRate = previousN3 < 30 ? -0.0515 : -0.08183;
+    return previousN3 * (std::exp)(decayRate * deltaTime);
   }
 
   /**
-   * @brief Calculates the N1 percentage during engine shutdown.
+   * @brief Calculates the N1 value during engine shutdown.
    *
-   * @param previousN1 The previous N1 percentage.
-   * @param deltaTime The elapsed time since the last calculation.
-   * @return The calculated N1 percentage.
+   * @param previousN1 The previous N1 value in percent.
+   * @param deltaTime The elapsed time since the last update in seconds.
+   * @return The calculated N1 value in percent.
    */
   static double shutdownN1(double previousN1, double deltaTime) {
     // The decayRate is used to model the rate at which the N1 percentage decreases during the engine
@@ -272,7 +281,11 @@ class Polynomial_A32NX {
    * @return The calculated corrected EGT in Celsius.
    */
   static double correctedEGT(double cn1, double cff, double mach, double alt) {
-    constexpr double c_EGT[16] = {
+    // TODO: Adjust the corrected fuel flow to account for the A330 double fuel flow. Will have to be taken care of.
+    cff = cff / 2;
+
+    // Coefficients for the polynomial calculation
+    double c_EGT[16] = {
         3.2636e+02,   // coefficient for x^0
         0.0000e+00,   // coefficient for x^1
         9.2893e-01,   // coefficient for x^2
@@ -291,10 +304,8 @@ class Polynomial_A32NX {
         1.9312e-08    // coefficient for x^15
     };
 
-    double egt = 0;
-    double factor = 2.5;
-
-    egt = c_EGT[0]                             //
+    // Calculate and return the Corrected EGT value using a polynomial model
+    return c_EGT[0]                             //
            + c_EGT[1]                           //
            + (c_EGT[2] * cn1)                   //
            + (c_EGT[3] * cff)                   //
@@ -309,22 +320,21 @@ class Polynomial_A32NX {
            + (c_EGT[12] * cff * alt)            //
            + (c_EGT[13] * (std::pow)(mach, 2))  //
            + (c_EGT[14] * mach * alt)           //
-           + (c_EGT[15] * (std::pow)(alt, 2));
-
-    return egt * factor;
+           + (c_EGT[15] * (std::pow)(alt, 2));  //
   }
 
   /**
    * @brief Calculates the customer corrected fuel flow based on cn1, mach, and altitude based on
    *        real-life modeled polynomials.
    *
-   * @param cn1 The corrected fan speed.
+   * @param cn1 The corrected fan speed in percent.
    * @param mach The Mach number.
-   * @param alt The altitude.
-   * @return The calculated corrected fuel flow in pounds per hour.
+   * @param alt The altitude in feet.
+   * @return The calculated Corrected Fuel Flow value in pounds per hour.
    */
   static double correctedFuelFlow(double cn1, double mach, double alt) {
-    constexpr double c_Flow[21] = {
+    /*
+    double c_Flow[21] = {
         -1.7630e+02,  // coefficient for x^0
         -2.1542e-01,  // coefficient for x^1
         4.7119e+01,   // coefficient for x^2
@@ -347,33 +357,56 @@ class Polynomial_A32NX {
         -9.5581e-07,  // coefficient for x^19
         1.2728e-11    // coefficient for x^20
     };
+    */
 
-    double flow = 0;
-    double factor = 2.5;
+    double c_Flow[21] = {
+        -639.6602981,
+        0.00000e+00,
+        1.03705e+02,
+        -2.23264e+03,
+        5.70316e-03,
+        -2.29404e+00,
+        1.08230e+02,
+        2.77667e-04,
+        -6.17180e+02,
+        -7.20713e-02,
+        2.19013e-07,
+        2.49418e-02,
+        -7.31662e-01,
+        -1.00003e-05,
+        -3.79466e+01,
+        1.34552e-03,
+        5.72612e-09,
+        -2.71950e+02,
+        8.58469e-02,
+        -2.72912e-06,
+        2.02928e-11
+    };
 
-    flow = c_Flow[0]                                   //
-           + c_Flow[1]                                 //
-           + (c_Flow[2] * cn1)                         //
-           + (c_Flow[3] * mach)                        //
-           + (c_Flow[4] * alt)                         //
-           + (c_Flow[5] * (std::pow)(cn1, 2))          //
-           + (c_Flow[6] * cn1 * mach)                  //
-           + (c_Flow[7] * cn1 * alt)                   //
-           + (c_Flow[8] * (std::pow)(mach, 2))         //
-           + (c_Flow[9] * mach * alt)                  //
-           + (c_Flow[10] * (std::pow)(alt, 2))         //
-           + (c_Flow[11] * (std::pow)(cn1, 3))         //
-           + (c_Flow[12] * (std::pow)(cn1, 2) * mach)  //
-           + (c_Flow[13] * (std::pow)(cn1, 2) * alt)   //
-           + (c_Flow[14] * cn1 * (std::pow)(mach, 2))  //
-           + (c_Flow[15] * cn1 * mach * alt)           //
-           + (c_Flow[16] * cn1 * (std::pow)(alt, 2))   //
-           + (c_Flow[17] * (std::pow)(mach, 3))        //
-           + (c_Flow[18] * (std::pow)(mach, 2) * alt)  //
-           + (c_Flow[19] * mach * (std::pow)(alt, 2))  //
-           + (c_Flow[20] * (std::pow)(alt, 3));
+    double outCFF = c_Flow[0]                                   //
+                    + c_Flow[1]                                 //
+                    + (c_Flow[2] * cn1)                         //
+                    + (c_Flow[3] * mach)                        //
+                    + (c_Flow[4] * alt)                         //
+                    + (c_Flow[5] * (std::pow)(cn1, 2))          //
+                    + (c_Flow[6] * cn1 * mach)                  //
+                    + (c_Flow[7] * cn1 * alt)                   //
+                    + (c_Flow[8] * (std::pow)(mach, 2))         //
+                    + (c_Flow[9] * mach * alt)                  //
+                    + (c_Flow[10] * (std::pow)(alt, 2))         //
+                    + (c_Flow[11] * (std::pow)(cn1, 3))         //
+                    + (c_Flow[12] * (std::pow)(cn1, 2) * mach)  //
+                    + (c_Flow[13] * (std::pow)(cn1, 2) * alt)   //
+                    + (c_Flow[14] * cn1 * (std::pow)(mach, 2))  //
+                    + (c_Flow[15] * cn1 * mach * alt)           //
+                    + (c_Flow[16] * cn1 * (std::pow)(alt, 2))   //
+                    + (c_Flow[17] * (std::pow)(mach, 3))        //
+                    + (c_Flow[18] * (std::pow)(mach, 2) * alt)  //
+                    + (c_Flow[19] * mach * (std::pow)(alt, 2))  //
+                    + (c_Flow[20] * (std::pow)(alt, 3));        //
 
-    return flow * factor;
+    // TODO: Adjust the corrected fuel flow to account for the A330 double fuel flow. Will have to be taken care of.
+    return 2.5 * outCFF;
   }
 
   /**
@@ -388,25 +421,27 @@ class Polynomial_A32NX {
    * TODO: Currently not used in the code.
    */
   static double oilTemperature(double thermalEnergy, double previousOilTemp, double maxOilTemperature, double deltaTime) {
-    // these constants are likely derived from empirical data or a mathematical model of the engine's behavior
-    // they were not documented in the original code, and their names here are inferred from their usage
-    const double heatTransferCoefficient = 0.001;
-    const double energyScalingFactor = 0.002;
-    const double temperatureThreshold = 10;
-    const double temperatureScalingFactor = 0.999997;
+    // Initialize the steady temperature and the decay constant
+    double k = 0.001;
 
-    const double changeInThermalEnergy = thermalEnergy * deltaTime * energyScalingFactor;
-    const double steadyStateTemp =
-        ((maxOilTemperature * heatTransferCoefficient * deltaTime) + previousOilTemp) / (1 + (heatTransferCoefficient * deltaTime));
+    // Calculate the change in temperature due to the energy
+    double dt = thermalEnergy * deltaTime * 0.002;
 
-    const double newTemp = steadyStateTemp - changeInThermalEnergy;
-    if (newTemp >= maxOilTemperature) {
-      return maxOilTemperature;
-    } else if (newTemp >= maxOilTemperature - temperatureThreshold) {
-      return newTemp * temperatureScalingFactor;
+    // Calculate the steady temperature based on the maximum oil temperature, the decay constant, and the previous oil temperature
+    double t_steady = ((maxOilTemperature * k * deltaTime) + previousOilTemp) / (1 + (k * deltaTime));
+
+    // Calculate the oil temperature based on the steady temperature and the change in temperature
+    double oilTemp_out;
+    if (t_steady - dt >= maxOilTemperature) {
+      oilTemp_out = maxOilTemperature;
+    } else if (t_steady - dt >= maxOilTemperature - 10) {
+      oilTemp_out = (t_steady - dt) * 0.999997;
     } else {
-      return newTemp;
+      oilTemp_out = (t_steady - dt);
     }
+
+    // Return the calculated oil temperature
+    return oilTemp_out;
   }
 
   /**
@@ -418,21 +453,22 @@ class Polynomial_A32NX {
    */
   static double oilGulpPct(double thrust) {
     const double oilGulpCoefficients[3] = {20.1968848, -1.2270302e-4, 1.78442e-8};
-    const double outOilGulpPct =
+    const double oilGulpPercentage =
         oilGulpCoefficients[0] + (oilGulpCoefficients[1] * thrust) + (oilGulpCoefficients[2] * (std::pow)(thrust, 2));
-    return outOilGulpPct / 100;
+    return oilGulpPercentage / 100;
   }
 
   /**
-   * @brief Calculates the Oil Pressure (PSI) based on simulated N2 value.
+   * @brief Calculates the Oil Pressure (PSI) based on simulated N3 value.
    *        Real-life modeled polynomials - Oil Pressure (PSI)
-   * @param simN2 The simulated N2 value in percent.
+   *
+   * @param simN3 The simulated N3 value in percent.
    * @return The calculated Oil Pressure value in PSI.
    */
-  static double oilPressure(double simN2) {
-    const double oilPressureCoefficients[3] = {-0.88921, 0.23711, 0.00682};
-    return oilPressureCoefficients[0] + (oilPressureCoefficients[1] * simN2) + (oilPressureCoefficients[2] * (std::pow)(simN2, 2));
+  static double oilPressure(double simN3) {
+    double oilPressureCoefficients[3] = {-0.88921, 0.23711, 0.00682};
+    return oilPressureCoefficients[0] + (oilPressureCoefficients[1] * simN3) + (oilPressureCoefficients[2] * (std::pow)(simN3, 2));
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_POLYNOMIAL_H

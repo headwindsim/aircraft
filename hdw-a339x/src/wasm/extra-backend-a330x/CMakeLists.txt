@@ -1,6 +1,6 @@
-# extra-backend-a32nx CMakeLists.txt
+# extra-backend-a330x CMakeLists.txt
 
-# add additional compiler definitions for the a32nx extra-backend build
+# add additional compiler definitions for the a330x extra-backend build
 add_definitions()
 
 # add the local include directories
@@ -16,8 +16,8 @@ include_directories(
 # define the source files
 set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Gauge_Extra_Backend.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/LightingPresets/LightingPresets_A32NX.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Pushback/Pushback_A339X.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/LightingPresets/LightingPresets_A330X.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Pushback/Pushback_A330X.cpp
     ${FBW_COMMON}/cpp-msfs-framework/Example/ExampleModule.cpp
     ${FBW_COMMON}/extra-backend/Pushback/Pushback.cpp
     ${FBW_COMMON}/extra-backend/AircraftPresets/AircraftPresets.cpp
@@ -25,9 +25,9 @@ set(SOURCE_FILES
 )
 
 set(INCLUDE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/AircraftPresets/AircraftPresetProcedures_A32NX.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/LightingPresets/LightingPresets_A32NX.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Pushback/Pushback_A339X.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/AircraftPresets/AircraftPresetProcedures_A330X.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/LightingPresets/LightingPresets_A330X.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Pushback/Pushback_A330X.h
     ${FBW_COMMON}/cpp-msfs-framework/Example/ExampleModule.h
     ${FBW_COMMON}/cpp-msfs-framework/Example/longtext.h
     ${FBW_COMMON}/extra-backend/Pushback/InertialDampener.hpp
@@ -39,8 +39,8 @@ set(INCLUDE_FILES
 )
 
 # create the targets
-add_library(extra-backend-a32nx OBJECT ${SOURCE_FILES} ${INCLUDE_FILES})
+add_library(extra-backend-a330x OBJECT ${SOURCE_FILES} ${INCLUDE_FILES})
 add_wasm_library(
-    NAME extra-backend-a32nx
-    DEPENDENCIES extra-backend-a32nx cpp-msfs-framework-a32nx
+    NAME extra-backend-a330x
+    DEPENDENCIES extra-backend-a330x cpp-msfs-framework-a330x
 )

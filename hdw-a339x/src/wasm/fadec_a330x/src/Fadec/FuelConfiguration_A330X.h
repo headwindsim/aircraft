@@ -1,8 +1,8 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A32NX_H
-#define FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A32NX_H
+#ifndef FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A330X_H
+#define FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A330X_H
 
 #include <string>
 
@@ -13,15 +13,16 @@
 #define INI_SECTION_FUEL_RIGHT_QUANTITY "FUEL_RIGHT_QUANTITY"
 #define INI_SECTION_FUEL_LEFT_AUX_QUANTITY "FUEL_LEFT_AUX_QUANTITY"
 #define INI_SECTION_FUEL_RIGHT_AUX_QUANTITY "FUEL_RIGHT_AUX_QUANTITY"
+//#define INI_SECTION_FUEL_TRIM_QTY "FUEL_TRIM_QTY"
 
 /**
- * @class FuelConfiguration_A32NX
- * @brief Class to manage the fuel configuration for the A32NX aircraft.
+ * @class FuelConfiguration_A330X
+ * @brief Class to manage the fuel configuration for the A330X aircraft.
  *
  * This class provides methods to load and save the fuel configuration from/to an INI file.
  * It also provides getter and setter methods for each fuel tank quantity.
  */
-class FuelConfiguration_A32NX {
+class FuelConfiguration_A330X {
  private:
   // Fuel tank default quantities in gallons
   static constexpr double fuelCenterDefault = 0;
@@ -29,6 +30,7 @@ class FuelConfiguration_A32NX {
   static constexpr double fuelRightDefault = fuelLeftDefault;
   static constexpr double fuelLeftAuxDefault = 0;
   static constexpr double fuelRightAuxDefault = fuelLeftAuxDefault;
+  //static constexpr double fuelTrimDefault = 0;  // tank 11
 
   // Actual fuel tank quantities in gallons
   double fuelCenter = fuelCenterDefault;
@@ -36,8 +38,10 @@ class FuelConfiguration_A32NX {
   double fuelRight = fuelRightDefault;
   double fuelLeftAux = fuelLeftAuxDefault;
   double fuelRightAux = fuelRightAuxDefault;
+  //double fuelTrim = fuelTrimDefault;
 
-  std::string configFilename{"A32NX-default-fuel-config.ini"};
+
+  std::string configFilename{"A330X-default-fuel-config.ini"};
 
  public:
   /**
@@ -88,12 +92,14 @@ class FuelConfiguration_A32NX {
   double getFuelRight() const { return fuelRight; }
   double getFuelLeftAux() const { return fuelLeftAux; }
   double getFuelRightAux() const { return fuelRightAux; }
+  // double getFuelTrim() const { return fuelTrim; }
 
   void setFuelCenter(double fuelCenter) { this->fuelCenter = fuelCenter; }
   void setFuelLeft(double fuelLeft) { this->fuelLeft = fuelLeft; }
   void setFuelRight(double fuelRight) { this->fuelRight = fuelRight; }
   void setFuelLeftAux(double fuelLeftAux) { this->fuelLeftAux = fuelLeftAux; }
   void setFuelRightAux(double fuelRightAux) { this->fuelRightAux = fuelRightAux; }
+  // void setFuelTrim(double fuelTrim) { this->fuelTrim = fuelTrim; }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A32NX_H
+#endif  // FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A330X_H

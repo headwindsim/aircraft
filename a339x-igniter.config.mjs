@@ -134,10 +134,10 @@ export default new TaskOfTasks("all", [
                         'build-a339x-common/src/wasm/cpp-msfs-framework',
                         'build-a339x-common/src/wasm/extra-backend',
                         'build-a339x-common/src/wasm/fadec_common',
-                        'build-a339x/src/wasm/extra-backend-a32nx',
-                        'build-a339x/src/wasm/fadec_a339x',
-                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a32nx.wasm',
-                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec-a32nx.wasm'
+                        'build-a339x/src/wasm/extra-backend-a330x',
+                        'build-a339x/src/wasm/fadec_a330x',
+                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a330x.wasm',
+                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec-a330x.wasm'
                     ])
             ], true),
         ]),
