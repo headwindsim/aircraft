@@ -59,7 +59,7 @@ const getSimBriefOfp = (mcdu, updateView, callback = () => {}) => {
     .then((data) => {
       mcdu.simbrief['units'] = data.units;
       mcdu.simbrief['route'] = data.route;
-      mcdu.simbrief['cruiseAltitude'] = data.general.cruiseAltitude;
+      mcdu.simbrief['cruiseAltitude'] = data.cruiseAltitude;
       mcdu.simbrief['originIcao'] = data.origin.icao;
       mcdu.simbrief['originTransAlt'] = parseInt(data.origin.transAlt, 10);
       mcdu.simbrief['originTransLevel'] = parseInt(data.origin.transLevel, 10);
