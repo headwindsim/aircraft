@@ -4,7 +4,7 @@ use systems::{
         acs_controller::{AcscId, AirConditioningSystemController, Pack},
         cabin_air::CabinAirSimulation,
         cabin_pressure_controller::{CabinPressureController, CpcId},
-        pressure_valve::{OutflowValve, SafetyValve},
+        pressure_valve::{OutflowValve, SafetyValve, SafetyValveSignal},
         AdirsToAirCondInterface, Air, AirConditioningOverheadShared, AirConditioningPack, CabinFan,
         Channel, DuctTemperature, MixerUnit, OutflowValveSignal, OutletAir, OverheadFlowSelector,
         PackFlowControllers, PressurizationConstants, PressurizationOverheadShared, TrimAirSystem,
@@ -496,7 +496,6 @@ impl OutletAir for A320AirConditioningSystem {
         outlet_air.set_temperature(self.duct_temperature().iter().average());
 
         outlet_air
-
         // TODO: This should use self.trim_air_system.outlet_air()
     }
 }
@@ -697,9 +696,10 @@ struct A320PressurizationSystem {
     cpc_interface: [PressurizationSystemInterfaceUnit; 2],
     outflow_valve: [OutflowValve; 1], // Array to prepare for more than 1 outflow valve in A380
     safety_valve: SafetyValve,
+    safety_valve_signal: SafetyValveSignal<A320PressurizationConstants>,
     residual_pressure_controller: ResidualPressureController,
     active_system: usize,
-
+    
     pressurization_overhead: A320PressurizationOverheadPanel,
 }
 
@@ -726,9 +726,10 @@ impl A320PressurizationSystem {
                 vec![ElectricalBusType::DirectCurrentBattery],
             )],
             safety_valve: SafetyValve::new(),
+            safety_valve_signal: SafetyValveSignal::new(),
             residual_pressure_controller: ResidualPressureController::new(),
             active_system: active as usize,
-
+            
             pressurization_overhead: A320PressurizationOverheadPanel::new(context),
         }
     }
@@ -795,8 +796,12 @@ impl A320PressurizationSystem {
             });
         }
 
-        self.safety_valve
-            .update(context, &self.cpc[self.active_system - 1]);
+        self.safety_valve_signal.update(
+            context,
+            cabin_simulation.cabin_pressure(),
+            self.safety_valve.open_amount(),
+        );
+        self.safety_valve.update(context, &self.safety_valve_signal);
 
         self.switch_active_system();
 
@@ -843,7 +848,7 @@ impl A320PressurizationSystem {
     fn safety_valve_open_amount(&self) -> Ratio {
         self.safety_valve.open_amount()
     }
-    
+
     fn pressurization_overhead(&self) -> &A320PressurizationOverheadPanel {
         &self.pressurization_overhead
     }
@@ -2629,7 +2634,7 @@ mod tests {
                     InternationalStandardAtmosphere::pressure_at_altitude(Length::default())
                         - Pressure::new::<psi>(10.),
                 )
-                .iterate(10);
+                .iterate(2);
 
             assert!(test_bed.safety_valve_open_amount() > Ratio::default());
         }
