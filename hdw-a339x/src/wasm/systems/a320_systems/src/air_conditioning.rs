@@ -919,12 +919,12 @@ impl SimulationElement for PressurizationSystemInterfaceUnit {
 struct A320PressurizationConstants;
 
 impl PressurizationConstants for A320PressurizationConstants {
-    // Volume data from A320 AIRCRAFT CHARACTERISTICS - AIRPORT AND MAINTENANCE PLANNING
-    const CABIN_ZONE_VOLUME_CUBIC_METER: f64 = 139.; // m3
-    const COCKPIT_VOLUME_CUBIC_METER: f64 = 9.; // m3
-    const FWD_CARGO_ZONE_VOLUME_CUBIC_METER: f64 = 0.; // m3 Not used in A320
-    const BULK_CARGO_ZONE_VOLUME_CUBIC_METER: f64 = 0.; // m3 Not used in A320
-    const PRESSURIZED_FUSELAGE_VOLUME_CUBIC_METER: f64 = 330.; // m3
+    // Volume data from A330 AIRCRAFT CHARACTERISTICS - AIRPORT AND MAINTENANCE PLANNING
+    const CABIN_ZONE_VOLUME_CUBIC_METER: f64 = 372.; // m3
+    const COCKPIT_VOLUME_CUBIC_METER: f64 = 12.; // m3
+    const FWD_CARGO_ZONE_VOLUME_CUBIC_METER: f64 = 0.; // m3 Not used in A330
+    const BULK_CARGO_ZONE_VOLUME_CUBIC_METER: f64 = 0.; // m3 Not used in A330
+    const PRESSURIZED_FUSELAGE_VOLUME_CUBIC_METER: f64 = 1056.; // m3
     const CABIN_LEAKAGE_AREA: f64 = 0.0003; // m2
     const OUTFLOW_VALVE_SIZE: f64 = 0.05; // m2
     const SAFETY_VALVE_SIZE: f64 = 0.02; // m2
