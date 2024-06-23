@@ -5,12 +5,12 @@ class CDUMenuPage {
         // The MCDU MENU does not maintain an editable scratchpad... subsystems and the backup nav do that.
         mcdu.activateMcduScratchpad();
 
-        const fmActive = mcdu.activeSystem === "FMGC";
-        const atsuActive = mcdu.activeSystem === "ATSU";
-        const acarsActive = mcdu.activeSystem === "ACARS";
-        const acmsActive = mcdu.activeSystem === "ACMS";
-        const cmsActive = mcdu.activeSystem === "CMS";
-        const satActive = mcdu.activeSystem === "SAT";
+        const fmActive = mcdu.activeSystem === 'FMGC';
+        const atsuActive = mcdu.activeSystem === 'ATSU';
+        const acarsActive = mcdu.activeSystem === 'ACARS';
+        const acmsActive = mcdu.activeSystem === 'ACMS';
+        const cmsActive = mcdu.activeSystem === 'CMS';
+        const satActive = mcdu.activeSystem === 'SAT';
 
         // delay to get text and draw already connected subsystem page
         const connectedSubsystemDelay = 200;
@@ -26,36 +26,35 @@ class CDUMenuPage {
                 let flag = null;
                 if (selectedSystem !== null) {
                     if (selectedSystem === name) {
-                        flag = "(SEL)";
+                        flag = '(SEL)';
                     }
                 } else if (isRequesting) {
-                    flag = "(REQ)";
+                    flag = '(REQ)';
                 }
                 if (isLeft) {
-                    return `${name}\xa0${flag !== null ? flag : ""}`;
-                } else {
-                    return `${flag !== null ? flag : ""}\xa0${name}`;
+                    return `${name}\xa0${flag !== null ? flag : ''}`;
                 }
+                return `${flag !== null ? flag : ''}\xa0${name}`;
             };
-            const getColor = (isActive, isSelected) => isSelected ? Column.cyan : (isActive && selectedSystem === null ? Column.green : Column.white);
+            const getColor = (isActive, isSelected) => (isSelected ? Column.cyan : (isActive && selectedSystem === null ? Column.green : Column.white));
 
             mcdu.setTemplate(FormatTemplate([
-                [new Column(7, "MCDU MENU")],
-                [new Column(22, "SELECT", Column.right, Column.inop)],
+                [new Column(7, 'MCDU MENU')],
+                [new Column(22, 'SELECT', Column.right, Column.inop)],
                 [
-                    new Column(0, getText("<FMGC", mcdu.isSubsystemRequesting("FMGC")), getColor(fmActive, selectedSystem === "FMGC")),
-                    new Column(23, "NAV B/UP>", Column.right, Column.inop)
+                    new Column(0, getText('<FMGC', mcdu.isSubsystemRequesting('FMGC')), getColor(fmActive, selectedSystem === 'FMGC')),
+                    new Column(23, 'NAV B/UP>', Column.right, Column.inop),
                 ],
-                [""],
-                [new Column(0, getText("<ACARS", mcdu.isSubsystemRequesting("ACARS")), getColor(acarsActive, selectedSystem === "ACARS"))],
-                [""],
-                [new Column(0, getText("<ACMS", mcdu.isSubsystemRequesting("ACMS")), getColor(acmsActive, selectedSystem === "ACMS"))],
-                [""],
-                [new Column(0, getText("<CMS", mcdu.isSubsystemRequesting("CMS")), getColor(cmsActive, selectedSystem === "CMS"))],
-                [""],
-                [new Column(0, getText("<SAT", mcdu.isSubsystemRequesting("SAT")), getColor(satActive, selectedSystem === "SAT"))],
-                [""],
-                [new Column(0, getText("<ATSU", mcdu.isSubsystemRequesting("ATSU")), getColor(atsuActive, selectedSystem === "ATSU"))],
+                [''],
+                [new Column(0, getText('<ACARS', mcdu.isSubsystemRequesting('ACARS')), getColor(acarsActive, selectedSystem === 'ACARS'))],
+                [''],
+                [new Column(0, getText('<ACMS', mcdu.isSubsystemRequesting('ACMS')), getColor(acmsActive, selectedSystem === 'ACMS'))],
+                [''],
+                [new Column(0, getText('<CMS', mcdu.isSubsystemRequesting('CMS')), getColor(cmsActive, selectedSystem === 'CMS'))],
+                [''],
+                [new Column(0, getText('<SAT', mcdu.isSubsystemRequesting('SAT')), getColor(satActive, selectedSystem === 'SAT'))],
+                [''],
+                [new Column(0, getText('<ATSU', mcdu.isSubsystemRequesting('ATSU')), getColor(atsuActive, selectedSystem === 'ATSU'))],
             ]));
         };
 
@@ -65,7 +64,7 @@ class CDUMenuPage {
 
         mcdu.onLeftInput[0] = () => {
             mcdu.mcduScratchpad.setMessage(NXSystemMessages.waitForSystemResponse);
-            updateView("FMGC");
+            updateView('FMGC');
 
             setTimeout(() => {
                 mcdu.mcduScratchpad.removeMessage(NXSystemMessages.waitForSystemResponse.text);
@@ -75,7 +74,7 @@ class CDUMenuPage {
 
         mcdu.onLeftInput[1] = () => {
             mcdu.mcduScratchpad.setMessage(NXSystemMessages.waitForSystemResponse);
-            updateView("ACARS");
+            updateView('ACARS');
             setTimeout(() => {
                 mcdu.mcduScratchpad.removeMessage(NXSystemMessages.waitForSystemResponse.text);
                 CDU_ACARS_MenuPage.ShowPage1(mcdu);
@@ -84,7 +83,7 @@ class CDUMenuPage {
 
         mcdu.onLeftInput[2] = () => {
             mcdu.mcduScratchpad.setMessage(NXSystemMessages.waitForSystemResponse);
-            updateView("ACMS");
+            updateView('ACMS');
             setTimeout(() => {
                 mcdu.mcduScratchpad.removeMessage(NXSystemMessages.waitForSystemResponse.text);
                 CDU_CMS_ACMS_Menu.ShowPage(mcdu);
@@ -93,7 +92,7 @@ class CDUMenuPage {
 
         mcdu.onLeftInput[3] = () => {
             mcdu.mcduScratchpad.setMessage(NXSystemMessages.waitForSystemResponse);
-            updateView("CMS");
+            updateView('CMS');
             setTimeout(() => {
                 mcdu.mcduScratchpad.removeMessage(NXSystemMessages.waitForSystemResponse.text);
                 CDU_CMS_MenuPage.ShowPage1(mcdu);
@@ -102,7 +101,7 @@ class CDUMenuPage {
 
         mcdu.onLeftInput[4] = () => {
             mcdu.mcduScratchpad.setMessage(NXSystemMessages.waitForSystemResponse);
-            updateView("SAT");
+            updateView('SAT');
             setTimeout(() => {
                 mcdu.mcduScratchpad.removeMessage(NXSystemMessages.waitForSystemResponse.text);
                 CDU_SAT_Menu.ShowPage(mcdu);
@@ -111,7 +110,7 @@ class CDUMenuPage {
 
         mcdu.onLeftInput[5] = () => {
             mcdu.mcduScratchpad.setMessage(NXSystemMessages.waitForSystemResponse);
-            updateView("ATSU");
+            updateView('ATSU');
             setTimeout(() => {
                 mcdu.mcduScratchpad.removeMessage(NXSystemMessages.waitForSystemResponse.text);
                 CDUAtsuMenu.ShowPage(mcdu);

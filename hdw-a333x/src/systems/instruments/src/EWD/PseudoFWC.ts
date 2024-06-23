@@ -109,7 +109,7 @@ export class PseudoFWC {
     private readonly acsc2DiscreteWord1 = Arinc429Register.empty();
 
     private readonly acsc2DiscreteWord2 = Arinc429Register.empty();
-    
+
     private readonly cpc1DiscreteWord = Arinc429Register.empty();
 
     private readonly cpc2DiscreteWord = Arinc429Register.empty();
@@ -1268,7 +1268,7 @@ export class PseudoFWC {
         this.packOffNotFailed1Status.set(this.packOffNotFailed1.write(!this.pack1On.get() && !pack1Fault && this.packOffBleedAvailable1.read() && this.fwcFlightPhase.get() === 6, deltaTime));
         this.packOffNotFailed2Status.set(this.packOffNotFailed2.write(!this.pack2On.get() && !pack2Fault && this.packOffBleedAvailable2.read() && this.fwcFlightPhase.get() === 6, deltaTime));
         this.pack1And2Fault.set(acscBothFault || (this.packOffNotFailed1Status.get() && this.acsc2Fault.get()) || (this.packOffNotFailed2Status.get() && this.acsc1Fault.get()));
-        
+
         const manOutflowValueOpenPercentage = SimVar.GetSimVarValue('L:A32NX_PRESS_MAN_OUTFLOW_VALVE_OPEN_PERCENTAGE', 'percent');
         this.outflowValveOpenAmount.set(Arinc429Word.fromSimVarValue(`L:A32NX_PRESS_CPC_${activeCpcNumber}_OUTFLOW_VALVE_OPEN_PERCENTAGE`).valueOr(manOutflowValueOpenPercentage));
         this.outflowValveNotOpenOutput.set(
@@ -1754,7 +1754,7 @@ export class PseudoFWC {
                         this.masterCaution.set(true);
                     }
                 }
-                
+
                 if (value.cancel === false && value.failure === 3) {
                     this.nonCancellableWarningCount++;
                 }
@@ -3055,7 +3055,7 @@ export class PseudoFWC {
             sysPage: 5,
             side: 'LEFT',
         },
-    }
+    };
 
     ewdMessageMemos: EWDMessageDict = {
         '0000010': { // T.O MEMO

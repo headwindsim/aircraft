@@ -24,7 +24,5 @@ CMakeFiles/*
 cmake*
 hdw-**/out/*
 build-**/out/*
-# TODO: these need to be more granular
-hdw-**/src/base/*
 hdw-**/bundles/*
 build-**/bundles/*

@@ -241,14 +241,14 @@ interface AileronElevatorProps {
 }
 
 const Aileron = ({
-                     x,
-                     y,
-                     side,
-                     leftHydraulicSystem,
-                     rightHydraulicSystem,
-                     fcdcDiscreteWord2,
-                     fcdcDiscreteWord3,
-                 }: ComponentPositionProps & ComponentSidePositionProps & HydraulicSystemPairProps & AileronElevatorProps) => {
+    x,
+    y,
+    side,
+    leftHydraulicSystem,
+    rightHydraulicSystem,
+    fcdcDiscreteWord2,
+    fcdcDiscreteWord3,
+}: ComponentPositionProps & ComponentSidePositionProps & HydraulicSystemPairProps & AileronElevatorProps) => {
     const textPositionX = side === 'left' ? -53 : 54;
 
     const fcdc1AileronDeflection = useArinc429Var(`L:A32NX_FCDC_1_AILERON_${side.toUpperCase()}_POS`);
@@ -348,14 +348,14 @@ const AileronAxis = ({ x, y, side }: ComponentPositionProps & ComponentSidePosit
 };
 
 const Elevator = ({
-                      x,
-                      y,
-                      side,
-                      leftHydraulicSystem,
-                      rightHydraulicSystem,
-                      fcdcDiscreteWord2,
-                      fcdcDiscreteWord3,
-                  }: ComponentPositionProps & ComponentSidePositionProps & HydraulicSystemPairProps & AileronElevatorProps) => {
+    x,
+    y,
+    side,
+    leftHydraulicSystem,
+    rightHydraulicSystem,
+    fcdcDiscreteWord2,
+    fcdcDiscreteWord3,
+}: ComponentPositionProps & ComponentSidePositionProps & HydraulicSystemPairProps & AileronElevatorProps) => {
     const textPositionX = side === 'left' ? -59 : 62;
     const textLetter = side === 'left' ? 'L' : 'R';
 

@@ -19,7 +19,7 @@ const to = [
         () => 164, // 220
         () => 164, // 230
         () => 167, // 240
-        () => 168  // 250
+        () => 168, // 250
     ], // Conf 1 + F
     [
         () => 143, // 130
@@ -34,7 +34,7 @@ const to = [
         () => 157, // 220
         () => 161, // 230
         () => 165, // 240
-        () => 165  // 250
+        () => 165, // 250
     ], // Conf 2
     [
         () => 141, // 130
@@ -49,8 +49,8 @@ const to = [
         () => 151, // 220
         () => 166, // 230
         () => 166, // 240
-        () => 166  // 250
-    ] // Conf 3
+        () => 166, // 250
+    ], // Conf 3
 ];
 
 /**
@@ -74,7 +74,7 @@ const vs = [
         () => 165, // 220
         () => 169, // 230
         () => 172, // 240
-        () => 176  // 250
+        () => 176, // 250
     ], // Clean Conf
     [
         () => 111, // 130
@@ -89,7 +89,7 @@ const vs = [
         () => 139, // 220
         () => 142, // 230
         () => 146, // 240
-        () => 148  // 250
+        () => 148, // 250
     ], // Conf 1 + F
     [
         () => 108, // 130
@@ -104,7 +104,7 @@ const vs = [
         () => 136, // 220
         () => 139, // 230
         () => 142, // 240
-        () => 144  // 250
+        () => 144, // 250
     ], // Conf 2
     [
         () => 107, // 130
@@ -119,7 +119,7 @@ const vs = [
         () => 130, // 220
         () => 132, // 230
         () => 135, // 240
-        () => 138  // 250
+        () => 138, // 250
     ], // Conf 3
     [
         () => 102, // 130
@@ -134,7 +134,7 @@ const vs = [
         () => 124, // 220
         () => 127, // 230
         () => 130, // 240
-        () => 133  // 250
+        () => 133, // 250
     ], // Conf Full
     [
         () => 132, // 130
@@ -149,8 +149,8 @@ const vs = [
         () => 172, // 220
         () => 176, // 230
         () => 180, // 240
-        () => 184  // 250
-    ] // Conf 1
+        () => 184, // 250
+    ], // Conf 1
 ];
 
 /**
@@ -174,7 +174,7 @@ const vls = [
         () => 203, // 220
         () => 208, // 230
         () => 212, // 240
-        () => 217  // 250
+        () => 217, // 250
     ], // Clean Config
     [
         () => 131, // 130
@@ -189,7 +189,7 @@ const vls = [
         () => 164, // 220
         () => 168, // 230
         () => 172, // 240
-        () => 175  // 250
+        () => 175, // 250
     ], // Config 1 + F
     [
         () => 127, // 130
@@ -204,7 +204,7 @@ const vls = [
         () => 161, // 220
         () => 164, // 230
         () => 167, // 240
-        () => 170  // 250
+        () => 170, // 250
     ], // Config 2
     [
         () => 126, // 130
@@ -219,7 +219,7 @@ const vls = [
         () => 153, // 220
         () => 156, // 230
         () => 159, // 240
-        () => 163  // 250
+        () => 163, // 250
     ], // Config 3
     [
         () => 126, // 130
@@ -234,7 +234,7 @@ const vls = [
         () => 152, // 220
         () => 156, // 230
         () => 160, // 240
-        () => 163  // 250
+        () => 163, // 250
     ], // Config Full
     [
         () => 141, // 130
@@ -249,8 +249,8 @@ const vls = [
         () => 184, // 220
         () => 189, // 230
         () => 193, // 240
-        () => 197  // 250
-    ] // Config 1
+        () => 197, // 250
+    ], // Config 1
 ];
 
 /**
@@ -274,7 +274,7 @@ const vlsTo = [
         () => 186, // 220
         () => 191, // 230
         () => 195, // 240
-        () => 199  // 250
+        () => 199, // 250
     ], // Clean Config
     [
         () => 125, // 130
@@ -289,7 +289,7 @@ const vlsTo = [
         () => 157, // 220
         () => 161, // 230
         () => 165, // 240
-        () => 168 // 250
+        () => 168, // 250
     ], // Config 1 + F
     [
         () => 122, // 130
@@ -304,7 +304,7 @@ const vlsTo = [
         () => 154, // 220
         () => 157, // 230
         () => 160, // 240
-        () => 163 // 250
+        () => 163, // 250
     ], // Config 2
     [
         () => 121, // 130
@@ -319,7 +319,7 @@ const vlsTo = [
         () => 147, // 220
         () => 149, // 230
         () => 152, // 240
-        () => 156  // 250
+        () => 156, // 250
     ], // Config 3
     [
         () => 116, // 130
@@ -334,7 +334,7 @@ const vlsTo = [
         () => 140, // 220
         () => 143, // 230
         () => 147, // 240
-        () => 150  // 250
+        () => 150, // 250
     ], // Config Full
     [
         () => 149, // 130
@@ -349,7 +349,7 @@ const vlsTo = [
         () => 194, // 220
         () => 199, // 230
         () => 203, // 240
-        () => 208  // 250
+        () => 208, // 250
     ], // Config 1
 ];
 
@@ -372,7 +372,7 @@ const f = [
     () => 164, // 220
     () => 168, // 230
     () => 172, // 240
-    () => 175 // 250
+    () => 175, // 250
 ];
 
 /**
@@ -394,20 +394,20 @@ const s = [
     () => 203, // 220
     () => 203, // 230
     () => 203, // 240
-    () => 203 // 250
+    () => 203, // 250
 ];
 
 /**
  * MINIMUM CONTROL SPEEDS
  * TEMP NOT USED - BASED ON VIR A330-941 FCOM LIM-AG-SPD P 3/4
  *
-**/
+* */
 const vmca = [
     [0, 129],
     [2000, 127],
     [4000, 125],
     [6000, 122],
-    [8000, 117]
+    [8000, 117],
 ];
 
 const vmcg = [ // 1+F, 2, 3 all the same
@@ -415,7 +415,7 @@ const vmcg = [ // 1+F, 2, 3 all the same
     [2000, 127],
     [4000, 125],
     [6000, 122],
-    [8000, 118]
+    [8000, 118],
 ];
 
 /**
@@ -428,7 +428,7 @@ const vfeFS = [
     196, // Config 2
     186, // Config 3
     180, // Config Full
-    240 // Config 1
+    240, // Config 1
 ];
 
 /**
@@ -445,7 +445,7 @@ const Mmo = 0.86;
  * @param cg {number} center of gravity
  * @returns {number} cg corrected velocity (CAS)
  */
-function correctCg(m, f, cg = SimVar.GetSimVarValue("CG PERCENT", "percent")) {
+function correctCg(m, f, cg = SimVar.GetSimVarValue('CG PERCENT', 'percent')) {
     return f(m, isNaN(cg) ? 25 : cg);
 }
 
@@ -511,9 +511,9 @@ function _getdiffAngle(a, b) {
  */
 function _getVfeNIdx(fi) {
     switch (fi) {
-        case 0: return 4;
-        case 5: return 1;
-        default: return fi;
+    case 0: return 4;
+    case 5: return 1;
+    default: return fi;
     }
 }
 
@@ -585,7 +585,7 @@ function _convertMachToKCas(M, T, p) {
  * @private
  */
 function _getVmo() {
-    return Math.min(Vmo, _convertMachToKCas(Mmo, _convertCtoK(Simplane.getAmbientTemperature()), SimVar.GetSimVarValue("AMBIENT PRESSURE", "millibar")));
+    return Math.min(Vmo, _convertMachToKCas(Mmo, _convertCtoK(Simplane.getAmbientTemperature()), SimVar.GetSimVarValue('AMBIENT PRESSURE', 'millibar')));
 }
 
 class NXSpeeds {
@@ -628,7 +628,7 @@ class NXSpeedsTo {
         this.vr = (this.v2 - 7) + fPos;
         this.v1 = this.vr - 2;
 
-        if(m >= 230) {
+        if (m >= 230) {
             this.v1 = (this.vr - 8) + fPos;
         }
     }
@@ -658,7 +658,7 @@ class NXSpeedsUtils {
      * @param vw {number} velocity wind (1/3 steady headwind)
      * @returns {number} velocity wind [5, 15]
      */
-    static addWindComponent(vw = (SimVar.GetSimVarValue("AIRCRAFT WIND Z", "knots") * -1) / 3) {
+    static addWindComponent(vw = (SimVar.GetSimVarValue('AIRCRAFT WIND Z', 'knots') * -1) / 3) {
         return _addWindComponent(vw);
     }
 
@@ -679,7 +679,7 @@ class NXSpeedsUtils {
      * @param vCur {number} velocity current headwind
      * @returns {number} head wind diff
      */
-    static getHeadWindDiff(vTwr, vCur = SimVar.GetSimVarValue("AIRCRAFT WIND Z", "knots") * -1) {
+    static getHeadWindDiff(vTwr, vCur = SimVar.GetSimVarValue('AIRCRAFT WIND Z', 'knots') * -1) {
         return Math.round(1 / 3 * (vCur - vTwr));
     }
 
@@ -691,14 +691,14 @@ class NXSpeedsUtils {
      */
     static getVtargetGSMini(vapp, windDiff) {
         return Math.max(vapp, Math.min(Math.round(vapp + windDiff), Math.round(
-            SimVar.GetSimVarValue("L:A32NX_FLAPS_HANDLE_INDEX", "Number") === 4 ? SimVar.GetSimVarValue("L:A32NX_SPEEDS_VMAX", "Number") - 5 : SimVar.GetSimVarValue("L:A32NX_SPEEDS_VFEN", "Number")
+            SimVar.GetSimVarValue('L:A32NX_FLAPS_HANDLE_INDEX', 'Number') === 4 ? SimVar.GetSimVarValue('L:A32NX_SPEEDS_VMAX', 'Number') - 5 : SimVar.GetSimVarValue('L:A32NX_SPEEDS_VFEN', 'Number'),
         )));
     }
 
     static convertKCasToMach(
         Vc,
         T = _convertCtoK(Simplane.getAmbientTemperature()),
-        p = SimVar.GetSimVarValue("AMBIENT PRESSURE", "millibar")
+        p = SimVar.GetSimVarValue('AMBIENT PRESSURE', 'millibar'),
     ) {
         return _convertKTASToMach(_convertKCasToKTAS(Vc, T, p), T);
     }

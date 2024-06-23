@@ -40,7 +40,7 @@ class ExtrasHost extends BaseInstrument {
     private readonly versionCheck: VersionCheck;
 
     private readonly keyInterceptor: KeyInterceptor;
-    
+
     private readonly aircraftSync: AircraftSync;
 
     public readonly xmlConfig: Document;

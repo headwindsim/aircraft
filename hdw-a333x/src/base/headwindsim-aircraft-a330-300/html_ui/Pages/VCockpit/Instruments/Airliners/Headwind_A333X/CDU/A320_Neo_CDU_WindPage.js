@@ -1,5 +1,4 @@
 class CDUWindPage {
-
     static Return() {}
 
     static ShowPage(mcdu) {
@@ -11,48 +10,47 @@ class CDUWindPage {
         mcdu.page.Current = mcdu.page.ClimbWind;
 
         const template = [
-            [new Column(7, "CLIMB WIND")],
+            [new Column(7, 'CLIMB WIND')],
 
             [
-                new Column(0, "TRU WIND/ALT"),
-                new Column(22, "HISTORY", Column.right, Column.inop),
+                new Column(0, 'TRU WIND/ALT'),
+                new Column(22, 'HISTORY', Column.right, Column.inop),
             ],
             [
-                "",
-                new Column(23, "WIND>", Column.right, Column.inop),
-            ],
-
-            [
-                "",
-                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
-                    new Column(22, "INSERT", Column.cyan, Column.right) :
-                    new Column(22, "WIND", Column.amber, Column.right)
-            ],
-            [
-                "",
-                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
-                    new Column(23, "UPLINK*", Column.cyan, Column.right) :
-                    new Column(23, mcdu.windRequestEnabled ? "REQUEST*" : "REQUEST ", Column.amber, Column.right)
+                '',
+                new Column(23, 'WIND>', Column.right, Column.inop),
             ],
 
-            [""],
-            [""],
-            [""],
-            [""],
             [
-                "",
-                new Column(22, "NEXT", Column.right)
+                '',
+                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)
+                    ? new Column(22, 'INSERT', Column.cyan, Column.right)
+                    : new Column(22, 'WIND', Column.amber, Column.right),
             ],
             [
-                "",
-                new Column(23, "PHASE>", Column.right)
+                '',
+                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)
+                    ? new Column(23, 'UPLINK*', Column.cyan, Column.right)
+                    : new Column(23, mcdu.windRequestEnabled ? 'REQUEST*' : 'REQUEST ', Column.amber, Column.right),
             ],
-            [""],
+
+            [''],
+            [''],
+            [''],
+            [''],
             [
-                new Column(0, "<RETURN")
+                '',
+                new Column(22, 'NEXT', Column.right),
+            ],
+            [
+                '',
+                new Column(23, 'PHASE>', Column.right),
+            ],
+            [''],
+            [
+                new Column(0, '<RETURN'),
             ],
         ];
-
 
         mcdu.setTemplate(FormatTemplate(CDUWindPage.ShowWinds(template, mcdu, 'CLB', CDUWindPage.ShowCLBPage, offset, 5)));
 
@@ -65,17 +63,15 @@ class CDUWindPage {
         };
 
         mcdu.onRightInput[1] = (value) => {
-            if(CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.climb)) {
+            if (CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.climb)) {
                 if (value === FMCMainDisplay.clrValue) {
                     CDUWindPage.ClearUplinkWindData(mcdu, 'CLB', CDUWindPage.ShowCLBPage);
                     return;
                 }
 
                 CDUWindPage.InsertUplinkWindData(mcdu, 'CLB', CDUWindPage.ShowCLBPage);
-            } else {
-                if (mcdu.windRequestEnabled) {
-                    CDUWindPage.WindRequest(mcdu, CDUWindPage.ShowCLBPage);
-                }
+            } else if (mcdu.windRequestEnabled) {
+                CDUWindPage.WindRequest(mcdu, CDUWindPage.ShowCLBPage);
             }
         };
     }
@@ -87,66 +83,66 @@ class CDUWindPage {
         let waypoint = null;
 
         const activeWaypoint = mcdu.flightPlanManager.getActiveWaypoint();
-        if(activeWaypoint) {
+        if (activeWaypoint) {
             waypoint = mcdu.simbrief.navlog.find((val) => val.stage === 'CRZ' && val.ident === activeWaypoint.ident);
-            if(waypoint) {
+            if (waypoint) {
                 CDUWindPage.ShowWPTPage(mcdu, waypoint.ident);
                 return;
             }
         }
 
         waypoint = mcdu.simbrief.navlog.find((val) => val.stage === 'CRZ');
-        if(waypoint) {
+        if (waypoint) {
             CDUWindPage.ShowWPTPage(mcdu, waypoint.ident);
             return;
         }
 
         const template = [
-            [new Column(7, "CRUISE WIND")],
+            [new Column(7, 'CRUISE WIND')],
             [
-                new Column(0, "TRU WIND/WPT"),
-                new Column(22, "CRZ FL", Column.right),
+                new Column(0, 'TRU WIND/WPT'),
+                new Column(22, 'CRZ FL', Column.right),
             ],
             [
-                "",
-                new Column(22, "FL330", Column.right),
-            ],
-
-            [
-                "",
-                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
-                    new Column(22, "INSERT", Column.cyan, Column.right) :
-                    new Column(22, "WIND", Column.amber, Column.right)
-            ],
-            [
-                "",
-                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
-                    new Column(23, "UPLINK*", Column.cyan, Column.right) :
-                    new Column(23, mcdu.windRequestEnabled ? "REQUEST*" : "REQUEST ", Column.amber, Column.right)
+                '',
+                new Column(22, 'FL330', Column.right),
             ],
 
-            [""],
-            [""],
+            [
+                '',
+                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)
+                    ? new Column(22, 'INSERT', Column.cyan, Column.right)
+                    : new Column(22, 'WIND', Column.amber, Column.right),
+            ],
+            [
+                '',
+                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)
+                    ? new Column(23, 'UPLINK*', Column.cyan, Column.right)
+                    : new Column(23, mcdu.windRequestEnabled ? 'REQUEST*' : 'REQUEST ', Column.amber, Column.right),
+            ],
+
+            [''],
+            [''],
 
             [
-                "",
-                new Column(22, "PREV", Column.right)
+                '',
+                new Column(22, 'PREV', Column.right),
             ],
             [
-                "",
-                new Column(23, "PHASE>", Column.right)
+                '',
+                new Column(23, 'PHASE>', Column.right),
             ],
             [
-                "",
-                new Column(22, "NEXT", Column.right)
+                '',
+                new Column(22, 'NEXT', Column.right),
             ],
             [
-                "",
-                new Column(23, "PHASE>", Column.right)
+                '',
+                new Column(23, 'PHASE>', Column.right),
             ],
-            [""],
+            [''],
             [
-                new Column(0, "<RETURN")
+                new Column(0, '<RETURN'),
             ],
         ];
 
@@ -164,17 +160,15 @@ class CDUWindPage {
         };
 
         mcdu.onRightInput[1] = (value) => {
-            if(CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)) {
+            if (CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)) {
                 if (value === FMCMainDisplay.clrValue) {
                     CDUWindPage.ClearUplinkWindData(mcdu, 'CRZ', CDUWindPage.ShowCRZPage);
                     return;
                 }
 
                 CDUWindPage.InsertUplinkWindData(mcdu, 'CRZ', CDUWindPage.ShowCRZPage);
-            } else {
-                if (mcdu.windRequestEnabled) {
-                    CDUWindPage.WindRequest(mcdu, CDUWindPage.ShowCRZPage);
-                }
+            } else if (mcdu.windRequestEnabled) {
+                CDUWindPage.WindRequest(mcdu, CDUWindPage.ShowCRZPage);
             }
         };
     }
@@ -184,63 +178,63 @@ class CDUWindPage {
         mcdu.page.Current = mcdu.page.CruiseWind;
 
         const waypoint = mcdu.simbrief.navlog.find((val) => val.ident === ident);
-        if(!waypoint || waypoint.stage === "CLB") {
+        if (!waypoint || waypoint.stage === 'CLB') {
             CDUWindPage.ShowCLBPage(mcdu);
             return;
         }
 
-        if(waypoint.stage === "DSC") {
+        if (waypoint.stage === 'DSC') {
             CDUWindPage.ShowDESPage(mcdu);
             return;
         }
 
         const template = [
             [
-                new Column(4, "CRZ WIND"),
-                new Column(13, "AT", Column.small),
-                new Column(16, ident, Column.green)
+                new Column(4, 'CRZ WIND'),
+                new Column(13, 'AT', Column.small),
+                new Column(16, ident, Column.green),
             ],
 
             [
-                new Column(0, "TRU WIND/ALT")
+                new Column(0, 'TRU WIND/ALT'),
             ],
-            [""],
+            [''],
 
             [
-                "",
-                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
-                    new Column(22, "INSERT", Column.cyan, Column.right) :
-                    new Column(22, "WIND", Column.amber, Column.right)
+                '',
+                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)
+                    ? new Column(22, 'INSERT', Column.cyan, Column.right)
+                    : new Column(22, 'WIND', Column.amber, Column.right),
             ],
             [
-                "",
-                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
-                    new Column(23, "UPLINK*", Column.cyan, Column.right) :
-                    new Column(23, mcdu.windRequestEnabled ? "REQUEST*" : "REQUEST ", Column.amber, Column.right)
+                '',
+                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)
+                    ? new Column(23, 'UPLINK*', Column.cyan, Column.right)
+                    : new Column(23, mcdu.windRequestEnabled ? 'REQUEST*' : 'REQUEST ', Column.amber, Column.right),
             ],
 
-            [""],
-            [""],
+            [''],
+            [''],
 
             [
-                "",
-                new Column(22, "PREV", Column.right)
+                '',
+                new Column(22, 'PREV', Column.right),
             ],
             [
-                "",
-                new Column(23, "PHASE>", Column.right)
+                '',
+                new Column(23, 'PHASE>', Column.right),
             ],
             [
-                new Column(0, "SAT / ALT", Column.small),
-                new Column(22, "NEXT", Column.right)
+                new Column(0, 'SAT / ALT', Column.small),
+                new Column(22, 'NEXT', Column.right),
             ],
             [
-                new Column(0,"[ ]°/[   ]", Column.inop),
-                new Column(23, "PHASE>", Column.right)
+                new Column(0, '[ ]°/[   ]', Column.inop),
+                new Column(23, 'PHASE>', Column.right),
             ],
-            [""],
+            [''],
             [
-                new Column(0, "<RETURN")
+                new Column(0, '<RETURN'),
             ],
         ];
 
@@ -258,17 +252,15 @@ class CDUWindPage {
         };
 
         mcdu.onRightInput[1] = (value) => {
-            if(CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)) {
+            if (CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)) {
                 if (value === FMCMainDisplay.clrValue) {
                     CDUWindPage.ClearUplinkWindData(mcdu, 'CRZ', CDUWindPage.ShowCRZPage);
                     return;
                 }
 
                 CDUWindPage.InsertUplinkWindData(mcdu, 'CRZ', CDUWindPage.ShowCRZPage);
-            } else {
-                if (mcdu.windRequestEnabled) {
-                    CDUWindPage.WindRequest(mcdu, CDUWindPage.ShowCRZPage);
-                }
+            } else if (mcdu.windRequestEnabled) {
+                CDUWindPage.WindRequest(mcdu, CDUWindPage.ShowCRZPage);
             }
         };
     }
@@ -277,58 +269,55 @@ class CDUWindPage {
         mcdu.clearDisplay();
         mcdu.page.Current = mcdu.page.DescentWind;
 
-
-        let alternateCellValue = "";
+        let alternateCellValue = '';
         if (mcdu.winds.alternate != null) {
             alternateCellValue = new Column(0, `${CDUWindPage.FormatNumber(mcdu.winds.alternate.direction, 2)}°/${CDUWindPage.FormatNumber(mcdu.winds.alternate.speed, 2)}/FL${mcdu.winds.alternate.altitude / 100}`, Column.cyan);
         }
 
-        if(mcdu.uplinkWinds.alternate != null) {
+        if (mcdu.uplinkWinds.alternate != null) {
             alternateCellValue = new Column(0, `${CDUWindPage.FormatNumber(mcdu.uplinkWinds.alternate.direction, 2)}°/${CDUWindPage.FormatNumber(mcdu.uplinkWinds.alternate.speed, 2)}/FL${mcdu.uplinkWinds.alternate.altitude / 100}`, Column.green);
         }
 
         const template = [
-            [new Column(6, "DESCENT WIND")],
+            [new Column(6, 'DESCENT WIND')],
             [
-                new Column(0, "TRU WIND/ALT"),
-                ""
+                new Column(0, 'TRU WIND/ALT'),
+                '',
             ],
-            [""],
+            [''],
             [
-                "",
-                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
-                    new Column(22, "INSERT", Column.cyan, Column.right) :
-                    new Column(22, "WIND", Column.amber, Column.right)
-            ],
-            [
-                "",
-                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise) ?
-                    new Column(23, "UPLINK*", Column.cyan, Column.right) :
-                    new Column(23, mcdu.windRequestEnabled ? "REQUEST*" : "REQUEST ", Column.amber, Column.right)
-            ],
-            [""],
-            [""],
-            [
-                "",
-                new Column(22, "PREV", Column.right)
+                '',
+                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)
+                    ? new Column(22, 'INSERT', Column.cyan, Column.right)
+                    : new Column(22, 'WIND', Column.amber, Column.right),
             ],
             [
-                "",
-                new Column(23, "PHASE>", Column.right)
+                '',
+                CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.cruise)
+                    ? new Column(23, 'UPLINK*', Column.cyan, Column.right)
+                    : new Column(23, mcdu.windRequestEnabled ? 'REQUEST*' : 'REQUEST ', Column.amber, Column.right),
+            ],
+            [''],
+            [''],
+            [
+                '',
+                new Column(22, 'PREV', Column.right),
             ],
             [
-                new Column(0, "ALTERNATE")
+                '',
+                new Column(23, 'PHASE>', Column.right),
             ],
             [
-                alternateCellValue
+                new Column(0, 'ALTERNATE'),
             ],
-            [""],
             [
-                new Column(0, "<RETURN")
+                alternateCellValue,
+            ],
+            [''],
+            [
+                new Column(0, '<RETURN'),
             ],
         ];
-
-
 
         mcdu.setTemplate(FormatTemplate(CDUWindPage.ShowWinds(template, mcdu, 'DES', CDUWindPage.ShowDESPage, offset, 4)));
 
@@ -356,19 +345,16 @@ class CDUWindPage {
             CDUWindPage.Return();
         };
 
-
         mcdu.onRightInput[1] = (value) => {
-            if(CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.des)) {
+            if (CDUWindPage.HasUplinkWindData(mcdu.uplinkWinds.des)) {
                 if (value === FMCMainDisplay.clrValue) {
                     CDUWindPage.ClearUplinkWindData(mcdu, 'DES', CDUWindPage.ShowDESPage);
                     return;
                 }
 
                 CDUWindPage.InsertUplinkWindData(mcdu, 'DES', CDUWindPage.ShowDESPage);
-            } else {
-                if (mcdu.windRequestEnabled) {
-                    CDUWindPage.WindRequest(mcdu, CDUWindPage.ShowDESPage);
-                }
+            } else if (mcdu.windRequestEnabled) {
+                CDUWindPage.WindRequest(mcdu, CDUWindPage.ShowDESPage);
             }
         };
     }
@@ -389,35 +375,35 @@ class CDUWindPage {
         let _winds = [];
         let _uplinkWinds = [];
 
-        switch(phase) {
-            case 'CLB':
-                _winds = mcdu.winds.climb;
-                _uplinkWinds = mcdu.uplinkWinds.climb;
-                break;
-            case 'CRZ':
-                _winds = mcdu.winds.cruise;
-                _uplinkWinds = mcdu.uplinkWinds.cruise;
-                break;
-            case 'DES':
-                _winds = mcdu.winds.des;
-                _uplinkWinds = mcdu.uplinkWinds.des;
-                break;
-            case 'WPT':
-                if(_ident) {
-                    const windWpt = mcdu.winds.cruise.find(x => x.ident === _ident);
-                    if(windWpt) {
-                        _winds = windWpt.data;
-                    }
-
-                    const uplinkWindWpt = mcdu.uplinkWinds.cruise.find(x => x.ident === _ident);
-                    if(uplinkWindWpt) {
-                        _winds = uplinkWindWpt.data;
-                    }
+        switch (phase) {
+        case 'CLB':
+            _winds = mcdu.winds.climb;
+            _uplinkWinds = mcdu.uplinkWinds.climb;
+            break;
+        case 'CRZ':
+            _winds = mcdu.winds.cruise;
+            _uplinkWinds = mcdu.uplinkWinds.cruise;
+            break;
+        case 'DES':
+            _winds = mcdu.winds.des;
+            _uplinkWinds = mcdu.uplinkWinds.des;
+            break;
+        case 'WPT':
+            if (_ident) {
+                const windWpt = mcdu.winds.cruise.find((x) => x.ident === _ident);
+                if (windWpt) {
+                    _winds = windWpt.data;
                 }
-                break;
+
+                const uplinkWindWpt = mcdu.uplinkWinds.cruise.find((x) => x.ident === _ident);
+                if (uplinkWindWpt) {
+                    _winds = uplinkWindWpt.data;
+                }
+            }
+            break;
         }
 
-        if(_uplinkWinds.length > 0) {
+        if (_uplinkWinds.length > 0) {
             _winds = _uplinkWinds;
             color = Column.green;
         }
@@ -429,14 +415,14 @@ class CDUWindPage {
                 const wind = _winds[i + _offset];
 
                 switch (phase) {
-                    case 'CRZ':
-                        row = new Column(0, `${CDUWindPage.FormatNumber(wind.direction, 2)}°/${CDUWindPage.FormatNumber(wind.speed, 2)}/${wind.ident}`, color);
-                        break;
-                    case 'CLB':
-                    case 'DES':
-                    case 'WPT':
-                        row = new Column(0, `${CDUWindPage.FormatNumber(wind.direction, 2)}°/${CDUWindPage.FormatNumber(wind.speed, 2)}/FL${wind.altitude}`, color);
-                        break;
+                case 'CRZ':
+                    row = new Column(0, `${CDUWindPage.FormatNumber(wind.direction, 2)}°/${CDUWindPage.FormatNumber(wind.speed, 2)}/${wind.ident}`, color);
+                    break;
+                case 'CLB':
+                case 'DES':
+                case 'WPT':
+                    row = new Column(0, `${CDUWindPage.FormatNumber(wind.direction, 2)}°/${CDUWindPage.FormatNumber(wind.speed, 2)}/FL${wind.altitude}`, color);
+                    break;
                 }
 
                 rows[(i * 2) + 2][0] = row;
@@ -445,7 +431,7 @@ class CDUWindPage {
                     if (value === FMCMainDisplay.clrValue) {
                         _winds.splice(i + _offset, 1);
 
-                        if(phase === 'WPT' && _ident) {
+                        if (phase === 'WPT' && _ident) {
                             _showPage(mcdu, _ident, _offset);
                         } else {
                             _showPage(mcdu, _offset);
@@ -455,7 +441,7 @@ class CDUWindPage {
             }
         }
         if (entries < _max) {
-            rows[(entries * 2) + 2][0] = new Column(0, "[ ]°/[ ]/[   ]", color);
+            rows[(entries * 2) + 2][0] = new Column(0, '[ ]°/[ ]/[   ]', color);
             mcdu.onLeftInput[entries] = (value, scratchpadCallback) => {
                 CDUWindPage.TryAddWind(mcdu, _winds, value, () => _showPage(mcdu, _offset), scratchpadCallback);
             };
@@ -464,7 +450,7 @@ class CDUWindPage {
         let up = false;
         let down = false;
 
-        if(phase === 'WPT') {
+        if (phase === 'WPT') {
             const waypoints = mcdu.simbrief.navlog.filter((val) => val.stage === 'CRZ');
             const actualCruiseWindIndex = waypoints.findIndex((x) => x.ident === _ident);
 
@@ -529,9 +515,9 @@ class CDUWindPage {
         }
 
         return {
-            direction: direction,
-            speed: speed,
-            altitude: altitude
+            direction,
+            speed,
+            altitude,
         };
     }
 
@@ -566,8 +552,8 @@ class CDUWindPage {
         }
 
         return {
-            direction: direction,
-            speed: speed
+            direction,
+            speed,
         };
     }
 
@@ -575,44 +561,44 @@ class CDUWindPage {
         getSimBriefOfp(mcdu, () => {}, () => {
             mcdu.windRequestEnabled = false;
 
-            if(_showPage) {
+            if (_showPage) {
                 _showPage(mcdu);
             }
 
-            const isOneEngineRunning = SimVar.GetSimVarValue("L:A32NX_ENGINE_N1:1", "Number") >= 15 || SimVar.GetSimVarValue("L:A32NX_ENGINE_N1:2", "Number") >= 15;
+            const isOneEngineRunning = SimVar.GetSimVarValue('L:A32NX_ENGINE_N1:1', 'Number') >= 15 || SimVar.GetSimVarValue('L:A32NX_ENGINE_N1:2', 'Number') >= 15;
             let clbWind = [];
             let crzWind = [];
             let desWind = [];
             let altWind = null;
 
-            switch(mcdu.flightPhaseManager.phase) {
-                case FmgcFlightPhases.PREFLIGHT:
-                case FmgcFlightPhases.TAKEOFF:
-                    clbWind = CDUWindPage.GetClimbWind(mcdu);
-                    crzWind = CDUWindPage.GetCruiseWind(mcdu);
-                    desWind = CDUWindPage.GetDescendWind(mcdu);
-                    altWind = CDUWindPage.GetAlternateWind(mcdu);
-                    break;
-                case FmgcFlightPhases.CLIMB:
-                case FmgcFlightPhases.CRUISE:
-                    crzWind = CDUWindPage.GetCruiseWind(mcdu);
-                    desWind = CDUWindPage.GetDescendWind(mcdu);
-                    altWind = CDUWindPage.GetAlternateWind(mcdu);
-                    break;
-                case FmgcFlightPhases.DESCENT:
-                case FmgcFlightPhases.APPROACH:
-                case FmgcFlightPhases.GOAROUND:
-                case FmgcFlightPhases.DONE:
-                default:
-                    mcdu.windRequestEnabled = true;
-                    if(_showPage) {
-                        _showPage(mcdu);
-                    }
-                    return;
+            switch (mcdu.flightPhaseManager.phase) {
+            case FmgcFlightPhases.PREFLIGHT:
+            case FmgcFlightPhases.TAKEOFF:
+                clbWind = CDUWindPage.GetClimbWind(mcdu);
+                crzWind = CDUWindPage.GetCruiseWind(mcdu);
+                desWind = CDUWindPage.GetDescendWind(mcdu);
+                altWind = CDUWindPage.GetAlternateWind(mcdu);
+                break;
+            case FmgcFlightPhases.CLIMB:
+            case FmgcFlightPhases.CRUISE:
+                crzWind = CDUWindPage.GetCruiseWind(mcdu);
+                desWind = CDUWindPage.GetDescendWind(mcdu);
+                altWind = CDUWindPage.GetAlternateWind(mcdu);
+                break;
+            case FmgcFlightPhases.DESCENT:
+            case FmgcFlightPhases.APPROACH:
+            case FmgcFlightPhases.GOAROUND:
+            case FmgcFlightPhases.DONE:
+            default:
+                mcdu.windRequestEnabled = true;
+                if (_showPage) {
+                    _showPage(mcdu);
+                }
+                return;
             }
 
             setTimeout(() => {
-                if(!isOneEngineRunning && mcdu.winds.climb.length === 0 && mcdu.winds.cruise.length === 0 && mcdu.winds.des.length === 0 && mcdu.winds.alternate == null) {
+                if (!isOneEngineRunning && mcdu.winds.climb.length === 0 && mcdu.winds.cruise.length === 0 && mcdu.winds.des.length === 0 && mcdu.winds.alternate == null) {
                     mcdu.winds.climb = clbWind;
                     mcdu.winds.cruise = crzWind;
                     mcdu.winds.des = desWind;
@@ -627,8 +613,8 @@ class CDUWindPage {
                 mcdu.windRequestEnabled = true;
                 mcdu.setScratchpadMessage(NXSystemMessages.windDataUplink);
 
-                if(_showPage && mcdu.page.Current === mcdu.page.ClimbWind || mcdu.page.Current === mcdu.page.CruiseWind ||
-                    mcdu.page.Current === mcdu.page.DescentWind || mcdu.page.Current === mcdu.page.AcarsMenuPage) {
+                if (_showPage && mcdu.page.Current === mcdu.page.ClimbWind || mcdu.page.Current === mcdu.page.CruiseWind
+                    || mcdu.page.Current === mcdu.page.DescentWind || mcdu.page.Current === mcdu.page.AcarsMenuPage) {
                     _showPage(mcdu);
                 }
             }, Math.floor(Math.random() * 25000) + 25000);
@@ -640,40 +626,40 @@ class CDUWindPage {
     }
 
     static InsertUplinkWindData(mcdu, phase, _showPage) {
-        switch(phase) {
-            case 'CLB':
-                mcdu.winds.climb = mcdu.uplinkWinds.climb;
-                break;
-            case 'CRZ':
-                mcdu.winds.climb = mcdu.uplinkWinds.climb;
-                break;
-            case 'DES':
-                mcdu.winds.cruise = mcdu.uplinkWinds.cruise;
-                mcdu.winds.alternate = mcdu.uplinkWinds.alternate;
-                break;
+        switch (phase) {
+        case 'CLB':
+            mcdu.winds.climb = mcdu.uplinkWinds.climb;
+            break;
+        case 'CRZ':
+            mcdu.winds.climb = mcdu.uplinkWinds.climb;
+            break;
+        case 'DES':
+            mcdu.winds.cruise = mcdu.uplinkWinds.cruise;
+            mcdu.winds.alternate = mcdu.uplinkWinds.alternate;
+            break;
         }
 
         CDUWindPage.ClearUplinkWindData(mcdu, phase, _showPage);
     }
 
     static ClearUplinkWindData(mcdu, phase, _showPage) {
-        switch(phase) {
-            case 'CLB':
-                mcdu.uplinkWinds.climb = [];
-                break;
-            case 'CRZ':
-                mcdu.uplinkWinds.cruise = [];
-                break;
-            case 'DES':
-                mcdu.uplinkWinds.des = [];
-                mcdu.uplinkWinds.alternate = null;
-                break;
+        switch (phase) {
+        case 'CLB':
+            mcdu.uplinkWinds.climb = [];
+            break;
+        case 'CRZ':
+            mcdu.uplinkWinds.cruise = [];
+            break;
+        case 'DES':
+            mcdu.uplinkWinds.des = [];
+            mcdu.uplinkWinds.alternate = null;
+            break;
         }
         _showPage(mcdu);
     }
 
     static GetClimbWind(mcdu) {
-        let windData = [];
+        const windData = [];
         let lastAltitude = 0;
         const clbWpts = mcdu.simbrief.navlog.filter((val) => val.stage === 'CLB');
 
@@ -733,11 +719,11 @@ class CDUWindPage {
     }
 
     static GetCruiseWind(mcdu) {
-        let windData = [];
-        const crzWpts = mcdu.simbrief.navlog.filter((val) => val.stage === "CRZ" && val.ident !== "TOD");
+        const windData = [];
+        const crzWpts = mcdu.simbrief.navlog.filter((val) => val.stage === 'CRZ' && val.ident !== 'TOD');
 
         crzWpts.forEach((crzWpt, wptIdx) => {
-            let wptWindData = [];
+            const wptWindData = [];
 
             crzWpt.wind_data.level.forEach((wind, levelIdx) => {
                 const altitude = parseInt(wind.altitude);
@@ -755,7 +741,7 @@ class CDUWindPage {
                 ident: crzWpt.ident,
                 speed: parseInt(crzWpt.wind_spd),
                 direction: parseInt(crzWpt.wind_dir),
-                data: wptWindData.reverse()
+                data: wptWindData.reverse(),
             });
         });
 
@@ -764,10 +750,10 @@ class CDUWindPage {
 
     static GetDescendWind(mcdu) {
         // TOD is marked as cruise stage, but we want it's topmost wind data
-        const tod = mcdu.simbrief.navlog.find((val) => val.ident === "TOD");
-        const desWpts = [tod, ...mcdu.simbrief.navlog.filter((val) => val.stage === "DSC")];
+        const tod = mcdu.simbrief.navlog.find((val) => val.ident === 'TOD');
+        const desWpts = [tod, ...mcdu.simbrief.navlog.filter((val) => val.stage === 'DSC')];
 
-        let windData = [];
+        const windData = [];
         let lastAltitude = 45000;
         desWpts.forEach((desWpt, wptIdx) => {
             if (wptIdx === 0) {

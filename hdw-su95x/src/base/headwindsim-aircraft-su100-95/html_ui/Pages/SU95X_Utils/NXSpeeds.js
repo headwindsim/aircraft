@@ -19,7 +19,7 @@ const to = [
         (m) => 155 + 1.79 * (m - 44),
         (m) => 158 + 1.75 * (m - 46),
         (m) => 162 + 1.72 * (m - 48),
-        () => 165
+        () => 165,
     ], // Conf 1 + F
     [
         () => 129,
@@ -35,8 +35,8 @@ const to = [
         (m) => 140 + 1.58 * (m - 44),
         (m) => 143 + 1.54 * (m - 46),
         (m) => 146 + 1.5 * (m - 48),
-        () => 149
-    ] // Conf 2
+        () => 149,
+    ], // Conf 2
     // Conf 3 is removed as no information can be found regarding flaps 3 TO config
 ];
 
@@ -61,7 +61,7 @@ const vs = [
         (m) => 165 + 2.15 * (m - 44),
         (m) => 169 + 2.1 * (m - 46),
         (m) => 174 + 2.07 * (m - 48),
-        () => 179
+        () => 179,
     ], // Clean Conf
     [
         () => 95,
@@ -93,7 +93,7 @@ const vs = [
         (m) => 123 + 1.35 * (m - 44),
         (m) => 125 + 1.31 * (m - 46),
         (m) => 128 + 1.27 * (m - 48),
-        () => 131
+        () => 131,
     ], // Conf 2
     [
         () => 88,
@@ -109,7 +109,7 @@ const vs = [
         (m) => 121 + 1.34 * (m - 44),
         (m) => 123 + 1.28 * (m - 46),
         (m) => 126 + 1.22 * (m - 48),
-        () => 129
+        () => 129,
     ], // Conf 3
     [
         (_, ldg) => 86 - ldg,
@@ -125,7 +125,7 @@ const vs = [
         (m, ldg) => 117 + 1.15 * (m - 44) - ldg,
         (m, ldg) => 119 + 1.07 * (m - 46) - ldg,
         (m, ldg) => 121 + 1 * (m - 48) - ldg,
-        (_, ldg) => 123 - ldg
+        (_, ldg) => 123 - ldg,
     ], // Conf Full
     [
         (_, ldg) => 98,
@@ -141,8 +141,8 @@ const vs = [
         (m, ldg) => 135 + 1.26 * (m - 44) - ldg,
         (m, ldg) => 137 + 1.14 * (m - 46) - ldg,
         (m, ldg) => 139 + 1.02 * (m - 48) - ldg,
-        (_, ldg) => 141 - ldg
-    ] // Conf 1
+        (_, ldg) => 141 - ldg,
+    ], // Conf 1
 ];
 
 /**
@@ -167,7 +167,7 @@ const vls = [
         (m) => 208 + 2.41 * (m - 44),
         (m) => 212 + 2.34 * (m - 46),
         (m) => 217 + 2.26 * (m - 48),
-        () => 221
+        () => 221,
     ], // Clean Config
     [
         () => 117,
@@ -183,7 +183,7 @@ const vls = [
         (m) => 160 + 1.96 * (m - 44),
         (m) => 164 + 1.92 * (m - 46),
         (m) => 168 + 1.88 * (m - 48),
-        () => 172
+        () => 172,
     ], // Config 1 + F
     [
         () => 115,
@@ -199,7 +199,7 @@ const vls = [
         (m) => 156 + 1.74 * (m - 44),
         (m) => 159 + 1.68 * (m - 46),
         (m) => 163 + 1.63 * (m - 48),
-        () => 166
+        () => 166,
     ], // Config 2
     [
         () => 113,
@@ -215,7 +215,7 @@ const vls = [
         (m) => 154 + 1.74 * (m - 44),
         (m) => 157 + 1.68 * (m - 46),
         (m) => 161 + 1.63 * (m - 48),
-        () => 164
+        () => 164,
     ], // Config 3
     [
         () => 111,
@@ -231,7 +231,7 @@ const vls = [
         (m) => 150 + 1.69 * (m - 44),
         (m) => 153 + 1.64 * (m - 46),
         (m) => 156 + 1.58 * (m - 48),
-        () => 159
+        () => 159,
     ], // Config Full
     [
         () => 133,
@@ -247,8 +247,8 @@ const vls = [
         (m) => 176 + 1.77 * (m - 44),
         (m) => 180 + 1.69 * (m - 46),
         (m) => 183 + 1.61 * (m - 48),
-        () => 186
-    ] // Config 1
+        () => 186,
+    ], // Config 1
 ];
 
 /**
@@ -274,7 +274,7 @@ const vlsTo = [
         (m) => 184 + 2.25 * (m - 44),
         (m) => 189 + 2.2 * (m - 44),
         (m) => 193 + 2.16 * (m - 44),
-        () => 198
+        () => 198,
     ], // Config 1 + F
     [
         () => 104,
@@ -290,7 +290,7 @@ const vlsTo = [
         (m) => 141 + 1.59 * (m - 44),
         (m) => 144 + 1.54 * (m - 46),
         (m) => 147 + 1.49 * (m - 48),
-        () => 150
+        () => 150,
     ], // Config 2
     [
         () => 96,
@@ -306,10 +306,10 @@ const vlsTo = [
         (m) => 130 + 1.45 * (m - 44),
         (m) => 133 + 1.39 * (m - 46),
         (m) => 136 + 1.34 * (m - 48),
-        () => 138
+        () => 138,
     ], // Config 3
     vls[4], // Config Full
-    vls[5] // Config 1
+    vls[5], // Config 1
 ];
 
 /**
@@ -333,7 +333,7 @@ const f = [
     (m) => 159 + 1.88 * (m - 44),
     (m) => 162 + 1.92 * (m - 46),
     (m) => 166 + 1.96 * (m - 48),
-    () => 170
+    () => 170,
 ];
 
 /**
@@ -357,7 +357,7 @@ const s = [
     (m) => 207 + 2.83 * (m - 44),
     (m) => 212 + 2.94 * (m - 46),
     (m) => 218 + 3.05 * (m - 48),
-    () => 223
+    () => 223,
 ];
 
 const vmca = [
@@ -396,7 +396,7 @@ const vfeFS = [
     200, // Config 2
     190, // Config 3
     180, // Config Full
-    250 // Config 1
+    250, // Config 1
 ];
 
 const Vmo = 308;
@@ -410,7 +410,7 @@ const Mmo = 0.81;
  * @returns {number} cg corrected velocity (CAS)
  *  Changed bsed on SSJ100 FCOM
  */
-function correctCg(m, f, cg = SimVar.GetSimVarValue("CG PERCENT", "percent")) {
+function correctCg(m, f, cg = SimVar.GetSimVarValue('CG PERCENT', 'percent')) {
     return f(m, isNaN(cg) ? 15 : cg);
 }
 
@@ -473,9 +473,9 @@ function _getdiffAngle(a, b) {
  */
 function _getVfeNIdx(fi) {
     switch (fi) {
-        case 0: return 4;
-        case 5: return 1;
-        default: return fi;
+    case 0: return 4;
+    case 5: return 1;
+    default: return fi;
     }
 }
 
@@ -547,7 +547,7 @@ function _convertMachToKCas(M, T, p) {
  * @private
  */
 function _getVmo() {
-    return Math.min(Vmo, _convertMachToKCas(Mmo, _convertCtoK(Simplane.getAmbientTemperature()), SimVar.GetSimVarValue("AMBIENT PRESSURE", "millibar")));
+    return Math.min(Vmo, _convertMachToKCas(Mmo, _convertCtoK(Simplane.getAmbientTemperature()), SimVar.GetSimVarValue('AMBIENT PRESSURE', 'millibar')));
 }
 
 class NXSpeeds {
@@ -574,7 +574,7 @@ class NXSpeeds {
     compensateForMachEffect(alt) {
         this.vs = _compensateForMachEffect(this.vs, alt);
         this.vls = _compensateForMachEffect(this.vls, alt);
-        this.gd = _compensateForMachEffect(this.gd, alt); //green dot in SSJ-100 seems to be not mac compesated but i added it back for now
+        this.gd = _compensateForMachEffect(this.gd, alt); // green dot in SSJ-100 seems to be not mac compesated but i added it back for now
     }
 }
 
@@ -587,8 +587,8 @@ class NXSpeedsTo {
      */
     constructor(m = 60, fPos = 1, alt = 0) {
         this.v2 = Math.floor(to[fPos - 1][_correctMass(m)](m) + (fPos === 2 ? (Math.abs(alt * 0.0002)) : 0));
-        this.vr = this.v2 - ((fPos == 2) ? 4 : 2); //rougly extrapolating from SU95 fcom
-        this.v1 = this.v2 - ((fPos == 2) ? 5 : 3); //rougly extrapolating from SU95 fcom
+        this.vr = this.v2 - ((fPos == 2) ? 4 : 2); // rougly extrapolating from SU95 fcom
+        this.v1 = this.v2 - ((fPos == 2) ? 5 : 3); // rougly extrapolating from SU95 fcom
     }
 }
 
@@ -616,7 +616,7 @@ class NXSpeedsUtils {
      * @param vw {number} velocity wind (1/3 steady headwind)
      * @returns {number} velocity wind [5, 15]
      */
-    static addWindComponent(vw = (SimVar.GetSimVarValue("AIRCRAFT WIND Z", "knots") * -1) / 3) {
+    static addWindComponent(vw = (SimVar.GetSimVarValue('AIRCRAFT WIND Z', 'knots') * -1) / 3) {
         return _addWindComponent(vw);
     }
 
@@ -637,7 +637,7 @@ class NXSpeedsUtils {
      * @param vCur {number} velocity current headwind
      * @returns {number} head wind diff
      */
-    static getHeadWindDiff(vTwr, vCur = SimVar.GetSimVarValue("AIRCRAFT WIND Z", "knots") * -1) {
+    static getHeadWindDiff(vTwr, vCur = SimVar.GetSimVarValue('AIRCRAFT WIND Z', 'knots') * -1) {
         return Math.round(1 / 3 * (vCur - vTwr));
     }
 
@@ -649,14 +649,14 @@ class NXSpeedsUtils {
      */
     static getVtargetGSMini(vapp, windDiff) {
         return Math.max(vapp, Math.min(Math.round(vapp + windDiff), Math.round(
-            SimVar.GetSimVarValue("L:A32NX_FLAPS_HANDLE_INDEX", "Number") === 4 ? SimVar.GetSimVarValue("L:A32NX_SPEEDS_VMAX", "Number") - 5 : SimVar.GetSimVarValue("L:A32NX_SPEEDS_VFEN", "Number")
+            SimVar.GetSimVarValue('L:A32NX_FLAPS_HANDLE_INDEX', 'Number') === 4 ? SimVar.GetSimVarValue('L:A32NX_SPEEDS_VMAX', 'Number') - 5 : SimVar.GetSimVarValue('L:A32NX_SPEEDS_VFEN', 'Number'),
         )));
     }
 
     static convertKCasToMach(
         Vc,
         T = _convertCtoK(Simplane.getAmbientTemperature()),
-        p = SimVar.GetSimVarValue("AMBIENT PRESSURE", "millibar")
+        p = SimVar.GetSimVarValue('AMBIENT PRESSURE', 'millibar'),
     ) {
         return _convertKTASToMach(_convertKCasToKTAS(Vc, T, p), T);
     }

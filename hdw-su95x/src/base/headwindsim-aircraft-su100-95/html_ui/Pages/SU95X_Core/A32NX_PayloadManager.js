@@ -8,7 +8,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(1440)),
                 stationIndex: 0 + 1,
                 position: 20.8,
-                simVar: "A32NX_PAX_A"
+                simVar: 'A32NX_PAX_A',
             },
             rows5_8: {
                 name: 'ROWS [5-8]',
@@ -16,7 +16,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(1600)),
                 stationIndex: 1 + 1,
                 position: 10.0,
-                simVar: "A32NX_PAX_B"
+                simVar: 'A32NX_PAX_B',
             },
             rows9_12: {
                 name: 'ROWS [9-12]',
@@ -24,7 +24,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(1600)),
                 stationIndex: 2 + 1,
                 position: -1.4,
-                simVar: "A32NX_PAX_C"
+                simVar: 'A32NX_PAX_C',
             },
             rows13_16: {
                 name: 'ROWS [13-16]',
@@ -32,7 +32,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(1600)),
                 stationIndex: 3 + 1,
                 position: -11.6,
-                simVar: "A32NX_PAX_D"
+                simVar: 'A32NX_PAX_D',
             },
             rows17_20: {
                 name: 'ROWS [17-20]',
@@ -40,7 +40,7 @@ class A32NX_PayloadConstructor {
                 weight: Math.round(NXUnits.kgToUser(1600)),
                 stationIndex: 4 + 1,
                 position: -22.5,
-                simVar: "A32NX_PAX_E"
+                simVar: 'A32NX_PAX_E',
             },
         };
 
@@ -94,17 +94,16 @@ const MAX_SEAT_AVAILABLE = 98;
  * Calculate %MAC ZWFCG of all stations
  */
 function getZfwcg() {
-
     const leMacZ = 2.990; // Accurate to 3 decimals, replaces debug weight values
     const macSize = 11.950; // Accurate to 3 decimals, replaces debug weight values
 
-    const emptyWeight = (SimVar.GetSimVarValue("EMPTY WEIGHT", getUserUnit()));
+    const emptyWeight = (SimVar.GetSimVarValue('EMPTY WEIGHT', getUserUnit()));
     const emptyPosition = 1.14; // Value from flight_model.cfg
     const emptyMoment = emptyPosition * emptyWeight;
-    const PAX_WEIGHT = SimVar.GetSimVarValue("L:A32NX_WB_PER_PAX_WEIGHT", "Number");
+    const PAX_WEIGHT = SimVar.GetSimVarValue('L:A32NX_WB_PER_PAX_WEIGHT', 'Number');
 
-    const paxTotalMass = Object.values(paxStations).map((station) => new BitFlags(SimVar.GetSimVarValue(`L:${station.simVar}`, "Number")).getTotalBits() * PAX_WEIGHT).reduce((acc, cur) => acc + cur, 0);
-    const paxTotalMoment = Object.values(paxStations).map((station) => new BitFlags(SimVar.GetSimVarValue(`L:${station.simVar}`, "Number")).getTotalBits() * PAX_WEIGHT * station.position).reduce((acc, cur) => acc + cur, 0);
+    const paxTotalMass = Object.values(paxStations).map((station) => new BitFlags(SimVar.GetSimVarValue(`L:${station.simVar}`, 'Number')).getTotalBits() * PAX_WEIGHT).reduce((acc, cur) => acc + cur, 0);
+    const paxTotalMoment = Object.values(paxStations).map((station) => new BitFlags(SimVar.GetSimVarValue(`L:${station.simVar}`, 'Number')).getTotalBits() * PAX_WEIGHT * station.position).reduce((acc, cur) => acc + cur, 0);
 
     const cargoTotalMass = Object.values(cargoStations).map((station) => SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${station.stationIndex}`, getUserUnit())).reduce((acc, cur) => acc + cur, 0);
     const cargoTotalMoment = Object.values(cargoStations).map((station) => (SimVar.GetSimVarValue(`PAYLOAD STATION WEIGHT:${station.stationIndex}`, getUserUnit()) * station.position)).reduce((acc, cur) => acc + cur, 0);
@@ -131,11 +130,11 @@ function getTotalPayload() {
 }
 
 function getZfw() {
-    const emptyWeight = (SimVar.GetSimVarValue("EMPTY WEIGHT", getUserUnit()));
+    const emptyWeight = (SimVar.GetSimVarValue('EMPTY WEIGHT', getUserUnit()));
     return emptyWeight + getTotalPayload();
 }
 
 function getUserUnit() {
-    const defaultUnit = (NXUnits.userWeightUnit() == "KG") ? "Kilograms" : "Pounds";
+    const defaultUnit = (NXUnits.userWeightUnit() == 'KG') ? 'Kilograms' : 'Pounds';
     return defaultUnit;
 }

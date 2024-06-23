@@ -117,7 +117,7 @@ export class PFDComponent extends DisplayComponent<PFDProps> {
                 brightness={this.displayBrightness}
                 normDmc={getDisplayIndex()}
             >
-                <svg class="pfd-svg" version="1.1" viewBox="0 0 158.75 158.75" xmlns="http://www.w3.org/2000/svg">
+                <svg className="pfd-svg" version="1.1" viewBox="0 0 158.75 158.75" xmlns="http://www.w3.org/2000/svg">
                     <Horizon
                         bus={this.props.bus}
                         instrument={this.props.instrument}
@@ -127,7 +127,7 @@ export class PFDComponent extends DisplayComponent<PFDProps> {
                     <AttitudeIndicatorFixedCenter bus={this.props.bus} isAttExcessive={this.isAttExcessive} />
                     <path
                         id="Mask1"
-                        class="BackgroundFill"
+                        className="BackgroundFill"
                         // eslint-disable-next-line max-len
                         d="m32.138 101.25c7.4164 13.363 21.492 21.652 36.768 21.652 15.277 0 29.352-8.2886 36.768-21.652v-40.859c-7.4164-13.363-21.492-21.652-36.768-21.652-15.277 0-29.352 8.2886-36.768 21.652zm-32.046 57.498h158.66v-158.75h-158.66z"
                     />
@@ -139,7 +139,7 @@ export class PFDComponent extends DisplayComponent<PFDProps> {
                     />
                     <path
                         id="Mask2"
-                        class="BackgroundFill"
+                        className="BackgroundFill"
                         // eslint-disable-next-line max-len
                         d="m32.138 145.34h73.536v10.382h-73.536zm0-44.092c7.4164 13.363 21.492 21.652 36.768 21.652 15.277 0 29.352-8.2886 36.768-21.652v-40.859c-7.4164-13.363-21.492-21.652-36.768-21.652-15.277 0-29.352 8.2886-36.768 21.652zm-32.046 57.498h158.66v-158.75h-158.66zm115.14-35.191v-85.473h20.344v85.473zm-113.33 0v-85.473h27.548v85.473z"
                     />

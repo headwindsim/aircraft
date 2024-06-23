@@ -5,27 +5,25 @@ class CDU_SAT_Directory {
 
         const updateView = () => {
             mcdu.setTemplate(FormatTemplate([
-                [new Column(4, "SATCOM DIRECTORY")],
-                [""],
-                [new Column(0, "<EMERGENCY", Column.inop)],
-                [""],
-                [new Column(0, "<SAFETY", Column.inop)],
-                [""],
-                [new Column(0, "<NON-SAFETY", Column.inop)],
-                [""],
-                [new Column(0, "<PUBLIC", Column.inop)],
-                [""],
-                [""],
-                [""],
-                [new Column(0, "<RETURN", Column.cyan)],
+                [new Column(4, 'SATCOM DIRECTORY')],
+                [''],
+                [new Column(0, '<EMERGENCY', Column.inop)],
+                [''],
+                [new Column(0, '<SAFETY', Column.inop)],
+                [''],
+                [new Column(0, '<NON-SAFETY', Column.inop)],
+                [''],
+                [new Column(0, '<PUBLIC', Column.inop)],
+                [''],
+                [''],
+                [''],
+                [new Column(0, '<RETURN', Column.cyan)],
             ]));
         };
 
         updateView();
 
-        mcdu.leftInputDelay[5] = () => {
-            return mcdu.getDelaySwitchPage();
-        };
+        mcdu.leftInputDelay[5] = () => mcdu.getDelaySwitchPage();
         mcdu.onLeftInput[5] = () => {
             CDU_SAT_Menu.ShowPage(mcdu);
         };

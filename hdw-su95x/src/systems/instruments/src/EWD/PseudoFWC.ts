@@ -602,7 +602,7 @@ export class PseudoFWC {
     private readonly height1Failed = Subject.create(false);
 
     private readonly height2Failed = Subject.create(false);
-    
+
     private adr3OverspeedWarning = new NXLogicMemoryNode(false, false);
 
     private readonly overspeedWarning = Subject.create(false);
@@ -1280,7 +1280,6 @@ export class PseudoFWC {
 
         const manCabinDeltaPressure = SimVar.GetSimVarValue('L:A32NX_PRESS_MAN_CABIN_DELTA_PRESSURE', 'percent');
         this.cabinDeltaPressure.set(Arinc429Word.fromSimVarValue(`L:A32NX_PRESS_CPC_${activeCpcNumber}_CABIN_DELTA_PRESSURE`).valueOr(manCabinDeltaPressure));
-
 
         /* OTHER STUFF */
 
@@ -3050,7 +3049,7 @@ export class PseudoFWC {
             sysPage: 5,
             side: 'LEFT',
         },
-    }
+    };
 
     ewdMessageMemos: EWDMessageDict = {
         '0000010': { // T.O MEMO

@@ -104,7 +104,7 @@ export class AircraftVersionChecker {
         if (this.buildInfo) {
             return this.buildInfo;
         }
-        
+
         const aircraft = getAircraftType();
 
         await fetch(`/VFS/${aircraft}_build_info.json`).then((response) => {

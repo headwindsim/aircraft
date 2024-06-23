@@ -26,19 +26,19 @@ class CDUStepAltsPage {
             : null;
 
         mcdu.setTemplate([
-            ["STEP ALTS {small}FROM{end} {green}FL" + mcdu._cruiseFlightLevel + "{end}"],
-            ["\xa0ALT\xa0/\xa0WPT", "DIST\xa0TIME"],
+            [`STEP ALTS {small}FROM{end} {green}FL${mcdu._cruiseFlightLevel}{end}`],
+            ['\xa0ALT\xa0/\xa0WPT', 'DIST\xa0TIME'],
             CDUStepAltsPage.formatStepClimbLine(mcdu, steps, 0, predictions, isFlying, transitionAltitude),
-            [""],
+            [''],
             CDUStepAltsPage.formatStepClimbLine(mcdu, steps, 1, predictions, isFlying, transitionAltitude),
-            [""],
+            [''],
             CDUStepAltsPage.formatStepClimbLine(mcdu, steps, 2, predictions, isFlying, transitionAltitude),
-            [""],
+            [''],
             CDUStepAltsPage.formatStepClimbLine(mcdu, steps, 3, predictions, isFlying, transitionAltitude),
-            [""],
+            [''],
             CDUStepAltsPage.formatOptStepLine(steps),
-            [""],
-            ["<RETURN"]
+            [''],
+            ['<RETURN'],
         ]);
 
         for (let i = 0; i < 4; i++) {
@@ -61,64 +61,63 @@ class CDUStepAltsPage {
 
     static formatFl(altitude, transAlt) {
         if (transAlt >= 100 && altitude > transAlt) {
-            return "FL" + Math.round(altitude / 100);
+            return `FL${Math.round(altitude / 100)}`;
         }
         return altitude;
     }
 
     static formatOptStepLine(steps) {
         if (steps.length > 0) {
-            return ["", ""];
+            return ['', ''];
         }
 
-        return ["{small}OPT STEP:{end}", "{small}ENTER ALT ONLY{end}"];
+        return ['{small}OPT STEP:{end}', '{small}ENTER ALT ONLY{end}'];
     }
 
     // TODO: I think it should not allow entries of step climbs after step descents, but I'm not sure if it rejects it entirely
     // or gives you an IGNORED.
     static formatStepClimbLine(mcdu, steps, index, predictions, isFlying, transitionAltitude) {
         if (!steps || index > steps.length) {
-            return [""];
-        } else if (index === steps.length) {
-            return ["{cyan}[\xa0\xa0\xa0]/[\xa0\xa0\xa0\xa0\xa0]{end}"];
-        } else {
-            const waypoint = steps[index];
-            const step = steps[index].additionalData.cruiseStep;
+            return [''];
+        } if (index === steps.length) {
+            return ['{cyan}[\xa0\xa0\xa0]/[\xa0\xa0\xa0\xa0\xa0]{end}'];
+        }
+        const waypoint = steps[index];
+        const step = steps[index].additionalData.cruiseStep;
 
-            const prediction = predictions ? predictions.get(step.waypointIndex) : null;
+        const prediction = predictions ? predictions.get(step.waypointIndex) : null;
 
-            // Cases:
-            // 1. Step above MAX FL (on PROG page)
-            // 2. IGNORED (If too close to T/D or before T/C)
-            // 3. STEP AHEAD
-            // 4. Distance and time<
+        // Cases:
+        // 1. Step above MAX FL (on PROG page)
+        // 2. IGNORED (If too close to T/D or before T/C)
+        // 3. STEP AHEAD
+        // 4. Distance and time<
 
-            let lastColumn = "----\xa0----";
-            if (this.checkIfStepAboveMaxFl(mcdu, step.toAltitude)) {
-                lastColumn = "ABOVE\xa0MAX[s-text]";
-            } else if (step.isIgnored) {
-                lastColumn = "IGNORED\xa0[s-text]";
-            } else if (prediction) {
-                const { distanceFromAircraft, secondsFromPresent } = prediction;
+        let lastColumn = '----\xa0----';
+        if (this.checkIfStepAboveMaxFl(mcdu, step.toAltitude)) {
+            lastColumn = 'ABOVE\xa0MAX[s-text]';
+        } else if (step.isIgnored) {
+            lastColumn = 'IGNORED\xa0[s-text]';
+        } else if (prediction) {
+            const { distanceFromAircraft, secondsFromPresent } = prediction;
 
-                if (Number.isFinite(distanceFromAircraft) && Number.isFinite(secondsFromPresent)) {
-                    if (distanceFromAircraft < 20) {
-                        lastColumn = "STEP\xa0AHEAD[s-text]";
-                    } else {
-                        const distanceCell = "{green}" + Math.round(distanceFromAircraft).toFixed(0) + "{end}";
+            if (Number.isFinite(distanceFromAircraft) && Number.isFinite(secondsFromPresent)) {
+                if (distanceFromAircraft < 20) {
+                    lastColumn = 'STEP\xa0AHEAD[s-text]';
+                } else {
+                    const distanceCell = `{green}${Math.round(distanceFromAircraft).toFixed(0)}{end}`;
 
-                        const utcTime = SimVar.GetGlobalVarValue("ZULU TIME", "seconds");
-                        const timeCell = isFlying
-                            ? `{green}${FMCMainDisplay.secondsToUTC(utcTime + secondsFromPresent)}[s-text]{end}`
-                            : `{green}${FMCMainDisplay.secondsTohhmm(secondsFromPresent)}[s-text]{end}`;
+                    const utcTime = SimVar.GetGlobalVarValue('ZULU TIME', 'seconds');
+                    const timeCell = isFlying
+                        ? `{green}${FMCMainDisplay.secondsToUTC(utcTime + secondsFromPresent)}[s-text]{end}`
+                        : `{green}${FMCMainDisplay.secondsTohhmm(secondsFromPresent)}[s-text]{end}`;
 
-                        lastColumn = distanceCell + "\xa0" + timeCell;
-                    }
+                    lastColumn = `${distanceCell}\xa0${timeCell}`;
                 }
             }
-
-            return ["{cyan}" + CDUStepAltsPage.formatFl(step.toAltitude, transitionAltitude) + "/" + waypoint.ident + "{end}", lastColumn];
         }
+
+        return [`{cyan}${CDUStepAltsPage.formatFl(step.toAltitude, transitionAltitude)}/${waypoint.ident}{end}`, lastColumn];
     }
 
     static tryAddOrUpdateCruiseStepFromLeftInput(mcdu, scratchpadCallback, stepWaypoints, index, input) {
@@ -135,7 +134,7 @@ class CDUStepAltsPage {
             return;
         }
 
-        const splitInputs = input.split("/");
+        const splitInputs = input.split('/');
         const rawAltitudeInput = splitInputs[0];
         const rawIdentInput = splitInputs[1];
 
@@ -158,12 +157,12 @@ class CDUStepAltsPage {
             mcdu.setScratchpadMessage(NXSystemMessages.formatError);
             scratchpadCallback();
             return;
-        } else if (waypointIndex < mcdu.flightPlanManager.getActiveWaypointIndex()) {
+        } if (waypointIndex < mcdu.flightPlanManager.getActiveWaypointIndex()) {
             // Don't allow step on FROM waypoint
             mcdu.setScratchpadMessage(NXSystemMessages.notAllowed);
             scratchpadCallback();
             return;
-        } else if (!this.checkStepInsertionRules(mcdu, stepWaypoints, waypointIndex, alt)) {
+        } if (!this.checkStepInsertionRules(mcdu, stepWaypoints, waypointIndex, alt)) {
             // Step too small or step descent after step climb
             mcdu.setScratchpadMessage(NXSystemMessages.notAllowed);
             scratchpadCallback();
@@ -215,15 +214,15 @@ class CDUStepAltsPage {
         }
 
         // Edit step
-        const splitInputs = input.split("/");
-        if (splitInputs.length === 1 || splitInputs.length === 2 && splitInputs[1] === "") {
+        const splitInputs = input.split('/');
+        if (splitInputs.length === 1 || splitInputs.length === 2 && splitInputs[1] === '') {
             // Altitude
             const altitude = this.tryParseAltitude(splitInputs[0]);
             if (!altitude) {
                 mcdu.setScratchpadMessage(NXSystemMessages.formatError);
                 scratchpadCallback();
                 return;
-            } else if (!this.checkStepInsertionRules(mcdu, stepWaypoints, clickedStep.wapyointIndex, clickedStep.toAltitude)) {
+            } if (!this.checkStepInsertionRules(mcdu, stepWaypoints, clickedStep.wapyointIndex, clickedStep.toAltitude)) {
                 // Step too small or step descent after step climb
                 mcdu.setScratchpadMessage(NXSystemMessages.notAllowed);
                 scratchpadCallback();
@@ -239,7 +238,7 @@ class CDUStepAltsPage {
             const rawAltitudeInput = splitInputs[0];
             const rawIdentInput = splitInputs[1];
 
-            const waypointIndex = mcdu.flightPlanManager.findWaypointIndexByIdent(rawIdentInput)
+            const waypointIndex = mcdu.flightPlanManager.findWaypointIndexByIdent(rawIdentInput);
             if (waypointIndex < 0) {
                 // Waypoint ident not found in flightplan
                 mcdu.setScratchpadMessage(NXSystemMessages.formatError);
@@ -249,7 +248,7 @@ class CDUStepAltsPage {
 
             const waypoint = mcdu.flightPlanManager.getWaypoint(waypointIndex);
 
-            if (rawAltitudeInput === "") {
+            if (rawAltitudeInput === '') {
                 // /Waypoint
                 mcdu.flightPlanManager.addOrUpdateCruiseStep(waypoint, clickedStep.toAltitude, waypointIndex);
                 mcdu.flightPlanManager.removeCruiseStep(stepWaypoint);
@@ -274,12 +273,11 @@ class CDUStepAltsPage {
             // /Place/distance
             mcdu.setScratchpadMessage(NXFictionalMessages.notYetImplemented);
             scratchpadCallback();
-            return;
         }
     }
 
     static checkIfStepAboveMaxFl(mcdu, altitude) {
-        const maxFl = mcdu.getMaxFlCorrected()
+        const maxFl = mcdu.getMaxFlCorrected();
         return Number.isFinite(maxFl) && altitude > maxFl * 100;
     }
 
@@ -318,7 +316,7 @@ class CDUStepAltsPage {
             return false;
         }
 
-        const isClimbVsDescent = toAltitude > altitude
+        const isClimbVsDescent = toAltitude > altitude;
         if (!isClimbVsDescent) {
             doesHaveStepDescent = true;
         } else if (doesHaveStepDescent) {
@@ -332,7 +330,7 @@ class CDUStepAltsPage {
 
             const isClimbAfterDescent = isClimbVsDescent && doesHaveStepDescent;
 
-            return isStepSizeValid && !isClimbAfterDescent
+            return isStepSizeValid && !isClimbAfterDescent;
         }
 
         return true;

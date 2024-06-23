@@ -94,7 +94,7 @@ export const StatusArea = () => {
         const fuelWeight = SimVar.GetSimVarValue('FUEL TOTAL QUANTITY WEIGHT', 'kg');
         const emptyWeight = SimVar.GetSimVarValue('EMPTY WEIGHT', 'kg');
         const payloadCount = SimVar.GetSimVarValue('PAYLOAD STATION COUNT', 'number');
-        const gwgc = SimVar.GetSimVarValue("CG PERCENT", "percent");
+        const gwgc = SimVar.GetSimVarValue('CG PERCENT', 'percent');
 
         const gwUnit = NXUnits.userWeightUnit();
         const payloadWeight = getPayloadWeight(payloadCount);
@@ -104,7 +104,7 @@ export const StatusArea = () => {
             // Lower EICAS displays GW in increments of 100
             setGwDisplayedValue((Math.floor(gw / 100) * 100).toString());
             setGwcgDisplayedValue(isNaN(gwgc) ? 25 : gwgc.toFixed(1));
-        } else if (loadFactor.isNoComputedData()){
+        } else if (loadFactor.isNoComputedData()) {
             setGwDisplayedValue('--');
             setGwcgDisplayedValue('--');
         } else {
@@ -206,7 +206,7 @@ export const StatusArea = () => {
                                 {gwDisplayedUnit}
                             </Text>
 
-                            <Text title x={470} y={87}  alignEnd>
+                            <Text title x={470} y={87} alignEnd>
                                 GWCG
                             </Text>
                             <Text warning x={512} y={87}>

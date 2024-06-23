@@ -1,21 +1,17 @@
 /** @type {import('@ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-    preset: 'ts-jest',
-    testEnvironment: 'node',
-    setupFilesAfterEnv: [
-        "./build-common/src/jest/setupJestMock.js"
-    ],
-    globals: {
-        'ts-jest': {
-            // Babel assumes isolated modules, therefore enable it here as well.
-            // This also speeds up the unit testing performance.
-            isolatedModules: true,
-            diagnostics: {
-                ignoreCodes: ['TS151001'],
-            }
-        }
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  setupFilesAfterEnv: ['./hdw-common/src/jest/setupJestMock.js'],
+  globals: {
+    'ts-jest': {
+      // Babel assumes isolated modules, therefore enable it here as well.
+      // This also speeds up the unit testing performance.
+      isolatedModules: true,
+      diagnostics: { ignoreCodes: ['TS151001'] },
     },
-    moduleNameMapper: {
-        '@flybywiresim/fbw-sdk' : '<rootDir>/build-common/src/systems/index.ts',
-    }
+  },
+  // disable fmsv2 tests until they are fixed
+  modulePathIgnorePatterns: ['fbw-a380x/src/systems/fmgc/src/flightplanning'],
+  moduleNameMapper: { '@flybywiresim/fbw-sdk': '<rootDir>/hdw-**-common/src/systems/index.ts' },
 };

@@ -55,13 +55,13 @@ export class N3 extends DisplayComponent<N3Props> {
         return (
             <Layer x={this.props.x} y={this.props.y}>
                 <g visibility={this.inactiveVisibility}>
-                    <text class="Large End Amber" x={60} y={45}>XX</text>
+                    <text className="Large End Amber" x={60} y={45}>XX</text>
                 </g>
                 <g visibility={this.activeVisibility}>
-                    <rect x={-9} y={22} width={80} height={25} class="LightGreyBox" visibility={this.starting} />
-                    <text class="Large End Green" x={42} y={45}>{this.n3Int}</text>
-                    <text class="Large End Green" x={54} y={45}>.</text>
-                    <text class="Medium End Green" x={70} y={45}>{this.n3Fract}</text>
+                    <rect x={-9} y={22} width={80} height={25} className="LightGreyBox" visibility={this.starting} />
+                    <text className="Large End Green" x={42} y={45}>{this.n3Int}</text>
+                    <text className="Large End Green" x={54} y={45}>.</text>
+                    <text className="Medium End Green" x={70} y={45}>{this.n3Fract}</text>
                 </g>
             </Layer>
         );

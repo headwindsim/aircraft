@@ -5,13 +5,13 @@ class CDU_SAT_ManualDial {
         let phoneNumber = null;
 
         const [phoneNumberAction, phoneNumberText, phoneNumberColor] = new CDU_SingleValueField(mcdu,
-            "string",
-            phoneNumber ? "["+phoneNumber+"]" : null,
+            'string',
+            phoneNumber ? `[${phoneNumber}]` : null,
             {
                 clearable: true,
-                emptyValue: "________________[color]amber",
-                suffix: "[color]cyan",
-                maxLength: 16
+                emptyValue: '________________[color]amber',
+                suffix: '[color]cyan',
+                maxLength: 16,
             },
             (value) => {
                 if (value != null) {
@@ -21,26 +21,25 @@ class CDU_SAT_ManualDial {
                 }
 
                 updateView();
-            }
-        ).getFieldAsColumnParameters();
+            }).getFieldAsColumnParameters();
 
         const updateView = () => {
             mcdu.setTemplate(FormatTemplate([
-                [new Column(3, "SATCOM MANUAL DIAL")],
-                [""],
-                [""],
-                [new Column(1, "PHONE NUMBER")],
+                [new Column(3, 'SATCOM MANUAL DIAL')],
+                [''],
+                [''],
+                [new Column(1, 'PHONE NUMBER')],
                 [new Column(1, phoneNumberText, phoneNumberColor)],
-                [""],
-                [""],
-                [new Column(1, "SAT1/2")],
-                [new Column(1, "1")],
-                [new Column(1, "PRIORITY")],
-                [new Column(1, "NON-SAFETY")],
-                [""],
+                [''],
+                [''],
+                [new Column(1, 'SAT1/2')],
+                [new Column(1, '1')],
+                [new Column(1, 'PRIORITY')],
+                [new Column(1, 'NON-SAFETY')],
+                [''],
                 [
-                    new Column(0, "<RETURN", Column.cyan),
-                    new Column(23, "PRE-SELECT*", Column.cyan, Column.right)
+                    new Column(0, '<RETURN', Column.cyan),
+                    new Column(23, 'PRE-SELECT*', Column.cyan, Column.right),
                 ],
             ]));
         };
@@ -49,9 +48,7 @@ class CDU_SAT_ManualDial {
 
         mcdu.onLeftInput[1] = phoneNumberAction;
 
-        mcdu.leftInputDelay[5] = () => {
-            return mcdu.getDelaySwitchPage();
-        };
+        mcdu.leftInputDelay[5] = () => mcdu.getDelaySwitchPage();
         mcdu.onLeftInput[5] = () => {
             CDU_SAT_Menu.ShowPage(mcdu);
         };
