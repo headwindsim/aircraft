@@ -1,4 +1,4 @@
-name: A333X - PR
+fname: A333X - PR
 on:
   pull_request:
     types:
@@ -31,7 +31,7 @@ on:
   
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: github.event.pull_request.draft == false
     env:
       run: |
