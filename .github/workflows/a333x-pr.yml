@@ -14,24 +14,10 @@ on:
       - 'a333x-igniter.config.mjs'
       - 'package.json'
       - 'package-lock.json'
-  workflow_dispatch:
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
-    paths:
-      - '.github/workflows/a333x-pr.yml'
-      - 'hdw-a333x/**'
-      - 'scripts/build-a333x.js'
-      - 'scripts/build-a333x.sh'
-      - 'a333x-igniter.config.mjs'
-      - 'package.json'
-      - 'package-lock.json'
   
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
     env:
       run: |
