@@ -4,14 +4,9 @@
 /* eslint-disable max-len */
 import React from 'react';
 import { ArrowLeftRight, BoxArrowRight, BriefcaseFill, CaretDownFill, PersonFill, Shuffle, StopCircleFill } from 'react-bootstrap-icons';
-import { Units } from '@flybywiresim/fbw-sdk';
+import { AirframeInfo, Units } from '@flybywiresim/fbw-sdk';
 import { ProgressBar, t, TooltipWrapper, SimpleInput } from '@flybywiresim/flypad';
 import { CargoStationInfo, PaxStationInfo } from './Seating/Constants';
-
-export type Loadsheet = {
-    specs: AirframeSpec,
-    seatMap: PaxStationInfo[]
-}
 
 export type AirframeSpec = {
     prefix: string,
@@ -59,6 +54,16 @@ export const PayloadValueInput: React.FC<PayloadValueInputProps> = ({ min, max, 
         <div className="absolute right-3 top-0 flex h-full items-center font-mono text-2xl text-gray-400">{unit}</div>
     </div>
 );
+
+// TODO: To be removed, relocated from Constants
+interface CargoStationInfo {
+    name: string,
+    weight: number,
+    simVar: string,
+    stationIndex: number,
+    progressBarWidth: number,
+    position: number,
+}
 
 interface CargoBarProps {
     cargoId: number,
@@ -243,7 +248,7 @@ export const PayloadPercentUnitDisplay: React.FC<{value: number}> = ({ value }) 
 };
 
 interface PayloadInputTableProps {
-    loadsheet: Loadsheet,
+    airframeInfo: AirframeInfo,
     emptyWeight: number,
     massUnitForDisplay: string,
     displayZfw: boolean,
@@ -272,7 +277,7 @@ interface PayloadInputTableProps {
 
 export const PayloadInputTable: React.FC<PayloadInputTableProps> = (
     {
-        loadsheet, emptyWeight, massUnitForDisplay,
+        airframeInfo, emptyWeight, massUnitForDisplay,
         BoardingInProgress,
         displayZfw,
         totalPax, totalPaxDesired, maxPax,
@@ -363,11 +368,11 @@ export const PayloadInputTable: React.FC<PayloadInputTableProps> = (
                 <td>
                     {(displayZfw
                         ? (
-                            <TooltipWrapper text={`${t('Ground.Payload.TT.MaxZFW')} ${Units.kilogramToUser(loadsheet.specs.weights.maxZfw).toFixed(0)} ${massUnitForDisplay}`}>
+                            <TooltipWrapper text={`${t('Ground.Payload.TT.MaxZFW')} ${Units.kilogramToUser(airframeInfo?.designLimits.weights.maxZfw).toFixed(0)} ${massUnitForDisplay}`}>
                                 <div className="text-md whitespace-nowrap px-4 font-light">
                                     <PayloadValueInput
                                         min={Math.round(Units.kilogramToUser(emptyWeight))}
-                                        max={Math.round(Units.kilogramToUser(loadsheet.specs.weights.maxZfw))}
+                                        max={Math.round(Units.kilogramToUser(airframeInfo?.designLimits.weights.maxZfw))}
                                         value={Units.kilogramToUser(zfwDesired)}
                                         onBlur={(x) => {
                                             if (!Number.isNaN(parseInt(x)) || parseInt(x) === 0) processZfw(Units.userToKilogram(parseInt(x)));
@@ -379,11 +384,11 @@ export const PayloadInputTable: React.FC<PayloadInputTableProps> = (
                             </TooltipWrapper>
                         )
                         : (
-                            <TooltipWrapper text={`${t('Ground.Payload.TT.MaxGW')} ${Units.kilogramToUser(loadsheet.specs.weights.maxGw).toFixed(0)} ${massUnitForDisplay}`}>
+                            <TooltipWrapper text={`${t('Ground.Payload.TT.MaxGW')} ${Units.kilogramToUser(airframeInfo?.designLimits.weights.maxGw).toFixed(0)} ${massUnitForDisplay}`}>
                                 <div className="text-md whitespace-nowrap px-4 font-light">
                                     <PayloadValueInput
                                         min={Math.round(Units.kilogramToUser(emptyWeight))}
-                                        max={Math.round(Units.kilogramToUser(loadsheet.specs.weights.maxGw))}
+                                        max={Math.round(Units.kilogramToUser(airframeInfo?.designLimits.weights.maxGw))}
                                         value={Units.kilogramToUser(gwDesired)}
                                         onBlur={(x) => {
                                             if (!Number.isNaN(parseInt(x)) || parseInt(x) === 0) processGw(Units.userToKilogram(parseInt(x)));
@@ -424,7 +429,7 @@ export const PayloadInputTable: React.FC<PayloadInputTableProps> = (
                     </div>
                 </td>
                 <td>
-                    <TooltipWrapper text={displayZfw ? `${t('Ground.Payload.TT.MaxZFWCG')} ${loadsheet.specs.weights.maxZfwCg}%` : `${t('Ground.Payload.TT.MaxGWCG')} ${loadsheet.specs.weights.maxGwCg}%`}>
+                    <TooltipWrapper text={displayZfw ? `${t('Ground.Payload.TT.MaxZFWCG')} ${airframeInfo?.designLimits.weights.maxZfwCg}%` : `${t('Ground.Payload.TT.MaxGWCG')} ${airframeInfo?.designLimits.weights.maxGwCg}%`}>
                         <div className="text-md whitespace-nowrap px-4 font-mono">
                             {/* TODO FIXME: Setting pax/cargo given desired ZFWCG, ZFW, total pax, total cargo */}
                             <div className="rounded-md px-3 py-4 transition">
@@ -450,4 +455,5 @@ export const PayloadInputTable: React.FC<PayloadInputTableProps> = (
             </tr>
         </tbody>
     </table>
+    
 );

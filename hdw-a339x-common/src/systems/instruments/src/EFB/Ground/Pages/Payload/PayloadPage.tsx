@@ -3,10 +3,32 @@
 
 /* eslint-disable max-len */
 import React, { useState } from 'react';
-import { Units, usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
-import { useAppSelector, isSimbriefDataLoaded, getAirframeType } from '@flybywiresim/flypad';
-import { A330Payload } from './A330_941/A330Payload';
-import { ACJ330Payload } from './ACJ330_941/A330Payload';
+import { AirframeInfo, AirframeType, CabinInfo, FlypadInfo, Units, usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
+import { useAppSelector, isSimbriefDataLoaded, getMaxPax, getMaxCargo } from '@flybywiresim/flypad';
+import { A339Payload } from './WideBody/A339Payload';
+import { ACJ339Payload } from './WideBody/ACJ339Payload';
+
+export interface PayloadProps {
+    airframeInfo: AirframeInfo,
+    flypadInfo: FlypadInfo,
+    cabinInfo: CabinInfo,
+    maxPax: number,
+    maxCargo: number,
+    simbriefUnits: string,
+    simbriefBagWeight: number,
+    simbriefPaxWeight: number,
+    simbriefPax: number,
+    simbriefBag: number,
+    simbriefFreight: number,
+    simbriefDataLoaded: boolean,
+    payloadImported: boolean,
+    massUnitForDisplay: string,
+    isOnGround: boolean,
+    boardingStarted: boolean,
+    boardingRate: string,
+    setBoardingStarted: (boardingStarted: any) => void,
+    setBoardingRate: (boardingRate: any) => void,
+}
 
 export const PayloadPage = () => {
     const simbriefUnits = useAppSelector((state) => state.simbrief.data.units);
@@ -25,30 +47,22 @@ export const PayloadPage = () => {
 
     const [massUnitForDisplay] = useState(Units.usingMetric ? 'KGS' : 'LBS');
 
-    switch (getAirframeType()) {
-    case 'ACJ330_941':
-        return (
-            <ACJ330Payload
-                simbriefUnits={simbriefUnits}
-                simbriefBagWeight={simbriefBagWeight}
-                simbriefPaxWeight={simbriefPaxWeight}
-                simbriefPax={simbriefPax}
-                simbriefBag={simbriefBag}
-                simbriefFreight={simbriefFreight}
-                simbriefDataLoaded={simbriefDataLoaded}
-                payloadImported={payloadImported}
-                massUnitForDisplay={massUnitForDisplay}
-                isOnGround={isOnGround}
-                boardingStarted={boardingStarted}
-                boardingRate={boardingRate}
-                setBoardingStarted={setBoardingStarted}
-                setBoardingRate={setBoardingRate}
-            />
-        );
-    case 'A330_941':
+    const flypadInfo = useAppSelector((state) => state.config.flypadInfo);
+    const airframeInfo = useAppSelector((state) => state.config.airframeInfo);
+    const cabinInfo = useAppSelector((state) => state.config.cabinInfo);
+
+    switch (airframeInfo.variant) {
+    case AirframeType.SU100_95:
+    case AirframeType.A330_343:
+    case AirframeType.A330_941:
     default:
         return (
-            <A330Payload
+            <A339Payload
+                airframeInfo={airframeInfo}
+                flypadInfo={flypadInfo}
+                cabinInfo={cabinInfo}
+                maxPax={getMaxPax()}
+                maxCargo={getMaxCargo()}
                 simbriefUnits={simbriefUnits}
                 simbriefBagWeight={simbriefBagWeight}
                 simbriefPaxWeight={simbriefPaxWeight}

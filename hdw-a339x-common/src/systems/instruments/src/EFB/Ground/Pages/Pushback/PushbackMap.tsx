@@ -2,15 +2,15 @@
 // SPDX-License-Identifier: GPL-3.0
 
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
-import { useSimVar, MathUtils } from '@flybywiresim/fbw-sdk';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSimVar, MathUtils, AirframeType } from '@flybywiresim/fbw-sdk';
 import { ZoomIn, ZoomOut } from 'react-bootstrap-icons';
 import { IconPlane } from '@tabler/icons';
 import { Coordinates } from 'msfs-geo';
 import { computeDestinationPoint, getGreatCircleBearing } from 'geolib';
 import getDistance from 'geolib/es/getPreciseDistance';
 import { GeolibInputCoordinates } from 'geolib/es/types';
-import { BingMap, t, TooltipWrapper, useAppDispatch, useAppSelector, getAirframeType } from '@flybywiresim/flypad';
+import { BingMap, t, TooltipWrapper, useAppDispatch, useAppSelector } from '@flybywiresim/flypad';
 import {
     setActualMapLatLon,
     setAircraftIconPosition,
@@ -64,7 +64,8 @@ const TurningRadiusIndicator = ({ turningRadius }: TurningRadiusIndicatorProps) 
 
 export const PushbackMap = () => {
     const dispatch = useAppDispatch();
-
+    const airframeInfo = useAppSelector((state) => state.config.airframeInfo);
+    const flypadInfo = useAppSelector((state) => state.config.flypadInfo);
     const [planeHeadingTrue] = useSimVar('PLANE HEADING DEGREES TRUE', 'degrees', 50);
     const [planeLatitude] = useSimVar('A:PLANE LATITUDE', 'degrees latitude', 50);
     const [planeLongitude] = useSimVar('A:PLANE LONGITUDE', 'degrees longitude', 50);
@@ -79,7 +80,7 @@ export const PushbackMap = () => {
         'number',
         250,
     );
-    const turnIndicatorTuningDefault = getAirframeType() === 'A320_251N' ? 1.35 : 1.35; // determined by testing
+    const turnIndicatorTuningDefault = flypadInfo.pushback.turnIndicatorTuningDefault;
 
     // Reducer state for pushback
     const {
@@ -97,8 +98,8 @@ export const PushbackMap = () => {
     // Source: https://www.airbus.com/sites/g/files/jlcbta136/files/2021-11/Airbus-Commercial-Aircraft-AC-A320.pdf
     // Source: https://www.airbus.com/sites/g/files/jlcbta136/files/2022-02/Airbus-A380-Facts-and-Figures-February-2022.pdf
     // Source: https://www.airbus.com/sites/g/files/jlcbta136/files/2021-11/Airbus-Commercial-Aircraft-AC-A330.pdf
-    const aircraftWheelBase = getAirframeType() === 'A330_941' ? 25.38 : 12.64;
-    const aircraftLengthMeter = getAirframeType() === 'A330_941' ? 62.84 : 37.57;
+    const aircraftWheelBase = airframeInfo.dimensions.aircraftWheelBase;
+    const aircraftLengthMeter = airframeInfo.dimensions.aircraftLengthMeter;
 
     // Map
     const [mouseDown, setMouseDown] = useState(false);
@@ -219,11 +220,23 @@ export const PushbackMap = () => {
         }
     }, [dragging, mouseDown, mouseCoords]);
 
+    const mapConfigPath = useMemo(() => {
+        switch (airframeInfo.variant) {
+        case AirframeType.SU100_95:
+            return '/Pages/VCockpit/Instruments/Airliners/Headwind_SU95X/EFB/';
+        case AirframeType.A330_343:
+            return '/Pages/VCockpit/Instruments/Airliners/Headwind_A333X/EFB/';
+        case AirframeType.A330_941:
+        default:
+            return '/Pages/VCockpit/Instruments/Airliners/Headwind_A339X/EFB/';
+        }
+    }, [airframeInfo]);
+
     return (
         <>
             {/* Map Container */}
             <div
-                className="relative flex h-[430px] grow flex-col space-y-4 overflow-hidden rounded-lg border-2 border-theme-accent"
+                className="border-theme-accent relative flex h-[430px] grow flex-col space-y-4 overflow-hidden rounded-lg border-2"
                 onMouseDown={(e) => {
                     setMouseDown(true);
                     setDragStartCoords({ x: e.pageX, y: e.pageY });
@@ -262,8 +275,8 @@ export const PushbackMap = () => {
                                 className="absolute"
                                 style={{
                                     transform: `rotate(-90deg)
-                                    scaleX(${tugCmdSpdFactor >= 0 ? 1 : -1}) 
-                                    scaleY(${tugCmdHdgFactor >= 0 ? 1 : -1}) 
+                                    scaleX(${tugCmdSpdFactor >= 0 ? 1 : -1})
+                                    scaleY(${tugCmdHdgFactor >= 0 ? 1 : -1})
                                     translateY(${turningRadius}px)`,
                                 }}
                             >
@@ -285,7 +298,7 @@ export const PushbackMap = () => {
                         <button
                             type="button"
                             onClick={() => handleCenterPlaneModeChange()}
-                            className="cursor-pointer bg-theme-secondary p-2 transition duration-100 hover:bg-theme-highlight hover:text-theme-body"
+                            className="bg-theme-secondary hover:bg-theme-highlight hover:text-theme-body cursor-pointer p-2 transition duration-100"
                         >
                             <IconPlane
                                 className={`-rotate-90 text-white${centerPlaneMode && 'fill-current'}`}
@@ -298,7 +311,7 @@ export const PushbackMap = () => {
                         <button
                             type="button"
                             onClick={() => handleZoomIn()}
-                            className="cursor-pointer bg-theme-secondary p-2 transition duration-100 hover:bg-theme-highlight hover:text-theme-body"
+                            className="bg-theme-secondary hover:bg-theme-highlight hover:text-theme-body cursor-pointer p-2 transition duration-100"
                         >
                             <ZoomIn size={40} />
                         </button>
@@ -307,7 +320,7 @@ export const PushbackMap = () => {
                         <button
                             type="button"
                             onClick={() => handleZoomOut()}
-                            className="cursor-pointer bg-theme-secondary p-2 transition duration-100 hover:bg-theme-highlight hover:text-theme-body"
+                            className="bg-theme-secondary hover:bg-theme-highlight hover:text-theme-body cursor-pointer p-2 transition duration-100"
                         >
                             <ZoomOut size={40} />
                         </button>

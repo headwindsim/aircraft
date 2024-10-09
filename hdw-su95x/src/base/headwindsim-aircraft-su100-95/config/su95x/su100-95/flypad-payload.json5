@@ -1,0 +1,100 @@
+// Copyright (c) 2024 FlyByWire Simulations
+// SPDX-License-Identifier: GPL-3.0
+// =======================================================================================
+// This is part of the base flyPad configuration file for SU100-95
+// Any keys prefixed by underscore (_) should be considered read-only and not overwritable.
+//
+// NOTE: * This is currently a WIP * ! The override functionality has not been completed yet !
+//
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+//
+// Please follow the instructions in the documentation to create a new configuration file!
+// =======================================================================================
+// Last updated: 22 June 2024
+{
+    "configMajorVersion": 0,
+    "configMinorVersion": 1,
+    "_canvas": {
+        "width": 1000,
+        "height": 150,
+        "canvasX": 243,
+        "canvasY": 78
+    },
+    "chartLimits": {
+        "weight": {
+            "min": 27000,
+            "max": 50000,
+            "lines": 23,
+            "scale": 1000,
+            "values": [ 50, 45, 40, 35, 30 ]
+        },
+        "cg": {
+            "angleRad": 0.014,
+            "min": 10,
+            "max": 35,
+            "overlap": 25,
+            "highlight": 2,
+            "lines": 25,
+            "scale": 1,
+            "values": [ 12, 16, 20, 24, 28, 32 ]
+        },
+        "labels": {
+            "mtow": {
+                "x1": 0.65,
+                "x2": 0.22,
+                "y": 0.02
+            },
+            "mlw": {
+                "x1": 0.65,
+                "x2": 0.22,
+                "y": 0.22
+            },
+            "mzfw": {
+                "x1": 0.65,
+                "x2": 0.22,
+                "y": 0.29
+            }
+        }
+    },
+    "seatDisplay": [
+        {
+            // NarrowbodyEconomy
+            len: 28.0,
+            wid: 23.1,
+            padX: 16,
+            padY: 0,
+            imageX: 39.0,
+            imageY: 23.0,
+        },
+        {
+            // NarrowbodyEconomyEmergency
+            len: 28.0,
+            wid: 23.1,
+            padX: 24,
+            padY: 0,
+            imageX: 39.0,
+            imageY: 23.0,
+        },
+        {
+            // WidebodyEconomy
+            len: 11.52,
+            wid: 11.52,
+            padX: 7.8,
+            padY: 0,
+            imageX: 15.24,
+            imageY: 11.52,
+        },
+        {
+            // WidebodyEconomyEmergency
+            len: 11.52,
+            wid: 11.52,
+            padX: 12,
+            padY: 0,
+            imageX: 15.24,
+            imageY: 11.52,
+        }
+    ]
+}

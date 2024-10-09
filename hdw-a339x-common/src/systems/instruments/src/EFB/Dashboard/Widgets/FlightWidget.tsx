@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: GPL-3.0
 
 /* eslint-disable max-len */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { IconPlane } from '@tabler/icons';
 import { CloudArrowDown } from 'react-bootstrap-icons';
 import { usePersistentNumberProperty, usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
 import { toast } from 'react-toastify';
 import {
-    AC_TYPE, ScrollableContainer, getAirframeType, t, useAppSelector,
+    ScrollableContainer, t, useAppSelector,
     useAppDispatch, fetchSimbriefDataAction, isSimbriefDataLoaded, setPayloadImported, setFuelImported, setToastPresented, setSimbriefDataPending,
 } from '@flybywiresim/flypad';
 
@@ -31,7 +31,7 @@ export const FlightWidget = () => {
     const [navigraphUsername] = usePersistentProperty('NAVIGRAPH_USERNAME');
     const [overrideSimBriefUserID] = usePersistentProperty('CONFIG_OVERRIDE_SIMBRIEF_USERID');
     const [autoSimbriefImport] = usePersistentProperty('CONFIG_AUTO_SIMBRIEF_IMPORT');
-    const [airframe] = useState(getAirframeType());
+    const airframeInfo = useAppSelector((state) => state.config.airframeInfo);
 
     const [gsxPayloadSyncEnabled] = usePersistentNumberProperty('GSX_PAYLOAD_SYNC', 248);
     const [gsxBoardingState] = useSimVar('L:FSDT_GSX_BOARDING_STATE', 'Number', 227);
@@ -131,7 +131,7 @@ export const FlightWidget = () => {
                 {simbriefDataLoaded && (
                     <h1>
                         {simbriefDataLoaded ? `${(airline.length > 0 ? airline : '') + flightNum} | ` : ''}
-                        {(airframe !== null ? AC_TYPE[airframe] : 'A330-941')}
+                        {airframeInfo.variant}
                     </h1>
                 )}
             </div>

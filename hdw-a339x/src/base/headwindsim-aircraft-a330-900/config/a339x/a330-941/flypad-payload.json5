@@ -1,0 +1,82 @@
+// Copyright (c) 2024 FlyByWire Simulations
+// SPDX-License-Identifier: GPL-3.0
+// =======================================================================================
+// This is part of the base flyPad configuration file for A330-941
+// Any keys prefixed by underscore (_) should be considered read-only and not overwritable.
+//
+// NOTE: * This is currently a WIP * ! The override functionality has not been completed yet !
+//
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+//
+// Please follow the instructions in the documentation to create a new configuration file!
+// =======================================================================================
+// Last updated: 22 June 2024
+{
+    "configMajorVersion": 0,
+    "configMinorVersion": 1,
+    "_canvas": {
+        "width": 1000,
+        "height": 150,
+        "canvasX": 243,
+        "canvasY": 78
+    },
+    "chartLimits": {
+        "weight": {
+            "min": 120000,
+            "max": 260000,
+            "lines": 8,
+            "scale": 20000,
+            "values": [ 260, 240, 220, 200, 180, 160, 140, 120 ]
+        },
+        "cg": {
+            "angleRad": 0.014025,
+            "min": 12,
+            "max": 47,
+            "overlap": 32,
+            "highlight": 5,
+            "lines": 35,
+            "scale": 1,
+            "values": [ 15, 20, 25, 30, 35, 40 ]
+        },
+        "labels": {
+            "mtow": {
+                "x1": 0.65,
+                "x2": 0.27,
+                "y": 0.05
+            },
+            "mlw": {
+                "x1": 0.65,
+                "x2": 0.27,
+                "y": 0.37
+            },
+            "mzfw": {
+                "x1": 0.65,
+                "x2": 0.27,
+                "y": 0.44
+            }
+        }
+    },
+    "seatDisplay": [
+        {
+            // Economy
+            len: 15,
+            wid: 15,
+            padX: 1,
+            padY: 0,
+            imageX: 12,
+            imageY: 12,
+        },
+        {
+            // EconomyEmergency
+            len: 19.2,
+            wid: 19.2,
+            padX: 20,
+            padY: 0,
+            imageX: 25.4,
+            imageY: 19.2,
+        }
+    ]
+}

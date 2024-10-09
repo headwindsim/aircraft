@@ -1,0 +1,80 @@
+// Copyright (c) 2024 FlyByWire Simulations
+// SPDX-License-Identifier: GPL-3.0
+// =======================================================================================
+// This is the base airframe configuration file for A330-941
+// Any keys prefixed by underscore (_) should be considered read-only and not overwritable.
+//
+// NOTE: * This is currently a WIP * ! The override functionality has not been completed yet !
+//
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+// ****** ! WARNING TO LIVERY MAKERS: DO NOT OVERRIDE THIS FILE ! **********
+//
+// Please follow the instructions in the documentation to create a new configuration file!
+// =======================================================================================
+// Last updated: 22 June 2024
+{
+    "configMajorVersion": 0,
+    "configMinorVersion": 1,
+    "_variant": "A330-941",
+    "_icao": "A339",
+    "_name": "Airbus A330-900neo",
+    "_engines": "RR TRENT 7000",
+    "_developer": "Headwind Simulations",
+    "msnReference": "MSN XXXX",
+    "weightVariant": "WV900",
+    "designLimits": {
+        "weights": {
+            "maxGw": 251000,     // kg
+            "maxZfw": 181000,    // kg
+            "minZfw": 127000,    // kg
+            "maxGwCg": 41,      // %CG MAC
+            "maxZfwCg": 41,     // %CG MAC
+            "maxCargo": 44836,   // kg
+            "maxFuel": 111665,   // kg
+        },
+        "endurance": {
+            "range": 7200,   // nm
+            "mmo": "0.86",        // mach
+        },
+        "performanceEnvelope": {
+            "mlw": [
+                [ 15, 127000 ],
+                [ 15, 191000 ],
+                [ 40.12, 191000 ],
+                [ 41, 173000 ],
+                [ 41, 127000 ],
+                [ 15, 127000 ]
+            ],
+            "mzfw": [
+                [ 15, 181000 ],
+                [ 40.5, 181000 ]
+            ],
+            "mtow": [
+                [ 15, 127000 ],
+                [ 15, 210000 ],
+                [ 20.61, 251000 ],
+                [ 33.00, 251000 ],
+                [ 38.60, 233000 ],
+                [ 39.90, 197200 ],
+                [ 32.45, 127000 ],
+                [ 15, 127000 ]
+            ],
+            "flight": [
+                [ 14, 127000 ],
+                [ 14, 210000 ],
+                [ 19.61, 251000 ],
+                [ 34.00, 251000 ],
+                [ 39.60, 233000 ],
+                [ 42, 173000 ],
+                [ 42, 127000 ],
+                [ 14, 127000 ]
+            ]
+        }
+    },
+    "_dimensions": {
+        "aircraftWheelBase": 25.38,
+        "aircraftLengthMeter": 62.84
+    }
+}
