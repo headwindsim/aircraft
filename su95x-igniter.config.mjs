@@ -114,14 +114,6 @@ export default new TaskOfTasks("all", [
                         "Cargo.toml",
                         "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/systems.wasm"
                     ]),
-                new ExecTask("systems-fadec",
-                    "npm run build-su95x:fadec",
-                    [
-                        "build-su95x/src/wasm/fadec_a320",
-                        "build-su95x-common/src/wasm/fbw_common",
-                        "build-su95x-common/src/wasm/fadec_common",
-                        "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fadec.wasm"
-                    ]),
                 new ExecTask("systems-fbw",
                     "npm run build-su95x:fbw",
                     [
@@ -136,13 +128,16 @@ export default new TaskOfTasks("all", [
                     "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/terronnd.wasm",
                     "build-su95x-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
-                new ExecTask("extra-backend",
+                new ExecTask('cpp-wasm-cmake',
                     "npm run build-su95x:cpp-wasm-cmake",
                     [
-                        "build-su95x-common/src/wasm/cpp-msfs-framework",
-                        "build-su95x-common/src/wasm/extra-backend",
-                        "build-su95x/src/wasm/extra-backend-a32nx",
-                        "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/extra-backend-a32nx.wasm"
+                        'build-su95x-common/src/wasm/cpp-msfs-framework',
+                        'build-su95x-common/src/wasm/extra-backend',
+                        'build-su95x-common/src/wasm/fadec_common_v2',
+                        'build-su95x/src/wasm/extra-backend-a32nx',
+                        'build-su95x/src/wasm/fadec_su95x',
+                        'build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/extra-backend-a32nx.wasm',
+                        'build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fadec-a32nx.wasm'
                     ])
             ], true),
         ]),

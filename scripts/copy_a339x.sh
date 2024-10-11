@@ -72,9 +72,6 @@ cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/Air
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/sound
 
 chmod +x ./build-a339x/src/wasm/fbw_a320/build.sh
-chmod +x ./build-a339x/src/wasm/fadec_a320/build.sh
-chmod +x ./build-a339x/src/wasm/fadec_a330/build.sh
-# chmod +x ./build-a339x/src/wasm/flypad-backend/build.sh
 
 ##### ACJ330neo
 

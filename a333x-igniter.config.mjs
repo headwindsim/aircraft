@@ -114,14 +114,6 @@ export default new TaskOfTasks("all", [
                         "Cargo.toml",
                         "build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/systems.wasm"
                     ]),
-                new ExecTask("systems-fadec",
-                    "npm run build-a333x:fadec",
-                    [
-                        "build-a333x/src/wasm/fadec_a330",
-                        "build-a333x-common/src/wasm/fbw_common",
-                        "build-a333x-common/src/wasm/fadec_common",
-                        "build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/fadec.wasm"
-                    ]),
                 new ExecTask("systems-fbw",
                     "npm run build-a333x:fbw",
                     [
@@ -136,13 +128,16 @@ export default new TaskOfTasks("all", [
                     "build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/terronnd.wasm",
                     "build-a333x-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
-                new ExecTask("extra-backend",
+                new ExecTask('cpp-wasm-cmake',
                     "npm run build-a333x:cpp-wasm-cmake",
                     [
-                        "build-a333x-common/src/wasm/cpp-msfs-framework",
-                        "build-a333x-common/src/wasm/extra-backend",
-                        "build-a333x/src/wasm/extra-backend-a32nx",
-                        "build-a333x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a32nx.wasm"                    
+                        'build-a333x-common/src/wasm/cpp-msfs-framework',
+                        'build-a333x-common/src/wasm/extra-backend',
+                        'build-a333x-common/src/wasm/fadec_common_v2',
+                        'build-a333x/src/wasm/extra-backend-a32nx',
+                        'build-a333x/src/wasm/fadec_a333x',
+                        'build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/extra-backend-a32nx.wasm',
+                        'build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/fadec-a32nx.wasm'
                     ])
             ], true),
         ]),
