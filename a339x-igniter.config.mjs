@@ -142,6 +142,7 @@ export default new TaskOfTasks("all", [
             ], true),
         ]),
 
+        /*
         new TaskOfTasks("ACJ330neo", [
             // Group all WASM build tasks together but separate from the rest of the tasks as build run more stable like this.
             new TaskOfTasks("wasm", [
@@ -159,6 +160,7 @@ export default new TaskOfTasks("all", [
                     ])
             ], true),
         ]),
+        */
 
         // Create final package meta files.
         new TaskOfTasks("dist", [
