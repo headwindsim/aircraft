@@ -291,6 +291,8 @@ class Polynomial_A32NX {
         2.8637860e-08
     };
 
+    cff = 2.5; //TODO: Remove Static CFF when adjusting to correct EGT above for A330
+
     return c_EGT[0]                      //
     + c_EGT[1]                           //
     + (c_EGT[2] * cn1)                   //
