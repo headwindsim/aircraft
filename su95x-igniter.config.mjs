@@ -133,7 +133,7 @@ export default new TaskOfTasks("all", [
                     [
                         'build-su95x-common/src/wasm/cpp-msfs-framework',
                         'build-su95x-common/src/wasm/extra-backend',
-                        'build-su95x-common/src/wasm/fadec_common_v2',
+                        'build-su95x-common/src/wasm/fadec_common',
                         'build-su95x/src/wasm/extra-backend-a32nx',
                         'build-su95x/src/wasm/fadec_su95x',
                         'build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/extra-backend-a32nx.wasm',
