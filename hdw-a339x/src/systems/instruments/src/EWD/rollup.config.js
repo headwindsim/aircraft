@@ -13,14 +13,22 @@ const root = join(__dirname, '..', '..', '..', '..', '..', '..');
 console.log('Root: ', root);
 
 export default {
-    input: join(__dirname, 'instrument.tsx'),
-    output: {
-        file: join(root, 'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/EWD/instrument.js'),
-        format: 'es',
-    },
-    plugins: [
-        scss({ output: join(root, 'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/EWD/ewd.css') }),
-        resolve(),
-        ts(),
-    ],
+  input: join(__dirname, 'instrument.tsx'),
+  output: {
+    file: join(
+      root,
+      'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/EWD/instrument.js',
+    ),
+    format: 'es',
+  },
+  plugins: [
+    scss({
+      output: join(
+        root,
+        'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/EWD/ewd.css',
+      ),
+    }),
+    resolve(),
+    ts(),
+  ],
 };

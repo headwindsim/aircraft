@@ -27,95 +27,95 @@ import { AircraftSync } from './modules/aircraft_sync/AircraftSync';
  * - `update` is called in every update call of the simulator, but only after `startPublish` is called
  */
 class ExtrasHost extends BaseInstrument {
-    private readonly bus: EventBus;
+  private readonly bus: EventBus;
 
-    private readonly notificationManager: NotificationManager;
+  private readonly notificationManager: NotificationManager;
 
-    private readonly hEventPublisher: HEventPublisher;
+  private readonly hEventPublisher: HEventPublisher;
 
-    private readonly simVarPublisher: ExtrasSimVarPublisher;
+  private readonly simVarPublisher: ExtrasSimVarPublisher;
 
-    private readonly pushbuttonCheck: PushbuttonCheck;
+  private readonly pushbuttonCheck: PushbuttonCheck;
 
-    private readonly versionCheck: VersionCheck;
+  private readonly versionCheck: VersionCheck;
 
-    private readonly keyInterceptor: KeyInterceptor;
-    
-    private readonly aircraftSync: AircraftSync;
+  private readonly keyInterceptor: KeyInterceptor;
 
-    public readonly xmlConfig: Document;
+  private readonly aircraftSync: AircraftSync;
 
-    /**
-     * "mainmenu" = 0
-     * "loading" = 1
-     * "briefing" = 2
-     * "ingame" = 3
-     */
-    private gameState = 0;
+  public readonly xmlConfig: Document;
 
-    constructor() {
-        super();
+  /**
+   * "mainmenu" = 0
+   * "loading" = 1
+   * "briefing" = 2
+   * "ingame" = 3
+   */
+  private gameState = 0;
 
-        this.bus = new EventBus();
-        this.hEventPublisher = new HEventPublisher(this.bus);
-        this.simVarPublisher = new ExtrasSimVarPublisher(this.bus);
+  constructor() {
+    super();
 
-        this.notificationManager = new NotificationManager();
+    this.bus = new EventBus();
+    this.hEventPublisher = new HEventPublisher(this.bus);
+    this.simVarPublisher = new ExtrasSimVarPublisher(this.bus);
 
-        this.pushbuttonCheck = new PushbuttonCheck(this.bus, this.notificationManager);
-        this.keyInterceptor = new KeyInterceptor(this.bus, this.notificationManager);
-        this.versionCheck = new VersionCheck(process.env.AIRCRAFT_PROJECT_PREFIX, this.bus);
-        this.aircraftSync = new AircraftSync(process.env.AIRCRAFT_PROJECT_PREFIX, this.bus);
+    this.notificationManager = new NotificationManager();
 
-        console.log('SU95X_EXTRASHOST: Created');
+    this.pushbuttonCheck = new PushbuttonCheck(this.bus, this.notificationManager);
+    this.keyInterceptor = new KeyInterceptor(this.bus, this.notificationManager);
+    this.versionCheck = new VersionCheck(process.env.AIRCRAFT_PROJECT_PREFIX, this.bus);
+    this.aircraftSync = new AircraftSync(process.env.AIRCRAFT_PROJECT_PREFIX, this.bus);
+
+    console.log('SU95X_EXTRASHOST: Created');
+  }
+
+  get templateID(): string {
+    return 'SU95X_EXTRASHOST';
+  }
+
+  public getDeltaTime() {
+    return this.deltaTime;
+  }
+
+  public onInteractionEvent(args: string[]): void {
+    this.hEventPublisher.dispatchHEvent(args[0]);
+  }
+
+  public connectedCallback(): void {
+    super.connectedCallback();
+
+    this.pushbuttonCheck.connectedCallback();
+    this.versionCheck.connectedCallback();
+    this.aircraftSync.connectedCallback();
+  }
+
+  public parseXMLConfig(): void {
+    super.parseXMLConfig();
+    this.aircraftSync.parseXMLConfig(this.xmlConfig);
+  }
+
+  public Update(): void {
+    super.Update();
+
+    if (this.gameState !== GameState.ingame) {
+      const gs = this.getGameState();
+      if (gs === GameState.ingame) {
+        this.hEventPublisher.startPublish();
+        this.versionCheck.startPublish();
+        this.keyInterceptor.startPublish();
+        this.simVarPublisher.startPublish();
+        this.aircraftSync.startPublish();
+      }
+      this.gameState = gs;
+    } else {
+      this.simVarPublisher.onUpdate();
     }
 
-    get templateID(): string {
-        return 'SU95X_EXTRASHOST';
-    }
-
-    public getDeltaTime() {
-        return this.deltaTime;
-    }
-
-    public onInteractionEvent(args: string[]): void {
-        this.hEventPublisher.dispatchHEvent(args[0]);
-    }
-
-    public connectedCallback(): void {
-        super.connectedCallback();
-
-        this.pushbuttonCheck.connectedCallback();
-        this.versionCheck.connectedCallback();
-        this.aircraftSync.connectedCallback();
-    }
-
-    public parseXMLConfig(): void {
-        super.parseXMLConfig();
-        this.aircraftSync.parseXMLConfig(this.xmlConfig);
-    }
-
-    public Update(): void {
-        super.Update();
-
-        if (this.gameState !== GameState.ingame) {
-            const gs = this.getGameState();
-            if (gs === GameState.ingame) {
-                this.hEventPublisher.startPublish();
-                this.versionCheck.startPublish();
-                this.keyInterceptor.startPublish();
-                this.simVarPublisher.startPublish();
-                this.aircraftSync.startPublish();
-            }
-            this.gameState = gs;
-        } else {
-            this.simVarPublisher.onUpdate();
-        }
-
-        this.versionCheck.update();
-        this.keyInterceptor.update();
-        this.aircraftSync.update();
-    }
+    this.versionCheck.update();
+    this.keyInterceptor.update();
+    this.aircraftSync.update();
+  }
 }
 
 registerInstrument('extras-host', ExtrasHost);

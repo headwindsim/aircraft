@@ -33,7 +33,6 @@ cp -ra ./hdw-a333x/src/localization/. ./build-a333x/src/localization
 cp -ra ./hdw-a333x/src/model/. ./build-a333x/src/model
 cp -ra ./hdw-a333x/src/systems/. ./build-a333x/src/systems
 cp -ra ./hdw-a333x/src/wasm/. ./build-a333x/src/wasm
-cp -ra ./hdw-a333x/src/.eslintrc.js ./build-a333x/src/.eslintrc.js
 
 mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300
 mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300-lock-highlight

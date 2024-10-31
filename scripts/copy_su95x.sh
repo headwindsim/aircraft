@@ -29,7 +29,6 @@ cp -ra ./flybywire/fbw-a32nx/src/wasm/. ./build-su95x/src/wasm
 
 cp -ra ./hdw-su95x/.env ./build-su95x/.env
 cp -ra ./hdw-su95x/mach.config.js ./build-su95x/mach.config.js
-cp -ra ./hdw-su95x/src/.eslintrc.js ./build-su95x/src/.eslintrc.js
 
 cp -ra ./hdw-su95x/src/behavior/. ./build-su95x/src/behavior
 cp -ra ./hdw-su95x/src/localization/. ./build-su95x/src/localization
