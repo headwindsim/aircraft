@@ -26,9 +26,9 @@ class Polynomial_A32NX {
   static double startN2(double n2, double preN2, double idleN2) {
     // Normalize the current N2 percentage by scaling it with the idle N2
     // percentage and a constant factor.
-    // The constant factor 68.2 is likely derived from empirical data or a mathematical model of the
+    // The constant factor 66.0 is likely derived from empirical data or a mathematical model of the
     // engine's behavior.
-    double normalN2 = n2 * 68.2 / idleN2;
+    double normalN2 = n2 * 66.0 / idleN2;
 
     // Coefficients for the polynomial used to calculate the N2 percentage.
     constexpr double c_N2[16] = {
@@ -291,19 +291,21 @@ class Polynomial_A32NX {
         1.9312e-08    // coefficient for x^15
     };
 
+    double cff_ssj = cff/0.88;
+
     return c_EGT[0]                             //
            + c_EGT[1]                           //
            + (c_EGT[2] * cn1)                   //
-           + (c_EGT[3] * cff)                   //
+           + (c_EGT[3] * cff_ssj)                   //
            + (c_EGT[4] * mach)                  //
            + (c_EGT[5] * alt)                   //
            + (c_EGT[6] * (std::pow)(cn1, 2))    //
-           + (c_EGT[7] * cn1 * cff)             //
+           + (c_EGT[7] * cn1 * cff_ssj)             //
            + (c_EGT[8] * cn1 * mach)            //
            + (c_EGT[9] * cn1 * alt)             //
-           + (c_EGT[10] * (std::pow)(cff, 2))   //
-           + (c_EGT[11] * mach * cff)           //
-           + (c_EGT[12] * cff * alt)            //
+           + (c_EGT[10] * (std::pow)(cff_ssj, 2))   //
+           + (c_EGT[11] * mach * cff_ssj)           //
+           + (c_EGT[12] * cff_ssj * alt)            //
            + (c_EGT[13] * (std::pow)(mach, 2))  //
            + (c_EGT[14] * mach * alt)           //
            + (c_EGT[15] * (std::pow)(alt, 2));
@@ -343,7 +345,10 @@ class Polynomial_A32NX {
         1.2728e-11    // coefficient for x^20
     };
 
-    return c_Flow[0]                                   //
+    double ssj_factor  = 0.88;
+    double outCFF = 0;
+
+    outCFF = c_Flow[0]                                 //
            + c_Flow[1]                                 //
            + (c_Flow[2] * cn1)                         //
            + (c_Flow[3] * mach)                        //
@@ -363,7 +368,9 @@ class Polynomial_A32NX {
            + (c_Flow[17] * (std::pow)(mach, 3))        //
            + (c_Flow[18] * (std::pow)(mach, 2) * alt)  //
            + (c_Flow[19] * mach * (std::pow)(alt, 2))  //
-           + (c_Flow[20] * (std::pow)(alt, 3));
+           + (c_Flow[20] * (std::pow)(alt, 3));        //
+
+    return ssj_factor * outCFF;
   }
 
   /**
