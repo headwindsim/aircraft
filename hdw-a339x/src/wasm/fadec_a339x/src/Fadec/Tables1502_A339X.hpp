@@ -1,15 +1,15 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_TABLES1502_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_TABLES1502_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_TABLES1502_A339X_HPP
+#define FLYBYWIRE_AIRCRAFT_TABLES1502_A339X_HPP
 
 #include <cmath>
 
 #include "Fadec.h"
 
 /**
- * @class Table1502_A32NX
+ * @class Table1502_A339X
  *
  * This class contains methods and data used in the calculation of the corrected fan speed (CN1 and CN2).
  * The class has a 2D array `table` that contains values used in the calculation of the corrected fan speed.
@@ -18,7 +18,7 @@
  *
  * TODO: extract the reusable code to a common library
  */
-class Tables1502_A32NX {
+class Table1502_A339X {
   /**
    * @brief Table 1502 (CN2 vs correctedN1) representations with FSX nomenclature.
    *
@@ -94,4 +94,4 @@ class Tables1502_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_TABLES1502_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_TABLES1502_A339X_HPP

@@ -7,26 +7,26 @@
 #include "SimpleProfiler.hpp"
 #endif
 
-#include "EngineControlA32NX.h"
+#include "EngineControlA339X.h"
 #include "EngineRatios.hpp"
-#include "Polynomials_A32NX.hpp"
-#include "Tables1502_A32NX.hpp"
-#include "ThrustLimits_A32NX.hpp"
+#include "Polynomials_A339X.hpp"
+#include "Tables1502_A339X.hpp"
+#include "ThrustLimits_A339X.hpp"
 
 #include <algorithm>
 
-void EngineControl_A32NX::initialize(MsfsHandler* msfsHandler) {
+void EngineControl_A339X::initialize(MsfsHandler* msfsHandler) {
   this->msfsHandlerPtr = msfsHandler;
   this->dataManagerPtr = &msfsHandler->getDataManager();
   this->simData.initialize(dataManagerPtr);
-  LOG_INFO("Fadec::EngineControl_A32NX::initialize() - initialized");
+  LOG_INFO("Fadec::EngineControl_A339X::initialize() - initialized");
 }
 
-void EngineControl_A32NX::shutdown() {
-  LOG_INFO("Fadec::EngineControl_A32NX::shutdown()");
+void EngineControl_A339X::shutdown() {
+  LOG_INFO("Fadec::EngineControl_A339X::shutdown()");
 }
 
-void EngineControl_A32NX::update() {
+void EngineControl_A339X::update() {
 #ifdef PROFILING
   profilerUpdate.start();
 #endif
@@ -38,7 +38,7 @@ void EngineControl_A32NX::update() {
     simData.atcIdDataPtr->requestUpdateFromSim(msfsHandlerPtr->getTimeStamp(), msfsHandlerPtr->getTickCounter());
     if (simData.atcIdDataPtr->hasChanged()) {
       atcId = simData.atcIdDataPtr->data().atcID;
-      LOG_INFO("Fadec::EngineControl_A32NX::update() - received ATC ID: " + atcId);
+      LOG_INFO("Fadec::EngineControl_A339X::update() - received ATC ID: " + atcId);
       initializeEngineControlData();
     }
     return;
@@ -157,11 +157,11 @@ void EngineControl_A32NX::update() {
  * This function initializes the engine control data for the aircraft. It is called when the ATC ID
  * is received from the simulator.
  */
-void EngineControl_A32NX::initializeEngineControlData() {
-  LOG_INFO("Fadec::EngineControl_A32NX::initializeEngineControlData()");
+void EngineControl_A339X::initializeEngineControlData() {
+  LOG_INFO("Fadec::EngineControl_A339X::initializeEngineControlData()");
 
 #ifdef PROFILING
-  ScopedTimer timer("Fadec::EngineControl_A32NX::initializeEngineControlData()");
+  ScopedTimer timer("Fadec::EngineControl_A339X::initializeEngineControlData()");
 #endif
 
   const FLOAT64 timeStamp   = msfsHandlerPtr->getTimeStamp();
@@ -260,7 +260,7 @@ void EngineControl_A32NX::initializeEngineControlData() {
   simData.thrustLimitToga->set(0);
 }
 
-void EngineControl_A32NX::generateEngineImbalance(int initial) {
+void EngineControl_A339X::generateEngineImbalance(int initial) {
   std::string imbalanceCode;
   int         engine;
 
@@ -308,7 +308,7 @@ void EngineControl_A32NX::generateEngineImbalance(int initial) {
   }
 }
 
-double EngineControl_A32NX::imbalanceExtractor(double imbalanceCode, int parameter) {
+double EngineControl_A339X::imbalanceExtractor(double imbalanceCode, int parameter) {
   // Adjust the parameter number to match the position in the imbalance code
   parameter = 9 - parameter;
   // Shift the decimal point of the imbalance code to the right by the parameter number of places
@@ -317,14 +317,14 @@ double EngineControl_A32NX::imbalanceExtractor(double imbalanceCode, int paramet
   return static_cast<int>(imbalanceCode) % 100;
 }
 
-void EngineControl_A32NX::generateIdleParameters(double pressAltitude, double mach, double ambientTemp, double ambientPressure) {
-  const double idleCN1 = Tables1502_A32NX::iCN1(pressAltitude, mach, ambientTemp);
+void EngineControl_A339X::generateIdleParameters(double pressAltitude, double mach, double ambientTemp, double ambientPressure) {
+  const double idleCN1 = Table1502_A339X::iCN1(pressAltitude, mach, ambientTemp);
   const double idleN1  = idleCN1 * sqrt(EngineRatios::theta2(0, ambientTemp));
-  const double idleN3  = Tables1502_A32NX::iCN2(pressAltitude, mach) * sqrt(EngineRatios::theta(ambientTemp));
-  const double idleCFF = Polynomial_A32NX::correctedFuelFlow(idleCN1, 0, pressAltitude);  // lbs/hr
+  const double idleN3  = Table1502_A339X::iCN2(pressAltitude, mach) * sqrt(EngineRatios::theta(ambientTemp));
+  const double idleCFF = Polynomial_A339X::correctedFuelFlow(idleCN1, 0, pressAltitude);  // lbs/hr
   const double idleFF =
       idleCFF * Fadec::LBS_TO_KGS * EngineRatios::delta2(0, ambientPressure) * sqrt(EngineRatios::theta2(0, ambientTemp));  // Kg/hr
-  const double idleEGT = Polynomial_A32NX::correctedEGT(idleCN1, idleCFF, 0, pressAltitude) * EngineRatios::theta2(0, ambientTemp);
+  const double idleEGT = Polynomial_A339X::correctedEGT(idleCN1, idleCFF, 0, pressAltitude) * EngineRatios::theta2(0, ambientTemp);
 
   simData.engineIdleN1->set(idleN1);
   simData.engineIdleN3->set(idleN3);
@@ -332,7 +332,7 @@ void EngineControl_A32NX::generateIdleParameters(double pressAltitude, double ma
   simData.engineIdleEGT->set(idleEGT);
 }
 
-EngineControl_A32NX::EngineState EngineControl_A32NX::engineStateMachine(int    engine,                  //
+EngineControl_A339X::EngineState EngineControl_A339X::engineStateMachine(int    engine,                  //
                                                                          double engineIgniter,           //
                                                                          bool   engineStarter,           //
                                                                          bool   engineStarterTurnedOff,  //
@@ -424,7 +424,7 @@ EngineControl_A32NX::EngineState EngineControl_A32NX::engineStateMachine(int    
 #endif
 }
 
-void EngineControl_A32NX::engineStartProcedure(int                     engine,
+void EngineControl_A339X::engineStartProcedure(int                     engine,
                                                EngineState             engineState,
                                                double                  imbalance,
                                                double                  deltaTime,
@@ -460,11 +460,11 @@ void EngineControl_A32NX::engineStartProcedure(int                     engine,
 
   const double preN3Fbw       = simData.engineN3[engineIdx]->get();
   const double preEgtFbw      = simData.engineEgt[engineIdx]->get();
-  const double newN3Fbw       = Polynomial_A32NX::startN2(simN3, preN3Fbw, idleN3 - n3Imbalance);
-  const double startN1Fbw     = Polynomial_A32NX::startN1(newN3Fbw, idleN3 - n3Imbalance, idleN1);
-  const double startFfFbw     = Polynomial_A32NX::startFF(newN3Fbw, idleN3 - n3Imbalance, idleFF - ffImbalance);
-  const double startEgtFbw    = Polynomial_A32NX::startEGT(newN3Fbw, idleN3 - n3Imbalance, ambientTemperature, idleEGT - egtImbalance);
-  const double shutdownEgtFbw = Polynomial_A32NX::shutdownEGT(preEgtFbw, ambientTemperature, deltaTime);
+  const double newN3Fbw       = Polynomial_A339X::startN2(simN3, preN3Fbw, idleN3 - n3Imbalance);
+  const double startN1Fbw     = Polynomial_A339X::startN1(newN3Fbw, idleN3 - n3Imbalance, idleN1);
+  const double startFfFbw     = Polynomial_A339X::startFF(newN3Fbw, idleN3 - n3Imbalance, idleFF - ffImbalance);
+  const double startEgtFbw    = Polynomial_A339X::startEGT(newN3Fbw, idleN3 - n3Imbalance, ambientTemperature, idleEGT - egtImbalance);
+  const double shutdownEgtFbw = Polynomial_A339X::shutdownEGT(preEgtFbw, ambientTemperature, deltaTime);
 
   simData.engineN3[engineIdx]->set(newN3Fbw);
   simData.engineN2[engineIdx]->set(newN3Fbw + 0.7);
@@ -484,7 +484,7 @@ void EngineControl_A32NX::engineStartProcedure(int                     engine,
     simData.engineEgt[engineIdx]->set(startEgtFbw);
   }
 
-  simData.oilTempDataPtr[engineIdx]->data().oilTemp = Polynomial_A32NX::startOilTemp(newN3Fbw, idleN3, ambientTemperature);
+  simData.oilTempDataPtr[engineIdx]->data().oilTemp = Polynomial_A339X::startOilTemp(newN3Fbw, idleN3, ambientTemperature);
   simData.oilTempDataPtr[engineIdx]->writeDataToSim();
 
 #ifdef PROFILING
@@ -495,7 +495,7 @@ void EngineControl_A32NX::engineStartProcedure(int                     engine,
 #endif
 }
 
-void EngineControl_A32NX::engineShutdownProcedure(int    engine,              //
+void EngineControl_A339X::engineShutdownProcedure(int    engine,              //
                                                   double ambientTemperature,  //
                                                   double simN1,               //
                                                   double deltaTime,           //
@@ -513,12 +513,12 @@ void EngineControl_A32NX::engineShutdownProcedure(int    engine,              //
     const double preN3Fbw  = simData.engineN3[engineIdx]->get();
     const double preEgtFbw = simData.engineEgt[engineIdx]->get();
 
-    double newN1Fbw = Polynomial_A32NX::shutdownN1(preN1Fbw, deltaTime);
+    double newN1Fbw = Polynomial_A339X::shutdownN1(preN1Fbw, deltaTime);
     if (simN1 < 5 && simN1 > newN1Fbw) {  // Takes care of windmilling
       newN1Fbw = simN1;
     }
-    const double newN3Fbw  = Polynomial_A32NX::shutdownN2(preN3Fbw, deltaTime);
-    const double newEgtFbw = Polynomial_A32NX::shutdownEGT(preEgtFbw, ambientTemperature, deltaTime);
+    const double newN3Fbw  = Polynomial_A339X::shutdownN2(preN3Fbw, deltaTime);
+    const double newEgtFbw = Polynomial_A339X::shutdownEGT(preEgtFbw, ambientTemperature, deltaTime);
 
     simData.engineN1[engineIdx]->set(newN1Fbw);
     simData.engineN2[engineIdx]->set(newN3Fbw + 0.7);
@@ -534,7 +534,7 @@ void EngineControl_A32NX::engineShutdownProcedure(int    engine,              //
 #endif
 }
 
-double EngineControl_A32NX::updateFF(int    engine,
+double EngineControl_A339X::updateFF(int    engine,
                                      double imbalance,
                                      double simCN1,
                                      double mach,
@@ -545,7 +545,7 @@ double EngineControl_A32NX::updateFF(int    engine,
   profilerUpdateFF.start();
 #endif
 
-  const double correctedFuelFlow = Polynomial_A32NX::correctedFuelFlow(simCN1, mach, pressureAltitude);  // in lbs/hr.
+  const double correctedFuelFlow = Polynomial_A339X::correctedFuelFlow(simCN1, mach, pressureAltitude);  // in lbs/hr.
 
   // Check which engine is imbalanced and set the imbalance parameter
   const double engineImbalanced = imbalanceExtractor(imbalance, 1);
@@ -574,7 +574,7 @@ double EngineControl_A32NX::updateFF(int    engine,
   return correctedFuelFlow;
 }
 
-void EngineControl_A32NX::updatePrimaryParameters(int engine, double imbalance, double simN1, double simN3) {
+void EngineControl_A339X::updatePrimaryParameters(int engine, double imbalance, double simN1, double simN3) {
 #ifdef PROFILING
   profilerUpdatePrimaryParameters.start();
 #endif
@@ -599,7 +599,7 @@ void EngineControl_A32NX::updatePrimaryParameters(int engine, double imbalance, 
 #endif
 }
 
-void EngineControl_A32NX::updateEGT(int         engine,
+void EngineControl_A339X::updateEGT(int         engine,
                                     double      imbalance,
                                     double      deltaTime,
                                     double      simOnGround,
@@ -624,7 +624,7 @@ void EngineControl_A32NX::updateEGT(int         engine,
     if (engineImbalanced == engine) {
       paramImbalance = imbalanceExtractor(imbalance, 2);
     }
-    const double correctedEGT      = Polynomial_A32NX::correctedEGT(simCN1, customFuelFlow, mach, pressureAltitude);
+    const double correctedEGT      = Polynomial_A339X::correctedEGT(simCN1, customFuelFlow, mach, pressureAltitude);
     const double egtFbwPreviousEng = simData.engineEgt[engineIdx]->get();
     double       egtFbwActualEng   = (correctedEGT * EngineRatios::theta2(mach, ambientTemperature)) - paramImbalance;
     egtFbwActualEng                = egtFbwActualEng + (egtFbwPreviousEng - egtFbwActualEng) * (std::exp)(-0.1 * deltaTime);
@@ -639,7 +639,7 @@ void EngineControl_A32NX::updateEGT(int         engine,
 #endif
 }
 
-void EngineControl_A32NX::updateFuel(double deltaTimeSeconds) {
+void EngineControl_A339X::updateFuel(double deltaTimeSeconds) {
 #ifdef PROFILING
   profilerUpdateFuel.start();
 #endif
@@ -964,7 +964,7 @@ void EngineControl_A32NX::updateFuel(double deltaTimeSeconds) {
 #endif
 }
 
-void EngineControl_A32NX::updateThrustLimits(double                  simulationTime,
+void EngineControl_A339X::updateThrustLimits(double                  simulationTime,
                                              double                  pressureAltitude,
                                              double                  ambientTemperature,
                                              double                  ambientPressure,
@@ -990,16 +990,16 @@ void EngineControl_A32NX::updateThrustLimits(double                  simulationT
   double flex    = 0;
 
   // Write all N1 Limits
-  to = ThrustLimits_A32NX::limitN1(0, (std::min)(16600.0, pressAltitude), ambientTemperature, ambientPressure, 0, packs, nai, wai);
-  ga = ThrustLimits_A32NX::limitN1(1, (std::min)(16600.0, pressAltitude), ambientTemperature, ambientPressure, 0, packs, nai, wai);
+  to = ThrustLimits_A339X::limitN1(0, (std::min)(16600.0, pressAltitude), ambientTemperature, ambientPressure, 0, packs, nai, wai);
+  ga = ThrustLimits_A339X::limitN1(1, (std::min)(16600.0, pressAltitude), ambientTemperature, ambientPressure, 0, packs, nai, wai);
   if (flexTemp > 0) {
     flex_to =
-        ThrustLimits_A32NX::limitN1(0, (std::min)(16600.0, pressAltitude), ambientTemperature, ambientPressure, flexTemp, packs, nai, wai);
+        ThrustLimits_A339X::limitN1(0, (std::min)(16600.0, pressAltitude), ambientTemperature, ambientPressure, flexTemp, packs, nai, wai);
     flex_ga =
-        ThrustLimits_A32NX::limitN1(1, (std::min)(16600.0, pressAltitude), ambientTemperature, ambientPressure, flexTemp, packs, nai, wai);
+        ThrustLimits_A339X::limitN1(1, (std::min)(16600.0, pressAltitude), ambientTemperature, ambientPressure, flexTemp, packs, nai, wai);
   }
-  clb = ThrustLimits_A32NX::limitN1(2, pressAltitude, ambientTemperature, ambientPressure, 0, packs, nai, wai);
-  mct = ThrustLimits_A32NX::limitN1(3, pressAltitude, ambientTemperature, ambientPressure, 0, packs, nai, wai);
+  clb = ThrustLimits_A339X::limitN1(2, pressAltitude, ambientTemperature, ambientPressure, 0, packs, nai, wai);
+  mct = ThrustLimits_A339X::limitN1(3, pressAltitude, ambientTemperature, ambientPressure, 0, packs, nai, wai);
 
   // transition between TO and GA limit -----------------------------------------------------------------------------
   double machFactorLow = (std::max)(0.0, (std::min)(1.0, (mach - 0.04) / 0.04));

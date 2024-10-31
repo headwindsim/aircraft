@@ -1,8 +1,8 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A339X_HPP
+#define FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A339X_HPP
 
 #include <algorithm>
 #include <cmath>
@@ -11,12 +11,12 @@
 #include "Fadec.h"
 
 /**
- * @class ThrustLimits_A32NX
+ * @class ThrustLimits_A339X
  * @brief A static class that provides methods for calculating various engine thrust limits for the A33NX aircraft.
  *
  * TODO: extract the reusable code to a common library
  */
-class ThrustLimits_A32NX {
+class ThrustLimits_A339X {
   /**
    * @brief A 2D array representing various engine thrust limits.
    *
@@ -326,4 +326,4 @@ class ThrustLimits_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_THRUSTLIMITS_A339X_HPP

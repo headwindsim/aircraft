@@ -1,19 +1,19 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#include "Fadec_A32NX.h"
+#include "Fadec_A339X.h"
 
-bool Fadec_A32NX::initialize() {
+bool Fadec_A339X::initialize() {
   engineControl.initialize(&msfsHandler);
 
   _isInitialized = true;
-  LOG_INFO("Fadec_A32NX initialized");
+  LOG_INFO("Fadec_A339X initialized");
   return true;
 }
 
-bool Fadec_A32NX::update([[maybe_unused]] sGaugeDrawData* pData) {
+bool Fadec_A339X::update([[maybe_unused]] sGaugeDrawData* pData) {
   if (!_isInitialized) {
-    std::cerr << "Fadec_A32NX::update() - not initialized" << std::endl;
+    std::cerr << "Fadec_A339X::update() - not initialized" << std::endl;
     return false;
   }
 
@@ -22,8 +22,8 @@ bool Fadec_A32NX::update([[maybe_unused]] sGaugeDrawData* pData) {
   return true;
 }
 
-bool Fadec_A32NX::shutdown() {
+bool Fadec_A339X::shutdown() {
   _isInitialized = false;
-  LOG_INFO("Fadec_A32NX::shutdown()");
+  LOG_INFO("Fadec_A339X::shutdown()");
   return true;
 }

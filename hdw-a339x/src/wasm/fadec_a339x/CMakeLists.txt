@@ -1,6 +1,6 @@
-# flybywire-a32nx-fadec-v2 CMakeLists.txt
+# flybywire-a339x-fadec-v2 CMakeLists.txt
 
-# add additional compiler definitions for the a32nx fadec-v2 build
+# add additional compiler definitions for the a339x fadec-v2 build
 add_definitions()
 
 # add the local include directories
@@ -15,27 +15,27 @@ include_directories(
 set(SOURCE_FILES
     ${FBW_COMMON}/fadec_common/src/Fadec.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Gauge_Fadec_v2.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/Fadec_A32NX.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/EngineControlA32NX.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/FuelConfiguration_A32NX.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/Fadec_A339X.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/EngineControlA339X.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/FuelConfiguration_A339X.cpp
 )
 
 set(INCLUDE_FILES
     ${FBW_COMMON}/fadec_common/src/Fadec.h
     ${FBW_COMMON}/fadec_common/src/EngineRatios.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/Fadec_A32NX.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/FadecSimData_A32NX.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/EngineControlA32NX.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/FuelConfiguration_A32NX.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/ThrustLimits_A32NX.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/Polynomials_A32NX.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/Tables1502_A32NX.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/Fadec_A339X.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/FadecSimData_A339X.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/EngineControlA339X.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/FuelConfiguration_A339X.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/ThrustLimits_A339X.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/Polynomials_A339X.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/Fadec/Tables1502_A339X.hpp
 )
 
 # create the targets
-add_library(fadec-a32nx OBJECT ${SOURCE_FILES} ${INCLUDE_FILES})
+add_library(fadec-a339x OBJECT ${SOURCE_FILES} ${INCLUDE_FILES})
 add_wasm_library(
-    NAME fadec-a32nx
-    DEPENDENCIES fadec-a32nx cpp-msfs-framework-a32nx
+    NAME fadec-a339x
+    DEPENDENCIES fadec-a339x cpp-msfs-framework-a32nx
 )
 

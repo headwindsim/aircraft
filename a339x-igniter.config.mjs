@@ -137,7 +137,7 @@ export default new TaskOfTasks("all", [
                         'build-a339x/src/wasm/extra-backend-a339x',
                         'build-a339x/src/wasm/fadec_a339x',
                         'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a339x.wasm',
-                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec-a32nx.wasm'
+                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec-a339x.wasm'
                     ])
             ], true),
         ]),

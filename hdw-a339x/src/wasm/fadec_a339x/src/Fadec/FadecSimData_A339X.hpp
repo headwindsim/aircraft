@@ -1,8 +1,8 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A339X_HPP
+#define FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A339X_HPP
 
 #include <MSFS/Legacy/gauges.h>
 
@@ -19,11 +19,11 @@ enum EngineAndSide {
 };
 
 /**
- * @class FadecSimData_A32NX
+ * @class FadecSimData_A339X
  * @brief This class manages the simulation data for the FADEC (Full Authority Digital Engine Control)
- *        simulation for the A32NX aircraft.
+ *        simulation for the A339X aircraft.
  */
-class FadecSimData_A32NX {
+class FadecSimData_A339X {
  public:
   // Notification groups for events
   enum NotificationGroup { NOTIFICATION_GROUP_0 };
@@ -218,7 +218,7 @@ class FadecSimData_A32NX {
   // ===============================================================================================
 
   /**
-   * @brief Initializes the FadecSimData_A32NX object.
+   * @brief Initializes the FadecSimData_A339X object.
    * @param dm Pointer to the DataManager object. This object is used to create the data definition
    *           variable for the ATC ID data.
    */
@@ -227,7 +227,7 @@ class FadecSimData_A32NX {
     initEvents(dm);
     initSimvars(dm);
     initLvars(dm);
-    LOG_INFO("Fadec::FadecSimData_A32NX initialized");
+    LOG_INFO("Fadec::FadecSimData_A339X initialized");
   }
 
   void initDataDefinitions(DataManager* dm) {
@@ -383,4 +383,4 @@ class FadecSimData_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A339X_HPP

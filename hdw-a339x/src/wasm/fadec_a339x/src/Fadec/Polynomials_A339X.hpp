@@ -1,5 +1,5 @@
-#ifndef FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A339X_HPP
+#define FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A339X_HPP
 
 #include <algorithm>
 #include <cmath>
@@ -13,7 +13,7 @@
  * and Oil Pressure during different engine states such as shutdown and startup. The class also
  * includes methods for calculating corrected EGT and Fuel Flow, as well as Oil Gulping percentage.
  */
-class Polynomial_A32NX {
+class Polynomial_A339X {
  public:
   /**
    * @brief Calculates the N2 percentage during engine start-up using real-life modeled polynomials.
@@ -432,4 +432,4 @@ class Polynomial_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A339X_HPP
