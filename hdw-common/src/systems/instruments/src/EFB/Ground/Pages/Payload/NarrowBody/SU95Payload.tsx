@@ -440,7 +440,7 @@ export const SU95Payload: React.FC<PayloadProps> = ({
         return `${minutes}:${padding}${seconds.toFixed(0)} ${t('Ground.Payload.EstimatedDurationUnit')}`;
     };
 
-    const [theme] = usePersistentProperty('EFB_UI_THEME', 'blue');
+    const [theme] = usePersistentProperty('EFB_UI_THEME', 'orange');
     const getTheme = useCallback((theme: string): [string, string, string] => {
         let base = '#fff';
         let primary = '#00C9E4';
@@ -454,6 +454,11 @@ export const SU95Payload: React.FC<PayloadProps> = ({
         case 'light':
             base = '#000000';
             primary = '#3B82F6';
+            secondary = '#84CC16';
+            break;
+        case 'orange':
+            base = '#fff';
+            primary = '#e37e28';
             secondary = '#84CC16';
             break;
         default:
