@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { AirframeInfo, AirframeType, CabinInfo, FlypadInfo, Units, usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
 import { useAppSelector, isSimbriefDataLoaded, getMaxPax, getMaxCargo } from '@flybywiresim/flypad';
 import { A339Payload } from './WideBody/A339Payload';
+import { SU95Payload } from './NarrowBody/SU95Payload';
 import { ACJ339Payload } from './WideBody/ACJ339Payload';
 
 export interface PayloadProps {
@@ -53,6 +54,29 @@ export const PayloadPage = () => {
 
     switch (airframeInfo.variant) {
     case AirframeType.SU100_95:
+        return (
+            <SU95Payload
+                airframeInfo={airframeInfo}
+                flypadInfo={flypadInfo}
+                cabinInfo={cabinInfo}
+                maxPax={getMaxPax()}
+                maxCargo={getMaxCargo()}
+                simbriefUnits={simbriefUnits}
+                simbriefBagWeight={simbriefBagWeight}
+                simbriefPaxWeight={simbriefPaxWeight}
+                simbriefPax={simbriefPax}
+                simbriefBag={simbriefBag}
+                simbriefFreight={simbriefFreight}
+                simbriefDataLoaded={simbriefDataLoaded}
+                payloadImported={payloadImported}
+                massUnitForDisplay={massUnitForDisplay}
+                isOnGround={isOnGround}
+                boardingStarted={boardingStarted}
+                boardingRate={boardingRate}
+                setBoardingStarted={setBoardingStarted}
+                setBoardingRate={setBoardingRate}
+            />
+        );
     case AirframeType.A330_343:
     case AirframeType.A330_941:
     default:

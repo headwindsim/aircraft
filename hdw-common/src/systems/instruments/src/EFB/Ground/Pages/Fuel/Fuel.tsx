@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { AirframeType, Units, useSimVar } from '@flybywiresim/fbw-sdk';
 import { isSimbriefDataLoaded } from '@flybywiresim/flypad';
 import { A330Fuel } from './A330_941/A330Fuel';
+import { SU95Fuel } from './SU100_95/SU95Fuel';
 import { useAppSelector } from '../../../Store/store';
 
 export const Fuel = () => {
@@ -21,6 +22,16 @@ export const Fuel = () => {
 
     switch (airframeInfo.variant) {
     case AirframeType.SU100_95:
+        return (
+            <SU95Fuel
+                simbriefDataLoaded={simbriefDataLoaded}
+                simbriefUnits={simbriefUnits}
+                simbriefPlanRamp={simbriefPlanRamp}
+                massUnitForDisplay={massUnitForDisplay}
+                convertUnit={convertUnit}
+                isOnGround={isOnGround}
+            />
+        );
     case AirframeType.A330_343:
     case AirframeType.A330_941:
     default:

@@ -4,7 +4,7 @@ import React, { FC } from 'react';
 import { useSimVar, Units, AirframeType } from '@flybywiresim/fbw-sdk';
 import { IconPlane } from '@tabler/icons';
 import { Box, LightningFill, PeopleFill, Rulers, Speedometer2 } from 'react-bootstrap-icons';
-import { t, A320NoseOutline, A330NoseOutline, useAppSelector, getMaxPax } from '@flybywiresim/flypad';
+import { t, A320NoseOutline, A330NoseOutline, SU95NoseOutline, useAppSelector, getMaxPax } from '@flybywiresim/flypad';
 
 interface InformationEntryProps {
     title: string;
@@ -50,11 +50,24 @@ export const OverviewPage = () => {
 
             <div className="mt-6 flex items-center justify-center">
                 {/* TODO: Make this SVG configurable */}
-                {airframeInfo.variant === AirframeType.A330_941 ? (
-                    <A330NoseOutline className="flip-horizontal -ml-96 mr-32 h-64 text-theme-text" />
-                ) : (
-                    <A320NoseOutline className="flip-horizontal text-theme-text -ml-96 mr-32 h-64" />
-                )}
+
+                {(() => {
+                    switch (airframeInfo.variant) {
+                        case AirframeType.A330_941:
+                            return (
+                                <A330NoseOutline className="flip-horizontal -ml-96 mr-32 h-64 text-theme-text" />
+                            );
+                        case AirframeType.SU100_95:
+                            return (
+                                <SU95NoseOutline className="flip-horizontal -ml-96 mr-32 h-64 text-theme-text" />
+                            );
+                        case AirframeType.A320:
+                        default:
+                            return (
+                                <A320NoseOutline className="flip-horizontal text-theme-text -ml-96 mr-32 h-64" />
+                            );
+                    }
+                })()}
             </div>
 
             <div className="mt-8 flex flex-row space-x-16">

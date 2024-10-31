@@ -15,6 +15,8 @@ enum ServiceButtonState {
 interface ButtonSelectionState {
     boarding1DoorButtonState: ServiceButtonState
     boarding2DoorButtonState: ServiceButtonState
+    boarding3DoorButtonState: ServiceButtonState
+    serviceDoorButtonState: ServiceButtonState
     service1DoorButtonState: ServiceButtonState
     service2DoorButtonState: ServiceButtonState
     cargo1DoorButtonState: ServiceButtonState
@@ -30,6 +32,8 @@ interface ButtonSelectionState {
 let initialState: ButtonSelectionState = {
     boarding1DoorButtonState: ServiceButtonState.DISABLED,
     boarding2DoorButtonState: ServiceButtonState.DISABLED,
+    boarding3DoorButtonState: ServiceButtonState.DISABLED,
+    serviceDoorButtonState: ServiceButtonState.DISABLED,
     service1DoorButtonState: ServiceButtonState.DISABLED,
     service2DoorButtonState: ServiceButtonState.DISABLED,
     cargo1DoorButtonState: ServiceButtonState.DISABLED,
@@ -45,6 +49,8 @@ const setInitialState = () => {
     initialState = {
         boarding1DoorButtonState: (SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:0', 'Percent over 100') === 1.0 ? ServiceButtonState.ACTIVE : ServiceButtonState.INACTIVE),
         boarding2DoorButtonState: (SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:2', 'Percent over 100') === 1.0 ? ServiceButtonState.ACTIVE : ServiceButtonState.INACTIVE),
+        boarding3DoorButtonState: (SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:2', 'Percent over 100') === 1.0 ? ServiceButtonState.ACTIVE : ServiceButtonState.INACTIVE),
+        serviceDoorButtonState: (SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:3', 'Percent over 100') === 1.0 ? ServiceButtonState.ACTIVE : ServiceButtonState.INACTIVE),
         service1DoorButtonState: (SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:1', 'Percent over 100') === 1.0 ? ServiceButtonState.ACTIVE : ServiceButtonState.INACTIVE),
         service2DoorButtonState: (SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:3', 'Percent over 100') === 1.0 ? ServiceButtonState.ACTIVE : ServiceButtonState.INACTIVE),
         cargo1DoorButtonState: (SimVar.GetSimVarValue('A:INTERACTIVE POINT OPEN:4', 'Percent over 100') === 1.0 ? ServiceButtonState.ACTIVE : ServiceButtonState.INACTIVE),
@@ -73,6 +79,12 @@ export const buttonsSlice = createSlice({
         },
         setBoarding2DoorButtonState: (state, action: PayloadAction<ServiceButtonState>) => {
             state.boarding2DoorButtonState = action.payload;
+        },
+        setBoarding3DoorButtonState: (state, action: PayloadAction<ServiceButtonState>) => {
+            state.boarding3DoorButtonState = action.payload;
+        },
+        setServiceDoorButtonState: (state, action: PayloadAction<ServiceButtonState>) => {
+            state.serviceDoorButtonState = action.payload;
         },
         setService1DoorButtonState: (state, action: PayloadAction<ServiceButtonState>) => {
             state.service1DoorButtonState = action.payload;
@@ -107,6 +119,8 @@ export const buttonsSlice = createSlice({
 export const {
     setBoarding1DoorButtonState,
     setBoarding2DoorButtonState,
+    setBoarding3DoorButtonState,
+    setServiceDoorButtonState,
     setService1DoorButtonState,
     setService2DoorButtonState,
     setCargo1DoorButtonState,
