@@ -48,6 +48,11 @@ CMakeLists.txt
 
 !/textures/**
 
+/hdw-common/*
+/hdw-common/src/systems/instruments/src/EFB/Localization/data/downloaded/*.json
+!/hdw-common/src/
+!/hdw-common/src/**
+
 /hdw-a333x-common/*
 /hdw-a333x-common/src/systems/instruments/src/EFB/Localization/data/downloaded/*.json
 !/hdw-a333x-common/src/
@@ -160,7 +165,7 @@ cmake-build*/
 /build-a339x-acj/
 /build-su95x/
 /build-a333x-common/
-/build-a339x-common/
+/build-common/
 /build-su95x-common/
 
 # ======== OLD =============

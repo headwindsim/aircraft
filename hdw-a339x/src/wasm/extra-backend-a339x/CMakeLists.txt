@@ -1,6 +1,6 @@
-# extra-backend-a32nx CMakeLists.txt
+# extra-backend-a339x CMakeLists.txt
 
-# add additional compiler definitions for the a32nx extra-backend build
+# add additional compiler definitions for the a339x extra-backend build
 add_definitions()
 
 # add the local include directories
@@ -39,8 +39,8 @@ set(INCLUDE_FILES
 )
 
 # create the targets
-add_library(extra-backend-a32nx OBJECT ${SOURCE_FILES} ${INCLUDE_FILES})
+add_library(extra-backend-a339x OBJECT ${SOURCE_FILES} ${INCLUDE_FILES})
 add_wasm_library(
-    NAME extra-backend-a32nx
-    DEPENDENCIES extra-backend-a32nx cpp-msfs-framework-a32nx
+    NAME extra-backend-a339x
+    DEPENDENCIES extra-backend-a339x cpp-msfs-framework-a32nx
 )

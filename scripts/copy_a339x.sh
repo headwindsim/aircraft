@@ -5,11 +5,12 @@ set -ex
 df -h
 
 #remove directory if it exist
-rm -rf ./build-a339x-common
+rm -rf ./build-common
 
 # copy from FBW COMMON source and HDW COMMON into one src
-cp -ra ./flybywire/fbw-common/. ./build-a339x-common
-cp -ra ./hdw-a339x-common/. ./build-a339x-common
+cp -ra ./flybywire/fbw-common/. ./build-common
+cp -ra ./hdw-common/. ./build-common
+cp -ra ./hdw-a339x-common/. ./build-common
 
 #remove directory if it exist
 rm -rf ./build-a339x

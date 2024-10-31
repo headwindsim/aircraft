@@ -4,12 +4,12 @@
       "resolveJsonModule" : true,
       "paths": {
         "@instruments/common/*": ["./instruments/src/Common/*"],
-        "@typings/*": ["../../../build-a339x-common/src/typings/*"],
+        "@typings/*": ["../../../build-common/src/typings/*"],
         "@sentry/*": ["./sentry-client/src/*"],
         "@failures": ["./failures/src/index.ts"],
-        "@flybywiresim/fbw-sdk": ["../../../build-a339x-common/src/systems/index.ts"],
-        "@flybywiresim/flypad": ["../../../build-a339x-common/src/systems/instruments/src/EFB/index.ts"],
-        "@flybywiresim/checklists": ["../../../build-a339x-common/src/systems/shared/src/checklists/index.ts"],
+        "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index.ts"],
+        "@flybywiresim/flypad": ["../../../build-common/src/systems/instruments/src/EFB/index.ts"],
+        "@flybywiresim/checklists": ["../../../build-common/src/systems/shared/src/checklists/index.ts"],
       }
     }
   }

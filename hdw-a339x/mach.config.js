@@ -17,7 +17,7 @@ module.exports = {
             extract: true,
             postcss: {
                 plugins: [
-                    tailwind('../hdw-a339x-common/src/systems/instruments/src/EFB/tailwind.config.js'),
+                    tailwind('../build-common/src/systems/instruments/src/EFB/tailwind.config.js'),
 
                     // transform: hsl(x y z / alpha) -> hsl(x, y, z, alpha)
                     postCssColorFunctionalNotation(),

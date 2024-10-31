@@ -89,7 +89,7 @@ export default new TaskOfTasks("all", [
                     'npm run build-a339x:systems-host',
                     [
                         'build-a339x/src/systems/systems-host',
-                        'build-a339x-common/src/systems/datalink',
+                        'build-common/src/systems/datalink',
                         'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/SystemsHost'
                     ]
                 ),
@@ -109,7 +109,7 @@ export default new TaskOfTasks("all", [
                     "npm run build-a339x:systems",
                     [
                         "build-a339x/src/wasm/systems",
-                        "build-a339x-common/src/wasm/systems",
+                        "build-common/src/wasm/systems",
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/systems.wasm"
@@ -118,25 +118,25 @@ export default new TaskOfTasks("all", [
                     "npm run build-a339x:fbw",
                     [
                         "build-a339x/src/wasm/fbw_a320",
-                        "build-a339x-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fbw_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm"
                     ]),
                 new ExecTask("systems-terronnd", [
                     "npm run build-a339x:terronnd",
                 ], [
-                    "build-a339x-common/src/wasm/terronnd",
+                    "build-common/src/wasm/terronnd",
                     "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm",
-                    "build-a339x-common/src/wasm/terronnd/out/terronnd.wasm",
+                    "build-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
                 new ExecTask('cpp-wasm-cmake',
                     "npm run build-a339x:cpp-wasm-cmake",
                     [
-                        'build-a339x-common/src/wasm/cpp-msfs-framework',
-                        'build-a339x-common/src/wasm/extra-backend',
-                        'build-a339x-common/src/wasm/fadec_common',
-                        'build-a339x/src/wasm/extra-backend-a32nx',
+                        'build-common/src/wasm/cpp-msfs-framework',
+                        'build-common/src/wasm/extra-backend',
+                        'build-common/src/wasm/fadec_common',
+                        'build-a339x/src/wasm/extra-backend-a339x',
                         'build-a339x/src/wasm/fadec_a339x',
-                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a32nx.wasm',
+                        'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/extra-backend-a339x.wasm',
                         'build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fadec-a32nx.wasm'
                     ])
             ], true),
@@ -153,7 +153,7 @@ export default new TaskOfTasks("all", [
                     "npm run build-a339x-acj:systems",
                     [
                         "build-a339x-acj/src/wasm/systems",
-                        "build-a339x-common/src/wasm/systems",
+                        "build-common/src/wasm/systems",
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/systems.wasm"

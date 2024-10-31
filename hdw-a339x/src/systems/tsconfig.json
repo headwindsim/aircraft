@@ -5,16 +5,16 @@
     "resolveJsonModule" : true,
     "skipLibCheck": true,
     "typeRoots": [
-      "../../../build-a339x-common/src/typings"
+      "../../../build-common/src/typings"
     ],
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "paths": {
-      "@datalink/aoc": ["../../../build-a339x-common/src/systems/datalink/aoc/src/index.ts"],
-      "@datalink/atc": ["../../../build-a339x-common/src/systems/datalink/atc/src/index.ts"],
-      "@datalink/common": ["../../../build-a339x-common/src/systems/datalink/common/src/index.ts"],
-      "@datalink/router": ["../../../build-a339x-common/src/systems/datalink/router/src/index.ts"],
+      "@datalink/aoc": ["../../../build-common/src/systems/datalink/aoc/src/index.ts"],
+      "@datalink/atc": ["../../../build-common/src/systems/datalink/atc/src/index.ts"],
+      "@datalink/common": ["../../../build-common/src/systems/datalink/common/src/index.ts"],
+      "@datalink/router": ["../../../build-common/src/systems/datalink/router/src/index.ts"],
       "@failures": ["./failures/src/index.ts"],
       "@fmgc/*": ["./fmgc/src/*"],
       "@instruments/common/*": ["./instruments/src/Common/*"],
@@ -23,11 +23,11 @@
       "@simbridge/*": ["./simbridge-client/src/*"],
       "@shared/*": ["./shared/src/*"],
       "@tcas/*": ["./tcas/src/*"],
-      "@typings/*": ["../../../build-a339x-common/src/typings/*"],
-      "@flybywiresim/fbw-sdk": ["../../../build-a339x-common/src/systems/index.ts"],
-      "@flybywiresim/flypad": ["../../../build-a339x-common/src/systems/instruments/src/EFB/index.ts"],
-      "@flybywiresim/clock": ["../../../build-a339x-common/src/systems/instruments/src/Clock/index.ts"],
-      "@flybywiresim/bat": ["../../../build-a339x-common/src/systems/instruments/src/BAT/index.ts"]
+      "@typings/*": ["../../../build-common/src/typings/*"],
+      "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index.ts"],
+      "@flybywiresim/flypad": ["../../../build-common/src/systems/instruments/src/EFB/index.ts"],
+      "@flybywiresim/clock": ["../../../build-common/src/systems/instruments/src/Clock/index.ts"],
+      "@flybywiresim/bat": ["../../../build-common/src/systems/instruments/src/BAT/index.ts"]
     }
   },
 }

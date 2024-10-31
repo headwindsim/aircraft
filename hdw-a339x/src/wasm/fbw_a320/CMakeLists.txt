@@ -25,16 +25,16 @@ include_directories(
     ./src/model
     ./src/sec
     ./src/utils
-    ${FBW_ROOT}/build-a339x-common/src/wasm/fadec_common/src/zlib
-    ${FBW_ROOT}/build-a339x-common/src/wasm/fbw_common/src/inih
-    ${FBW_ROOT}/build-a339x-common/src/wasm/fbw-common/src
+    ${FBW_ROOT}/build-common/src/wasm/fadec_common/src/zlib
+    ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/inih
+    ${FBW_ROOT}/build-common/src/wasm/fbw-common/src
 )
 
 add_executable(flybywire-a32nx-fbw
-    ${FBW_ROOT}/build-a339x-common/src/wasm/fbw_common/src/zlib/zfstream.cc
-    ${FBW_ROOT}/build-a339x-common/src/wasm/fbw_common/src/LocalVariable.cpp
-    ${FBW_ROOT}/build-a339x-common/src/wasm/fbw_common/src/ThrottleAxisMapping.cpp
-    ${FBW_ROOT}/build-a339x-common/src/wasm/fbw_common/src/InterpolatingLookupTable.cpp
+    ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/zlib/zfstream.cc
+    ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/LocalVariable.cpp
+    ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/ThrottleAxisMapping.cpp
+    ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/InterpolatingLookupTable.cpp
     src/interface/SimConnectInterface.cpp
     src/elac/Elac.cpp
     src/sec/Sec.cpp

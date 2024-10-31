@@ -16,9 +16,9 @@ include_directories("${MSFS_SDK}/SimConnect SDK/include")
 
 include_directories(
         ./src
-        ${FBW_ROOT}/build-a339x-common/src/wasm/fadec_common/src
-        ${FBW_ROOT}/build-a339x-common/src/wasm/fbw_common/src
-        ${FBW_ROOT}/build-a339x-common/src/wasm/fbw_common/src/inih
+        ${FBW_ROOT}/build-common/src/wasm/fadec_common/src
+        ${FBW_ROOT}/build-common/src/wasm/fbw_common/src
+        ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/inih
 )
 
 add_executable(flybywire-a32nx-fadec
