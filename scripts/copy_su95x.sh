@@ -9,6 +9,7 @@ rm -rf ./build-common
 
 # copy from FBW COMMON source and HDW COMMON into one src
 cp -ra ./flybywire/fbw-common/. ./build-common
+cp -ra ./hdw-common/. ./build-common
 cp -ra ./hdw-su95x-common/. ./build-common
 
 #remove directory if it exist
@@ -82,5 +83,3 @@ cp -ra ./hdw-su95x/src/base/headwindsim-aircraft-su100-95-lock-highlight/. ./bui
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/sound/
 
 chmod +x ./build-su95x/src/wasm/fbw_a320/build.sh
-chmod +x ./build-su95x/src/wasm/fadec_a320/build.sh
-#chmod +x ./build-su95x/src/wasm/flypad-backend/build.sh
