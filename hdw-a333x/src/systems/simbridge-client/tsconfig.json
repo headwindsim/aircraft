@@ -11,6 +11,6 @@
     },
     "include": [
       "src/**/*",
-      "../../../../build-a333x-common/src/typings/**/*.d.ts"
+      "../../../../build-common/src/typings/**/*.d.ts"
     ]
   }

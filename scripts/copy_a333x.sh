@@ -5,11 +5,12 @@ set -e
 df -h
 
 #remove directory if it exist
-rm -rf ./build-a333x-common
+rm -rf ./build-common
 
 # copy from FBW COMMON source and HDW COMMON into one src
-cp -ra ./flybywire/fbw-common/. ./build-a333x-common
-cp -ra ./hdw-a333x-common/. ./build-a333x-common
+cp -ra ./flybywire/fbw-common/. ./build-common
+cp -ra ./hdw-common/. ./build-common
+cp -ra ./hdw-a333x-common/. ./build-common
 
 #remove directory if it exist
 rm -rf ./build-a333x
@@ -70,5 +71,3 @@ cp -ra ./hdw-a333x/src/base/headwindsim-aircraft-a330-300-lock-highlight/. ./bui
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/sound
 
 chmod +x ./build-a333x/src/wasm/fbw_a320/build.sh
-chmod +x ./build-a333x/src/wasm/fadec_a330/build.sh
-#chmod +x ./build-a333x/src/wasm/flypad-backend/build.sh

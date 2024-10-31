@@ -14,18 +14,18 @@
 #include <MSFS/Legacy/gauges.h>
 #include <MSFS/MSFS.h>
 
-#include "Fadec/Fadec_A32NX.h"
+#include "Fadec/Fadec_A333X.h"
 #include "MsfsHandler.h"
 
 // Create an instance of the MsfsHandler
 // We do not use a prefix and use the full LVar name in the code.
 // Prefixes in framework code are not ideal and also prevent the creation
 // of an LVar without a prefix
-MsfsHandler msfsHandler("Gauge_Fadec_A32NX", "");
+MsfsHandler msfsHandler("Gauge_Fadec_A333X", "");
 
 // ADD ADDITIONAL MODULES HERE
 // This is the only place these have to be added - everything else is handled automatically
-Fadec_A32NX fadec(msfsHandler);
+Fadec_A333X fadec(msfsHandler);
 
 /**
  * Gauge Callback

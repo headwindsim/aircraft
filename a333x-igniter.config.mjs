@@ -89,7 +89,7 @@ export default new TaskOfTasks("all", [
                     'npm run build-a333x:systems-host',
                     [
                         'build-a333x/src/systems/systems-host',
-                        'build-a333x-common/src/systems/datalink',
+                        'build-common/src/systems/datalink',
                         'build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VCockpit/Instruments/A333X/SystemsHost'
                     ]
                 ),
@@ -109,7 +109,7 @@ export default new TaskOfTasks("all", [
                     "npm run build-a333x:systems",
                     [
                         "build-a333x/src/wasm/systems",
-                        "build-a333x-common/src/wasm/systems",
+                        "build-common/src/wasm/systems",
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/systems.wasm"
@@ -118,26 +118,26 @@ export default new TaskOfTasks("all", [
                     "npm run build-a333x:fbw",
                     [
                         "build-a333x/src/wasm/fbw_a320",
-                        "build-a333x-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fbw_common",
                         "build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/fbw.wasm"
                     ]),
                 new ExecTask("systems-terronnd", [
                     "npm run build-a333x:terronnd",
                 ], [
-                    "build-a333x-common/src/wasm/terronnd",
+                    "build-common/src/wasm/terronnd",
                     "build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/terronnd.wasm",
-                    "build-a333x-common/src/wasm/terronnd/out/terronnd.wasm",
+                    "build-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
                 new ExecTask('cpp-wasm-cmake',
                     "npm run build-a333x:cpp-wasm-cmake",
                     [
-                        'build-a333x-common/src/wasm/cpp-msfs-framework',
-                        'build-a333x-common/src/wasm/extra-backend',
-                        'build-a333x-common/src/wasm/fadec_common',
-                        'build-a333x/src/wasm/extra-backend-a32nx',
+                        'build-common/src/wasm/cpp-msfs-framework',
+                        'build-common/src/wasm/extra-backend',
+                        'build-common/src/wasm/fadec_common',
+                        'build-a333x/src/wasm/extra-backend-a333x',
                         'build-a333x/src/wasm/fadec_a333x',
-                        'build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/extra-backend-a32nx.wasm',
-                        'build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/fadec-a32nx.wasm'
+                        'build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/extra-backend-a333x.wasm',
+                        'build-a333x/out/headwindsim-aircraft-a330-300/SimObjects/Airplanes/Headwind_A330_300/panel/fadec-a333x.wasm'
                     ])
             ], true),
         ]),

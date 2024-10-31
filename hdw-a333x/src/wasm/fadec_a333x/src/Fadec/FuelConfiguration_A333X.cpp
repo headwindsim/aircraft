@@ -9,22 +9,22 @@
 
 #include "logging.h"
 
-#include "FuelConfiguration_A32NX.h"
+#include "FuelConfiguration_A333X.h"
 
-void FuelConfiguration_A32NX::loadConfigurationFromIni() {
+void FuelConfiguration_A333X::loadConfigurationFromIni() {
   if (configFilename.empty()) {
-    LOG_ERROR("Fadec::FuelConfiguration_A32NX: no configuration file specified -> using default fuel"
+    LOG_ERROR("Fadec::FuelConfiguration_A333X: no configuration file specified -> using default fuel"
               " quantities. Use setConfigFilename() to set the configuration file)");
     return;
   }
 
-  LOG_INFO("Fadec::FuelConfiguration_A32NX: loading configuration file " + configFilename);
+  LOG_INFO("Fadec::FuelConfiguration_A333X: loading configuration file " + configFilename);
 
   mINI::INIStructure ini;
   mINI::INIFile iniFile(configFilename);
 
   if (!iniFile.read(ini)) {
-    LOG_ERROR("Fadec::FuelConfiguration_A32NX: failed to read configuration file \"" + configFilename + "\" due to error \"" +
+    LOG_ERROR("Fadec::FuelConfiguration_A333X: failed to read configuration file \"" + configFilename + "\" due to error \"" +
               strerror(errno) + "\" -> using default fuel quantities.");
     return;
   }
@@ -35,12 +35,12 @@ void FuelConfiguration_A32NX::loadConfigurationFromIni() {
   fuelLeftAux = mINI::INITypeConversion::getDouble(ini, INI_SECTION_FUEL, INI_SECTION_FUEL_LEFT_AUX_QUANTITY, fuelLeftAuxDefault);
   fuelRightAux = mINI::INITypeConversion::getDouble(ini, INI_SECTION_FUEL, INI_SECTION_FUEL_RIGHT_AUX_QUANTITY, fuelRightAuxDefault);
 
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: loaded fuel configuration from " + configFilename + " with the following values:");
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: " + this->toString());
+  LOG_DEBUG("Fadec::FuelConfiguration_A333X: loaded fuel configuration from " + configFilename + " with the following values:");
+  LOG_DEBUG("Fadec::FuelConfiguration_A333X: " + this->toString());
 }
 
-void FuelConfiguration_A32NX::saveConfigurationToIni() {
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: saving configuration file " + configFilename);
+void FuelConfiguration_A333X::saveConfigurationToIni() {
+  LOG_DEBUG("Fadec::FuelConfiguration_A333X: saving configuration file " + configFilename);
 
   mINI::INIStructure ini;
   mINI::INIFile iniFile(configFilename);
@@ -55,18 +55,18 @@ void FuelConfiguration_A32NX::saveConfigurationToIni() {
   ini[INI_SECTION_FUEL][INI_SECTION_FUEL_RIGHT_AUX_QUANTITY] = std::to_string(this->fuelRightAux);
 
   if (!iniFile.write(ini, true)) {
-    LOG_ERROR("Fadec::FuelConfiguration_A32NX: failed to write engine conf " + configFilename + " due to error \"" + strerror(errno) +
+    LOG_ERROR("Fadec::FuelConfiguration_A333X: failed to write engine conf " + configFilename + " due to error \"" + strerror(errno) +
               "\"");
     return;
   }
 
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: saved fuel configuration to " + configFilename + " with the following values:");
-  LOG_DEBUG("Fadec::FuelConfiguration_A32NX: " + this->toString());
+  LOG_DEBUG("Fadec::FuelConfiguration_A333X: saved fuel configuration to " + configFilename + " with the following values:");
+  LOG_DEBUG("Fadec::FuelConfiguration_A333X: " + this->toString());
 }
 
-std::string FuelConfiguration_A32NX::toString() const {
+std::string FuelConfiguration_A333X::toString() const {
   std::ostringstream oss;
-  oss << "FuelConfiguration_A32NX: { "
+  oss << "FuelConfiguration_A333X: { "
       << "fuelCenter: " << fuelCenter        //
       << ", fuelLeft: " << fuelLeft          //
       << ", fuelRight: " << fuelRight        //

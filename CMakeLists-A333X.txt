@@ -4,7 +4,7 @@ project(flybywire-aircraft C CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 set(FBW_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
-set(FBW_COMMON ${FBW_ROOT}/build-a333x-common/src/wasm)
+set(FBW_COMMON ${FBW_ROOT}/build-common/src/wasm)
 
 # cmake helper scripts
 include("${FBW_COMMON}/cpp-msfs-framework/cmake/TargetDefinition.cmake")
@@ -54,7 +54,7 @@ add_definitions(
 )
 
 # add the common components
-add_subdirectory(build-a333x-common/src/wasm)
+add_subdirectory(build-common/src/wasm)
 
 # add the A333X components
 add_subdirectory(build-a333x/src/wasm)

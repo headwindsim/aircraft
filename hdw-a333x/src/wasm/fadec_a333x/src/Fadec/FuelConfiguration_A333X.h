@@ -1,8 +1,8 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A32NX_H
-#define FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A32NX_H
+#ifndef FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A333X_H
+#define FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A333X_H
 
 #include <string>
 
@@ -15,17 +15,17 @@
 #define INI_SECTION_FUEL_RIGHT_AUX_QUANTITY "FUEL_RIGHT_AUX_QUANTITY"
 
 /**
- * @class FuelConfiguration_A32NX
- * @brief Class to manage the fuel configuration for the A32NX aircraft.
+ * @class FuelConfiguration_A333X
+ * @brief Class to manage the fuel configuration for the A333X aircraft.
  *
  * This class provides methods to load and save the fuel configuration from/to an INI file.
  * It also provides getter and setter methods for each fuel tank quantity.
  */
-class FuelConfiguration_A32NX {
+class FuelConfiguration_A333X {
  private:
   // Fuel tank default quantities in gallons
   static constexpr double fuelCenterDefault = 0;
-  static constexpr double fuelLeftDefault = 411.34;
+  static constexpr double fuelLeftDefault = 1645.0;
   static constexpr double fuelRightDefault = fuelLeftDefault;
   static constexpr double fuelLeftAuxDefault = 0;
   static constexpr double fuelRightAuxDefault = fuelLeftAuxDefault;
@@ -37,7 +37,7 @@ class FuelConfiguration_A32NX {
   double fuelLeftAux = fuelLeftAuxDefault;
   double fuelRightAux = fuelRightAuxDefault;
 
-  std::string configFilename{"A32NX-default-fuel-config.ini"};
+  std::string configFilename{"A333X-default-fuel-config.ini"};
 
  public:
   /**
@@ -96,4 +96,4 @@ class FuelConfiguration_A32NX {
   void setFuelRightAux(double fuelRightAux) { this->fuelRightAux = fuelRightAux; }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A32NX_H
+#endif  // FLYBYWIRE_AIRCRAFT_FUELCONFIGURATION_A333X_H

@@ -1,8 +1,8 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A333X_HPP
+#define FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A333X_HPP
 
 #include <MSFS/Legacy/gauges.h>
 
@@ -19,11 +19,11 @@ enum EngineAndSide {
 };
 
 /**
- * @class FadecSimData_A32NX
+ * @class FadecSimData_A333X
  * @brief This class manages the simulation data for the FADEC (Full Authority Digital Engine Control)
- *        simulation for the A32NX aircraft.
+ *        simulation for the A333X aircraft.
  */
-class FadecSimData_A32NX {
+class FadecSimData_A333X {
  public:
   // Notification groups for events
   enum NotificationGroup { NOTIFICATION_GROUP_0 };
@@ -186,9 +186,11 @@ class FadecSimData_A32NX {
   NamedVariablePtr engineIdleFF;
   NamedVariablePtr engineIdleN1;
   NamedVariablePtr engineIdleN2;
+  NamedVariablePtr engineIdleN3;
   NamedVariablePtr engineImbalance;
   NamedVariablePtr engineN1[2];
   NamedVariablePtr engineN2[2];
+  NamedVariablePtr engineN3[2];
   NamedVariablePtr engineOilTotal[2];
   NamedVariablePtr engineOil[2];
   NamedVariablePtr enginePreFF[2];
@@ -216,7 +218,7 @@ class FadecSimData_A32NX {
   // ===============================================================================================
 
   /**
-   * @brief Initializes the FadecSimData_A32NX object.
+   * @brief Initializes the FadecSimData_A333X object.
    * @param dm Pointer to the DataManager object. This object is used to create the data definition
    *           variable for the ATC ID data.
    */
@@ -225,7 +227,7 @@ class FadecSimData_A32NX {
     initEvents(dm);
     initSimvars(dm);
     initLvars(dm);
-    LOG_INFO("Fadec::FadecSimData_A32NX initialized");
+    LOG_INFO("Fadec::FadecSimData_A333X initialized");
   }
 
   void initDataDefinitions(DataManager* dm) {
@@ -283,6 +285,7 @@ class FadecSimData_A32NX {
 
     engineIdleN1 = dm->make_named_var("A32NX_ENGINE_IDLE_N1", UNITS.Number, AUTO_READ_WRITE);
     engineIdleN2 = dm->make_named_var("A32NX_ENGINE_IDLE_N2", UNITS.Number, AUTO_READ_WRITE);
+    engineIdleN3 = dm->make_named_var("A32NX_ENGINE_IDLE_N2", UNITS.Number, AUTO_READ_WRITE);
 
     engineImbalance = dm->make_named_var("A32NX_ENGINE_IMBALANCE", UNITS.Number, AUTO_READ_WRITE);
 
@@ -291,6 +294,9 @@ class FadecSimData_A32NX {
 
     engineN2[L] = dm->make_named_var("A32NX_ENGINE_N2:1", UNITS.Number, AUTO_READ_WRITE);
     engineN2[R] = dm->make_named_var("A32NX_ENGINE_N2:2", UNITS.Number, AUTO_READ_WRITE);
+
+    engineN3[L] = dm->make_named_var("A32NX_ENGINE_N3:1", UNITS.Number, AUTO_READ_WRITE);
+    engineN3[R] = dm->make_named_var("A32NX_ENGINE_N3:2", UNITS.Number, AUTO_READ_WRITE);
 
     engineOil[L] = dm->make_named_var("A32NX_ENGINE_OIL_QTY:1", UNITS.Number, AUTO_READ_WRITE);
     engineOil[R] = dm->make_named_var("A32NX_ENGINE_OIL_QTY:2", UNITS.Number, AUTO_READ_WRITE);
@@ -344,11 +350,14 @@ class FadecSimData_A32NX {
     engineIdleFF->setAndWriteToSim(0);
     engineIdleN1->setAndWriteToSim(0);
     engineIdleN2->setAndWriteToSim(0);
+    engineIdleN3->setAndWriteToSim(0);
     engineImbalance->setAndWriteToSim(0);
     engineN1[L]->setAndWriteToSim(0);
     engineN1[R]->setAndWriteToSim(0);
     engineN2[L]->setAndWriteToSim(0);
     engineN2[R]->setAndWriteToSim(0);
+    engineN3[L]->setAndWriteToSim(0);
+    engineN3[R]->setAndWriteToSim(0);
     engineOilTotal[L]->setAndWriteToSim(0);
     engineOilTotal[R]->setAndWriteToSim(0);
     engineOil[L]->setAndWriteToSim(0);
@@ -374,4 +383,4 @@ class FadecSimData_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_FADECSIMDATA_A333X_HPP

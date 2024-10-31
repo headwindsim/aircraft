@@ -4,7 +4,7 @@ set(OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../build-a333x/out/headwi
 # add compiler definitions
 add_definitions(-DA32NX)
 
-add_subdirectory(extra-backend-a32nx)
+add_subdirectory(extra-backend-a333x)
 add_subdirectory(fadec_a333x)
 
 # these are only here to allow CMake compatible IDEs (JetBrains' Clion for example) to show systax

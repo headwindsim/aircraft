@@ -1,28 +1,28 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_ENGINECONTROL_A32NX_H
-#define FLYBYWIRE_AIRCRAFT_ENGINECONTROL_A32NX_H
+#ifndef FLYBYWIRE_AIRCRAFT_ENGINECONTROL_A333X_H
+#define FLYBYWIRE_AIRCRAFT_ENGINECONTROL_A333X_H
 
 #include "MsfsHandler.h"
 
-#include "FadecSimData_A32NX.hpp"
-#include "FuelConfiguration_A32NX.h"
+#include "FadecSimData_A333X.hpp"
+#include "FuelConfiguration_A333X.h"
 
 #define FILENAME_FADEC_CONF_DIRECTORY "\\work\\AircraftStates\\"
 #define FILENAME_FADEC_CONF_FILE_EXTENSION ".ini"
 
 /**
- * @class EngineControl_A32NX
- * @brief Manages the engine control for the A32NX aircraft, coordinating and synchronising the
+ * @class EngineControl_A333X
+ * @brief Manages the engine control for the A333X aircraft, coordinating and synchronising the
  *        simulator's jet engine simulation with realistic custom values.
  *
  * Engine control is adding more realistic values and behaviour to the engine simulation of the simulator.
  * Esp. for startup, shutdown, fuel consumption, thrust limits, etc.
  *
- * TODO: The EngineControl_A32NX class is still work in progress and might be extended or replaced in the future.
+ * TODO: The EngineControl_A333X class is still work in progress and might be extended or replaced in the future.
  */
-class EngineControl_A32NX {
+class EngineControl_A333X {
  private:
   // Convenience pointer to the msfs handler
   MsfsHandler* msfsHandlerPtr = nullptr;
@@ -31,13 +31,13 @@ class EngineControl_A32NX {
   DataManager* dataManagerPtr = nullptr;
 
   // FADEC simulation data
-  FadecSimData_A32NX simData{};
+  FadecSimData_A333X simData{};
 
   // ATC ID for the aircraft used to load and store the fuel levels
   std::string atcId{};
 
   // Fuel configuration for loading and storing fuel levels
-  FuelConfiguration_A32NX fuelConfiguration{};
+  FuelConfiguration_A333X fuelConfiguration{};
 
   // previous time the fuel levels were saved to file
   double lastFuelSaveTime = 0.0;
@@ -87,17 +87,17 @@ class EngineControl_A32NX {
 
 #ifdef PROFILING
   // Profiling for the engine control - can eventually be removed
-  SimpleProfiler profilerUpdate{"Fadec::EngineControl_A32NX::update()", 100};
-  SimpleProfiler profilerGenerateParameters{"Fadec::EngineControl_A32NX::generateIdleParameters()", 100};
-  SimpleProfiler profilerEngineStateMachine{"Fadec::EngineControl_A32NX::engineStateMachine()", 100};
-  SimpleProfiler profilerEngineStartProcedure{"Fadec::EngineControl_A32NX::engineStartProcedure()", 100};
-  SimpleProfiler profilerEngineShutdownProcedure{"Fadec::EngineControl_A32NX::engineShutdownProcedure()", 100};
-  SimpleProfiler profilerUpdateFF{"Fadec::EngineControl_A32NX::updateFF()", 100};
-  SimpleProfiler profilerUpdatePrimaryParameters{"Fadec::EngineControl_A32NX::updatePrimaryParameters()", 100};
-  SimpleProfiler profilerUpdateEGT{"Fadec::EngineControl_A32NX::updateEGT()", 100};
-  SimpleProfiler profilerUpdateFuel{"Fadec::EngineControl_A32NX::updateFuel()", 100};
-  SimpleProfiler profilerUpdateThrustLimits{"Fadec::EngineControl_A32NX::updateThrustLimits()", 100};
-  SimpleProfiler profilerUpdateOil{"Fadec::EngineControl_A32NX::updateOil()", 100};
+  SimpleProfiler profilerUpdate{"Fadec::EngineControl_A333X::update()", 100};
+  SimpleProfiler profilerGenerateParameters{"Fadec::EngineControl_A333X::generateIdleParameters()", 100};
+  SimpleProfiler profilerEngineStateMachine{"Fadec::EngineControl_A333X::engineStateMachine()", 100};
+  SimpleProfiler profilerEngineStartProcedure{"Fadec::EngineControl_A333X::engineStartProcedure()", 100};
+  SimpleProfiler profilerEngineShutdownProcedure{"Fadec::EngineControl_A333X::engineShutdownProcedure()", 100};
+  SimpleProfiler profilerUpdateFF{"Fadec::EngineControl_A333X::updateFF()", 100};
+  SimpleProfiler profilerUpdatePrimaryParameters{"Fadec::EngineControl_A333X::updatePrimaryParameters()", 100};
+  SimpleProfiler profilerUpdateEGT{"Fadec::EngineControl_A333X::updateEGT()", 100};
+  SimpleProfiler profilerUpdateFuel{"Fadec::EngineControl_A333X::updateFuel()", 100};
+  SimpleProfiler profilerUpdateThrustLimits{"Fadec::EngineControl_A333X::updateThrustLimits()", 100};
+  SimpleProfiler profilerUpdateOil{"Fadec::EngineControl_A333X::updateOil()", 100};
 #endif
 
   // ===========================================================================
@@ -106,19 +106,18 @@ class EngineControl_A32NX {
 
  public:
   /**
-   * @brief Initializes the EngineControl_A32NX class once during the gauge initialization.
+   * @brief Initializes the EngineControl_A333X class once during the gauge initialization.
    * @param msfsHandler
    */
   void initialize(MsfsHandler* msfsHandler);
 
   /**
-   * @brief Updates the EngineControl_A32NX class once per frame.
-   * @param pData
+   * @brief Updates the EngineControl_A333X class once per frame.
    */
-  void update(sGaugeDrawData* pData);
+  void update();
 
   /**
-   * @brief Shuts down the EngineControl_A32NX class once during the gauge shutdown.
+   * @brief Shuts down the EngineControl_A333X class once during the gauge shutdown.
    */
   void shutdown();
 
@@ -210,7 +209,7 @@ class EngineControl_A32NX {
    * @return The current state of the engine as an enum of type EngineState.
    * @see EngineState
    */
-  EngineControl_A32NX::EngineState engineStateMachine(int engine,
+  EngineControl_A333X::EngineState engineStateMachine(int engine,
                                                       double engineIgniter,
                                                       bool engineStarter,
                                                       bool engineStarterTurnedOff,
@@ -344,4 +343,4 @@ class EngineControl_A32NX {
                           int wai);
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_ENGINECONTROL_A32NX_H
+#endif  // FLYBYWIRE_AIRCRAFT_ENGINECONTROL_A333X_H

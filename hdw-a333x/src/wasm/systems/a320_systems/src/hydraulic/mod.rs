@@ -4219,7 +4219,6 @@ impl A320AutobrakeController {
                     || (self.left_brake_pedal_input > Ratio::new::<percent>(53.)
                         && self.right_brake_pedal_input > Ratio::new::<percent>(53.))
             }
-            _ => false,
         }
     }
 

@@ -16,8 +16,8 @@ include_directories("${MSFS_SDK}/SimConnect SDK/include")
 
 include_directories(
         ./src
-        ${FBW_ROOT}/build-a333x-common/src/wasm/fadec_common/src
-        ${FBW_ROOT}/build-a333x-common/src/wasm/fbw_common/src
+        ${FBW_ROOT}/build-common/src/wasm/fadec_common/src
+        ${FBW_ROOT}/build-common/src/wasm/fbw_common/src
         ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/inih
 )
 

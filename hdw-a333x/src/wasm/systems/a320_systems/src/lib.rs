@@ -24,6 +24,7 @@ use electrical::{
 use hydraulic::{A320Hydraulic, A320HydraulicOverheadPanel};
 use navigation::A320RadioAltimeters;
 use power_consumption::A320PowerConsumption;
+use systems::simulation::InitContext;
 use systems::{enhanced_gpwc::EnhancedGroundProximityWarningComputer, shared::MachNumber};
 use uom::si::{f64::Length, length::nautical_mile, quantities::Velocity, velocity::knot};
 

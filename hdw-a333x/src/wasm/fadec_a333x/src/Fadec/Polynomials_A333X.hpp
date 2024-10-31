@@ -1,5 +1,5 @@
-#ifndef FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A333X_HPP
+#define FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A333X_HPP
 
 #include <algorithm>
 #include <cmath>
@@ -13,7 +13,7 @@
  * and Oil Pressure during different engine states such as shutdown and startup. The class also
  * includes methods for calculating corrected EGT and Fuel Flow, as well as Oil Gulping percentage.
  */
-class Polynomial_A32NX {
+class Polynomial_A333X {
  public:
   /**
    * @brief Calculates the N2 percentage during engine start-up using real-life modeled polynomials.
@@ -26,9 +26,9 @@ class Polynomial_A32NX {
   static double startN2(double n2, double preN2, double idleN2) {
     // Normalize the current N2 percentage by scaling it with the idle N2
     // percentage and a constant factor.
-    // The constant factor 68.2 is likely derived from empirical data or a mathematical model of the
+    // The constant factor 60.0 is likely derived from empirical data or a mathematical model of the
     // engine's behavior.
-    double normalN2 = n2 * 68.2 / idleN2;
+    double normalN2 = n2 * 60.0 / idleN2;
 
     // Coefficients for the polynomial used to calculate the N2 percentage.
     constexpr double c_N2[16] = {
@@ -273,40 +273,42 @@ class Polynomial_A32NX {
    */
   static double correctedEGT(double cn1, double cff, double mach, double alt) {
     constexpr double c_EGT[16] = {
-        3.2636e+02,   // coefficient for x^0
-        0.0000e+00,   // coefficient for x^1
-        9.2893e-01,   // coefficient for x^2
-        3.9505e-02,   // coefficient for x^3
-        3.9070e+02,   // coefficient for x^4
-        -4.7911e-04,  // coefficient for x^5
-        7.7679e-03,   // coefficient for x^6
-        5.8361e-05,   // coefficient for x^7
-        -2.5566e+00,  // coefficient for x^8
-        5.1227e-06,   // coefficient for x^9
-        1.0178e-07,   // coefficient for x^10
-        -7.4602e-03,  // coefficient for x^11
-        1.2106e-07,   // coefficient for x^12
-        -5.1639e+01,  // coefficient for x^13
-        -2.7356e-03,  // coefficient for x^14
-        1.9312e-08    // coefficient for x^15
+        443.3145034,
+        0.0000000e+00,
+        3.0141710e+00,
+        3.9132758e-02,
+        -4.8488279e+02,
+        -1.2890964e-03,
+        -2.2332050e-02,
+        8.3849683e-05,
+        6.0478647e+00,
+        6.9171710e-05,
+        -6.5369271e-07,
+        -8.1438322e-03,
+        -5.1229403e-07,
+        7.4657497e+01,
+        -4.6016728e-03,
+        2.8637860e-08
     };
 
-    return c_EGT[0]                             //
-           + c_EGT[1]                           //
-           + (c_EGT[2] * cn1)                   //
-           + (c_EGT[3] * cff)                   //
-           + (c_EGT[4] * mach)                  //
-           + (c_EGT[5] * alt)                   //
-           + (c_EGT[6] * (std::pow)(cn1, 2))    //
-           + (c_EGT[7] * cn1 * cff)             //
-           + (c_EGT[8] * cn1 * mach)            //
-           + (c_EGT[9] * cn1 * alt)             //
-           + (c_EGT[10] * (std::pow)(cff, 2))   //
-           + (c_EGT[11] * mach * cff)           //
-           + (c_EGT[12] * cff * alt)            //
-           + (c_EGT[13] * (std::pow)(mach, 2))  //
-           + (c_EGT[14] * mach * alt)           //
-           + (c_EGT[15] * (std::pow)(alt, 2));
+    cff = 2.5; //TODO: Remove Static CFF when adjusting to correct EGT above for A330
+
+    return c_EGT[0]                      //
+    + c_EGT[1]                           //
+    + (c_EGT[2] * cn1)                   //
+    + (c_EGT[3] * cff)                   //
+    + (c_EGT[4] * mach)                  //
+    + (c_EGT[5] * alt)                   //
+    + (c_EGT[6] * (std::pow)(cn1, 2))    //
+    + (c_EGT[7] * cn1 * cff)             //
+    + (c_EGT[8] * cn1 * mach)            //
+    + (c_EGT[9] * cn1 * alt)             //
+    + (c_EGT[10] * (std::pow)(cff, 2))   //
+    + (c_EGT[11] * mach * cff)           //
+    + (c_EGT[12] * cff * alt)            //
+    + (c_EGT[13] * (std::pow)(mach, 2))  //
+    + (c_EGT[14] * mach * alt)           //
+    + (c_EGT[15] * (std::pow)(alt, 2));
   }
 
   /**
@@ -320,50 +322,55 @@ class Polynomial_A32NX {
    */
   static double correctedFuelFlow(double cn1, double mach, double alt) {
     constexpr double c_Flow[21] = {
-        -1.7630e+02,  // coefficient for x^0
-        -2.1542e-01,  // coefficient for x^1
-        4.7119e+01,   // coefficient for x^2
-        6.1519e+02,   // coefficient for x^3
-        1.8047e-03,   // coefficient for x^4
-        -4.4554e-01,  // coefficient for x^5
-        -4.3940e+01,  // coefficient for x^6
-        4.0459e-05,   // coefficient for x^7
-        -3.2912e+01,  // coefficient for x^8
-        -6.2894e-03,  // coefficient for x^9
-        -1.2544e-07,  // coefficient for x^10
-        1.0938e-02,   // coefficient for x^11
-        4.0936e-01,   // coefficient for x^12
-        -5.5841e-06,  // coefficient for x^13
-        -2.3829e+01,  // coefficient for x^14
-        9.3269e-04,   // coefficient for x^15
-        2.0273e-11,   // coefficient for x^16
-        -2.4100e+02,  // coefficient for x^17
-        1.4171e-02,   // coefficient for x^18
-        -9.5581e-07,  // coefficient for x^19
-        1.2728e-11    // coefficient for x^20
+        -639.6602981,
+        0.00000e+00,
+        1.03705e+02,
+        -2.23264e+03,
+        5.70316e-03,
+        -2.29404e+00,
+        1.08230e+02,
+        2.77667e-04,
+        -6.17180e+02,
+        -7.20713e-02,
+        2.19013e-07,
+        2.49418e-02,
+        -7.31662e-01,
+        -1.00003e-05,
+        -3.79466e+01,
+        1.34552e-03,
+        5.72612e-09,
+        -2.71950e+02,
+        8.58469e-02,
+        -2.72912e-06,
+        2.02928e-11
     };
 
-    return c_Flow[0]                                   //
-           + c_Flow[1]                                 //
-           + (c_Flow[2] * cn1)                         //
-           + (c_Flow[3] * mach)                        //
-           + (c_Flow[4] * alt)                         //
-           + (c_Flow[5] * (std::pow)(cn1, 2))          //
-           + (c_Flow[6] * cn1 * mach)                  //
-           + (c_Flow[7] * cn1 * alt)                   //
-           + (c_Flow[8] * (std::pow)(mach, 2))         //
-           + (c_Flow[9] * mach * alt)                  //
-           + (c_Flow[10] * (std::pow)(alt, 2))         //
-           + (c_Flow[11] * (std::pow)(cn1, 3))         //
-           + (c_Flow[12] * (std::pow)(cn1, 2) * mach)  //
-           + (c_Flow[13] * (std::pow)(cn1, 2) * alt)   //
-           + (c_Flow[14] * cn1 * (std::pow)(mach, 2))  //
-           + (c_Flow[15] * cn1 * mach * alt)           //
-           + (c_Flow[16] * cn1 * (std::pow)(alt, 2))   //
-           + (c_Flow[17] * (std::pow)(mach, 3))        //
-           + (c_Flow[18] * (std::pow)(mach, 2) * alt)  //
-           + (c_Flow[19] * mach * (std::pow)(alt, 2))  //
-           + (c_Flow[20] * (std::pow)(alt, 3));
+    double outCFF = 0;
+    double a330_factor = 2.5;
+
+    outCFF = c_Flow[0]                          //
+    + c_Flow[1]                                 //
+    + (c_Flow[2] * cn1)                         //
+    + (c_Flow[3] * mach)                        //
+    + (c_Flow[4] * alt)                         //
+    + (c_Flow[5] * (std::pow)(cn1, 2))          //
+    + (c_Flow[6] * cn1 * mach)                  //
+    + (c_Flow[7] * cn1 * alt)                   //
+    + (c_Flow[8] * (std::pow)(mach, 2))         //
+    + (c_Flow[9] * mach * alt)                  //
+    + (c_Flow[10] * (std::pow)(alt, 2))         //
+    + (c_Flow[11] * (std::pow)(cn1, 3))         //
+    + (c_Flow[12] * (std::pow)(cn1, 2) * mach)  //
+    + (c_Flow[13] * (std::pow)(cn1, 2) * alt)   //
+    + (c_Flow[14] * cn1 * (std::pow)(mach, 2))  //
+    + (c_Flow[15] * cn1 * mach * alt)           //
+    + (c_Flow[16] * cn1 * (std::pow)(alt, 2))   //
+    + (c_Flow[17] * (std::pow)(mach, 3))        //
+    + (c_Flow[18] * (std::pow)(mach, 2) * alt)  //
+    + (c_Flow[19] * mach * (std::pow)(alt, 2))  //
+    + (c_Flow[20] * (std::pow)(alt, 3));
+
+    return a330_factor * outCFF;
   }
 
   /**
@@ -425,4 +432,4 @@ class Polynomial_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_POLYNOMIAL_A333X_HPP

@@ -1,15 +1,15 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-#ifndef FLYBYWIRE_AIRCRAFT_TABLES1502_A32NX_HPP
-#define FLYBYWIRE_AIRCRAFT_TABLES1502_A32NX_HPP
+#ifndef FLYBYWIRE_AIRCRAFT_TABLES1502_A333X_HPP
+#define FLYBYWIRE_AIRCRAFT_TABLES1502_A333X_HPP
 
 #include <cmath>
 
 #include "Fadec.h"
 
 /**
- * @class Table1502_A32NX
+ * @class Table1502_A333X
  *
  * This class contains methods and data used in the calculation of the corrected fan speed (CN1 and CN2).
  * The class has a 2D array `table` that contains values used in the calculation of the corrected fan speed.
@@ -18,7 +18,7 @@
  *
  * TODO: extract the reusable code to a common library
  */
-class Tables1502_A32NX {
+class Table1502_A333X {
   /**
    * @brief Table 1502 (CN2 vs correctedN1) representations with FSX nomenclature.
    *
@@ -57,7 +57,7 @@ class Tables1502_A32NX {
   static double iCN2(double pressureAltitude, double mach) {
     // The specific values are likely derived from empirical data or a mathematical model of the engine's behavior.
     // The original source code does not provide any information on the origin of these values.
-    return 68.2 / ((std::sqrt)((288.15 - (1.98 * pressureAltitude / 1000)) / 288.15) * (std::sqrt)(1 + (0.2 * (std::pow)(mach, 2))));
+    return 60.0 / ((std::sqrt)((288.15 - (1.98 * pressureAltitude / 1000)) / 288.15) * (std::sqrt)(1 + (0.2 * (std::pow)(mach, 2))));
   }
 
   /**
@@ -94,4 +94,4 @@ class Tables1502_A32NX {
   }
 };
 
-#endif  // FLYBYWIRE_AIRCRAFT_TABLES1502_A32NX_HPP
+#endif  // FLYBYWIRE_AIRCRAFT_TABLES1502_A333X_HPP
