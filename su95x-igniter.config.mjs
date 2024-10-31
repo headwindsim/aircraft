@@ -89,7 +89,7 @@ export default new TaskOfTasks("all", [
                     'npm run build-su95x:systems-host',
                     [
                         'build-su95x/src/systems/systems-host',
-                        'build-su95x-common/src/systems/datalink',
+                        'build-common/src/systems/datalink',
                         'build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/su95x/SystemsHost'
                     ]
                 ),
@@ -109,7 +109,7 @@ export default new TaskOfTasks("all", [
                     "npm run build-su95x:systems",
                     [
                         "build-su95x/src/wasm/systems",
-                        "build-su95x-common/src/wasm/systems",
+                        "build-common/src/wasm/systems",
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/systems.wasm"
@@ -118,22 +118,22 @@ export default new TaskOfTasks("all", [
                     "npm run build-su95x:fbw",
                     [
                         "build-su95x/src/wasm/fbw_a320",
-                        "build-su95x-common/src/wasm/fbw_common",
+                        "build-common/src/wasm/fbw_common",
                         "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/fbw.wasm"
                     ]),
                 new ExecTask("systems-terronnd", [
                     "npm run build-su95x:terronnd",
                 ], [
-                    "build-su95x-common/src/wasm/terronnd",
+                    "build-common/src/wasm/terronnd",
                     "build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/terronnd.wasm",
-                    "build-su95x-common/src/wasm/terronnd/out/terronnd.wasm",
+                    "build-common/src/wasm/terronnd/out/terronnd.wasm",
                 ]),
                 new ExecTask('cpp-wasm-cmake',
                     "npm run build-su95x:cpp-wasm-cmake",
                     [
-                        'build-su95x-common/src/wasm/cpp-msfs-framework',
-                        'build-su95x-common/src/wasm/extra-backend',
-                        'build-su95x-common/src/wasm/fadec_common',
+                        'build-common/src/wasm/cpp-msfs-framework',
+                        'build-common/src/wasm/extra-backend',
+                        'build-common/src/wasm/fadec_common',
                         'build-su95x/src/wasm/extra-backend-a32nx',
                         'build-su95x/src/wasm/fadec_su95x',
                         'build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/panel/extra-backend-a32nx.wasm',

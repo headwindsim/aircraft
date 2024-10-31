@@ -6,8 +6,8 @@ members = [
     "build-su95x/src/wasm/systems/a320_systems",
     "build-su95x/src/wasm/systems/a320_systems_wasm",
     "build-su95x/src/wasm/systems/a320_hydraulic_simulation_graphs",
-    "build-su95x-common/src/wasm/systems/systems",
-    "build-su95x-common/src/wasm/systems/systems_wasm",
+    "build-common/src/wasm/systems/systems",
+    "build-common/src/wasm/systems/systems_wasm",
 ]
 
 [profile.release]

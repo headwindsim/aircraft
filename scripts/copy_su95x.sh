@@ -5,11 +5,11 @@ set -e
 df -h
 
 #remove directory if it exist
-rm -rf ./build-su95x-common
+rm -rf ./build-common
 
 # copy from FBW COMMON source and HDW COMMON into one src
-cp -ra ./flybywire/fbw-common/. ./build-su95x-common
-cp -ra ./hdw-su95x-common/. ./build-su95x-common
+cp -ra ./flybywire/fbw-common/. ./build-common
+cp -ra ./hdw-su95x-common/. ./build-common
 
 #remove directory if it exist
 rm -rf ./build-su95x
