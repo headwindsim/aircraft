@@ -14,7 +14,9 @@
                 "${workspaceFolder}/flybywire/fbw-a32nx/src/wasm/extra-backend-a32nx/src/**",
                 "${workspaceFolder}/flybywire/fbw-a380x/src/wasm/extra-backend-a380x/src/**",
                 "${workspaceFolder}/flybywire/fbw-a32nx/src/wasm/fadec_a320/src/**",
-                "${workspaceFolder}/flybywire/fbw-a380x/src/wasm/fadec_a380/src/**"
+                "${workspaceFolder}/flybywire/fbw-a380x/src/wasm/fadec_a380/src/**",
+                "${workspaceFolder}/fbw-common/src/wasm/fadec_common/src",
+                "${workspaceFolder}/fbw-common/src/wasm/**"
             ],
             "defines": [
                 "_MSFS_WASM=1",
