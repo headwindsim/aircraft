@@ -13,7 +13,12 @@ module.exports = {
       },
     },
   },
+  modulePathIgnorePatterns: [
+    'hdw-a333x/src/systems/fmgc/src/flightplanning',
+    'hdw-a339x/src/systems/fmgc/src/flightplanning',
+    'hdw-su95x/src/systems/fmgc/src/flightplanning',
+  ],
   moduleNameMapper: {
-    '@flybywiresim/fbw-sdk': '<rootDir>/build-common/src/systems/index.ts',
+    '@flybywiresim/fbw-sdk': '<rootDir>/hdw-common/src/systems/index.ts',
   },
 };

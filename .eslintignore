@@ -16,9 +16,10 @@ hdw-**/src/systems/fmgc/src/flightplanning/ManagedFlightPlan.ts
 hdw-**/src/systems/fmgc/src/flightplanning/ProcedureDetails.ts
 hdw-**/src/systems/fmgc/src/flightplanning/RawDataMapper.ts
 hdw-**/src/systems/fmgc/src/flightplanning/SegmentedFlightPlan.ts
-hdw-**/src/systems/fmgc/src/flightplanning/WaypointBuilder.ts
 hdw-**/src/systems/fmgc/src/flightplanning/WorldMagneticModel.ts
 hdw-**/src/systems/fmgc/src/utils/LzUtf8.js
+hdw-**/src/systems/fmgc/src/flightplanning/new/test/*
+hdw-**/src/systems/fmgc/src/flightplanning/**/*.spec.ts
 target/*
 CMakeFiles/*
 cmake*

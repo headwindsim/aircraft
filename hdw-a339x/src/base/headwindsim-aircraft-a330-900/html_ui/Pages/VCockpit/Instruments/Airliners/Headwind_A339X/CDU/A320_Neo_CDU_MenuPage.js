@@ -66,7 +66,6 @@ class CDUMenuPage {
         mcdu.onLeftInput[0] = () => {
             mcdu.mcduScratchpad.setMessage(NXSystemMessages.waitForSystemResponse);
             updateView("FMGC");
-
             setTimeout(() => {
                 mcdu.mcduScratchpad.removeMessage(NXSystemMessages.waitForSystemResponse.text);
                 CDUIdentPage.ShowPage(mcdu);
