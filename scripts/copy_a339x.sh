@@ -71,7 +71,7 @@ cp -ra ./hdw-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight/. ./bui
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/sound
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/sound
 
-chmod +x ./build-a339x/src/wasm/fbw_a320/build.sh
+chmod +x ./build-a339x/src/wasm/fbw_a330/build.sh
 
 ##### ACJ330neo
 

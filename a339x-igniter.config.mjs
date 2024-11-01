@@ -117,7 +117,7 @@ export default new TaskOfTasks("all", [
                 new ExecTask("systems-fbw",
                     "npm run build-a339x:fbw",
                     [
-                        "build-a339x/src/wasm/fbw_a320",
+                        "build-a339x/src/wasm/fbw_a330",
                         "build-common/src/wasm/fbw_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm"
                     ]),

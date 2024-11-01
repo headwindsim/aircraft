@@ -81,4 +81,4 @@ cp -ra ./hdw-su95x/src/base/headwindsim-aircraft-su100-95-lock-highlight/. ./bui
 # copy A32NX sound pack to a333x sound folder
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-su95x/out/headwindsim-aircraft-su100-95/SimObjects/Airplanes/Headwind_SU95/sound/
 
-chmod +x ./build-su95x/src/wasm/fbw_a320/build.sh
+chmod +x ./build-su95x/src/wasm/fbw_su95x/build.sh
