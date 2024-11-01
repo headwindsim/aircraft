@@ -1,0 +1,9 @@
+{
+  "index": "./index.tsx",
+  "isInteractive": false,
+  "name": "ISIS",
+  "dimensions": {
+    "width": 512,
+    "height": 512
+  }
+}
