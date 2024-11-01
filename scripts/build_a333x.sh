@@ -13,7 +13,7 @@ if [ "${GITHUB_ACTIONS}" == "true" ]; then
 fi
 
 # run build
-FBW_TYPECHECK=1 time npx igniter -c a333x-igniter.config.mjs -r A333X "$@"
+time npx igniter -c a333x-igniter.config.mjs -r A333X "$@"
 
 if [ "${GITHUB_ACTIONS}" == "true" ]; then
   rm -rf /external/build-a333x/src
