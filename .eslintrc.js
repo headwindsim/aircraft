@@ -4,6 +4,7 @@
 
 'use strict';
 
+const path = require('path');
 module.exports = {
   env: { browser: true },
   root: true,
