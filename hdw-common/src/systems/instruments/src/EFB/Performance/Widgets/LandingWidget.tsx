@@ -1,7 +1,7 @@
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { Metar as FbwApiMetar } from '@flybywiresim/api-client';
 import { Metar as MsfsMetar } from '@microsoft/msfs-sdk';
 import {
@@ -11,18 +11,20 @@ import {
   usePersistentProperty,
   parseMetar,
   ConfigWeatherMap,
+  LandingFlapsConfig,
+  LandingRunwayConditions,
 } from '@flybywiresim/fbw-sdk';
 import { toast } from 'react-toastify';
 import { Calculator, CloudArrowDown, Trash } from 'react-bootstrap-icons';
 import { t } from '../../Localization/translation';
 import { TooltipWrapper } from '../../UtilComponents/TooltipWrapper';
 import { PromptModal, useModals } from '../../UtilComponents/Modals/Modals';
-import { LandingCalculator, LandingFlapsConfig, LandingRunwayConditions } from '../Calculators/LandingCalculator';
 import RunwayVisualizationWidget, { LabelType } from './RunwayVisualizationWidget';
 import { SimpleInput } from '../../UtilComponents/Form/SimpleInput/SimpleInput';
 import { SelectInput } from '../../UtilComponents/Form/SelectInput/SelectInput';
 import { useAppDispatch, useAppSelector } from '../../Store/store';
 import { clearLandingValues, initialState, setLandingValues } from '../../Store/features/performance';
+import { AircraftContext } from '../../AircraftContext';
 
 interface OutputDisplayProps {
   label: string;
@@ -50,10 +52,12 @@ const Label: FC<LabelProps> = ({ text, className, children }) => (
   </div>
 );
 
+// TODO F-LD and LD
+
 export const LandingWidget = () => {
   const dispatch = useAppDispatch();
 
-  const calculator: LandingCalculator = new LandingCalculator();
+  const calculators = useContext(AircraftContext).performanceCalculators;
 
   const [totalWeight] = useSimVar('TOTAL WEIGHT', 'Pounds', 1000);
   const [autoFillSource, setAutoFillSource] = useState<'METAR' | 'OFP'>('OFP');
@@ -91,7 +95,7 @@ export const LandingWidget = () => {
 
   const handleCalculateLanding = (): void => {
     if (!areInputsValid()) return;
-    const landingDistances = calculator.calculateLandingDistances(
+    const landingDistances = calculators.landing.calculateLandingDistances(
       weight ?? 0,
       flaps ?? LandingFlapsConfig.Full,
       runwayCondition,
@@ -146,7 +150,7 @@ export const LandingWidget = () => {
       try {
         metar = await Coherent.call('GET_METAR_BY_IDENT', icao);
         if (metar.icao !== icao.toUpperCase()) {
-          throw new Error('No METAR available');
+          toast.error('No METAR available');
         }
         parsedMetar = parseMetar(metar.metarString);
       } catch (err) {
@@ -156,7 +160,7 @@ export const LandingWidget = () => {
       try {
         const response = await FbwApiMetar.get(icao, ConfigWeatherMap[metarSource]);
         if (!response.metar) {
-          throw new Error('No METAR available');
+          toast.error('No METAR available');
         }
         parsedMetar = parseMetar(response.metar);
       } catch (err) {
@@ -294,7 +298,7 @@ export const LandingWidget = () => {
   };
 
   const handleRunwaySlopeChange = (value: string): void => {
-    let slope: number | undefined = parseInt(value);
+    let slope: number | undefined = parseFloat(value);
 
     if (Number.isNaN(slope)) {
       slope = undefined;
@@ -457,7 +461,11 @@ export const LandingWidget = () => {
                   <TooltipWrapper text={fillDataTooltip()}>
                     <button
                       onClick={isAutoFillIcaoValid() ? handleAutoFill : undefined}
-                      className={`text-theme-body border-theme-highlight bg-theme-highlight flex flex-row items-center justify-center space-x-4 rounded-md rounded-r-none border-2 px-8 py-2 outline-none transition duration-100 ${!isAutoFillIcaoValid() ? 'opacity-50' : 'hover:text-theme-highlight hover:bg-theme-body'}`}
+                      className={`border-theme-highlight bg-theme-highlight text-theme-body flex flex-row items-center justify-center
+                        space-x-4 rounded-md rounded-r-none border-2 px-8 py-2 outline-none
+                        transition duration-100 ${
+                          !isAutoFillIcaoValid() ? 'opacity-50' : 'hover:bg-theme-body ' + 'hover:text-theme-highlight'
+                        }`}
                       type="button"
                     >
                       <CloudArrowDown size={26} />
@@ -735,7 +743,9 @@ export const LandingWidget = () => {
             <div className="mt-14 flex flex-row space-x-8">
               <button
                 onClick={handleCalculateLanding}
-                className={`bg-theme-highlight border-theme-highlight text-theme-body hover:text-theme-highlight hover:bg-theme-body flex w-full flex-row items-center justify-center space-x-4 rounded-md border-2 py-2 outline-none ${!areInputsValid() && 'pointer-events-none opacity-50'}`}
+                className={`border-theme-highlight bg-theme-highlight text-theme-body hover:bg-theme-body hover:text-theme-highlight flex w-full flex-row items-center
+                  justify-center space-x-4 rounded-md border-2 py-2 outline-none
+                  ${!areInputsValid() && 'pointer-events-none opacity-50'}`}
                 type="button"
                 disabled={!areInputsValid()}
               >
