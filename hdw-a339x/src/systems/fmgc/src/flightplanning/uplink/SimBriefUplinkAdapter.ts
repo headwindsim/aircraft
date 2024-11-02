@@ -5,18 +5,18 @@
 
 /* eslint-disable no-await-in-loop */
 
-import { FlightPlanService } from '@fmgc/flightplanning/new/FlightPlanService';
-import { FlightPlanIndex } from '@fmgc/flightplanning/new/FlightPlanManager';
-import { NavigationDatabaseService } from '@fmgc/flightplanning/new/NavigationDatabaseService';
+import { FlightPlanService } from '@fmgc/flightplanning/FlightPlanService';
+import { FlightPlanIndex } from '@fmgc/flightplanning/FlightPlanManager';
+import { NavigationDatabaseService } from '@fmgc/flightplanning/NavigationDatabaseService';
 import { Airway, Fix } from '@flybywiresim/fbw-sdk';
 import { Coordinates, distanceTo } from 'msfs-geo';
-import { DisplayInterface } from '@fmgc/flightplanning/new/interface/DisplayInterface';
-import { FlightPlanPerformanceData } from '@fmgc/flightplanning/new/plans/performance/FlightPlanPerformanceData';
+import { DisplayInterface } from '@fmgc/flightplanning/interface/DisplayInterface';
+import { FlightPlanPerformanceData } from '@fmgc/flightplanning/plans/performance/FlightPlanPerformanceData';
 import { FmsErrorType } from '@fmgc/FmsError';
 import {
   ISimbriefData,
   simbriefDataParser,
-} from '../../../../../../../../build-common/src/systems/instruments/src/EFB/Apis/Simbrief';
+} from '../../../../../../../build-common/src/systems/instruments/src/EFB/Apis/Simbrief';
 import { DataInterface } from '../interface/DataInterface';
 
 const SIMBRIEF_API_URL = 'https://www.simbrief.com/api/xml.fetcher.php?json=1';

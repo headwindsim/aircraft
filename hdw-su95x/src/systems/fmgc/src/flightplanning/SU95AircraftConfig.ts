@@ -9,7 +9,7 @@ import {
   LnavConfig,
   VnavConfig,
   VnavDescentMode,
-} from '@fmgc/flightplanning/new/AircraftConfigTypes';
+} from '@fmgc/flightplanning/AircraftConfigTypes';
 
 const lnavConfig: LnavConfig = {
   DEFAULT_MIN_PREDICTED_TAS: 160,
