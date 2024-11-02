@@ -3,12 +3,13 @@ class CDU_ACARS_MenuPage {
         mcdu.clearDisplay();
         mcdu.page.Current = mcdu.page.AcarsMenuPage;
         mcdu.activeSystem = "ACARS";
-        let requestEnable = true;
+        let requestEnable = false;
 
         if (mcdu.simbrief.sendStatus === "REQUESTING") {
             requestEnable = false;
         }
 
+        /*
         if (mcdu.flightPlanManager.getPersistentOrigin() && mcdu.flightPlanManager.getPersistentOrigin().ident) {
             if (mcdu.flightPlanManager.getDestination() && mcdu.flightPlanManager.getDestination().ident) {
                 if (mcdu.simbrief.sendStatus != "DONE" ||
@@ -17,6 +18,7 @@ class CDU_ACARS_MenuPage {
                 }
             }
         }
+            */
 
         const updateView = () => {
             mcdu.setTemplate(FormatTemplate([
@@ -61,24 +63,6 @@ class CDU_ACARS_MenuPage {
         };
         mcdu.onNextPage = () => {
             this.ShowPage2(mcdu);
-        };
-
-        mcdu.onRightInput[0] = () => {
-            if (requestEnable) {
-                getSimBriefOfp(mcdu, () => {
-                    CDU_ACARS_MenuPage.ShowPage1(mcdu)
-                }).then(() => {
-                    insertUplink(mcdu);
-                });
-                updateView();
-            }
-        };
-
-        mcdu.onRightInput[2] = () => {
-            if (mcdu.windRequestEnabled) {
-                CDUWindPage.WindRequest(mcdu, CDU_ACARS_MenuPage.ShowPage1);
-                updateView();
-            }
         };
     }
 
