@@ -1,3 +1,7 @@
+// Copyright (c) 2021-2024 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import { RequestedVerticalMode, TargetAltitude, TargetVerticalSpeed } from '@fmgc/guidance/ControlLaws';
 import { AtmosphericConditions } from '@fmgc/guidance/vnav/AtmosphericConditions';
 import { AircraftToDescentProfileRelation } from '@fmgc/guidance/vnav/descent/AircraftToProfileRelation';
@@ -88,7 +92,7 @@ export class LatchedDescentGuidance {
     this.verticalState = newState;
   }
 
-  private reset() {
+  reset() {
     this.requestedVerticalMode = RequestedVerticalMode.None;
     this.targetAltitude = 0;
     this.targetVerticalSpeed = 0;
@@ -101,6 +105,7 @@ export class LatchedDescentGuidance {
     this.aircraftToDescentProfileRelation.update(distanceToEnd);
 
     if (!this.aircraftToDescentProfileRelation.isValid) {
+      this.changeState(DescentVerticalGuidanceState.InvalidProfile);
       return;
     }
 
@@ -273,5 +278,21 @@ export class LatchedDescentGuidance {
     if (!this.isInOverspeedCondition && airspeed > overspeedTriggerSpeed) {
       this.isInOverspeedCondition = true;
     }
+  }
+
+  public getDesSubmode(): RequestedVerticalMode {
+    return this.requestedVerticalMode;
+  }
+
+  public getTargetVerticalSpeed(): FeetPerMinute {
+    return this.targetVerticalSpeed;
+  }
+
+  public getLinearDeviation(): Feet {
+    if (!this.aircraftToDescentProfileRelation.isValid) {
+      return undefined;
+    }
+
+    return this.aircraftToDescentProfileRelation.computeLinearDeviation();
   }
 }
