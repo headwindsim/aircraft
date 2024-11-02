@@ -28,7 +28,8 @@
       "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index.ts"],
       "@flybywiresim/flypad": ["../../../build-common/src/systems/instruments/src/EFB/index.ts"],
       "@flybywiresim/clock": ["../../../build-common/src/systems/instruments/src/Clock/index.ts"],
-      "@flybywiresim/bat": ["../../../build-common/src/systems/instruments/src/BAT/index.ts"]
+      "@flybywiresim/bat": ["../../../build-common/src/systems/instruments/src/BAT/index.ts"],
+      "@flybywiresim/pfd": ["../../../build-common/src/systems/instruments/src/PFD/index.ts"]
     }
   },
 }

@@ -27,7 +27,9 @@
         "@shared/*": ["./shared/src/*"],
         "@tcas/*": ["./tcas/src/*"],
         "@typings/*": ["../../../build-common/src/typings/*"],
-        "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index-no-react.ts"]
+        "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index-no-react.ts"],
+        "@flybywiresim/pfd": ["../../../build-common/src/systems/instruments/src/PFD/index.ts"],
+        "@flybywiresim/msfs-avionics-common": ["../../../build-common/src/systems/instruments/src/MsfsAvionicsCommon/index.ts"]
       }
     }
   }

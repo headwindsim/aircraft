@@ -11,10 +11,6 @@
       "jsx": "react",
       "skipLibCheck": true,
       "paths": {
-//      "@datalink/aoc": ["datalink/aoc/src/index.ts"],
-//      "@datalink/atc": ["datalink/atc/src/index.ts"],
-//      "@datalink/common": ["datalink/common/src/index.ts"],
-//      "@datalink/router": ["datalink/router/src/index.ts"],
         "@fmgc/*": ["../../../build-a339x/src/systems/fmgc/src/*"],
         "@shared/*": ["../../../build-a339x/src/systems/shared/src/*"],
         "@simbridge/*": ["../../../build-a339x/src/systems/simbridge-client/src/*"],
