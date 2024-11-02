@@ -41,7 +41,7 @@ AudioMarkerListen=True
 AudioDmeListen=False
 AudioAdfListen=False
 AudioAdf2Listen=False
-AvionicsSwitch=False
+AvionicsSwitch=True
 
 [Engine Parameters.1.0]
 ThrottleLeverPct=0
@@ -82,6 +82,9 @@ Afterburner=0
 FuelValveOpen=False
 
 [FuelSystem.0]
+Tank.1=0
+Tank.4=0 // Tank 2 & 3 are set through FADEC wasm
+Tank.5=0
 Valve.1=False
 Valve.2=False
 Valve.3=False
@@ -280,7 +283,8 @@ A32NX_GEAR_CENTER_POSITION = 100
 A32NX_GEAR_LEFT_POSITION = 100
 A32NX_GEAR_RIGHT_POSITION = 100
 A32NX_GEAR_LEVER_POSITION_REQUEST = 1
-A32NX_ECAM_SD_CURRENT_PAGE_INDEX = -1
+A32NX_GPWS_GROUND_STATE=1
+A32NX_GPWS_APPROACH_STATE=0
 
 [Gauges.0]
 KollsmanSetting=29.921342849731445313
