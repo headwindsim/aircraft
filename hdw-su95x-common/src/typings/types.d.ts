@@ -96,7 +96,5 @@ declare global {
     const WaypointEntryUtils: typeof WaypointEntryUtils_;
 
     const SimBriefUplinkAdapter: typeof SimBriefUplinkAdapter_;
-
-    function getFlightPhaseManager(): FlightPhaseManager_;
   }
 }
