@@ -2,7 +2,7 @@
     "index": "./instrument.tsx",
     "isInteractive": false,
     "extraDeps": [
-      "../MsfsAvionicsCommon",
+      "build-su95x/src/systems/instruments/src/MsfsAvionicsCommon",
       "build-common/src/systems/instruments/src/PFD"
     ]
   }
