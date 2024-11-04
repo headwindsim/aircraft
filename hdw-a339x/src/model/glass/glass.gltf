@@ -777,17 +777,16 @@
                 "index": 2
             },
             "pbrMetallicRoughness": {
-                "metallicFactor": 0.0,
-                "baseColorTexture": {
+                "metallicRoughnessTexture": {
                     "index": 2
                 },
-                "metallicRoughnessTexture": {
+                "baseColorTexture": {
                     "index": 0
                 }
             },
             "extensions": {
                 "ASOBO_material_kitty_glass": {
-                    "glassReflectionMaskFactor": 0.10000000149011612
+                    "glassReflectionMaskFactor": 1
                 }
             }
         }
