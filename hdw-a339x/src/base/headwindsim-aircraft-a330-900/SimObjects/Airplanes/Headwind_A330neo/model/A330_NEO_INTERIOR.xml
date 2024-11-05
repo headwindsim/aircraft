@@ -243,6 +243,63 @@
                 <ANIM_NAME>SWITCH_EFIS_CS_CONSOLE</ANIM_NAME>
             </UseTemplate>
 
+            <!-- CPT LT CEILING -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
+                <ANIM_NAME>SWITCH_CEILING_LIGHT_CAPTAIN</ANIM_NAME>
+                <NODE_ID>SWITCH_CEILING_LIGHT_CAPTAIN</NODE_ID>
+                <PART_ID>SWITCH_CEILING_LIGHT_CAPTAIN</PART_ID>
+                <TOGGLE_EVENT>A339X_SWITCH_CEILING_LIGHT_CAPTAIN_Position</TOGGLE_EVENT>
+                <SIMVAR_NAME>A339X_SWITCH_CEILING_LIGHT_CAPTAIN_Position</SIMVAR_NAME>
+                <SIMVAR_GROUP>L</SIMVAR_GROUP>
+                <ANIMTIP_0>Turn ON CPT LT Ceiling (INOP)</ANIMTIP_0>
+                <ANIMTIP_1>Turn OFF CPT LT Ceiling (INOP)</ANIMTIP_1>
+            </UseTemplate>
+
+
+            <!-- CPT LT MAP -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
+                <ANIM_NAME>SWITCH_MAP_LIGHT_CAPTAIN</ANIM_NAME>
+                <NODE_ID>SWITCH_MAP_LIGHT_CAPTAIN</NODE_ID>
+                <PART_ID>SWITCH_MAP_LIGHT_CAPTAIN</PART_ID>
+                <TOGGLE_EVENT>A339X_SWITCH_MAP_LIGHT_CAPTAIN_Position</TOGGLE_EVENT>
+                <SIMVAR_NAME>A339X_SWITCH_MAP_LIGHT_CAPTAIN_Position</SIMVAR_NAME>
+                <SIMVAR_GROUP>L</SIMVAR_GROUP>
+                <ANIMTIP_0>Turn ON CPT LT Map (INOP)</ANIMTIP_0>
+                <ANIMTIP_1>Turn OFF CPT LT Map (INOP)</ANIMTIP_1>
+            </UseTemplate>
+
+            <!-- CPT LT CONSOLE -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
+                <ANIM_NAME>SWITCH_CONSOLE_LIGHT_CAPTAIN</ANIM_NAME>
+                <NODE_ID>SWITCH_CONSOLE_LIGHT_CAPTAIN</NODE_ID>
+                <PART_ID>SWITCH_CONSOLE_LIGHT_CAPTAIN</PART_ID>
+                <TOGGLE_EVENT>A339X_SWITCH_CONSOLE_LIGHT_CAPTAIN_Position</TOGGLE_EVENT>
+                <SIMVAR_NAME>A339X_SWITCH_CONSOLE_LIGHT_CAPTAIN_Position</SIMVAR_NAME>
+                <SIMVAR_GROUP>L</SIMVAR_GROUP>
+                <ANIMTIP_0>Turn ON CPT Console (INOP)</ANIMTIP_0>
+                <ANIMTIP_1>Turn OFF CPT Console (INOP)</ANIMTIP_1>
+            </UseTemplate>
+
+            <!-- CPT FOOT WARMER -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
+                <ANIM_NAME>SWITCH_FOOT_WARMER_CAPTAIN</ANIM_NAME>
+                <NODE_ID>SWITCH_FOOT_WARMER_CAPTAIN</NODE_ID>
+                <PART_ID>SWITCH_FOOT_WARMER_CAPTAIN</PART_ID>
+                <TOGGLE_EVENT>A339X_SWITCH_FOOT_WARMER_CAPTAIN_Position</TOGGLE_EVENT>
+                <SIMVAR_NAME>A339X_SWITCH_FOOT_WARMER_CAPTAIN_Position</SIMVAR_NAME>
+                <SIMVAR_GROUP>L</SIMVAR_GROUP>
+                <ANIMTIP_0>Turn ON CPT Foot Warmer (INOP)</ANIMTIP_0>
+                <ANIMTIP_1>Turn OFF CPT Foot Warmer (INOP)</ANIMTIP_1>
+            </UseTemplate>
+
             <!-- F/O CONSOLE/FLOOR LT -->
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
@@ -251,6 +308,62 @@
                 <NODE_ID>SWITCH_EFIS_FO_CONSOLE</NODE_ID>
                 <PART_ID>SWITCH_EFIS_FO_CONSOLE</PART_ID>
                 <ANIM_NAME>SWITCH_EFIS_FO_CONSOLE</ANIM_NAME>
+            </UseTemplate>
+
+            <!-- F/O LT CEILING -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
+                <ANIM_NAME>SWITCH_CEILING_LIGHT_FO</ANIM_NAME>
+                <NODE_ID>SWITCH_CEILING_LIGHT_FO</NODE_ID>
+                <PART_ID>SWITCH_CEILING_LIGHT_FO</PART_ID>
+                <TOGGLE_EVENT>A339X_SWITCH_CEILING_LIGHT_FO_Position</TOGGLE_EVENT>
+                <SIMVAR_NAME>A339X_SWITCH_CEILING_LIGHT_FO_Position</SIMVAR_NAME>
+                <SIMVAR_GROUP>L</SIMVAR_GROUP>
+                <ANIMTIP_0>Turn ON F/O LT Ceiling (INOP)</ANIMTIP_0>
+                <ANIMTIP_1>Turn OFF F/O Ceiling (INOP)</ANIMTIP_1>
+            </UseTemplate>
+
+            <!-- F/O LT MAP -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
+                <ANIM_NAME>SWITCH_MAP_LIGHT_FO</ANIM_NAME>
+                <NODE_ID>SWITCH_MAP_LIGHT_FO</NODE_ID>
+                <PART_ID>SWITCH_MAP_LIGHT_FO</PART_ID>
+                <TOGGLE_EVENT>A339X_SWITCH_MAP_LIGHT_FO_Position</TOGGLE_EVENT>
+                <SIMVAR_NAME>A339X_SWITCH_MAP_LIGHT_FO_Position</SIMVAR_NAME>
+                <SIMVAR_GROUP>L</SIMVAR_GROUP>
+                <ANIMTIP_0>Turn ON F/O LT Map (INOP)</ANIMTIP_0>
+                <ANIMTIP_1>Turn OFF F/O LT Map (INOP)</ANIMTIP_1>
+            </UseTemplate>
+
+            <!-- F/O LT CONSOLE -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
+                <ANIM_NAME>SWITCH_CONSOLE_LIGHT_FO</ANIM_NAME>
+                <NODE_ID>SWITCH_CONSOLE_LIGHT_FO</NODE_ID>
+                <PART_ID>SWITCH_CONSOLE_LIGHT_FO</PART_ID>
+                <TOGGLE_EVENT>A339X_SWITCH_CONSOLE_LIGHT_FO_Position</TOGGLE_EVENT>
+                <SIMVAR_NAME>A339X_SWITCH_CONSOLE_LIGHT_FO_Position</SIMVAR_NAME>
+                <SIMVAR_GROUP>L</SIMVAR_GROUP>
+                <ANIMTIP_0>Turn ON F/O Console (INOP)</ANIMTIP_0>
+                <ANIMTIP_1>Turn OFF F/O Console (INOP)</ANIMTIP_1>
+            </UseTemplate>
+
+            <!-- F/O FOOT WARMER -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
+                <ANIM_NAME>SWITCH_FOOT_WARMER_FO</ANIM_NAME>
+                <NODE_ID>SWITCH_FOOT_WARMER_FO</NODE_ID>
+                <PART_ID>SWITCH_FOOT_WARMER_FO</PART_ID>
+                <TOGGLE_EVENT>A339X_SWITCH_FOOT_WARMER_FO_Position</TOGGLE_EVENT>
+                <SIMVAR_NAME>A339X_SWITCH_FOOT_WARMER_FO_Position</SIMVAR_NAME>
+                <SIMVAR_GROUP>L</SIMVAR_GROUP>
+                <ANIMTIP_0>Turn ON F/O Foot Warmer (INOP)</ANIMTIP_0>
+                <ANIMTIP_1>Turn OFF F/O Foot Warmer (INOP)</ANIMTIP_1>
             </UseTemplate>
         </Component>
 
@@ -4476,6 +4589,34 @@
             <UseTemplate Name="FBW_Airbus_ATC_MSG_Button">
                 <NODE_ID>PUSH_AUTOPILOT_RR</NODE_ID>
                 <SEQ1_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED, Bool)</SEQ1_POWERED>
+            </UseTemplate>
+        </Component>
+
+        <Component ID="CS_Glareshild">
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>KNOB</ANIM_TYPE>
+                <ANIM_TEMPLATE>A32NX_AIRBUS_PACK_SELECTOR_TEMPLATE</ANIM_TEMPLATE>
+                <Node_ID>KNOB_EFIS_CS_NORM</Node_ID>
+                <PART_ID>KNOB_EFIS_CS_NORM</PART_ID>
+                <ANIM_NAME>KNOB_EFIS_CS_NORM</ANIM_NAME>
+                <ANIM_CODE>0</ANIM_CODE>
+                <ANIMTIP_0>Set EFIS DMC to NORM</ANIMTIP_0>
+                <ANIMTIP_1>Set EFIS DMC to 3</ANIMTIP_1>
+                <ANIMTIP_2>Set EFIS DMC to 2</ANIMTIP_2>
+            </UseTemplate>
+        </Component>
+
+        <Component ID="FO_Glareshild">
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>KNOB</ANIM_TYPE>
+                <ANIM_TEMPLATE>A32NX_AIRBUS_PACK_SELECTOR_TEMPLATE</ANIM_TEMPLATE>
+                <Node_ID>KNOB_EFIS_FO_NORM</Node_ID>
+                <PART_ID>KNOB_EFIS_FO_NORM</PART_ID>
+                <ANIM_NAME>KNOB_EFIS_FO_NORM</ANIM_NAME>
+                <ANIM_CODE>0</ANIM_CODE>
+                <ANIMTIP_0>Set EFIS DMC to NORM</ANIMTIP_0>
+                <ANIMTIP_1>Set EFIS DMC to 3</ANIMTIP_1>
+                <ANIMTIP_2>Set EFIS DMC to 1</ANIMTIP_2>
             </UseTemplate>
         </Component>
 
