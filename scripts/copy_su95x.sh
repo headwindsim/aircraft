@@ -44,7 +44,6 @@ mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Fonts
 mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Images
 mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/JS
 mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/Airliners
-mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/FlightElements
 mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/NavSystems
 mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VLivery/Liveries/Printer
 mkdir -p ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VLivery/Liveries/Registration
@@ -56,7 +55,6 @@ cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/JS/fbw
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/A32NX_Core ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/SU95X_Core
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/A32NX_Utils ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/SU95X_Utils
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VCockpit/Instruments/Airliners/FlyByWire_A320_Neo ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/Airliners/Headwind_SU95X
-cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VCockpit/Instruments/FlightElements ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/FlightElements/SU95X
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VCockpit/Instruments/NavSystems/A320_Neo ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/NavSystems/SU95X
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Registration ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VLivery/Liveries/Registration/SU95X
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Printer ./build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VLivery/Liveries/Printer/SU95X

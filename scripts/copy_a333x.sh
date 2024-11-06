@@ -43,7 +43,6 @@ mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Fonts
 mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Images
 mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/JS
 mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VCockpit/Instruments/Airliners
-mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VCockpit/Instruments/FlightElements
 mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VCockpit/Instruments/NavSystems
 mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VLivery/Liveries/Printer
 mkdir -p ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VLivery/Liveries/Registration
@@ -55,7 +54,6 @@ cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/JS/fbw
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/A32NX_Core ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/A333X_Core
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/A32NX_Utils ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/A333X_Utils
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VCockpit/Instruments/Airliners/FlyByWire_A320_Neo ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VCockpit/Instruments/Airliners/Headwind_A333X
-cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VCockpit/Instruments/FlightElements ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VCockpit/Instruments/FlightElements/A333X
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VCockpit/Instruments/NavSystems/A320_Neo ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VCockpit/Instruments/NavSystems/A333X
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Registration ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VLivery/Liveries/Registration/A333X
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Printer ./build-a333x/out/headwindsim-aircraft-a330-300/html_ui/Pages/VLivery/Liveries/Printer/A333X
