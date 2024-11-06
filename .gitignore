@@ -24,7 +24,6 @@
 !su95x-igniter.config.mjs
 !jsconfig.json
 
-Cargo.lock
 Cargo.toml
 !Cargo-A333X.toml
 !Cargo-A339X.toml
@@ -164,6 +163,7 @@ CMakeLists.txt
 *.bak
 *.tgz
 localazy.keys.json
+Cargo.lock
 
 # build artifacts
 node_modules/
