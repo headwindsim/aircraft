@@ -1,6 +1,6 @@
 {
     "extends": "../../../tsconfig.json",
-
+  
     "compilerOptions": {
       "incremental": false /* Enables incremental builds */,
       "target": "es2017" /* Specifies the ES2017 target, compatible with Coherent GT */,
@@ -19,15 +19,19 @@
         "@datalink/common": ["../../../build-common/src/systems/datalink/common/src/index.ts"],
         "@datalink/router": ["../../../build-common/src/systems/datalink/router/src/index.ts"],
         "@failures": ["./failures/src/index.ts"],
-        "@fmgc/*": ["../../../build-su95x/src/systems/fmgc/src/*"],
+        "@fmgc/*": ["./fmgc/src/*"],
         "@instruments/common/*": ["./instruments/src/Common/*"],
         "@localization/*": ["../localization/*"],
         "@sentry/*": ["./sentry-client/src/*"],
-        "@simbridge/*": ["../../../build-su95x/src/systems/simbridge-client/src/*"],
+        "@simbridge/*": ["./simbridge-client/src/*"],
+        "@shared/*": ["./shared/src/*"],
         "@tcas/*": ["./tcas/src/*"],
         "@typings/*": ["../../../build-common/src/typings/*"],
         "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index-no-react.ts"],
+        "@flybywiresim/navigation-display": ["../../../build-common/src/systems/instruments/src/ND/index.ts"],
         "@flybywiresim/oanc": ["../../../build-common/src/systems/instruments/src/OANC/index.ts"],
+        "@flybywiresim/msfs-avionics-common": ["../../../build-common/src/systems/instruments/src/MsfsAvionicsCommon/index.ts"]
       }
     }
   }
+  

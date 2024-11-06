@@ -1,0 +1,9 @@
+{
+    "index": "./instrument.tsx",
+    "isInteractive": true,
+    "extraDeps": [
+      "build-common/src/systems/instruments/src/ND",
+      "build-common/src/systems/instruments/src/OANC"
+    ]
+  }
+  

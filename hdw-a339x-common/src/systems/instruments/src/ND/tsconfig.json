@@ -19,15 +19,15 @@
         "@datalink/common": ["../../../build-common/src/systems/datalink/common/src/index.ts"],
         "@datalink/router": ["../../../build-common/src/systems/datalink/router/src/index.ts"],
         "@failures": ["./failures/src/index.ts"],
-        "@fmgc/*": ["./fmgc/src/*"],
+        "@fmgc/*": ["../../../build-a339x/src/systems/fmgc/src/*"],
         "@instruments/common/*": ["./instruments/src/Common/*"],
         "@localization/*": ["../localization/*"],
         "@sentry/*": ["./sentry-client/src/*"],
-        "@simbridge/*": ["./simbridge-client/src/*"],
-        "@shared/*": ["./shared/src/*"],
+        "@simbridge/*": ["../../../build-a339x/src/systems/simbridge-client/src/*"],
         "@tcas/*": ["./tcas/src/*"],
         "@typings/*": ["../../../build-common/src/typings/*"],
-        "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index-no-react.ts"]
+        "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index-no-react.ts"],
+        "@flybywiresim/oanc": ["../../../build-common/src/systems/instruments/src/OANC/index.ts"],
       }
     }
   }
