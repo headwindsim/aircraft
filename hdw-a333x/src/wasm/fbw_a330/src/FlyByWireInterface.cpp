@@ -228,9 +228,6 @@ void FlyByWireInterface::loadConfiguration() {
   autothrustThrustLimitReversePercentageToga =
       INITypeConversion::getDouble(iniStructure, "AUTOTHRUST", "THRUST_LIMIT_REVERSE_PERCENTAGE_TOGA", 0.813);
 
-  // initialize local variable for reverse
-  idAutothrustThrustLimitREV->set(autothrustThrustLimitReversePercentageToga);
-
   // print configuration into console
   std::cout << "WASM: AUTOTHRUST : THRUST_LIMIT_REVERSE_PERCENTAGE_TOGA    = " << autothrustThrustLimitReversePercentageToga << std::endl;
 
@@ -897,7 +894,7 @@ bool FlyByWireInterface::readDataAndLocalVariables(double sampleTime) {
   }
 
   // calculate delta time (and ensure it does not get 0 -> max 500 fps)
-  calculatedSampleTime = max(0.002, simData.simulationTime - previousSimulationTime);
+  calculatedSampleTime = std::max(0.002, simData.simulationTime - previousSimulationTime);
 
   monotonicTime += calculatedSampleTime;
 
@@ -958,7 +955,7 @@ bool FlyByWireInterface::handleSimulationRate(double sampleTime) {
   if (simData.simulation_rate > idMaximumSimulationRate->get()) {
     // set target simulation rate
     targetSimulationRateModified = true;
-    targetSimulationRate = max(1, simData.simulation_rate / 2);
+    targetSimulationRate = std::max(1., simData.simulation_rate / 2);
     // sed event to reduce simulation rate
     simConnectInterface.sendEvent(SimConnectInterface::Events::SIM_RATE_DECR, 0, SIMCONNECT_GROUP_PRIORITY_DEFAULT);
     // log event of reduction
@@ -980,7 +977,7 @@ bool FlyByWireInterface::handleSimulationRate(double sampleTime) {
       elac2ProtActive || autopilotStateMachineOutput.speed_protection_mode == 1) {
     // set target simulation rate
     targetSimulationRateModified = true;
-    targetSimulationRate = max(1, simData.simulation_rate / 2);
+    targetSimulationRate = std::max(1., simData.simulation_rate / 2);
     // send event to reduce simulation rate
     simConnectInterface.sendEvent(SimConnectInterface::Events::SIM_RATE_DECR, 0, SIMCONNECT_GROUP_PRIORITY_DEFAULT);
     // reset low performance timer
@@ -1847,7 +1844,7 @@ bool FlyByWireInterface::updateAutopilotStateMachine(double sampleTime) {
     autopilotStateMachineInput.in.data.bz_m_s2 = simData.bz_m_s2;
     autopilotStateMachineInput.in.data.nav_valid = (simData.nav_valid != 0);
     const auto backbeam = idFm1BackbeamSelected->get() != 0;
-    autopilotStateMachineInput.in.data.nav_loc_deg = simData.nav_loc_deg;
+    autopilotStateMachineInput.in.data.nav_loc_deg = MathUtils::normalise360(simData.nav_loc_deg + (backbeam ? 180 : 0));
     autopilotStateMachineInput.in.data.nav_gs_deg = simData.nav_gs_deg;
     if (idRadioReceiverUsageEnabled->get()) {
       autopilotStateMachineInput.in.data.nav_dme_valid = 0;  // this forces the usage of the calculated dme
@@ -2384,7 +2381,7 @@ bool FlyByWireInterface::updateFlyByWire(double sampleTime) {
   idSideStickPositionY->set(-1.0 * simInput.inputs[0]);
 
   // set rudder pedals position
-  idRudderPedalPosition->set(max(-100, min(100, (-100.0 * simInput.inputs[2]))));
+  idRudderPedalPosition->set(std::max(-100., std::min(100., (-100. * simInput.inputs[2]))));
 
   // provide tracking mode state
   idTrackingMode->set(wasInSlew || pauseDetected || idExternalOverride->get());
