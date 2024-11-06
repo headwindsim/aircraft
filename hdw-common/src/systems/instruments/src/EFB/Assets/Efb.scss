@@ -13,250 +13,250 @@
   @font-face {
     font-family: "JetBrains Mono";
     font-weight: 300;
-    src: url("/Fonts/A339X/JetBrainsMono-Regular.ttf") format("truetype");
+    src: url("#{$font-file-path}/JetBrainsMono-Regular.ttf") format("truetype");
   }
 
   @font-face {
     font-family: "Inter";
     font-weight: 400;
-    src: url("/Fonts/A339X/Inter-Regular.ttf") format("truetype");
+    src: url("#{$font-file-path}/Inter-Regular.ttf") format("truetype");
   }
   @font-face {
     font-family: "Inter";
     font-weight: 600;
-    src: url("/Fonts/A339X/Inter-SemiBold.ttf") format("truetype");
+    src: url("#{$font-file-path}/Inter-SemiBold.ttf") format("truetype");
   }
 
   @font-face {
     font-family: "Manrope";
     font-weight: 300;
-    src: url("/Fonts/A339X/Manrope-Light.ttf") format("truetype");
+    src: url("#{$font-file-path}/Manrope-Light.ttf") format("truetype");
   }
   @font-face {
     font-family: "Manrope";
     font-weight: 400;
-    src: url("/Fonts/A339X/Manrope-Regular.ttf") format("truetype");
+    src: url("#{$font-file-path}/Manrope-Regular.ttf") format("truetype");
   }
   @font-face {
     font-family: "Manrope";
     font-weight: 500;
-    src: url("/Fonts/A339X/Manrope-Medium.ttf") format("truetype");
+    src: url("#{$font-file-path}/Manrope-Medium.ttf") format("truetype");
   }
   @font-face {
     font-family: "Manrope";
     font-weight: 600;
-    src: url("/Fonts/A339X/Manrope-SemiBold.ttf") format("truetype");
+    src: url("#{$font-file-path}/Manrope-SemiBold.ttf") format("truetype");
   }
   @font-face {
     font-family: "Manrope";
     font-weight: 700;
-    src: url("/Fonts/A339X/Manrope-Bold.ttf") format("truetype");
+    src: url("#{$font-file-path}/Manrope-Bold.ttf") format("truetype");
   }
 
   @font-face {
     font-family: "AirbusRMP";
     font-weight: 900;
-    src: url("/Fonts/A339X/AirbusRMP.ttf") format("truetype");
+    src: url("#{$font-file-path}/AirbusRMP.ttf") format("truetype");
   }
 
   // Korean
   @font-face {
     font-family: "NotoSansKR";
     font-weight: 300;
-    src: url("/Fonts/A339X/NotoSansKR-Light.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansKR-Light.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansKR";
     font-weight: 400;
-    src: url("/Fonts/A339X/NotoSansKR-Regular.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansKR-Regular.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansKR";
     font-weight: 500;
-    src: url("/Fonts/A339X/NotoSansKR-Medium.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansKR-Medium.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansKR";
     font-weight: 600;
-    src: url("/Fonts/A339X/NotoSansKR-Bold.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansKR-Bold.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansKR";
     font-weight: 700;
-    src: url("/Fonts/A339X/NotoSansKR-Bold.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansKR-Bold.otf") format("truetype");
   }
 
   // Japanese
   @font-face {
     font-family: "NotoSansJP";
     font-weight: 300;
-    src: url("/Fonts/A339X/NotoSansJP-Light.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansJP-Light.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansJP";
     font-weight: 400;
-    src: url("/Fonts/A339X/NotoSansJP-Regular.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansJP-Regular.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansJP";
     font-weight: 500;
-    src: url("/Fonts/A339X/NotoSansJP-Medium.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansJP-Medium.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansJP";
     font-weight: 600;
-    src: url("/Fonts/A339X/NotoSansJP-Bold.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansJP-Bold.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansJP";
     font-weight: 700;
-    src: url("/Fonts/A339X/NotoSansJP-Bold.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansJP-Bold.otf") format("truetype");
   }
 
   // Simplified Chinese
   @font-face {
     font-family: "NotoSansSC";
     font-weight: 300;
-    src: url("/Fonts/A339X/NotoSansSC-Light.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansSC-Light.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansSC";
     font-weight: 400;
-    src: url("/Fonts/A339X/NotoSansSC-Regular.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansSC-Regular.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansSC";
     font-weight: 500;
-    src: url("/Fonts/A339X/NotoSansSC-Medium.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansSC-Medium.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansSC";
     font-weight: 600;
-    src: url("/Fonts/A339X/NotoSansSC-Bold.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansSC-Bold.otf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansSC";
     font-weight: 700;
-    src: url("/Fonts/A339X/NotoSansSC-Bold.otf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansSC-Bold.otf") format("truetype");
   }
 
   // Arabic
   @font-face {
     font-family: "NotoSansArabic";
     font-weight: 300;
-    src: url("/Fonts/A339X/NotoSansArabic-Light.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansArabic-Light.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansArabic";
     font-weight: 400;
-    src: url("/Fonts/A339X/NotoSansArabic-Regular.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansArabic-Regular.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansArabic";
     font-weight: 500;
-    src: url("/Fonts/A339X/NotoSansArabic-Medium.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansArabic-Medium.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansArabic";
     font-weight: 600;
-    src: url("/Fonts/A339X/NotoSansArabic-SemiBold.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansArabic-SemiBold.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansArabic";
     font-weight: 700;
-    src: url("/Fonts/A339X/NotoSansArabic-Bold.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansArabic-Bold.ttf") format("truetype");
   }
 
   // Thai
   @font-face {
     font-family: "NotoSansThai";
     font-weight: 300;
-    src: url("/Fonts/A339X/NotoSansThai-Light.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansThai-Light.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansThai";
     font-weight: 400;
-    src: url("/Fonts/A339X/NotoSansThai-Regular.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansThai-Regular.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansThai";
     font-weight: 500;
-    src: url("/Fonts/A339X/NotoSansThai-Medium.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansThai-Medium.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansThai";
     font-weight: 600;
-    src: url("/Fonts/A339X/NotoSansThai-SemiBold.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansThai-SemiBold.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansThai";
     font-weight: 700;
-    src: url("/Fonts/A339X/NotoSansThai-Bold.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansThai-Bold.ttf") format("truetype");
   }
 
   // Hebrew
   @font-face {
     font-family: "NotoSansHebrew";
     font-weight: 300;
-    src: url("/Fonts/A339X/NotoSansHebrew-Light.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansHebrew-Light.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansHebrew";
     font-weight: 400;
-    src: url("/Fonts/A339X/NotoSansHebrew-Regular.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansHebrew-Regular.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansHebrew";
     font-weight: 500;
-    src: url("/Fonts/A339X/NotoSansHebrew-Medium.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansHebrew-Medium.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansHebrew";
     font-weight: 600;
-    src: url("/Fonts/A339X/NotoSansHebrew-SemiBold.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansHebrew-SemiBold.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansHebrew";
     font-weight: 700;
-    src: url("/Fonts/A339X/NotoSansHebrew-Bold.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansHebrew-Bold.ttf") format("truetype");
   }
 
   // Hindi
   @font-face {
     font-family: "NotoSansDevanagari";
     font-weight: 300;
-    src: url("/Fonts/A339X/NotoSansDevanagari-Light.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansDevanagari-Light.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansDevanagari";
     font-weight: 400;
-    src: url("/Fonts/A339X/NotoSansDevanagari-Regular.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansDevanagari-Regular.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansDevanagari";
     font-weight: 500;
-    src: url("/Fonts/A339X/NotoSansDevanagari-Medium.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansDevanagari-Medium.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansDevanagari";
     font-weight: 600;
-    src: url("/Fonts/A339X/NotoSansDevanagari-SemiBold.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansDevanagari-SemiBold.ttf") format("truetype");
   }
   @font-face {
     font-family: "NotoSansDevanagari";
     font-weight: 700;
-    src: url("/Fonts/A339X/NotoSansDevanagari-Bold.ttf") format("truetype");
+    src: url("#{$font-file-path}/NotoSansDevanagari-Bold.ttf") format("truetype");
   }
 
   @font-face {
-    src: url("/Fonts/A339X/HoneywellMCDU.ttf") format("truetype");
+    src: url("#{$font-file-path}/HoneywellMCDU.ttf") format("truetype");
     font-family: "HoneywellMCDU";
     font-style: normal;
     font-weight: 900;
   }
 
   @font-face {
-    src: url("/Fonts/A339X/HoneywellMCDUSmall.ttf") format("truetype");
+    src: url("#{$font-file-path}/HoneywellMCDUSmall.ttf") format("truetype");
     font-family: "HoneywellMCDUSmall";
     font-style: normal;
     font-weight: 900;

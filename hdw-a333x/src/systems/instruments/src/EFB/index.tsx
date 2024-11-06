@@ -11,6 +11,8 @@ import { A330343TakeoffPerformanceCalculator } from '@shared/performance/a333x_t
 import { AutomaticCallOutsPage } from './Pages/AutomaticCallOutsPage';
 import { a32nxSyncedSettings } from 'instruments/src/EFB/settingsSync';
 
+import './Efb.scss';
+
 function aircraftEfbSetup(): void {
   syncSettingsFromPersistentStorage(a32nxSyncedSettings);
 }

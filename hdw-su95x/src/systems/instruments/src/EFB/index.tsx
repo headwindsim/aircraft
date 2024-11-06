@@ -11,6 +11,8 @@ import { SSJ10095TakeoffPerformanceCalculator } from '@shared/performance/su95x_
 import { AutomaticCallOutsPage } from './Pages/AutomaticCallOutsPage';
 import { a32nxSyncedSettings } from 'instruments/src/EFB/settingsSync';
 
+import './Efb.scss';
+
 function aircraftEfbSetup(): void {
   syncSettingsFromPersistentStorage(a32nxSyncedSettings);
 }
