@@ -55,16 +55,13 @@ export interface NotificationData extends Omit<NotificationParameters, 'message'
  */
 
 export class NotificationManager {
-  eventBus: EventBus;
-
   manager: KeyEventManager;
 
   notifications: Notification[];
 
-  constructor() {
+  constructor(private readonly bus: EventBus) {
     this.notifications = [];
-    this.eventBus = new EventBus();
-    KeyEventManager.getManager(this.eventBus).then((man) => {
+    KeyEventManager.getManager(this.bus).then((man) => {
       this.manager = man;
       this.registerIntercepts();
     });
@@ -76,7 +73,7 @@ export class NotificationManager {
     this.manager.interceptKey('PAUSE_OFF', true);
     this.manager.interceptKey('PAUSE_SET', true);
 
-    const subscriber = this.eventBus.getSubscriber<KeyEvents>();
+    const subscriber = this.bus.getSubscriber<KeyEvents>();
     subscriber.on('key_intercept').handle((keyData) => {
       switch (keyData.key) {
         case 'PAUSE_TOGGLE':
@@ -110,7 +107,7 @@ class Notification {
    * Creates a Notification
    */
   constructor() {
-    const title = 'A339X ALERT';
+    const title = 'HEADWIND SIMULATIONS ALERT';
     this.time = new Date().getTime();
     this.params = {
       id: `${title}_${this.time}`,

@@ -33,7 +33,7 @@ export class PopUpDialog {
    * Creates a Popup
    */
   constructor() {
-    const title = 'A339X POPUP';
+    const title = 'HEADWIND SIMULATIONS POPUP';
     const time = new Date().getTime();
     this.popupListener = undefined;
     this.params = {
