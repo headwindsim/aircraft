@@ -1,22 +1,23 @@
 {
-  "compilerOptions": {
-    "target": "es2017" /* Specifies the ES2017 target, compatible with Coherent GT */,
-    "baseUrl": ".",
-    "resolveJsonModule" : true,
-    "typeRoots": [
-      "../typings",
-    ],
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react",
-    "skipLibCheck": true,
-    "paths": {
-      "@fmgc/*": ["../../../build-a333x/src/systems/fmgc/src/*"],
-      "@shared/*": ["../../../build-a333x/src/systems/shared/src/*"],
-      "@typings/*": ["../typings/*"],
-      "@flybywiresim/fbw-sdk": ["./index.ts"],
-      "@flybywiresim/flypad": ["./instruments/src/EFB/index.ts"],
-      "@flybywiresim/checklists": ["./shared/src/checklists/index.ts"]
+    "compilerOptions": {
+      "target": "es2017" /* Specifies the ES2017 target, compatible with Coherent GT */,
+      "baseUrl": ".",
+      "resolveJsonModule" : true,
+      "typeRoots": [
+        "../typings",
+      ],
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "jsx": "react",
+      "skipLibCheck": true,
+      "paths": {
+        "@fmgc/*": ["../../../build-a333x/src/systems/fmgc/src/*"],
+        "@shared/*": ["../../../build-a333x/src/systems/shared/src/*"],
+        "@simbridge/*": ["../../../build-a333x/src/systems/simbridge-client/src/*"],
+        "@typings/*": ["../typings/*"],
+        "@flybywiresim/fbw-sdk": ["./index.ts"],
+        "@flybywiresim/flypad": ["./instruments/src/EFB/index.ts"],
+        "@flybywiresim/checklists": ["./shared/src/checklists/index.ts"]
+      }
     }
   }
-}
