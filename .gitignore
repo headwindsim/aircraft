@@ -164,7 +164,6 @@ CMakeLists.txt
 *.bak
 *.tgz
 localazy.keys.json
-Cargo.lock
 
 # build artifacts
 node_modules/
