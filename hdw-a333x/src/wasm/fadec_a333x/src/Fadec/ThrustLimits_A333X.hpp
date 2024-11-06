@@ -33,7 +33,7 @@ class ThrustLimits_A333X {
    * The array is divided into sections for different flight phases: Takeoff (TO), Go-Around (GA),
    * Climb (CLB), and Maximum Continuous Thrust (MCT).
    */
-  static constexpr double limits[72][6] = {
+static constexpr double limits[72][6] = {
   // TO
       {-2000,   48.000,  55.000,  81.351, 79.370, 61.535}, // row 0
       {-1000,   46.000,  55.000,  82.605, 80.120, 62.105}, //

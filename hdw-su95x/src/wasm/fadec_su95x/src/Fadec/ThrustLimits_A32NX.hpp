@@ -156,7 +156,8 @@ class ThrustLimits_A32NX {
    * @param type The type of operation (0-TO, 1-GA, 2-CLB, 3-MCT).
    * @param altitude The current altitude of the aircraft in feet.
    * @param oat The outside air temperature in degrees Celsius.
-   * @param cp The corner point - the temperature below which the engine can operate at full thrust without any restrictions (in degrees Celsius).
+   * @param cp The corner point - the temperature below which the engine can operate at full thrust without any restrictions (in degrees
+   * Celsius).
    * @param lp The limit point - the temperature above which the engine thrust starts to be limited (in degrees Celsius).
    * @param flexTemp The flex temperature in degrees Celsius.
    * @param packs The status of the air conditioning (0 for off, 1 for on).
@@ -170,9 +171,9 @@ class ThrustLimits_A32NX {
                            double cp,        //
                            double lp,        //
                            double flexTemp,  //
-                           int packs,        //
-                           int nacelle,      //
-                           int wing          //
+                           int    packs,     //
+                           int    nacelle,   //
+                           int    wing       //
   ) {
     if (flexTemp > lp && type <= 1) {
       return packs * -0.6 + nacelle * -0.7 + wing * -0.7;
@@ -272,6 +273,18 @@ class ThrustLimits_A32NX {
         rowMax = 71;
         mach   = Fadec::cas2mach(230, ambientPressure);
         break;
+    }
+
+    // Check for over/under flows. Else, find top row value
+    if (altitude <= limits[rowMin][0]) {
+      hiAltRow = rowMin;
+      loAltRow = rowMin;
+    } else if (altitude >= limits[rowMax][0]) {
+      hiAltRow = rowMax;
+      loAltRow = rowMax;
+    } else {
+      hiAltRow = finder(altitude, rowMin);
+      loAltRow = hiAltRow - 1;
     }
 
     // Define key table variables and interpolation

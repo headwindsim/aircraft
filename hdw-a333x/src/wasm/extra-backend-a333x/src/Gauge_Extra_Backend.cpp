@@ -20,7 +20,6 @@
 #include "Example/ExampleModule.h"
 #endif
 
-#include "AircraftPresets/AircraftPresetProcedures_A333X.h"
 #include "AircraftPresets/AircraftPresets.h"
 #include "LightingPresets/LightingPresets_A333X.h"
 #include "Pushback/Pushback_A333X.h"
@@ -34,7 +33,7 @@ ExampleModule exampleModule(msfsHandler);
 // This is the only place these have to be added - everything else is handled automatically
 LightingPresets_A333X lightingPresets(msfsHandler);
 Pushback_A333X        pushback(msfsHandler);
-AircraftPresets       aircraftPresets(msfsHandler, AircraftPresetProcedures_A333X::aircraftProcedureDefinition);
+AircraftPresets       aircraftPresets(msfsHandler, "./config/a333x/a330-343/aircraft_preset_procedures.xml");
 
 /**
  * Gauge Callback

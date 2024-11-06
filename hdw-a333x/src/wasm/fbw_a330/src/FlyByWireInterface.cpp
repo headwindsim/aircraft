@@ -277,7 +277,7 @@ void FlyByWireInterface::loadConfiguration() {
   // create mapping for 3D animation position
   std::vector<std::pair<double, double>> mappingTable3d;
   mappingTable3d.emplace_back(-20.0, 0.0);
-  mappingTable3d.emplace_back(0.0, 0.0);
+  mappingTable3d.emplace_back(0.0, 25.0);
   mappingTable3d.emplace_back(25.0, 50.0);
   mappingTable3d.emplace_back(35.0, 75.0);
   mappingTable3d.emplace_back(45.0, 100.0);
@@ -372,8 +372,8 @@ void FlyByWireInterface::setupLocalVariables() {
   idFmgcAccelerationAltitudeGoAround = std::make_unique<LocalVariable>("A32NX_FM1_MISSED_ACC_ALT");
   idFmgcAccelerationAltitudeGoAroundEngineOut = std::make_unique<LocalVariable>("A32NX_FM1_MISSED_EO_ACC_ALT");
 
-  idFmgcCruiseAltitude = std::make_unique<LocalVariable>("AIRLINER_CRUISE_ALTITUDE");
-  idFmgcFlexTemperature = std::make_unique<LocalVariable>("AIRLINER_TO_FLEX_TEMP");
+  idFmgcCruiseAltitude = std::make_unique<LocalVariable>("A32NX_AIRLINER_CRUISE_ALTITUDE");
+  idFmgcFlexTemperature = std::make_unique<LocalVariable>("A32NX_AIRLINER_TO_FLEX_TEMP");
 
   idFlightGuidanceAvailable = std::make_unique<LocalVariable>("A32NX_FG_AVAIL");
   idFlightGuidanceCrossTrackError = std::make_unique<LocalVariable>("A32NX_FG_CROSS_TRACK_ERROR");

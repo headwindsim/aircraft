@@ -141,6 +141,9 @@ clang++ \
   "${DIR}/src/model/rt_modd.cpp" \
   "${DIR}/src/model/rt_remd.cpp" \
   "${DIR}/src/model/uMultiWord2Double.cpp" \
+  "${DIR}/src/model/binsearch_u32d.cpp" \
+  "${DIR}/src/model/intrp3d_l_pw.cpp" \
+  "${DIR}/src/model/plook_binx.cpp" \
   -I "${FBW_COMMON_DIR}/src/zlib" \
   "${FBW_COMMON_DIR}/src/zlib/zfstream.cc" \
   "${DIR}/src/FlyByWireInterface.cpp" \
