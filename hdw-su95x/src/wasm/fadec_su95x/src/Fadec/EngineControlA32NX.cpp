@@ -554,10 +554,10 @@ double EngineControl_A32NX::updateFF(int    engine,
   // Checking Fuel Logic and final Fuel Flow
   double outFlow = 0;
   if (correctedFuelFlow >= 1) {
-    outFlow = (std::max)(0.0,                                                                                  //
-                         (correctedFuelFlow * Fadec::LBS_TO_KGS * EngineRatios::delta2(mach, ambientPressure)  //
-                          * (std::sqrt)(EngineRatios::theta2(mach, ambientTemperature)))                       //
-                             - paramImbalance);                                                                //
+    outFlow = std::max(0.0,                                                                                  //
+                       (correctedFuelFlow * Fadec::LBS_TO_KGS * EngineRatios::delta2(mach, ambientPressure)  //
+                        * (std::sqrt)(EngineRatios::theta2(mach, ambientTemperature)))                       //
+                           - paramImbalance);                                                                //
   }
   simData.engineFF[engine - 1]->set(outFlow);
 
@@ -1007,7 +1007,7 @@ void EngineControl_A32NX::updateThrustLimits(double                  simulationT
   if ((prevThrustLimitType != 3 && thrustLimitType == 3) || (prevFlexTemperature == 0 && flexTemp > 0)) {
     wasFlexActive = true;
   } else if ((flexTemp == 0) || (thrustLimitType == 4)) {
-    wasFlexActive = false;
+      wasFlexActive      = false;
   }
 
   if (wasFlexActive && !isTransitionActive && thrustLimitType == 1) {
@@ -1028,7 +1028,7 @@ void EngineControl_A32NX::updateThrustLimits(double                  simulationT
       deltaThrust = (std::min)(clb - flex, timeDifference * transitionFactor);
     }
     if (flex + deltaThrust >= clb) {
-      wasFlexActive = false;
+      wasFlexActive      = false;
       isTransitionActive = false;
     }
   }

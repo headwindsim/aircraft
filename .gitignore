@@ -48,6 +48,8 @@ CMakeLists.txt
 
 !/textures/**
 
+# === Common ===
+
 /hdw-common/*
 /hdw-common/src/systems/instruments/src/EFB/Localization/data/downloaded/*.json
 !/hdw-common/src/
@@ -68,6 +70,19 @@ CMakeLists.txt
 !/hdw-su95x-common/src/
 !/hdw-su95x-common/src/**
 
+# === A333X ===
+
+/hdw-a333x/*
+!/hdw-a333x/README.md
+!/hdw-a333x/mach.config.js
+!/hdw-a333x/.env
+!/hdw-a333x/docs/
+!/hdw-a333x/docs/**
+!/hdw-a333x/src/
+!/hdw-a333x/src/**
+
+# === A339X ===
+
 /hdw-a339x/*
 /hdw-a339x/.env.local
 !/hdw-a339x/README.md
@@ -87,14 +102,17 @@ CMakeLists.txt
 !/hdw-a339x-acj/src/
 !/hdw-a339x-acj/src/**
 
-/hdw-a333x/*
-!/hdw-a333x/README.md
-!/hdw-a333x/mach.config.js
-!/hdw-a333x/.env
-!/hdw-a333x/docs/
-!/hdw-a333x/docs/**
-!/hdw-a333x/src/
-!/hdw-a333x/src/**
+/hdw-a339x/out
+/hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.bin
+/hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.gltf
+/hdw-a339x/src/systems/instruments/aceBundles
+/hdw-a339x/src/systems/instruments/buildSrc/custom/*
+
+/hdw-a339x/src/localization/msfs/downloaded/*.locPak
+/hdw-a339x/src/systems/instruments/src/EFB/dist
+/hdw-a339x/src/systems/instruments/src/EFB/web/
+
+# === SU95X ===
 
 /hdw-su95x/*
 /hdw-su95x/.env.local
@@ -106,15 +124,7 @@ CMakeLists.txt
 !/hdw-su95x/src/
 !/hdw-su95x/src/**
 
-/hdw-a339x/out
-/hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.bin
-/hdw-a339x/src/base/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/model/*.gltf
-/hdw-a339x/src/systems/instruments/aceBundles
-/hdw-a339x/src/systems/instruments/buildSrc/custom/*
-
-/hdw-a339x/src/localization/msfs/downloaded/*.locPak
-/hdw-a339x/src/systems/instruments/src/EFB/dist
-/hdw-a339x/src/systems/instruments/src/EFB/web/
+# === A339X Liveries ===
 
 /hdw-a339x-liveries/*
 !/hdw-a339x-liveries/README.md
@@ -125,6 +135,8 @@ CMakeLists.txt
 !/hdw-a339x-liveries/src/
 !/hdw-a339x-liveries/src/**
 
+# === SU95X Liveries ===
+
 /hdw-su95x-liveries/*
 !/hdw-su95x-liveries/README.md
 !/hdw-su95x-liveries/mach.config.js
@@ -134,73 +146,36 @@ CMakeLists.txt
 !/hdw-su95x-liveries/src/
 !/hdw-su95x-liveries/src/**
 
-!/scripts/**
-
-!/build-utils.js
+# === Tools ===
 
 !/tools/**
 /tools/fdr2csv/*.exe
 /tools/fdr2csv/build/
 /tools/fdr2csv/cmake-build*
 
-# avoid issues when switching branches during transistion from old to new structure
-/src/
-/headwind-aircraft-a330-900/
-/headwind-aircraft-a330-900-lock-highlight/
-/headwindsim-aircraft-a330-900/
-/headwindsim-aircraft-a330-900-lock-highlight/
+# Build scripts
+!/scripts/**
+!/build-utils.js
 
 # explicit exclusions
 /.env
-node_modules/
-target/
-obj/
-cmake-build*/
 *.tgz
 *.wasm
 *.bak
+*.tgz
+localazy.keys.json
+Cargo.lock
+
+# build artifacts
+node_modules/
+target/
+obj/
+build/
+out/
+cmake-*/
 
 /build-a333x/
 /build-a339x/
 /build-a339x-acj/
 /build-su95x/
 /build-common/
-
-# ======== OLD =============
-
-#!/.husky/**
-#!CODEOWNERS
-#/src/mcdu-server/client/build
-#/src/presets/obj/
-#/src/systems/a320_hydraulic_simulation_graphs/*.png
-#/src/systems/a320_pneumatic_simulation_graph_data/*.txt
-#/src/systems/target/
-#!/headwindsim-aircraft-a330-900/CORS SERVER/*
-#/src/fadec/obj/
-#/src/fbw_a320/obj/
-#/src/fbw_a380/obj/
-#/src/sound/.cache
-#/src/instruments/buildSrc/custom/*
-#src/instruments/buildSrc/custom/*
-#/src/autothrottle/target
-#/headwindsim-aircraft-a330-900/layout.json
-#/headwindsim-aircraft-a330-900/manifest.json
-#/headwindsim-aircraft-a330-900/a32nx_build_info.json
-#/headwindsim-aircraft-a330-900/html_ui/JS/atsu/
-#/headwindsim-aircraft-a330-900/html_ui/JS/fmgc/
-#/headwindsim-aircraft-a330-900/html_ui/JS/sentry-client/
-#/headwindsim-aircraft-a330-900/html_ui/JS/simbridge-client/
-#/headwindsim-aircraft-a330-900/html_ui/JS/tcas/
-#/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX/*
-#!/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX/PFD
-#/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX/PFD/*.js
-#/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX/PFD/*.css
-#/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A32NX/PFD/*.html
-#/headwindsim-aircraft-a330-900/html_ui/JS/generated/**
-#/headwindsim-aircraft-a330-900/ModelBehaviorDefs/A32NX/generated
-#!/docs/**
-#!/src/**
-#!/scripts/**
-#!/typings/**
-
-Cargo.lock

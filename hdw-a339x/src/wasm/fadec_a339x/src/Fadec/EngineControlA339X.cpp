@@ -558,9 +558,9 @@ double EngineControl_A339X::updateFF(int    engine,
   double outFlow = 0;
   if (correctedFuelFlow >= 1) {
     outFlow = std::max(0.0,                                                                                  //
-                         (correctedFuelFlow * Fadec::LBS_TO_KGS * EngineRatios::delta2(mach, ambientPressure)  //
-                          * (std::sqrt)(EngineRatios::theta2(mach, ambientTemperature)))                       //
-                             - paramImbalance);                                                                //
+                       (correctedFuelFlow * Fadec::LBS_TO_KGS * EngineRatios::delta2(mach, ambientPressure)  //
+                        * (std::sqrt)(EngineRatios::theta2(mach, ambientTemperature)))                       //
+                           - paramImbalance);                                                                //
   }
   simData.engineFF[engine - 1]->set(outFlow);
 
@@ -1032,7 +1032,7 @@ void EngineControl_A339X::updateThrustLimits(double                  simulationT
       deltaThrust = (std::min)(clb - flex, timeDifference * transitionFactor);
     }
     if (flex + deltaThrust >= clb) {
-      wasFlexActive = false;
+      wasFlexActive      = false;
       isTransitionActive = false;
     }
   }
