@@ -1619,11 +1619,13 @@ impl A320Hydraulic {
 
             nose_steering: SteeringActuator::new(
                 context,
+                "NOSE_WHEEL",
                 Angle::new::<degree>(75.),
                 AngularVelocity::new::<radian_per_second>(0.35),
                 Length::new::<meter>(0.075),
                 Ratio::new::<ratio>(0.18),
                 Pressure::new::<psi>(2000.),
+                true,
             ),
 
             core_hydraulic_updater: MaxStepLoop::new(Self::HYDRAULIC_SIM_TIME_STEP),
@@ -2731,7 +2733,6 @@ impl A320GearHydraulicController {
     ) {
         let speed_condition =
             adirs.low_speed_warning_4_260kts(1) || adirs.low_speed_warning_4_260kts(3);
-
         let on_ground_condition = lgciu1.left_and_right_gear_compressed(true)
             || lgciu2.left_and_right_gear_compressed(true);
 
@@ -3572,8 +3573,6 @@ struct A320HydraulicBrakeSteerComputerUnit {
     left_brake_pedal_input_id: VariableIdentifier,
     right_brake_pedal_input_id: VariableIdentifier,
 
-    ground_speed_id: VariableIdentifier,
-
     rudder_pedal_input_id: VariableIdentifier,
     tiller_handle_input_id: VariableIdentifier,
     tiller_pedal_disconnect_id: VariableIdentifier,
@@ -3602,8 +3601,6 @@ struct A320HydraulicBrakeSteerComputerUnit {
     tiller_steering_limiter: SteeringAngleLimiter<5>,
     tiller_input_map: SteeringRatioToAngle<6>,
     final_steering_position_request: Angle,
-
-    ground_speed: Velocity,
 }
 impl A320HydraulicBrakeSteerComputerUnit {
     const RUDDER_PEDAL_INPUT_GAIN: f64 = 32.;
@@ -3646,7 +3643,6 @@ impl A320HydraulicBrakeSteerComputerUnit {
             right_brake_pedal_input_id: context
                 .get_identifier("RIGHT_BRAKE_PEDAL_INPUT".to_owned()),
 
-            ground_speed_id: context.get_identifier("GPS GROUND SPEED".to_owned()),
             rudder_pedal_input_id: context.get_identifier("RUDDER_PEDAL_POSITION_RATIO".to_owned()),
             tiller_handle_input_id: context.get_identifier("TILLER_HANDLE_POSITION".to_owned()),
             tiller_pedal_disconnect_id: context
@@ -3691,8 +3687,6 @@ impl A320HydraulicBrakeSteerComputerUnit {
                 Self::TILLER_INPUT_CURVE_MAP,
             ),
             final_steering_position_request: Angle::new::<degree>(0.),
-
-            ground_speed: Velocity::new::<knot>(0.),
         }
     }
 
@@ -3755,7 +3749,7 @@ impl A320HydraulicBrakeSteerComputerUnit {
         engine1: &impl Engine,
         engine2: &impl Engine,
     ) {
-        self.update_steering_demands(lgciu1, engine1, engine2);
+        self.update_steering_demands(context, lgciu1, engine1, engine2);
 
         self.update_normal_braking_availability(current_pressure.pressure());
         self.update_brake_pressure_limitation();
@@ -3833,6 +3827,7 @@ impl A320HydraulicBrakeSteerComputerUnit {
 
     fn update_steering_demands(
         &mut self,
+        context: &UpdateContext,
         lgciu1: &impl LgciuInterface,
         engine1: &impl Engine,
         engine2: &impl Engine,
@@ -3850,7 +3845,7 @@ impl A320HydraulicBrakeSteerComputerUnit {
 
         // TODO Here ground speed would be probably computed from wheel sensor logic
         let final_steer_rudder_plus_autopilot = self.pedal_steering_limiter.angle_from_speed(
-            self.ground_speed,
+            context.ground_speed(),
             (steer_angle_from_pedals + steer_angle_from_autopilot)
                 .min(Angle::new::<degree>(
                     Self::MAX_RUDDER_INPUT_INCLUDING_AUTOPILOT_DEGREE,
@@ -3861,7 +3856,7 @@ impl A320HydraulicBrakeSteerComputerUnit {
         );
 
         let steer_angle_from_tiller = self.tiller_steering_limiter.angle_from_speed(
-            self.ground_speed,
+            context.ground_speed(),
             self.tiller_input_map
                 .angle_demand_from_input_demand(self.tiller_handle_position),
         );
@@ -3912,7 +3907,6 @@ impl SimulationElement for A320HydraulicBrakeSteerComputerUnit {
             Ratio::new::<ratio>(reader.read(&self.tiller_handle_input_id));
         self.rudder_pedal_position = Ratio::new::<ratio>(reader.read(&self.rudder_pedal_input_id));
         self.tiller_pedal_disconnect = reader.read(&self.tiller_pedal_disconnect_id);
-        self.ground_speed = reader.read(&self.ground_speed_id);
 
         self.autopilot_nosewheel_demand =
             Ratio::new::<ratio>(reader.read(&self.autopilot_nosewheel_demand_id));
@@ -6066,7 +6060,7 @@ mod tests {
 
         use uom::si::{
             angle::degree,
-            angle::radian,
+            angular_velocity::degree_per_second,
             electric_potential::volt,
             length::foot,
             mass_density::kilogram_per_cubic_meter,
@@ -6948,8 +6942,9 @@ mod tests {
                 self
             }
 
-            fn set_pushback_angle(mut self, angle: Angle) -> Self {
-                self.write_by_name("PUSHBACK ANGLE", angle.get::<radian>());
+            fn set_pushback_angle(mut self, angle: AngularVelocity) -> Self {
+                self.write_by_name("ROTATION VELOCITY BODY Y", angle.get::<degree_per_second>());
+                self.write_by_name("VELOCITY BODY Z", -1.);
                 self
             }
 
@@ -10507,14 +10502,14 @@ mod tests {
                 .set_tiller_demand(Ratio::new::<ratio>(1.))
                 .run_waiting_for(Duration::from_secs_f64(5.));
 
-            assert!(test_bed.nose_steering_position().get::<degree>() >= 73.9);
+            assert!(test_bed.nose_steering_position().get::<degree>() >= 73.5);
             assert!(test_bed.nose_steering_position().get::<degree>() <= 75.1);
 
             test_bed = test_bed
                 .set_tiller_demand(Ratio::new::<ratio>(-1.))
                 .run_waiting_for(Duration::from_secs_f64(10.));
 
-            assert!(test_bed.nose_steering_position().get::<degree>() <= -73.9);
+            assert!(test_bed.nose_steering_position().get::<degree>() <= -73.5);
             assert!(test_bed.nose_steering_position().get::<degree>() >= -75.1);
         }
 
@@ -11067,8 +11062,8 @@ mod tests {
 
             test_bed = test_bed
                 .set_pushback_state(true)
-                .set_pushback_angle(Angle::new::<degree>(80.))
-                .run_waiting_for(Duration::from_secs_f64(0.5));
+                .set_pushback_angle(AngularVelocity::new::<degree_per_second>(-5.))
+                .run_waiting_for(Duration::from_secs_f64(5.));
 
             // Do not turn instantly in 0.5s
             assert!(
@@ -11084,8 +11079,8 @@ mod tests {
             // Going left
             test_bed = test_bed
                 .set_pushback_state(true)
-                .set_pushback_angle(Angle::new::<degree>(-80.))
-                .run_waiting_for(Duration::from_secs_f64(0.5));
+                .set_pushback_angle(AngularVelocity::new::<degree_per_second>(5.))
+                .run_waiting_for(Duration::from_secs_f64(5.));
 
             assert!(test_bed.get_nose_steering_ratio() > Ratio::new::<ratio>(0.2));
 
