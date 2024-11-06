@@ -2730,8 +2730,7 @@ impl A320GearHydraulicController {
         lgciu2: &impl LgciuWeightOnWheels,
     ) {
         let speed_condition =
-            !adirs.low_speed_warning_4_260kts(1) || !adirs.low_speed_warning_4_260kts(3);
-
+            adirs.low_speed_warning_4_260kts(1) || adirs.low_speed_warning_4_260kts(3);
         let on_ground_condition = lgciu1.left_and_right_gear_compressed(true)
             || lgciu2.left_and_right_gear_compressed(true);
 
@@ -6124,7 +6123,7 @@ mod tests {
             }
 
             fn low_speed_warning_4_260kts(&self, _: usize) -> bool {
-                self.airspeed.get::<knot>() > 260.
+                self.airspeed.get::<knot>() < 260.
             }
         }
 
