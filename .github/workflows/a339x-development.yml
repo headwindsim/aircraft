@@ -76,15 +76,3 @@ jobs:
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/build-modules
-      - name: Get short SHA
-        uses: benjlevesque/short-sha@v2.2
-        id: short-sha
-      - name: Upload Release Config to CloudFlare CDN
-        env:
-          SHA: ${{ steps.short-sha.outputs.sha }}
-        run: |
-          mkdir -p ./build-a339x/out/config
-          echo "releases:" >> ./build-a339x/out/config/releases.yaml
-          echo "  - name: $SHA" >> ./build-a339x/out/config/releases.yaml
-          echo "    date: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ./build-a339x/out/config/releases.yaml
-          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/config

@@ -4,6 +4,7 @@ const fs = require('fs');
 const execute = async () => {
   try {
     const result = await fragmenter.pack({
+      version: require('./fragmenter_version').version,
       packOptions: { splitFileSize: 102_760_448, keepCompleteModulesAfterSplit: false },
       baseDir: './build-su95x/out/headwindsim-aircraft-su100-95',
       outDir: './build-su95x/out/build-modules',

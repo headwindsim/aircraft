@@ -70,13 +70,6 @@ jobs:
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a333x/out/build-modules
-      - name: Upload Release Config to CloudFlare CDN
-        run: |
-          mkdir -p ./build-a333x/out/config
-          echo "releases:" >> ./build-a333x/out/config/releases.yaml
-          echo "  - name: $GITHUB_REF_NAME" >> ./build-a333x/out/config/releases.yaml
-          echo "    date: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ./build-a333x/out/config/releases.yaml
-          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a333x/out/config
   build-a339x:
     runs-on: ubuntu-latest
     env:
@@ -139,13 +132,6 @@ jobs:
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/build-modules
-      - name: Upload Release Config to CloudFlare CDN
-        run: |
-          mkdir -p ./build-a339x/out/config
-          echo "releases:" >> ./build-a339x/out/config/releases.yaml
-          echo "  - name: $GITHUB_REF_NAME" >> ./build-a339x/out/config/releases.yaml
-          echo "    date: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ./build-a339x/out/config/releases.yaml
-          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/config
   build-su95x:
     runs-on: ubuntu-latest
     env:
@@ -208,10 +194,3 @@ jobs:
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-su95x/out/build-modules
-      - name: Upload Release Config to CloudFlare CDN
-        run: |
-          mkdir -p ./build-su95x/out/config
-          echo "releases:" >> ./build-su95x/out/config/releases.yaml
-          echo "  - name: $GITHUB_REF_NAME" >> ./build-su95x/out/config/releases.yaml
-          echo "    date: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> ./build-su95x/out/config/releases.yaml
-          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-su95x/out/config
