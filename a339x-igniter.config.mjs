@@ -120,7 +120,7 @@ export default new TaskOfTasks("all", [
                         "build-a339x/src/wasm/fbw_a330",
                         "build-common/src/wasm/fbw_common",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/fbw.wasm"
-                    ]),
+                    ]),                    
                 new ExecTask("systems-terronnd", [
                     "npm run build-a339x:terronnd",
                 ], [

@@ -188,7 +188,7 @@ class A32NX_ND extends FsBaseInstrument<NDInstrument> {
   }
 
   get templateID(): string {
-    return 'A339X_ND';
+    return 'A333X_ND';
   }
 }
 

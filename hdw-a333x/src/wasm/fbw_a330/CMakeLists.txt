@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.19)
 
-project(flybywire-a339x-fbw)
+project(flybywire-a333x-fbw)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -30,7 +30,7 @@ include_directories(
     ${FBW_ROOT}/build-common/src/wasm/fbw-common/src
 )
 
-add_executable(flybywire-a339x-fbw
+add_executable(flybywire-a333x-fbw
     ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/zlib/zfstream.cc
     ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/LocalVariable.cpp
     ${FBW_ROOT}/build-common/src/wasm/fbw_common/src/ThrottleAxisMapping.cpp
