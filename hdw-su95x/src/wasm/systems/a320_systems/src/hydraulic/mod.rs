@@ -1809,7 +1809,6 @@ impl A320Hydraulic {
                 A320ReverserController::new(context, 2),
             ],
             reversers_assembly: A320Reversers::new(context),
-            tilting_gears: A330TiltingGearsFactory::new_a330_tilt_assembly(context),
         }
     }
 
