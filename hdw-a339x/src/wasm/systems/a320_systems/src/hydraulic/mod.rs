@@ -82,30 +82,44 @@ use systems::hydraulic::PressureSwitchState;
 
 struct A330TiltingGearsFactory {}
 impl A330TiltingGearsFactory {
-    fn new_a330_body_gear(context: &mut InitContext, is_left: bool) -> TiltingGear {
-        let mut x_offset_meters = 17.851249;
-        let y_offset_meters = -33.00;
-        let z_offset_meters = -16.89;
+    fn new_a330_wing_gear(context: &mut InitContext, is_left: bool) -> TiltingGear {
+        let mut x_offset = Length::new::<meter>(17.851249);
+        let y_offset = Length::new::<meter>(-33.00);
+        let z_offset = Length::new::<meter>(-16.89);
+        let distance_offset_fwd_to_aft_wheel = Length::new::<meter>(2.0);
+        let low_to_up_height = Length::new::<meter>(0.134608);
 
         if is_left {
-            x_offset_meters *= -1.;
+            x_offset *= -1.;
         }
 
         TiltingGear::new(
             context,
-            Length::new::<meter>(0.280065),
-            if is_left { 1 } else { 2 },
-            Vector3::new(x_offset_meters, y_offset_meters, z_offset_meters),
-            Angle::new::<degree>(9.89),
+            low_to_up_height,
+            if is_left { 3 } else { 4 },
+            Vector3::new(
+                x_offset.get::<meter>(),
+                y_offset.get::<meter>(),
+                z_offset.get::<meter>(),
+            ),
+            // Aft wheel as an offset aft, and height when aft wheel is down is same as fwd wheel down + down to up length
+            // Note this only works if bogey tilt axis is in the middle
+            Vector3::new(
+                x_offset.get::<meter>(),
+                (y_offset + low_to_up_height).get::<meter>(),
+                (z_offset - distance_offset_fwd_to_aft_wheel).get::<meter>(),
+            ),
+            Angle::new::<degree>(9.),
             Length::new::<meter>(0.711),
         )
     }
 
     fn new_a330_tilt_assembly(context: &mut InitContext) -> A330TiltingGears {
-        let left_body_gear = Self::new_a330_body_gear(context, true);
-        let right_body_gear = Self::new_a330_body_gear(context, false);
+        let left_wing_gear = Self::new_a330_wing_gear(context, true);
+        let right_wing_gear = Self::new_a330_wing_gear(context, false);
 
-        A330TiltingGears::new(left_body_gear, right_body_gear)
+
+        A330TiltingGears::new(left_wing_gear, right_wing_gear)
     }
 }
 
@@ -6013,26 +6027,26 @@ impl SimulationElement for A320Reversers {
 }
 
 struct A330TiltingGears {
-    left_body_gear: TiltingGear,
-    right_body_gear: TiltingGear,
+    left_wing_gear: TiltingGear,
+    right_wing_gear: TiltingGear,
 }
 impl A330TiltingGears {
-    fn new(left_body_gear: TiltingGear, right_body_gear: TiltingGear) -> Self {
+    fn new(left_wing_gear: TiltingGear, right_wing_gear: TiltingGear) -> Self {
         Self {
-            left_body_gear,
-            right_body_gear,
+            left_wing_gear,
+            right_wing_gear,
         }
     }
 
     fn update(&mut self, context: &UpdateContext) {
-        self.left_body_gear.update(context);
-        self.right_body_gear.update(context);
+        self.left_wing_gear.update(context);
+        self.right_wing_gear.update(context);
     }
 }
 impl SimulationElement for A330TiltingGears {
     fn accept<T: SimulationElementVisitor>(&mut self, visitor: &mut T) {
-        self.left_body_gear.accept(visitor);
-        self.right_body_gear.accept(visitor);
+        self.left_wing_gear.accept(visitor);
+        self.right_wing_gear.accept(visitor);
 
         visitor.visit(self);
     }
