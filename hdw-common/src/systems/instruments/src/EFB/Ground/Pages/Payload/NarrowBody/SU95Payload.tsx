@@ -650,7 +650,7 @@ export const SU95Payload: React.FC<PayloadProps> = ({
             </div>
             {gsxPayloadSyncEnabled !== 1 && (
               <div className="mt-4 flex flex-row">
-                <Card className="size-full" childrenContainerClassName="flex flex-col w-full h-full">
+                <Card className="h-full w-full" childrenContainerClassName="flex flex-col w-full h-full">
                   <div className="flex flex-row items-center justify-between">
                     <div className="flex font-medium">
                       {t('Ground.Payload.BoardingTime')}

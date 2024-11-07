@@ -556,7 +556,7 @@ export const A330Services: React.FC = () => {
         midRightStatus={midRightDoorOpen >= 1.0}
         aftLeftStatus={aftLeftDoorOpen >= 1.0}
         aftRightStatus={false}
-        className="size-full inset-x-0 mx-auto text-theme-text"
+        className="inset-x-0 mx-auto h-full w-full text-theme-text"
       />
 
       <ServiceButtonWrapper xr={930} y={24}>
