@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 /**
  * NotificationParams container for popups to package popup metadata
  */
@@ -15,12 +16,12 @@ export type NotificationParams = {
 };
 
 /**
- * PopUp utility class to create a pop-up UI element
+ * PopUpDialog utility class to create a pop-up UI element
  *
  * Usage:
- * import { PopUp } from '@flybywiresim/fbw-sdk';
+ * import { PopUpDialog } from '@flybywiresim/fbw-sdk';
  * ...
- * const popup = new PopUp();
+ * const popup = new PopUpDialog();
  * popup.showPopUp("CRITICAL SETTING CHANGED", "Your message here", "small", yesFunc, noFunc);
  * popup.showInformation("CRITICAL MESSAGE", "Your message here", "small", yesFunc);
  */
@@ -39,8 +40,8 @@ export class PopUpDialog {
     this.params = {
       __Type: 'SNotificationParams',
       buttons: [
-        new NotificationButton('TT:MENU.YES', `A32NX_POP_${title}_${time}_YES`),
-        new NotificationButton('TT:MENU.NO', `A32NX_POP_${title}_${time}_NO`),
+        new NotificationButton('TT:MENU.YES', `HDW_POP_${title}_${time}_YES`),
+        new NotificationButton('TT:MENU.NO', `HDW_POP_${title}_${time}_NO`),
       ],
       style: 'normal',
       displayGlobalPopup: true,
@@ -59,6 +60,8 @@ export class PopUpDialog {
    */
   /* eslint-disable no-underscore-dangle */
   _showPopUp(params: any = {}): void {
+    Coherent.trigger('UNFOCUS_INPUT_FIELD', uuidv4()); // Needed to mitigate an issue when ALT-TAB or using toggle free look
+    SimVar.SetSimVarValue('A:COCKPIT CAMERA HEADLOOK', 'Enum', 2); // Toggles freelook off if it is on and forces on the mouse cursor
     Coherent.trigger('SHOW_POP_UP', params);
   }
 
@@ -88,15 +91,15 @@ export class PopUpDialog {
     }
     if (callbackYes) {
       const yes = typeof callbackYes === 'function' ? callbackYes : () => callbackYes;
-      Coherent.on(`A32NX_POP_${this.params.id}_YES`, () => {
-        Coherent.off(`A32NX_POP_${this.params.id}_YES`, null, null);
+      Coherent.on(`HDW_POP_${this.params.id}_YES`, () => {
+        Coherent.off(`HDW_POP_${this.params.id}_YES`, null, null);
         yes();
       });
     }
     if (callbackNo) {
       const no = typeof callbackNo === 'function' ? callbackNo : () => callbackNo;
-      Coherent.on(`A32NX_POP_${this.params.id}_NO`, () => {
-        Coherent.off(`A32NX_POP_${this.params.id}_NO`, null, null);
+      Coherent.on(`HDW_POP_${this.params.id}_NO`, () => {
+        Coherent.off(`HDW_POP_${this.params.id}_NO`, null, null);
         no();
       });
     }
@@ -132,12 +135,12 @@ export class PopUpDialog {
     }
     if (callback) {
       const yes = typeof callback === 'function' ? callback : () => callback;
-      Coherent.on(`A32NX_POP_${this.params.id}_YES`, () => {
-        Coherent.off(`A32NX_POP_${this.params.id}_YES`, null, null);
+      Coherent.on(`HDW_POP_${this.params.id}_YES`, () => {
+        Coherent.off(`HDW_POP_${this.params.id}_YES`, null, null);
         yes();
       });
     }
-    this.params.buttons = [new NotificationButton('TT:MENU.OK', `A32NX_POP_${this.params.id}_YES`)];
+    this.params.buttons = [new NotificationButton('TT:MENU.OK', `HDW_POP_${this.params.id}_YES`)];
 
     if (!this.popupListener) {
       this.popupListener = RegisterViewListener('JS_LISTENER_POPUP', this._showPopUp.bind(null, this.params));
