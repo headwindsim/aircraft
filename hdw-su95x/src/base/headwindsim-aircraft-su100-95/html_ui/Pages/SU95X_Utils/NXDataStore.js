@@ -19,11 +19,11 @@ class NXDataStore {
 
     static set(key, val) {
         SetStoredData(`SU95X_${key}`, val);
-        this.listener.triggerToAllSubscribers('SU95X_NXDATASTORE_UPDATE', key, val);
+        this.listener.triggerToAllSubscribers('HDW_NXDATASTORE_UPDATE', key, val);
     }
 
     static subscribe(key, callback) {
-        return Coherent.on('SU95X_NXDATASTORE_UPDATE', (updatedKey, value) => {
+        return Coherent.on('HDW_NXDATASTORE_UPDATE', (updatedKey, value) => {
             if (key === '*' || key === updatedKey) {
                 callback(updatedKey, value);
             }
