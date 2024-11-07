@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - '.github/workflows/su95x-development.yml'
+      - 'hdw-common/**'
       - 'hdw-su95x/**'
       - 'scripts/build-su95x.js'
       - 'scripts/build-su95x.sh'

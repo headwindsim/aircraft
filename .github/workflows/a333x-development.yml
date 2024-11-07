@@ -5,6 +5,7 @@ on:
       - main
     paths:
       - '.github/workflows/a333x-development.yml'
+      - 'hdw-common/**'
       - 'hdw-a333x/**'
       - 'scripts/build-a333x.js'
       - 'scripts/build-a333x.sh'

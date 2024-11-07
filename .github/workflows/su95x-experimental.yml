@@ -5,6 +5,7 @@ on:
       - experimental
     paths:
       - '.github/workflows/su95x-experimental.yml'
+      - 'hdw-common/**'
       - 'hdw-su95x/**'
       - 'scripts/build-su95x.js'
       - 'scripts/build-su95x.sh'

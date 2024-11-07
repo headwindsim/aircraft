@@ -8,6 +8,7 @@ on:
       - ready_for_review
     paths:
       - '.github/workflows/a333x-pr.yml'
+      - 'hdw-common/**'
       - 'hdw-a333x/**'
       - 'scripts/build-a333x.js'
       - 'scripts/build-a333x.sh'

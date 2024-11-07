@@ -5,6 +5,7 @@ on:
       - experimental
     paths:
       - '.github/workflows/a339x-experimental.yml'
+      - 'hdw-common/**'
       - 'hdw-a339x/**'
       - 'scripts/build-a339x.js'
       - 'scripts/build-a339x.sh'
