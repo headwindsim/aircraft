@@ -2696,8 +2696,7 @@ impl A320GearHydraulicController {
         lgciu1: &(impl LgciuWeightOnWheels + LandingGearHandle),
         lgciu2: &impl LgciuWeightOnWheels,
     ) {
-        let speed_condition =
-            adirs.low_speed_warning_4_260kts(1) || adirs.low_speed_warning_4_260kts(3);
+        let speed_condition = adirs.low_speed_warning_4(1) || adirs.low_speed_warning_4(3);
 
         let on_ground_condition = lgciu1.left_and_right_gear_compressed(true)
             || lgciu2.left_and_right_gear_compressed(true);
@@ -4209,6 +4208,7 @@ impl A320AutobrakeController {
                 self.deceleration_governor.time_engaged().as_secs_f64(),
             ),
             AutobrakeMode::MAX => Self::MAX_MODE_DECEL_TARGET_MS2,
+            _ => Self::OFF_MODE_DECEL_TARGET_MS2,
         })
     }
 
@@ -6044,19 +6044,19 @@ mod tests {
             }
         }
         impl AdirsDiscreteOutputs for A320TestAdirus {
-            fn low_speed_warning_1_104kts(&self, _: usize) -> bool {
+            fn low_speed_warning_1(&self, _: usize) -> bool {
                 self.airspeed.get::<knot>() > 104.
             }
 
-            fn low_speed_warning_2_54kts(&self, _: usize) -> bool {
+            fn low_speed_warning_2(&self, _: usize) -> bool {
                 self.airspeed.get::<knot>() > 54.
             }
 
-            fn low_speed_warning_3_159kts(&self, _: usize) -> bool {
+            fn low_speed_warning_3(&self, _: usize) -> bool {
                 self.airspeed.get::<knot>() > 159.
             }
 
-            fn low_speed_warning_4_260kts(&self, _: usize) -> bool {
+            fn low_speed_warning_4(&self, _: usize) -> bool {
                 self.airspeed.get::<knot>() < 260.
             }
         }
@@ -10998,6 +10998,14 @@ mod tests {
                 .set_pushback_angle(AngularVelocity::new::<degree_per_second>(-5.))
                 .run_waiting_for(Duration::from_secs_f64(5.));
 
+            // Do not turn instantly in 0.5s
+            assert!(
+                test_bed.get_nose_steering_ratio() > Ratio::new::<ratio>(0.)
+                    && test_bed.get_nose_steering_ratio() < Ratio::new::<ratio>(0.5)
+            );
+
+            test_bed = test_bed.run_waiting_for(Duration::from_secs_f64(5.));
+
             // Has turned fully after 5s
             assert!(test_bed.get_nose_steering_ratio() > Ratio::new::<ratio>(0.9));
 
@@ -11006,6 +11014,10 @@ mod tests {
                 .set_pushback_state(true)
                 .set_pushback_angle(AngularVelocity::new::<degree_per_second>(5.))
                 .run_waiting_for(Duration::from_secs_f64(5.));
+
+            assert!(test_bed.get_nose_steering_ratio() > Ratio::new::<ratio>(0.2));
+
+            test_bed = test_bed.run_waiting_for(Duration::from_secs_f64(5.));
 
             // Has turned fully left after 5s
             assert!(test_bed.get_nose_steering_ratio() < Ratio::new::<ratio>(-0.9));
