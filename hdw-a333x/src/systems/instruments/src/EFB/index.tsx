@@ -26,7 +26,45 @@ render(
         takeoff: new A330343TakeoffPerformanceCalculator(),
         landing: new A330343LandingCalculator(),
       },
+      pushbackPage: {
+        turnIndicatorTuningDefault: 1.35,
+      },
       settingsPages: {
+        audio: {
+          announcements: true,
+          boardingMusic: true,
+          engineVolume: true,
+          masterVolume: true,
+          windVolume: true,
+          ptuCockpit: true,
+          paxAmbience: true,
+        },
+        // FIXME: just inject the aircraft options page from the aircraft context (or plugin in flypadOSv4).
+        pinProgram: {
+          latLonExtend: true,
+          paxSign: true,
+          rmpVhfSpacing: true,
+          satcom: true,
+        },
+        realism: {
+          mcduKeyboard: true,
+          pauseOnTod: true,
+          pilotAvatars: true,
+        },
+        sim: {
+          cones: true,
+          pilotSeat: false,
+          registrationDecal: true,
+          wheelChocks: true,
+        },
+        throttle: {
+          numberOfAircraftThrottles: 2,
+          axisOptions: [1, 2],
+          axisMapping: [
+            [[1, 2]], // 1
+            [[1], [2]], // 2
+          ],
+        },
         autoCalloutsPage: AutomaticCallOutsPage,
       },
     }}

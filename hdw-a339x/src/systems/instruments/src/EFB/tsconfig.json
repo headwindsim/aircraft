@@ -1,6 +1,7 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
+      "jsx": "react",
       "resolveJsonModule" : true,
       "paths": {
         "@instruments/common/*": ["./instruments/src/Common/*"],
