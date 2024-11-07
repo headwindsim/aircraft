@@ -1,0 +1,7 @@
+#include "../../hdw-a339x/src/wasm/fbw_a330/src/model/AutopilotLaws_types.h"
+#include "../../hdw-a339x/src/wasm/fbw_a330/src/model/AutopilotStateMachine_types.h"
+#include "../../hdw-a339x/src/wasm/fbw_a330/src/model/Autothrust_types.h"
+#include "../../hdw-a339x/src/wasm/fbw_a330/src/model/ElacComputer_types.h"
+#include "../../hdw-a339x/src/wasm/fbw_a330/src/model/FacComputer_types.h"
+#include "../../hdw-a339x/src/wasm/fbw_a330/src/model/SecComputer_types.h"
+#include "../../hdw-a339x/src/wasm/fbw_a330/src/recording/RecordingDataTypes.h"
