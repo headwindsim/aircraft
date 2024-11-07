@@ -22,9 +22,8 @@ const evaluate = (cmd) =>
 const getReleaseName = (commitHash, branch, tag) => {
   if (tag) {
     return `stable/${tag}`;
-  } else {
-    return `${branch}:${commitHash.substring(0, 8)}`;
   }
+  return `${branch}:${commitHash.substring(0, 8)}`;
 };
 
 /**
@@ -34,22 +33,29 @@ const getReleaseName = (commitHash, branch, tag) => {
 exports.getGitBuildInfo = () => {
   // all git commands are wrapped in a try block so the build can still succeed outside of a git repo.
   try {
-    const commitHash = process.env['GITHUB_SHA'] ?? evaluate('git show-ref -s HEAD');
-    const tag = evaluate('git tag -l --contains HEAD')
-      .split('\n')
-      .filter((it) => !!it)[0];
+    const commitHash = process.env.GITHUB_SHA ? process.env.GITHUB_SHA : evaluate('git show-ref -s HEAD');
+    let tag = '';
+    try {
+      tag = evaluate('git tag -l --contains HEAD')
+        .split('\n')
+        .filter((it) => !!it)[0];
+    } catch (e) {
+      console.log('No tag', e);
+    }
 
     const isPullRequest = process.env.GITHUB_REF && process.env.GITHUB_REF.startsWith('refs/pull/');
-    const branch = isPullRequest
-      ? process.env.GITHUB_REF.match('^refs/pull/([0-9]+)/.*$')[1]
-      : process.env.GITHUB_REF_NAME
-        ? process.env.GITHUB_REF_NAME
-        : evaluate('git rev-parse --abbrev-ref HEAD');
+
+    let branch;
+    if (isPullRequest) {
+      branch = process.env.GITHUB_REF.match('^refs/pull/([0-9]+)/.*$')[1];
+    } else {
+      branch = process.env.GITHUB_REF_NAME ? process.env.GITHUB_REF_NAME : evaluate('git rev-parse --abbrev-ref HEAD');
+    }
 
     const buildInfo = {
-      actor: process.env['GITHUB_ACTOR'] ?? evaluate("git log -1 --pretty=format:'%an <%ae>'"),
-      event: process.env['GITHUB_EVENT_NAME'] ?? 'manual',
-      ref: process.env['GITHUB_REF'] ?? evaluate('git show-ref HEAD').replace(/.+\//, ''),
+      actor: process.env.GITHUB_ACTOR ?? evaluate("git log -1 --pretty=format:'%an <%ae>'"),
+      event: process.env.GITHUB_EVENT_NAME ?? 'manual',
+      ref: process.env.GITHUB_REF ? process.env.GITHUB_REF : evaluate('git show-ref HEAD').replace(/.+\//, ''),
       commitHash,
       shortHash: commitHash.substring(0, 7),
       branch,
@@ -60,10 +66,12 @@ exports.getGitBuildInfo = () => {
 
     return buildInfo;
   } catch (e) {
-    if (process.env['CI']) {
+    if (process.env.CI) {
       throw e;
     } else {
       console.warn('Git failed', e);
     }
   }
+
+  return undefined;
 };
