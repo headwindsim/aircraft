@@ -20,20 +20,19 @@ jobs:
       AIRCRAFT_PROJECT_PREFIX: a333x
       AIRCRAFT_VARIANT: a330-343
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v4.1
         with:
-          tool-cache: false
-          android: true
-          dotnet: false
-          haskell: false
-          large-packages: false
-          docker-images: false
-          swap-storage: false
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-large-packages: 'true'
+          remove-cached-tools: 'true'
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: true
           lfs: false
       - name: Create .env file
         run: |
@@ -80,20 +79,19 @@ jobs:
       AIRCRAFT_PROJECT_PREFIX: a339x
       AIRCRAFT_VARIANT: a330-941
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v4.1
         with:
-          tool-cache: false
-          android: true
-          dotnet: false
-          haskell: false
-          large-packages: false
-          docker-images: false
-          swap-storage: false
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-large-packages: 'true'
+          remove-cached-tools: 'true'
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: true
           lfs: true
       - name: Create .env file
         run: |
@@ -140,21 +138,20 @@ jobs:
       AIRCRAFT_PROJECT_PREFIX: su95x
       AIRCRAFT_VARIANT: su100-95
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v4.1
         with:
-          tool-cache: false
-          android: true
-          dotnet: false
-          haskell: false
-          large-packages: false
-          docker-images: false
-          swap-storage: false
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-large-packages: 'true'
+          remove-cached-tools: 'true'
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          submodules: recursive
-          lfs: false
+          submodules: true
+          lfs: true
       - name: Create .env file
         run: |
           echo A32NX_PRODUCTION_BUILD=1 >> hdw-su95x/.env
