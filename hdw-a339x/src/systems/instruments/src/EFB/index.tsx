@@ -23,7 +23,7 @@ render(
   <AircraftContext.Provider
     value={{
       performanceCalculators: {
-        takeoff: new A330941TakeoffPerformanceCalculator(),
+        takeoff: null,
         landing: new A330941LandingCalculator(),
       },
       pushbackPage: {
