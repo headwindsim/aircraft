@@ -2,8 +2,9 @@
     "index": "./instrument.tsx",
     "isInteractive": false,
     "extraDeps": [
-      "build-common/src/systems/instruments/src/ND",
-      "build-common/src/systems/instruments/src/OANC"
+      "../MsfsAvionicsCommon",
+      "/build-common/src/systems/instruments/src/ND",
+      "/build-common/src/systems/instruments/src/OANC"
     ]
   }
   

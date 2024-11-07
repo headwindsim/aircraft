@@ -9,8 +9,7 @@
       "/Pages/VCockpit/Instruments/Shared/Map/MapInstrument.html"
     ],
     "extraDeps": [
-      "build-common/src/systems/instruments/src/EFB",
-      "build-a333x/src/systems/shared/src/performance"
+      "/build-common/src/systems/instruments/src/EFB",
+      "/build-a333x/src/systems/shared/src/performance"
     ]
-}
-  
+  }

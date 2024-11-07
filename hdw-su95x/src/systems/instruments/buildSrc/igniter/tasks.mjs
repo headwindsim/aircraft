@@ -1,5 +1,9 @@
+// Copyright (c) 2021-2024 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import fs from 'fs';
-import { join } from 'path';
+import path, { join } from 'path';
 import { ExecTask } from '@flybywiresim/igniter';
 import { Directories } from '../directories.mjs';
 
@@ -9,12 +13,17 @@ export function getInstrumentsIgniterTasks() {
         .filter((d) => d.isDirectory() && fs.existsSync(join(Directories.instruments, 'src', d.name, 'config.json')));
 
     return baseInstruments.map(({ name }) => {
-        const config = JSON.parse(fs.readFileSync(join(Directories.instruments, 'src', name, 'config.json')));
+        const instrumentPath = join(Directories.instruments, 'src', name);
+        const config = JSON.parse(fs.readFileSync(join(instrumentPath, 'config.json')));
         return new ExecTask(name, `cd build-su95x && mach build -f ${name}`, [
             join('build-su95x/src/systems/instruments/src', name),
             'build-su95x/src/systems/instruments/src/Common',
             join('build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/SU95X', name),
-            ...(config.extraDeps || []),
+            ...(config.extraDeps || []).map((p) =>
+                path.isAbsolute(p)
+                    ? path.relative('/', p)
+                    : path.relative(Directories.root, path.resolve(join(instrumentPath, p))),
+            ),
         ]);
     });
 }
