@@ -219,7 +219,7 @@ export const PushbackMap = () => {
     <>
       {/* Map Container */}
       <div
-        className="border-theme-accent relative flex h-[430px] grow flex-col space-y-4 overflow-hidden rounded-lg border-2"
+        className="relative flex h-[430px] grow flex-col space-y-4 overflow-hidden rounded-lg border-2 border-theme-accent"
         onMouseDown={(e) => {
           setMouseDown(true);
           setDragStartCoords({ x: e.pageX, y: e.pageY });
@@ -286,7 +286,7 @@ export const PushbackMap = () => {
             <button
               type="button"
               onClick={() => handleCenterPlaneModeChange()}
-              className="bg-theme-secondary hover:bg-theme-highlight hover:text-theme-body cursor-pointer p-2 transition duration-100"
+              className="cursor-pointer bg-theme-secondary p-2 transition duration-100 hover:bg-theme-highlight hover:text-theme-body"
             >
               <IconPlane
                 className={`-rotate-90 text-white${centerPlaneMode && 'fill-current'}`}
@@ -299,7 +299,7 @@ export const PushbackMap = () => {
             <button
               type="button"
               onClick={() => handleZoomIn()}
-              className="bg-theme-secondary hover:bg-theme-highlight hover:text-theme-body cursor-pointer p-2 transition duration-100"
+              className="cursor-pointer bg-theme-secondary p-2 transition duration-100 hover:bg-theme-highlight hover:text-theme-body"
             >
               <ZoomIn size={40} />
             </button>
@@ -308,7 +308,7 @@ export const PushbackMap = () => {
             <button
               type="button"
               onClick={() => handleZoomOut()}
-              className="bg-theme-secondary hover:bg-theme-highlight hover:text-theme-body cursor-pointer p-2 transition duration-100"
+              className="cursor-pointer bg-theme-secondary p-2 transition duration-100 hover:bg-theme-highlight hover:text-theme-body"
             >
               <ZoomOut size={40} />
             </button>

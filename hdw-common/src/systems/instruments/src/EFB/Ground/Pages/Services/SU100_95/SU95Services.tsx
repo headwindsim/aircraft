@@ -45,7 +45,7 @@ interface ServiceButtonWrapperProps {
 // This groups buttons and sets a border and divider line
 const ServiceButtonWrapper: FC<ServiceButtonWrapperProps> = ({ children, className, xl, xr, y }) => (
   <div
-    className={`divide-theme-accent border-theme-accent flex flex-col divide-y-2 overflow-hidden rounded-xl border-2 ${className}`}
+    className={`flex flex-col divide-y-2 divide-theme-accent overflow-hidden rounded-xl border-2 border-theme-accent ${className}`}
     style={{ position: 'absolute', left: xl, right: xr, top: y }}
   >
     {children}
@@ -549,13 +549,13 @@ export const SU95Services: React.FC = () => {
   const serviceIndicationCss = 'text-2xl font-bold text-utility-amber w-min';
 
   return (
-    <div className="h-content-section-reduced relative">
+    <div className="relative h-content-section-reduced">
       <GroundServiceOutline
         cabinLeftStatus={cabinLeftDoorOpen >= 1.0}
         cabinRightStatus={cabinRightDoorOpen >= 1.0}
         aftLeftStatus={aftLeftDoorOpen >= 1.0}
         aftRightStatus={aftRightDoorOpen >= 1.0}
-        className="text-theme-text inset-x-0 mx-auto h-full w-full"
+        className="size-full inset-x-0 mx-auto text-theme-text"
       />
 
       <ServiceButtonWrapper xr={930} y={24}>
@@ -613,7 +613,7 @@ export const SU95Services: React.FC = () => {
             className={`flex cursor-pointer flex-row items-center space-x-6 p-6 ${wheelChocksVisible ? 'text-green-500' : 'text-gray-500'}`}
           >
             <div
-              className={`-ml-2 mr-[2px] flex items-end justify-center ${wheelChocksVisible ? 'text-green-500' : 'text-gray-500'}`}
+              className={`-ml-2 mr-[-2px] flex items-end justify-center ${wheelChocksVisible ? 'text-green-500' : 'text-gray-500'}`}
             >
               <Chock size="12" stroke="4" />
               <Wheel size="36" stroke="5" className="-mx-0.5" />

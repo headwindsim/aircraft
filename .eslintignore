@@ -1,8 +1,17 @@
 flybywire/*
-src/*
+
 build*.js
 buildSrc/*
 **-igniter.config.mjs
+target/*
+CMakeFiles/*
+cmake*
+hdw-**/out/*
+hdw-**/bundles/*
+/bundles/*
+build-**/out/*
+build-**/src/*
+
 **/src/base/**/html_ui/Pages/**/math.js
 **/src/systems/fmgc/src/flightplanning/DirectTo.ts
 **/src/systems/fmgc/src/flightplanning/FixNamingScheme.ts
@@ -20,12 +29,3 @@ buildSrc/*
 **/src/systems/fmgc/src/utils/LzUtf8.js
 **/src/systems/fmgc/src/flightplanning/new/test/*
 **/src/systems/fmgc/src/flightplanning/**/*.spec.ts
-target/*
-CMakeFiles/*
-cmake*
-hdw-**/out/*
-build-**/out/*
-# TODO: these need to be more granular
-hdw-**/src/base/*
-hdw-**/bundles/*
-build-**/bundles/*

@@ -50,7 +50,10 @@ module.exports = {
     },
   ],
   settings: {
-    tailwindcss: { groupByResponsive: true },
+    tailwindcss: {
+      groupByResponsive: true,
+      config: path.join(__dirname, 'hdw-common/src/systems/instruments/src/EFB/tailwind.config.js'),
+    },
     react: { version: 'detect' },
   },
   ignorePatterns: ['hdw-common/src/typings/*'],

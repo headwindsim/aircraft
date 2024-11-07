@@ -124,7 +124,7 @@ class A32NX_OANC extends BaseInstrument {
         style={`width: ${OANC_RENDER_WIDTH}px; height: ${OANC_RENDER_HEIGHT}px; overflow: hidden`}
       >
         <div ref={this.oansMessageScreenRef} class="oanc-message-screen">
-        PLEASE WAIT
+          PLEASE WAIT
         </div>
         <Oanc
           bus={this.bus}

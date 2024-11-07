@@ -13,7 +13,7 @@ interface InformationEntryProps {
 
 const InformationEntry: FC<InformationEntryProps> = ({ children, title, info }) => (
   <div>
-    <div className="text-theme-highlight flex flex-row items-center space-x-4">
+    <div className="flex flex-row items-center space-x-4 text-theme-highlight">
       {children}
       <p className="whitespace-nowrap">{title}</p>
     </div>
@@ -45,7 +45,7 @@ export const OverviewPage = () => {
   const airframeInfo = useAppSelector((state) => state.config.airframeInfo);
 
   return (
-    <div className="h-content-section-reduced border-theme-accent mr-3 w-min overflow-hidden rounded-lg border-2 p-6">
+    <div className="mr-3 h-content-section-reduced w-min overflow-hidden rounded-lg border-2 border-theme-accent p-6">
       <h1 className="font-bold">{airframeInfo.name}</h1>
       <p>{airline}</p>
 

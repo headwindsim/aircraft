@@ -45,7 +45,7 @@ interface ServiceButtonWrapperProps {
 // This groups buttons and sets a border and divider line
 const ServiceButtonWrapper: FC<ServiceButtonWrapperProps> = ({ children, className, xl, xr, y }) => (
   <div
-    className={`border-theme-accent divide-theme-accent flex flex-col divide-y-2 overflow-hidden rounded-xl border-2 ${className}`}
+    className={`flex flex-col divide-y-2 divide-theme-accent overflow-hidden rounded-xl border-2 border-theme-accent ${className}`}
     style={{ position: 'absolute', left: xl, right: xr, top: y }}
   >
     {children}
@@ -102,7 +102,7 @@ const GroundServiceButton: React.FC<GroundServiceButtonProps> = ({ children, nam
 
   return (
     <div
-      className={`flex cursor-pointer flex-row items-center space-x-6 p-6${buttonsStyles[state]} ${className}`}
+      className={`flex cursor-pointer flex-row items-center space-x-6 p-6 ${buttonsStyles[state]} ${className}`}
       onClick={state === ServiceButtonState.DISABLED ? undefined : onClick}
     >
       {children}
@@ -548,7 +548,7 @@ export const A330Services: React.FC = () => {
   const serviceIndicationCss = 'text-2xl font-bold text-utility-amber w-min';
 
   return (
-    <div className="h-content-section-reduced relative">
+    <div className="relative h-content-section-reduced">
       <GroundServiceOutline
         fwdLeftStatus={false}
         fwdRightStatus={fwdRightDoorOpen >= 1.0}
@@ -556,7 +556,7 @@ export const A330Services: React.FC = () => {
         midRightStatus={midRightDoorOpen >= 1.0}
         aftLeftStatus={aftLeftDoorOpen >= 1.0}
         aftRightStatus={false}
-        className="text-theme-text inset-x-0 mx-auto h-full w-full"
+        className="size-full inset-x-0 mx-auto text-theme-text"
       />
 
       <ServiceButtonWrapper xr={930} y={24}>
