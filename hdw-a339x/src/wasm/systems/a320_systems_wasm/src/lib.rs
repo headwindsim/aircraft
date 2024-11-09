@@ -26,7 +26,8 @@ use spoilers::spoilers;
 use std::error::Error;
 use systems::air_conditioning::{
     acs_controller::AcscId, cabin_pressure_controller::CpcId, Channel, ZoneType,
-};use systems::failures::FailureType;
+};
+use systems::failures::FailureType;
 use systems::shared::{
     AirbusElectricPumpId, AirbusEngineDrivenPumpId, ElectricalBusType, GearActuatorId,
     HydraulicColor, LgciuId, ProximityDetectorId,

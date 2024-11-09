@@ -57,7 +57,12 @@ pub enum A320Cargo {
     AftBaggage,
     AftBulkLoose,
 }
-
+#[cfg(test)]
+impl From<A320Cargo> for usize {
+    fn from(value: A320Cargo) -> Self {
+        value as usize
+    }
+}
 #[cfg(test)]
 impl From<usize> for A320Cargo {
     fn from(value: usize) -> Self {
@@ -171,7 +176,6 @@ impl A320Payload {
         let per_pax_weight = Rc::new(Cell::new(Mass::new::<kilogram>(
             Self::DEFAULT_PER_PAX_WEIGHT_KG,
         )));
-
         let developer_state = Rc::new(Cell::new(0));
         let boarding_sounds = BoardingSounds::new(context);
         let pax = Self::A320_PAX.map(|p| {
