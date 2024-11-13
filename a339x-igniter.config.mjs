@@ -142,7 +142,6 @@ export default new TaskOfTasks("all", [
             ], true),
         ]),
 
-        /*
         new TaskOfTasks("ACJ330neo", [
             // Group all WASM build tasks together but separate from the rest of the tasks as build run more stable like this.
             new TaskOfTasks("wasm", [
@@ -157,10 +156,9 @@ export default new TaskOfTasks("all", [
                         "Cargo.lock",
                         "Cargo.toml",
                         "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/panel/systems.wasm"
-                    ])
+                    ]),
             ], true),
         ]),
-        */
 
         // Create final package meta files.
         new TaskOfTasks("dist", [

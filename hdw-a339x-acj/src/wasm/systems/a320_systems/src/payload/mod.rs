@@ -43,7 +43,12 @@ pub enum A320Cargo {
     AftBaggage,
     AftBulkLoose,
 }
-
+#[cfg(test)]
+impl From<A320Cargo> for usize {
+    fn from(value: A320Cargo) -> Self {
+        value as usize
+    }
+}
 #[cfg(test)]
 impl From<usize> for A320Cargo {
     fn from(value: usize) -> Self {
@@ -63,7 +68,7 @@ pub struct A320Payload {
 impl A320Payload {
     // Note: These constants reflect flight_model.cfg values and will have to be updated in sync with the configuration
     pub const DEFAULT_PER_PAX_WEIGHT_KG: f64 = 84.;
-    const A320_PAX: [PaxInfo<'_>; 3] = [
+    const A320_PAX: [PaxInfo<'static>; 3] = [
         PaxInfo {
             max_pax: 36,
             position: (40.0, 0., 0.),
@@ -84,7 +89,7 @@ impl A320Payload {
         },
     ];
 
-    const A320_CARGO: [CargoInfo<'_>; 4] = [
+    const A320_CARGO: [CargoInfo<'static>; 4] = [
         CargoInfo {
             max_cargo_kg: 5800.,
             position: (40.0, 0., 0.),
@@ -115,7 +120,6 @@ impl A320Payload {
         let per_pax_weight = Rc::new(Cell::new(Mass::new::<kilogram>(
             Self::DEFAULT_PER_PAX_WEIGHT_KG,
         )));
-
         let developer_state = Rc::new(Cell::new(0));
         let boarding_sounds = BoardingSounds::new(context);
         let pax = Self::A320_PAX.map(|p| {
@@ -140,18 +144,21 @@ impl A320Payload {
                 Mass::new::<kilogram>(c.max_cargo_kg),
             )
         });
+
+        let default_boarding_agent = BoardingAgent::new(None, [0, 1, 2]);
+
         let boarding_agents = [
             BoardingAgent::new(
-                context.get_identifier("INTERACTIVE POINT OPEN:0".to_owned()),
+                Some(context.get_identifier("INTERACTIVE POINT OPEN:0".to_owned())),
                 [0, 1, 2],
             ),
             BoardingAgent::new(
-                context.get_identifier("INTERACTIVE POINT OPEN:2".to_owned()),
+                Some(context.get_identifier("INTERACTIVE POINT OPEN:2".to_owned())),
                 [2, 1, 0],
             ),
         ];
 
-        let passenger_deck = PassengerDeck::new(pax, boarding_agents);
+        let passenger_deck = PassengerDeck::new(pax, default_boarding_agent, boarding_agents);
         let cargo_deck = CargoDeck::new(cargo);
 
         A320Payload {

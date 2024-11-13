@@ -26,7 +26,8 @@ use spoilers::spoilers;
 use std::error::Error;
 use systems::air_conditioning::{
     acs_controller::AcscId, cabin_pressure_controller::CpcId, Channel, ZoneType,
-};use systems::failures::FailureType;
+};
+use systems::failures::FailureType;
 use systems::shared::{
     AirbusElectricPumpId, AirbusEngineDrivenPumpId, ElectricalBusType, GearActuatorId,
     HydraulicColor, LgciuId, ProximityDetectorId,
@@ -302,6 +303,9 @@ async fn systems(mut gauge: msfs::Gauge) -> Result<(), Box<dyn Error>> {
     .provides_aircraft_variable("AMBIENT WIND Y", "meter per second", 0)?
     .provides_aircraft_variable("AMBIENT WIND Z", "meter per second", 0)?
     .provides_aircraft_variable("ANTISKID BRAKES ACTIVE", "Bool", 0)?
+    .provides_aircraft_variable("CONTACT POINT COMPRESSION", "Percent", 0)?
+    .provides_aircraft_variable("CONTACT POINT COMPRESSION", "Percent", 1)?
+    .provides_aircraft_variable("CONTACT POINT COMPRESSION", "Percent", 2)?
     .provides_aircraft_variable("EXTERNAL POWER AVAILABLE", "Bool", 1)?
     .provides_aircraft_variable("FUEL TANK CENTER QUANTITY", "gallons", 0)?
     .provides_aircraft_variable("FUEL TANK LEFT MAIN QUANTITY", "gallons", 0)?

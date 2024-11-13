@@ -86,9 +86,23 @@ impl VariablesToObject for GearPosition {
     }
 
     fn write(&mut self, values: Vec<f64>) -> ObjectWrite {
-        self.nose_position = values[0] / 100.;
-        self.left_position = values[1] / 100.;
-        self.right_position = values[2] / 100.;
+        const GEAR_POSITION_FOR_FAKE_DOOR_DRAG: f64 = 0.10;
+
+        let gear_deployed = values[0] > 5. || values[1] > 5. || values[2] > 5.;
+        let door_opened = values[0] > 10. || values[1] > 10. || values[2] > 10.;
+
+        // If doors are deployed we fake gear going down a bit to get some door drag effect from the sim
+        if door_opened && !gear_deployed {
+            self.nose_position = (values[3] / 100.).min(GEAR_POSITION_FOR_FAKE_DOOR_DRAG);
+            self.left_position = (values[4] / 100.).min(GEAR_POSITION_FOR_FAKE_DOOR_DRAG);
+            self.right_position = (values[5] / 100.).min(GEAR_POSITION_FOR_FAKE_DOOR_DRAG);
+        } else {
+            self.nose_position = values[0] / 100.;
+            self.left_position = values[1] / 100.;
+            self.right_position = values[2] / 100.;
+        }
+
+        self.gear_handle_position = if gear_deployed { 1. } else { 0. };
 
         ObjectWrite::default()
     }

@@ -48,7 +48,7 @@ pub struct A320Fuel {
     fuel_system: FuelSystem<5>,
 }
 impl A320Fuel {
-    pub const A320_FUEL: [FuelInfo<'_>; 5] = [
+    pub const A320_FUEL: [FuelInfo<'static>; 5] = [
         FuelInfo {
             fuel_tank_id: "FUEL TANK CENTER QUANTITY",
             position: (-20.3, 0., 4.),
@@ -82,7 +82,7 @@ impl A320Fuel {
                 context,
                 f.fuel_tank_id,
                 Vector3::new(f.position.0, f.position.1, f.position.2),
-                false
+                false,
             )
         });
         A320Fuel {

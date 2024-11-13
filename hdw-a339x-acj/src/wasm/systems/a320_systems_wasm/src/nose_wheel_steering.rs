@@ -132,14 +132,28 @@ pub(super) fn nose_wheel_steering(builder: &mut MsfsAspectBuilder) -> Result<(),
 
             steering_demand_to_msfs_from_steering_angle(nose_wheel_position, rudder_position)
         },
-        Variable::aspect("STEERING_ANGLE"),
+        Variable::aspect("STEERING_ANGLE_COMMAND"),
+    );
+
+    builder.map(
+        ExecuteOn::PostTick,
+        Variable::aspect("NOSE_WHEEL_POSITION_RATIO"),
+        steering_max_demand_to_msfs_from_steering_angle,
+        Variable::aspect("STEERING_ANGLE_MAX_COMMAND"),
     );
 
     builder.variable_to_event(
-        Variable::aspect("STEERING_ANGLE"),
+        Variable::aspect("STEERING_ANGLE_COMMAND"),
         VariableToEventMapping::EventData32kPosition,
         VariableToEventWriteOn::EveryTick,
         "STEERING_SET",
+    )?;
+
+    builder.variable_to_event(
+        Variable::aspect("STEERING_ANGLE_MAX_COMMAND"),
+        VariableToEventMapping::EventData32kPosition,
+        VariableToEventWriteOn::EveryTick,
+        "NOSE_WHEEL_STEERING_LIMIT_SET",
     )?;
 
     Ok(())
@@ -153,10 +167,10 @@ fn recenter_when_close_to_center(value: f64, increment: f64) -> f64 {
     }
 }
 
-const MAX_CONTROLLABLE_STEERING_ANGLE_DEGREES: f64 = 70.;
+const MAX_CONTROLLABLE_STEERING_ANGLE_DEGREES: f64 = 75.;
 
 fn steering_animation_to_msfs_from_steering_angle(nose_wheel_position: f64) -> f64 {
-    const STEERING_ANIMATION_TOTAL_RANGE_DEGREES: f64 = 140.;
+    const STEERING_ANIMATION_TOTAL_RANGE_DEGREES: f64 = 360.;
 
     ((nose_wheel_position * MAX_CONTROLLABLE_STEERING_ANGLE_DEGREES
         / (STEERING_ANIMATION_TOTAL_RANGE_DEGREES / 2.))
@@ -168,7 +182,7 @@ fn steering_demand_to_msfs_from_steering_angle(
     nose_wheel_position: f64,
     rudder_position: f64,
 ) -> f64 {
-    const MAX_MSFS_STEERING_ANGLE_DEGREES: f64 = 75.;
+    const MAX_MSFS_STEERING_ANGLE_DEGREES: f64 = 90.;
 
     // Steering in msfs is the max we want rescaled to the max in msfs
     let steering_ratio_converted = nose_wheel_position * MAX_CONTROLLABLE_STEERING_ANGLE_DEGREES
@@ -180,4 +194,14 @@ fn steering_demand_to_msfs_from_steering_angle(
     // Then we hack msfs by adding the rudder value that it will always substract internally
     // This way we end up with actual angle we required
     (1. - steering_ratio_converted) + (rudder_position - 0.5)
+}
+
+fn steering_max_demand_to_msfs_from_steering_angle(nose_wheel_position: f64) -> f64 {
+    const MAX_MSFS_STEERING_ANGLE_DEGREES: f64 = 180.;
+
+    // Steering in msfs is the max we want rescaled to the max in msfs
+    nose_wheel_position.abs() * MAX_CONTROLLABLE_STEERING_ANGLE_DEGREES
+        / MAX_MSFS_STEERING_ANGLE_DEGREES
+        / 2.
+        + 0.5
 }
