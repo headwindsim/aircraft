@@ -501,6 +501,7 @@ impl OutletAir for A320AirConditioningSystem {
         outlet_air.set_temperature(self.duct_temperature().iter().average());
 
         outlet_air
+
         // TODO: This should use self.trim_air_system.outlet_air()
     }
 }
@@ -944,12 +945,12 @@ impl SimulationElement for PressurizationSystemInterfaceUnit {
 struct A320PressurizationConstants;
 
 impl PressurizationConstants for A320PressurizationConstants {
-    // Volume data from A320 AIRCRAFT CHARACTERISTICS - AIRPORT AND MAINTENANCE PLANNING
-    const CABIN_ZONE_VOLUME_CUBIC_METER: f64 = 139.; // m3
+    // Volume data from A318 AIRCRAFT CHARACTERISTICS - AIRPORT AND MAINTENANCE PLANNING 
+    const CABIN_ZONE_VOLUME_CUBIC_METER: f64 = 107.; // m3
     const COCKPIT_VOLUME_CUBIC_METER: f64 = 9.; // m3
     const FWD_CARGO_ZONE_VOLUME_CUBIC_METER: f64 = 0.; // m3 Not used in A320
     const BULK_CARGO_ZONE_VOLUME_CUBIC_METER: f64 = 0.; // m3 Not used in A320
-    const PRESSURIZED_FUSELAGE_VOLUME_CUBIC_METER: f64 = 330.; // m3
+    const PRESSURIZED_FUSELAGE_VOLUME_CUBIC_METER: f64 = 257.; // m3
     const CABIN_LEAKAGE_AREA: f64 = 0.0003; // m2
     const OUTFLOW_VALVE_SIZE: f64 = 0.05; // m2
     const SAFETY_VALVE_SIZE: f64 = 0.02; // m2
@@ -2260,13 +2261,13 @@ mod tests {
         #[test]
         fn cpc_man_mode_starts_in_auto() {
             let mut test_bed = test_bed();
+
             assert!(test_bed.is_mode_sel_pb_auto());
         }
 
         #[test]
         fn cpc_switches_if_man_mode_is_engaged_for_at_least_10_seconds() {
             let mut test_bed = test_bed();
-
             assert_eq!(test_bed.active_system(), 1);
 
             test_bed = test_bed
