@@ -221,7 +221,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.dataManager = new Fmgc.DataManager(this);
 
         this.efisInterfaces = { L: new Fmgc.EfisInterface('L', this.currFlightPlanService), R: new Fmgc.EfisInterface('R', this.currFlightPlanService) };
-        this.guidanceController = new Fmgc.GuidanceController(this.bus, this, this.currFlightPlanService, this.efisInterfaces, Fmgc.a320EfisRangeSettings, Fmgc.A330AircraftConfig);
+        this.guidanceController = new Fmgc.GuidanceController(this.bus, this, this.currFlightPlanService, this.efisInterfaces, Fmgc.a320EfisRangeSettings, Fmgc.SU95AircraftConfig);
         this.navigation = new Fmgc.Navigation(this.bus, this.currFlightPlanService);
         this.efisSymbols = new Fmgc.EfisSymbols(
             this.bus,
@@ -272,7 +272,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.casToMachManualCrossoverCurve.add(200, 0.54806);
         this.casToMachManualCrossoverCurve.add(250, 0.67633);
         this.casToMachManualCrossoverCurve.add(300, 0.8);
-        this.casToMachManualCrossoverCurve.add(330, 0.86);
+        this.casToMachManualCrossoverCurve.add(308, 0.81);
 
         // This is used to determine the CAS corresponding to a Mach number at the manual crossover altitude
         // Effectively, the manual crossover altitude is FL305 up to M.80, then decreases linearly to the crossover altitude of (VMO, MMO)
@@ -284,7 +284,7 @@ class FMCMainDisplay extends BaseAirliners {
         this.machToCasManualCrossoverCurve.add(0.54806, 200);
         this.machToCasManualCrossoverCurve.add(0.67633, 250);
         this.machToCasManualCrossoverCurve.add(0.8, 300);
-        this.machToCasManualCrossoverCurve.add(0.86, 330);
+        this.machToCasManualCrossoverCurve.add(0.81, 308);
 
         this.updatePerfSpeeds();
 
@@ -318,8 +318,8 @@ class FMCMainDisplay extends BaseAirliners {
 
     initVariables(resetTakeoffData = true) {
         this.costIndex = undefined;
-        this.maxCruiseFL = 410;
-        this.recMaxCruiseFL = 415;
+        this.maxCruiseFL = 400;
+        this.recMaxCruiseFL = 410;
         this.routeIndex = 0;
         this.resetCoroute();
         this._overridenFlapApproachSpeed = NaN;
@@ -360,7 +360,7 @@ class FMCMainDisplay extends BaseAirliners {
         this._routeAltFuelTime = 0;
         this._routeTripFuelWeight = 0;
         this._routeTripTime = 0;
-        this._defaultTaxiFuelWeight = 0.5;
+        this._defaultTaxiFuelWeight = 0.2;
         this._rteRsvPercentOOR = false;
         this._rteReservedWeightEntered = false;
         this._rteReservedPctEntered = false;
@@ -456,24 +456,24 @@ class FMCMainDisplay extends BaseAirliners {
         this.descentSpeedLimit = 250;
         this.descentSpeedLimitAlt = 10000;
         this.descentSpeedLimitPilot = false;
-        this.managedSpeedClimb = 290;
+        this.managedSpeedClimb = 280;
         this.managedSpeedClimbIsPilotEntered = false;
-        this.managedSpeedClimbMach = 0.82;
+        this.managedSpeedClimbMach = 0.78;
         // this.managedSpeedClimbMachIsPilotEntered = false;
-        this.managedSpeedCruise = 300;
+        this.managedSpeedCruise = 280;
         this.managedSpeedCruiseIsPilotEntered = false;
-        this.managedSpeedCruiseMach = 0.82;
+        this.managedSpeedCruiseMach = 0.78;
         // this.managedSpeedCruiseMachIsPilotEntered = false;
-        this.managedSpeedDescend = 300;
+        this.managedSpeedDescend = 280;
         this.managedSpeedDescendPilot = undefined;
-        this.managedSpeedDescendMach = 0.82;
+        this.managedSpeedDescendMach = 0.78;
         this.managedSpeedDescendMachPilot = undefined;
         // this.managedSpeedDescendMachIsPilotEntered = false;
         this.cruiseFlightLevelTimeOut = undefined;
         this.flightNumber = undefined;
         // this.flightNumber = undefined;
         this.cruiseTemperature = undefined;
-        this.taxiFuelWeight = 0.5;
+        this.taxiFuelWeight = 0.2;
         this.blockFuel = undefined;
         this.zeroFuelWeight = undefined;
         this.zeroFuelWeightMassCenter = undefined;
@@ -1385,9 +1385,9 @@ class FMCMainDisplay extends BaseAirliners {
         let weight = this.tryEstimateLandingWeight();
         const vnavPrediction = this.guidanceController.vnavDriver.getDestinationPrediction();
         // Actual weight is used during approach phase (FCOM bulletin 46/2), and we also assume during go-around
-        // Fallback gross weight set to 181.0T (MZFW), which is replaced by FMGW once input in FMS to avoid function returning undefined results.
+        // Fallback gross weight set to 40.0T (MZFW for SSJ), which is replaced by FMGW once input in FMS to avoid function returning undefined results.
         if (this.flightPhaseManager.phase >= FmgcFlightPhases.APPROACH || !isFinite(weight)) {
-            weight = (this.getGW() == 0) ? 181.0 : this.getGW();
+            weight = (this.getGW() == 0) ? 40.0 : this.getGW();
         } else if (vnavPrediction && Number.isFinite(vnavPrediction.estimatedFuelOnBoard)) {
             weight = this.zeroFuelWeight + Math.max(0, vnavPrediction.estimatedFuelOnBoard * 0.4535934 / 1000);
         }
@@ -1668,7 +1668,7 @@ class FMCMainDisplay extends BaseAirliners {
 
         SimVar.SetSimVarValue("K:VS_SLOT_INDEX_SET", "number", 1);
 
-        this.taxiFuelWeight = 0.5;
+        this.taxiFuelWeight = 0.2;
         CDUInitPage.updateTowIfNeeded(this);
     }
 
@@ -2165,7 +2165,7 @@ class FMCMainDisplay extends BaseAirliners {
             const airDistance = A32NX_FuelPred.computeAirDistance(Math.round(this._DistanceToAlt), this.averageWind);
 
             const deviation = (this.zeroFuelWeight + this._routeFinalFuelWeight - A32NX_FuelPred.refWeight) * A32NX_FuelPred.computeNumbers(airDistance, placeholderFl, A32NX_FuelPred.computations.CORRECTIONS, true);
-            if ((50 < airDistance && airDistance < 1200) && (100 < placeholderFl && placeholderFl < 390)) { //This will always be true until we can setup alternate routes
+            if ((20 < airDistance && airDistance < 200) && (100 < placeholderFl && placeholderFl < 290)) { //This will always be true until we can setup alternate routes
                 this._routeAltFuelWeight = (A32NX_FuelPred.computeNumbers(airDistance, placeholderFl, A32NX_FuelPred.computations.FUEL, true) + deviation) / 1000;
                 this._routeAltFuelTime = this._routeAltFuelEntered ? null : A32NX_FuelPred.computeNumbers(airDistance, placeholderFl, A32NX_FuelPred.computations.TIME, true);
             }
@@ -2174,7 +2174,7 @@ class FMCMainDisplay extends BaseAirliners {
 
     /**
      * Attempts to calculate trip information. Is dynamic in that it will use liveDistanceTo the destination rather than a
-     * static distance. Works down to 20NM airDistance and FL100 Up to 9400NM airDistance and FL410, anything out of those ranges and values
+     * static distance. Works down to 20NM airDistance and FL100 Up to 3100NM airDistance and FL400, anything out of those ranges and values
      * won't be updated.
      */
     tryUpdateRouteTrip(dynamic = false) {
@@ -2188,7 +2188,7 @@ class FMCMainDisplay extends BaseAirliners {
             altToUse = SimVar.GetSimVarValue("PLANE ALTITUDE", 'Feet') / 100;
         }
 
-        if ((20 <= airDistance && airDistance <= 9400) && (100 <= altToUse && altToUse <= 410)) {
+        if ((20 <= airDistance && airDistance <= 3100) && (100 <= altToUse && altToUse <= 400)) {
             const deviation = (this.zeroFuelWeight + this._routeFinalFuelWeight + this._routeAltFuelWeight - A32NX_FuelPred.refWeight) * A32NX_FuelPred.computeNumbers(airDistance, altToUse, A32NX_FuelPred.computations.CORRECTIONS, false);
 
             this._routeTripFuelWeight = (A32NX_FuelPred.computeNumbers(airDistance, altToUse, A32NX_FuelPred.computations.FUEL, false) + deviation) / 1000;
@@ -3631,7 +3631,7 @@ class FMCMainDisplay extends BaseAirliners {
 
         if (v < 1) {
             const mach = Math.round(v * 100) / 100;
-            if (mach < 0.15 || mach > 0.86) {
+            if (mach < 0.15 || mach > 0.81) {
                 this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
@@ -3639,7 +3639,7 @@ class FMCMainDisplay extends BaseAirliners {
             this.preSelectedCrzSpeed = mach;
         } else {
             const spd = Math.round(v);
-            if (spd < 100 || spd > 350) {
+            if (spd < 100 || spd > 308) {
                 this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                 return false;
             }
@@ -3839,7 +3839,7 @@ class FMCMainDisplay extends BaseAirliners {
             }
 
             const limitLo = ldgRwy ? ldgRwy.thresholdLocation.alt : 0;
-            const limitHi = ldgRwy ? ldgRwy.thresholdLocation.alt + 5000 : 41000;
+            const limitHi = ldgRwy ? ldgRwy.thresholdLocation.alt + 5000 : 40000;
 
             if (value >= limitLo && value <= limitHi) {
                 this.perfApprMDA = value;
@@ -4473,7 +4473,7 @@ class FMCMainDisplay extends BaseAirliners {
      */
     //TODO: can this be an util?
     getMaxFL(temp = A32NX_Util.getIsaTempDeviation(), gw = this.getGW()) {
-        return Math.round(temp <= 10 ? -1.0433 * gw + 590.0912 : (temp * (-0.0086) - 0.985) * gw + temp * (-0.109) + 586.381);
+        return Math.round(temp <= 10 ? ((-0.0625 * (gw * gw)) + (1.525 * gw) + 436.05) : ((-0.0625 * (gw * gw)) + (1.175 * gw) + 452.15 - ((temp - 10) * 2.8)));
     }
 
     /**
@@ -4489,7 +4489,7 @@ class FMCMainDisplay extends BaseAirliners {
     // only used by trySetMinDestFob
     //TODO: Can this be util?
     isMinDestFobInRange(fuel) {
-        return 0 <= fuel && fuel <= 111.7;
+        return 0 <= fuel && fuel <= 80.0;
     }
 
     //TODO: Can this be util?
@@ -4520,17 +4520,17 @@ class FMCMainDisplay extends BaseAirliners {
 
     //TODO: Can this be util?
     isZFWInRange(zfw) {
-        return 127.0 <= zfw && zfw <= 181.0;
+        return 24.0 <= zfw && zfw <= 80.0;
     }
 
     //TODO: Can this be util?
     isZFWCGInRange(zfwcg) {
-        return (14.0 <= zfwcg && zfwcg <= 41.0);
+        return (8.0 <= zfwcg && zfwcg <= 50.0);
     }
 
     //TODO: Can this be util?
     isBlockFuelInRange(fuel) {
-        return 0 <= fuel && fuel <= 111.7;
+        return 0 <= fuel && fuel <= 80;
     }
 
     /**
@@ -4864,7 +4864,7 @@ class FMCMainDisplay extends BaseAirliners {
         if (machSlashSpeedMatch !== null /* ".NN/" or "/NNN" entry */) {
             const speed = parseInt(machSlashSpeedMatch[2]);
             if (Number.isFinite(speed)) {
-                if (speed < 100 || speed > 330) {
+                if (speed < 100 || speed > 308) {
                     this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
@@ -4874,7 +4874,7 @@ class FMCMainDisplay extends BaseAirliners {
 
             const mach = Math.round(parseFloat(machSlashSpeedMatch[1]) * 1000) / 1000;
             if (Number.isFinite(mach)) {
-                if (mach < 0.15 || mach > 0.86) {
+                if (mach < 0.15 || mach > 0.81) {
                     this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
@@ -4887,7 +4887,7 @@ class FMCMainDisplay extends BaseAirliners {
             // Entry of a Mach number only without a slash is allowed
             const mach = Math.round(parseFloat(value) * 1000) / 1000;
             if (Number.isFinite(mach)) {
-                if (mach < 0.15 || mach > 0.86) {
+                if (mach < 0.15 || mach > 0.81) {
                     this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }
@@ -4899,7 +4899,7 @@ class FMCMainDisplay extends BaseAirliners {
         } else if (value.match(SPD_REGEX) !== null /* "NNN" */) {
             const speed = parseInt(value);
             if (Number.isFinite(speed)) {
-                if (speed < 100 || speed > 330) {
+                if (speed < 100 || speed > 308) {
                     this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
                     return false;
                 }

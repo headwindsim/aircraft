@@ -55,7 +55,7 @@ class CDUIdentPage {
         let secondaryDBTopLine = "";
         if (
             stored.routes + stored.runways + stored.waypoints + stored.navaids >
-          0
+            0
         ) {
             storedTitleCell = "STORED\xa0\xa0\xa0\xa0";
             storedRoutesRunwaysCell = `{green}${stored.routes
@@ -75,9 +75,9 @@ class CDUIdentPage {
                 .toFixed(0)
                 .padStart(2, "0")}{end}{end}{small}NAVS{end}`;
             storedDeleteCell =
-              confirmType === ConfirmType.DeleteStored
-                  ? "{amber}CONFIRM DEL*{end}"
-                  : "{cyan}DELETE ALL}{end}";
+                confirmType === ConfirmType.DeleteStored
+                    ? "{amber}CONFIRM DEL*{end}"
+                    : "{cyan}DELETE ALL}{end}";
 
             // DELETE ALL
             mcdu.onRightInput[4] = () => {
@@ -102,17 +102,17 @@ class CDUIdentPage {
         // H4+ only confirm prompt
         if (confirmDataBaseSwitch) {
             secondaryDBTopLine =
-              confirmType === ConfirmType.SwitchDataBase
-                  ? `{amber}{small}\xa0${navCycleDates}{end}`
-                  : "\xa0SECOND\xa0NAV\xa0DATA\xa0BASE";
+                confirmType === ConfirmType.SwitchDataBase
+                    ? `{amber}{small}\xa0${navCycleDates}{end}`
+                    : "\xa0SECOND\xa0NAV\xa0DATA\xa0BASE";
             secondaryDBSubLine =
-              confirmType === ConfirmType.SwitchDataBase
-                  ? "{amber}{CANCEL\xa0\xa0\xa0\xa0SWAP\xa0CONFIRM*{end}"
-                  : `{small}{cyan}{${navCycleDates}{end}{end}`;
+                confirmType === ConfirmType.SwitchDataBase
+                    ? "{amber}{CANCEL\xa0\xa0\xa0\xa0SWAP\xa0CONFIRM*{end}"
+                    : `{small}{cyan}{${navCycleDates}{end}{end}`;
         } else {
             secondaryDBTopLine = "\xa0SECOND\xa0NAV\xa0DATA\xa0BASE";
             secondaryDBSubLine =
-              `{small}{cyan}{${navCycleDates}{end}{end}`;
+                `{small}{cyan}{${navCycleDates}{end}{end}`;
         }
 
         mcdu.leftInputDelay[2] = () => {
