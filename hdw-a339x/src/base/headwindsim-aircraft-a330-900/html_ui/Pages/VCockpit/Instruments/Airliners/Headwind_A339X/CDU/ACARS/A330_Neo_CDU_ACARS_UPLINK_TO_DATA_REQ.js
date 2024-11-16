@@ -124,7 +124,7 @@ class CDU_ACARS_UPLINK_TO_DATA_REQ_Page {
 
         const updateView = () => {
             mcdu.setTemplate([
-                ["UPLINK TO DATA REQ"],
+                ["UPLINK TO DATA REQ {small}1/2{end}"],
                 ["{small}TOW/TOCG{end}", "{small}SHIFT/RWY{end}"],
                 [hasRunway ? `{green}${towCell}/${mcdu.getCG().toFixed(1)}{end}` : "---.-/--.-", hasRunway ? `FT{inop}[  ]{end}{cyan}/${runway}{end}` : `-----{cyan}/[  ]{end}`],
                 ["{small}TEMP/QNH{end}", "{small}TO LIMIT{end}"],
@@ -157,7 +157,7 @@ class CDU_ACARS_UPLINK_TO_DATA_REQ_Page {
 
         const updateView = () => {
             mcdu.setTemplate([
-                ["UPLINK TO DATA REQ"],
+                ["UPLINK TO DATA REQ 2/2"],
                 ["{small}TOW/TOCG{end}", "{small}SHIFT/RWY{end}"],
                 ["---.-/--.-", "-----/{cyan}[  ]{end}"],
                 ["{small}TEMP/QNH{end}", "{small}TO LIMIT{end}"],
