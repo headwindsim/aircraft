@@ -59,37 +59,38 @@ cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/html_ui/Pages/VLivery/Liveries/A32NX_Printer ./build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VLivery/Liveries/Printer/A339X
 
 # remove fbw submodule
-#rm -rf ./flybywire
 
 # copy base of A339X to out
 cp -ra ./hdw-a339x/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/headwindsim-aircraft-a330-900
 cp -ra ./hdw-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight/. ./build-a339x/out/headwindsim-aircraft-a330-900-lock-highlight
 
-# copy A32NX sound pack to a333x sound folder
+# copy A32NX sound pack to A339X sound folder
 cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/sound
-cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/sound
+
 
 chmod +x ./build-a339x/src/wasm/fbw_a330/build.sh
 
 ##### ACJ330neo
 
 # remove directory if it exist
-rm -rf ./build-a339x-acj
+#rm -rf ./build-a339x-acj
 
 # create directory
-mkdir -p ./build-a339x-acj/src
-mkdir -p ./build-a339x-acj/src/wasm
+#mkdir -p ./build-a339x-acj/src
+#mkdir -p ./build-a339x-acj/src/wasm
 
 # copy from FBW A32NX source and A339X into one src
-cp -ra ./build-a339x/src/wasm/. ./build-a339x-acj/src/wasm
-cp -ra ./build-a339x/.env ./build-a339x-acj/.env
+#cp -ra ./build-a339x/src/wasm/. ./build-a339x-acj/src/wasm
+#cp -ra ./build-a339x/.env ./build-a339x-acj/.env
 
-cp -ra ./hdw-a339x-acj/src/wasm/. ./build-a339x-acj/src/wasm
+#cp -ra ./hdw-a339x-acj/src/wasm/. ./build-a339x-acj/src/wasm
 
 #cp -ra ./hdw-a339x-acj/mach.config.js ./build-a339x-acj/mach.config.js
 
 # copy base of A339X to out
 #cp -ra ./hdw-a339x-acj/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/headwindsim-aircraft-a330-900
+
+#cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_ACJ330_900/sound
 
 #chmod +x ./build-a339x-acj/src/wasm/fbw_a320/build.sh
 #chmod +x ./build-a339x-acj/src/wasm/fadec_a320/build.sh
