@@ -165,7 +165,9 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
             AOCFreeText: 76,
             StepAltsPage: 77,
             ATCDepartReq: 78,
-            AcarsMenuPage: 79
+            ACARSMenuPage: 79,
+            ACARSUplinkToDataReq1: 80,
+            ACARSUplinkToDataReq2: 81,
         };
 
         this.mcduServerClient = undefined;

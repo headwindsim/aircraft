@@ -1,7 +1,7 @@
 class CDU_ACARS_MenuPage {
     static ShowPage1(mcdu) {
         mcdu.clearDisplay();
-        mcdu.page.Current = mcdu.page.AcarsMenuPage;
+        mcdu.page.Current = mcdu.page.ACARSMenuPage;
         mcdu.activeSystem = "ACARS";
         let requestEnable = false;
 
@@ -33,8 +33,8 @@ class CDU_ACARS_MenuPage {
                 ],
                 [""],
                 [
-                    new Column(7, "TO DATA", Column.inop),
-                    new Column(23, "REQ*", Column.right, Column.inop)
+                    new Column(7, "TO DATA"),
+                    new Column(23, "REQ*", Column.right)
                 ],
                 [""],
                 [
@@ -57,6 +57,10 @@ class CDU_ACARS_MenuPage {
         };
 
         updateView();
+
+        mcdu.onRightInput[1] = () => {
+            CDU_ACARS_UPLINK_TO_DATA_REQ_Page.ShowPage1(mcdu);
+        };
 
         mcdu.onPrevPage = () => {
             this.ShowPage2(mcdu);

@@ -75,16 +75,8 @@ class CDUPerformancePage {
                         mcdu.v1Speed = mcdu.unconfirmedV1Speed;
                         mcdu.unconfirmedV1Speed = undefined;
                     } else {
-                        // not real: v-speed helper
-                        const gw = mcdu.getGrossWeight();
-                        if (mcdu.flaps && !gw) {
-                            mcdu.addMessageToQueue(NXSystemMessages.initializeWeightOrCg);
-                        } else if (mcdu.flaps && gw) {
-                            mcdu.setScratchpadText(mcdu._getV1Speed().toString());
-                        } else {
-                            mcdu.setScratchpadMessage(NXSystemMessages.formatError);
-                            scratchpadCallback();
-                        }
+                        mcdu.setScratchpadMessage(NXSystemMessages.formatError);
+                        scratchpadCallback();
                     }
                     CDUPerformancePage.ShowTAKEOFFPage(mcdu);
                 } else {
@@ -107,15 +99,8 @@ class CDUPerformancePage {
                         mcdu.vRSpeed = mcdu.unconfirmedVRSpeed;
                         mcdu.unconfirmedVRSpeed = undefined;
                     } else {
-                        const gw = mcdu.getGrossWeight();
-                        if (mcdu.flaps && !gw) {
-                            mcdu.addMessageToQueue(NXSystemMessages.initializeWeightOrCg);
-                        } else if (mcdu.flaps && gw) {
-                            mcdu.setScratchpadText(mcdu._getVRSpeed().toString());
-                        } else {
-                            mcdu.setScratchpadMessage(NXSystemMessages.formatError);
-                            scratchpadCallback();
-                        }
+                        mcdu.setScratchpadMessage(NXSystemMessages.formatError);
+                        scratchpadCallback();
                     }
                     CDUPerformancePage.ShowTAKEOFFPage(mcdu);
                 } else {
@@ -138,15 +123,8 @@ class CDUPerformancePage {
                         mcdu.v2Speed = mcdu.unconfirmedV2Speed;
                         mcdu.unconfirmedV2Speed = undefined;
                     } else {
-                        const gw = mcdu.getGrossWeight();
-                        if (mcdu.flaps && !gw) {
-                            mcdu.addMessageToQueue(NXSystemMessages.initializeWeightOrCg);
-                        } else if (mcdu.flaps && gw) {
-                            mcdu.setScratchpadText(mcdu._getV2Speed().toString());
-                        } else {
-                            mcdu.setScratchpadMessage(NXSystemMessages.formatError);
-                            scratchpadCallback();
-                        }
+                        mcdu.setScratchpadMessage(NXSystemMessages.formatError);
+                        scratchpadCallback();
                     }
                     CDUPerformancePage.ShowTAKEOFFPage(mcdu);
                 } else {
@@ -358,6 +336,16 @@ class CDUPerformancePage {
             };
         }
 
+        mcdu.onLeftInput[5] = () => {
+            if (
+                [mcdu.flightPhaseManager.phase].some(
+                    phase => phase === FmgcFlightPhases.PREFLIGHT || phase === FmgcFlightPhases.DONE
+                )
+            ) {
+                CDU_ACARS_UPLINK_TO_DATA_REQ_Page.ShowPage1(mcdu);
+            }
+        };
+
         mcdu.setTemplate([
             ["TAKE OFF RWY\xa0{green}" + runway.padStart(3, "\xa0") + "{end}[color]" + titleColor],
             ["\xa0V1\xa0\xa0FLP RETR", ""],
@@ -370,8 +358,8 @@ class CDUPerformancePage {
             [`{cyan}${transAltCell}{end}`, flexTakeOffTempCell],
             ["THR\xa0RED/ACC", "ENG\xa0OUT\xa0ACC"],
             [`{${altitudeColour}}${thrRedAcc}{end}`, `{${altitudeColour}}${engOut}{end}`],
-            ["\xa0UPLINK[color]inop", next],
-            ["<TO DATA[color]inop", nextPhase]
+            ["\xa0UPLINK", next],
+            ["<TO DATA", nextPhase]
         ]);
     }
     static ShowCLBPage(mcdu, confirmAppr = false) {
