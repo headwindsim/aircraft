@@ -46,22 +46,6 @@ const execute = async () => {
           sourceDir: './SimObjects/Airplanes/Headwind_A330neo/panel',
         },
         {
-          name: 'ACJModel',
-          sourceDir: './SimObjects/Airplanes/Headwind_ACJ330_900/model',
-        },
-        {
-          name: 'ACJPanel',
-          sourceDir: './SimObjects/Airplanes/Headwind_ACJ330_900/panel',
-        },
-        {
-          name: 'ACJSound',
-          sourceDir: './SimObjects/Airplanes/Headwind_ACJ330_900/sound',
-        },
-        {
-          name: 'ACJTextures',
-          sourceDir: './SimObjects/Airplanes/Headwind_ACJ330_900/texture',
-        },
-        {
           name: 'ContentInfo',
           sourceDir: './ContentInfo',
         },

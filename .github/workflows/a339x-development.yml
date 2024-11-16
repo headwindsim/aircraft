@@ -9,10 +9,15 @@ on:
       - 'hdw-a339x/**'
       - 'scripts/build-a339x.js'
       - 'scripts/build-a339x.sh'
+      - 'scripts/build-cmake-a339x.sh'
+      - 'scripts/copy_a339x.sh'
+      - 'scripts/fragment-a339x.js'
+      - 'scripts/install-source-a339x.js'
       - 'a339x-igniter.config.mjs'
       - 'package.json'
       - 'package-lock.json'
       - 'flybywire'
+      - 'Cargo-A339X.toml'
 
 jobs:
   build:
