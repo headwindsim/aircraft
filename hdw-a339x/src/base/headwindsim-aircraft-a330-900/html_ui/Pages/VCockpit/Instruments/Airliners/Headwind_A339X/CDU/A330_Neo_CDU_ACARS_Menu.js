@@ -25,11 +25,11 @@ class CDU_ACARS_MenuPage {
                 [new Column(1, "ACARS FUNCTION 1/2")],
                 [
                     "",
-                    new Column(23, "UPLINK", Column.right),
+                    new Column(23, "UPLINK", Column.right, Column.inop),
                 ],
                 [
-                    new Column(7, "F-PLN INIT"),
-                    new Column(23, requestEnable ? "REQ*" : "REQ ", Column.right)
+                    new Column(7, "F-PLN INIT", Column.inop),
+                    new Column(23, requestEnable ? "REQ*" : "REQ ", Column.right, Column.inop)
                 ],
                 [""],
                 [
@@ -38,8 +38,8 @@ class CDU_ACARS_MenuPage {
                 ],
                 [""],
                 [
-                    new Column(7, "WIND DATA", Column.small),
-                    new Column(23, mcdu.windRequestEnabled ? "REQ*" : "REQ ", Column.right)
+                    new Column(7, "WIND DATA", Column.small, Column.inop),
+                    new Column(23, mcdu.windRequestEnabled ? "REQ*" : "REQ ", Column.right, Column.inop)
                 ],
                 [""],
                 [""],
@@ -47,11 +47,11 @@ class CDU_ACARS_MenuPage {
                 [""],
                 [
                     "",
-                    new Column(23, "PRINT", Column.right)
+                    new Column(23, "PRINT", Column.right, Column.inop)
                 ],
                 [
-                    new Column(0, "<RETURN"),
-                    new Column(23, "FUNCTION>", Column.right)
+                    new Column(0, "<RETURN", Column.inop),
+                    new Column(23, "FUNCTION>", Column.right, Column.inop)
                 ],
             ]));
         };
@@ -75,16 +75,16 @@ class CDU_ACARS_MenuPage {
                 [new Column(1, "ACARS FUNCTION 2/2")],
                 [
                     "",
-                    new Column(23, "REPORT", Column.right),
+                    new Column(23, "REPORT", Column.right, Column.inop),
                 ],
                 [
-                    new Column(5, "F-PLN RPT"),
-                    new Column(23, "SEND*", Column.right)
+                    new Column(5, "F-PLN RPT", Column.inop),
+                    new Column(23, "SEND*", Column.right, Column.inop)
                 ],
                 [""],
                 [
-                    new Column(5, "POSITION RPT"),
-                    new Column(23, "SEND*", Column.right)
+                    new Column(5, "POSITION RPT", Column.inop),
+                    new Column(23, "SEND*", Column.right, Column.inop)
                 ],
                 [""],
                 [""],
@@ -94,11 +94,11 @@ class CDU_ACARS_MenuPage {
                 [""],
                 [
                     "",
-                    new Column(23, "PRINT", Column.right)
+                    new Column(23, "PRINT", Column.right, Column.inop)
                 ],
                 [
-                    new Column(0, "<RETURN"),
-                    new Column(23, "FUNCTION>", Column.right)
+                    new Column(0, "<RETURN", Column.inop),
+                    new Column(23, "FUNCTION>", Column.right, Column.inop)
                 ],
             ]));
         };
