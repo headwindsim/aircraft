@@ -4,6 +4,8 @@ const packageInfo = require('../package.json');
 let version;
 if (packageInfo.edition === 'stable') {
   version = `v${packageInfo.version}`;
+} else if (buildInfo?.tag) {
+  version = `v${buildInfo?.tag}`;
 } else {
   const hash = buildInfo?.shortHash;
 
