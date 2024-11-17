@@ -18,35 +18,33 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      A32NX_PRODUCTION_BUILD: 1
-      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: headwindsim-aircraft-su100-95-dev.zip
+      HDW_PRODUCTION_BUILD: 1
+      STANDALONE_ZIP_NAME: headwindsim-aircraft-su100-95-dev.zip
       BUILD_DIR_NAME: experimental
       CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
       CDN_BUCKET_DESTINATION: addons/su95x/experimental
       AIRCRAFT_PROJECT_PREFIX: su95x
       AIRCRAFT_VARIANT: su100-95
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+      - name: Maximize build space
+        uses: AdityaGarg8/remove-unwanted-software@v4.1
         with:
-          tool-cache: false
-          android: true
-          dotnet: false
-          haskell: false
-          large-packages: false
-          docker-images: false
-          swap-storage: false
+          remove-android: 'true'
+          remove-dotnet: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
+          remove-large-packages: 'true'
+          remove-cached-tools: 'true'
       - name: Checkout source
         uses: actions/checkout@v4
         with:
-          submodules: recursive
-          lfs: false
+          submodules: true
+          lfs: true
       - name: Set BUILT_DATE_TIME
         run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
         run: |
-          echo A32NX_PRODUCTION_BUILD=1 >> hdw-su95x/.env
+          echo HDW_PRODUCTION_BUILD=1 >> hdw-su95x/.env
           echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-su95x/.env
           echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-su95x/.env
           echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-su95x/.env
@@ -65,15 +63,11 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_su95x.sh --no-tty -j 4
           docker system prune -af
-      - name: Build ZIP files
+      - name: Build Fragmenter modules
         run: |
           node ./scripts/fragment-su95x.js
           cp ./build-su95x/out/build-modules/modules.json ./build-su95x/out/headwindsim-aircraft-su100-95/install.json
           node ./scripts/install-source-su95x.js
-          mkdir ./${{ env.BUILD_DIR_NAME }}
-          cd ./build-su95x/out/
-          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-su100-95/
-          cd ../../
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-su95x/out/build-modules

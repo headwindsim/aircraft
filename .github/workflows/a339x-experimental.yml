@@ -23,9 +23,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      A32NX_PRODUCTION_BUILD: 1
-      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: headwindsim-aircraft-a330-900-dev.zip
+      HDW_PRODUCTION_BUILD: 1      
+      STANDALONE_ZIP_NAME: headwindsim-aircraft-a330-900-dev.zip
       BUILD_DIR_NAME: experimental
       CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
       CDN_BUCKET_DESTINATION: addons/a339x/experimental
@@ -50,7 +49,7 @@ jobs:
         run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
         run: |
-          echo A32NX_PRODUCTION_BUILD=1 >> hdw-a339x/.env
+          echo HDW_PRODUCTION_BUILD=1 >> hdw-a339x/.env
           echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a339x/.env
           echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a339x/.env
           echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a339x/.env
@@ -69,15 +68,11 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_a339x.sh --no-tty -j 4
           docker system prune -af
-      - name: Build ZIP files
+      - name: Build Fragmenter modules
         run: |
           node ./scripts/fragment-a339x.js
           cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
           node ./scripts/install-source-a339x.js
-          mkdir ./${{ env.BUILD_DIR_NAME }}
-          cd ./build-a339x/out/
-          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-900/
-          cd ../../
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/build-modules

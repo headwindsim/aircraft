@@ -8,13 +8,30 @@ on:
       - '!v*-rc*'
 
 jobs:
+  create_github_release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      id: ${{ steps.create_release.outputs.id }}
+    steps:
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
   build-a333x:
     runs-on: ubuntu-latest
     env:
-      A32NX_PRODUCTION_BUILD: 1
-      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: headwindsim-aircraft-a330-300-release.zip
-      BUILD_DIR_NAME: release
+      HDW_PRODUCTION_BUILD: 1
+      STANDALONE_ZIP_NAME: headwindsim-aircraft-a330-300-release.zip
+      BUILD_DIR_NAME: release-a333x
       CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
       CDN_BUCKET_DESTINATION: addons/a333x/release
       AIRCRAFT_PROJECT_PREFIX: a333x
@@ -34,9 +51,11 @@ jobs:
         with:
           submodules: true
           lfs: false
+      - name: Set BUILT_DATE_TIME
+        run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
         run: |
-          echo A32NX_PRODUCTION_BUILD=1 >> hdw-a333x/.env
+          echo HDW_PRODUCTION_BUILD=1 >> hdw-a333x/.env
           echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a333x/.env
           echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a333x/.env
           echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a333x/.env
@@ -55,25 +74,21 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_a333x.sh --no-tty -j 4
           docker system prune -af
-      - name: Build ZIP files
+      - name: Build Fragmenter modules
         run: |
           node ./scripts/fragment-a333x.js
           cp ./build-a333x/out/build-modules/modules.json ./build-a333x/out/headwindsim-aircraft-a330-300/install.json
           node ./scripts/install-source-a333x.js
-          mkdir ./${{ env.BUILD_DIR_NAME }}
-          cd ./build-a333x/out/
-          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-300/
-          cd ../../
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a333x/out/build-modules
+
   build-a339x:
     runs-on: ubuntu-latest
     env:
-      A32NX_PRODUCTION_BUILD: 1
-      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: headwindsim-aircraft-a330-900-release.zip
-      BUILD_DIR_NAME: release
+      HDW_PRODUCTION_BUILD: 1
+      STANDALONE_ZIP_NAME: headwindsim-aircraft-a330-900-release.zip
+      BUILD_DIR_NAME: release-a339x
       CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
       CDN_BUCKET_DESTINATION: addons/a339x/release
       AIRCRAFT_PROJECT_PREFIX: a339x
@@ -93,9 +108,11 @@ jobs:
         with:
           submodules: true
           lfs: true
+      - name: Set BUILT_DATE_TIME
+        run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
         run: |
-          echo A32NX_PRODUCTION_BUILD=1 >> hdw-a339x/.env
+          echo HDW_PRODUCTION_BUILD=1 >> hdw-a339x/.env
           echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a339x/.env
           echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a339x/.env
           echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-a339x/.env
@@ -114,25 +131,40 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_a339x.sh --no-tty -j 4
           docker system prune -af
-      - name: Build ZIP files
+      - name: Build Fragmenter modules
         run: |
           node ./scripts/fragment-a339x.js
           cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
           node ./scripts/install-source-a339x.js
-          mkdir ./${{ env.BUILD_DIR_NAME }}
-          cd ./build-a339x/out/
-          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-a330-900/
-          cd ../../
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/build-modules
+      - name: Build Standalone Download files
+        run: |
+          mkdir ./${{ env.BUILD_DIR_NAME }}
+          cd ./build-a339x/out/
+          rm -rf build-modules
+          7z a -t7z -m0=lzma2 -mx=7 -v2047m ../../${{ env.BUILD_DIR_NAME }}/${{ env.STANDALONE_ZIP_NAME }} ./headwindsim-aircraft-a330-900/
+          cd ../../
+          if [ "$(ls -1 ./${{ env.BUILD_DIR_NAME }} | wc -l)" -eq 1 ]; then
+            mv ./${{ env.BUILD_DIR_NAME }}/${{ env.STANDALONE_ZIP_NAME }}.001 ./${{ env.BUILD_DIR_NAME }}/${{ env.STANDALONE_ZIP_NAME }} # Only applicable if split in 1 part!
+          fi
+          df -h
+      - name: Upload release assets
+        uses: dwenegar/upload-release-assets@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          release_id: ${{ needs.create_github_release.outputs.id }}
+          assets_path: ./${{ env.BUILD_DIR_NAME }}/
+
+
   build-su95x:
     runs-on: ubuntu-latest
     env:
-      A32NX_PRODUCTION_BUILD: 1
-      A32NX_INSTRUMENTS_BUILD_WORKERS: 2
-      ZIP_NAME: headwindsim-aircraft-su100-95-release.zip
-      BUILD_DIR_NAME: release
+      HDW_PRODUCTION_BUILD: 1
+      STANDALONE_ZIP_NAME: headwindsim-aircraft-su100-95-release.zip
+      BUILD_DIR_NAME: release-su95x
       CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
       CDN_BUCKET_DESTINATION: addons/su95x/release
       AIRCRAFT_PROJECT_PREFIX: su95x
@@ -152,9 +184,11 @@ jobs:
         with:
           submodules: true
           lfs: true
+      - name: Set BUILT_DATE_TIME
+        run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
         run: |
-          echo A32NX_PRODUCTION_BUILD=1 >> hdw-su95x/.env
+          echo HDW_PRODUCTION_BUILD=1 >> hdw-su95x/.env
           echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-su95x/.env
           echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-su95x/.env
           echo SENTRY_DSN=\"${{ secrets.SENTRY_DSN }}\" >> hdw-su95x/.env
@@ -173,15 +207,29 @@ jobs:
         run: |
           ./scripts/dev-env/run.sh ./scripts/build_su95x.sh --no-tty -j 4
           docker system prune -af
-      - name: Build ZIP files
+      - name: Build Fragmenter modules
         run: |
           node ./scripts/fragment-su95x.js
           cp ./build-su95x/out/build-modules/modules.json ./build-su95x/out/headwindsim-aircraft-su100-95/install.json
           node ./scripts/install-source-su95x.js
-          mkdir ./${{ env.BUILD_DIR_NAME }}
-          cd ./build-su95x/out/
-          zip -r ../../${{ env.BUILD_DIR_NAME }}/${{ env.ZIP_NAME }} ./headwindsim-aircraft-su100-95/
-          cd ../../
       - name: Upload to CloudFlare CDN
         run: |
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-su95x/out/build-modules
+      - name: Build Standalone Download files
+        run: |
+          mkdir ./${{ env.BUILD_DIR_NAME }}
+          cd ./build-su95x/out/
+          rm -rf build-modules
+          7z a -t7z -m0=lzma2 -mx=7 -v2047m ../../${{ env.BUILD_DIR_NAME }}/${{ env.STANDALONE_ZIP_NAME }} ./headwindsim-aircraft-su100-95/
+          cd ../../
+          if [ "$(ls -1 ./${{ env.BUILD_DIR_NAME }} | wc -l)" -eq 1 ]; then
+            mv ./${{ env.BUILD_DIR_NAME }}/${{ env.STANDALONE_ZIP_NAME }}.001 ./${{ env.BUILD_DIR_NAME }}/${{ env.STANDALONE_ZIP_NAME }} # Only applicable if split in 1 part!
+          fi
+          df -h
+      - name: Upload release assets
+        uses: dwenegar/upload-release-assets@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          release_id: ${{ needs.create_github_release.outputs.id }}
+          assets_path: ./${{ env.BUILD_DIR_NAME }}/

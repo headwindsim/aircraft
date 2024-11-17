@@ -22,7 +22,7 @@ jobs:
     if: github.event.pull_request.draft == false
     env:
       run: |
-        echo A32NX_PRODUCTION_BUILD=1 >> hdw-a333x/.env
+        echo HDW_PRODUCTION_BUILD=1 >> hdw-a333x/.env
         echo FBW_TYPECHECK=1 >> hdw-a333x/.env
         echo CLIENT_ID=\"${{ secrets.NAVIGRAPH_CLIENT_ID }}\" >> hdw-a333x/.env
         echo CLIENT_SECRET=\"${{ secrets.NAVIGRAPH_CLIENT_SECRET }}\" >> hdw-a333x/.env
