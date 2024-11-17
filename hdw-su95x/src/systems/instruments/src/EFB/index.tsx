@@ -23,7 +23,7 @@ render(
   <AircraftContext.Provider
     value={{
       performanceCalculators: {
-        takeoff: new SSJ10095TakeoffPerformanceCalculator(),
+        takeoff: null,
         landing: new SSJ10095LandingCalculator(),
       },
       pushbackPage: {
