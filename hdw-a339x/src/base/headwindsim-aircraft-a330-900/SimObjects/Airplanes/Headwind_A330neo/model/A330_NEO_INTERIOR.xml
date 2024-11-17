@@ -4607,10 +4607,14 @@
                 </LEFT_LEAVE_CODE>
                 <!-- 801XP-C via CB 29LP -->
                 <SEQ1_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED)</SEQ1_POWERED>
-                <SEQ1_CODE>(L:Generic_Master_Warning_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ1_CODE>
+                <SEQ1_CODE>(L:A32NX_MASTER_WARNING) (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or</SEQ1_CODE>
                 <!-- 202XP-A via CB 27LP -->
                 <SEQ2_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED)</SEQ2_POWERED>
-                <SEQ2_CODE>(L:Generic_Master_Warning_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ2_CODE>
+                <SEQ2_CODE>(L:A32NX_MASTER_WARNING) (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or</SEQ2_CODE>
+                <SEQ1_EMISSIVE_DRIVES_VISIBILITY>True</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
+                <SEQ2_EMISSIVE_DRIVES_VISIBILITY>True</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+                <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
+                <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                 <TOOLTIPID>TT:COCKPIT.TOOLTIPS.MASTER_WARNING_ACKNOWLEDGE</TOOLTIPID>
             </UseTemplate>
             <UseTemplate Name="FBW_Anim_Interactions">
@@ -4626,10 +4630,14 @@
                 </LEFT_LEAVE_CODE>
                 <!-- 801XP-C via CB 29LP -->
                 <SEQ1_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED)</SEQ1_POWERED>
-                <SEQ1_CODE>(L:Generic_Master_Caution_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ1_CODE>
+                <SEQ1_CODE>(L:A32NX_MASTER_CAUTION) (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or</SEQ1_CODE>
                 <!-- 202XP-A via CB 27LP -->
                 <SEQ2_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED)</SEQ2_POWERED>
-                <SEQ2_CODE>(L:Generic_Master_Caution_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ2_CODE>
+                <SEQ2_CODE>(L:A32NX_MASTER_CAUTION) (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or</SEQ2_CODE>
+                <SEQ1_EMISSIVE_DRIVES_VISIBILITY>True</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
+                <SEQ2_EMISSIVE_DRIVES_VISIBILITY>True</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+                <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
+                <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                 <TOOLTIPID>TT:COCKPIT.TOOLTIPS.MASTER_CAUTION_ACKNOWLEDGE</TOOLTIPID>
             </UseTemplate>
             <UseTemplate Name="FBW_Anim_Interactions">
@@ -4638,17 +4646,21 @@
                 <NODE_ID>PUSH_AUTOPILOT_MASTERAWARN_R</NODE_ID>
                 <PART_ID>PUSH_AUTOPILOT_MASTERAWARN_R</PART_ID>
                 <LEFT_SINGLE_CODE>
-                    1 (&gt;L:PUSH_AUTOPILOT_MASTERAWARN_L)
+                    1 (&gt;L:PUSH_AUTOPILOT_MASTERAWARN_R)
                 </LEFT_SINGLE_CODE>
                 <LEFT_LEAVE_CODE>
-                    0 (&gt;L:PUSH_AUTOPILOT_MASTERAWARN_L)
+                    0 (&gt;L:PUSH_AUTOPILOT_MASTERAWARN_R)
                 </LEFT_LEAVE_CODE>
-                <!-- 202XP-A via CB 27LP -->
-                <SEQ1_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED)</SEQ1_POWERED>
-                <SEQ1_CODE>(L:Generic_Master_Warning_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ1_CODE>
                 <!-- 801XP-C via CB 29LP -->
-                <SEQ2_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED)</SEQ2_POWERED>
-                <SEQ2_CODE>(L:Generic_Master_Warning_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ2_CODE>
+                <SEQ1_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED)</SEQ1_POWERED>
+                <SEQ1_CODE>(L:A32NX_MASTER_WARNING) (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or</SEQ1_CODE>
+                <!-- 202XP-A via CB 27LP -->
+                <SEQ2_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED)</SEQ2_POWERED>
+                <SEQ2_CODE>(L:A32NX_MASTER_WARNING) (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or</SEQ2_CODE>
+                <SEQ1_EMISSIVE_DRIVES_VISIBILITY>True</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
+                <SEQ2_EMISSIVE_DRIVES_VISIBILITY>True</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+                <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
+                <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                 <TOOLTIPID>TT:COCKPIT.TOOLTIPS.MASTER_WARNING_ACKNOWLEDGE</TOOLTIPID>
             </UseTemplate>
             <UseTemplate Name="FBW_Anim_Interactions">
@@ -4657,17 +4669,21 @@
                 <NODE_ID>PUSH_AUTOPILOT_MASTERCAUT_R</NODE_ID>
                 <PART_ID>PUSH_AUTOPILOT_MASTERCAUT_R</PART_ID>
                 <LEFT_SINGLE_CODE>
-                    1 (&gt;L:PUSH_AUTOPILOT_MASTERCAUT_L)
+                    1 (&gt;L:PUSH_AUTOPILOT_MASTERCAUT_R)
                 </LEFT_SINGLE_CODE>
                 <LEFT_LEAVE_CODE>
-                    0 (&gt;L:PUSH_AUTOPILOT_MASTERCAUT_L)
+                    0 (&gt;L:PUSH_AUTOPILOT_MASTERCAUT_R)
                 </LEFT_LEAVE_CODE>
-                <!-- 202XP-A via CB 27LP -->
-                <SEQ1_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED)</SEQ1_POWERED>
-                <SEQ1_CODE>(L:Generic_Master_Caution_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ1_CODE>
                 <!-- 801XP-C via CB 29LP -->
-                <SEQ2_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED)</SEQ2_POWERED>
-                <SEQ2_CODE>(L:Generic_Master_Caution_Active) (L:A32NX_OVHD_INTLT_ANN) 0 == or</SEQ2_CODE>
+                <SEQ1_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED)</SEQ1_POWERED>
+                <SEQ1_CODE>(L:A32NX_MASTER_CAUTION) (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or</SEQ1_CODE>
+                <!-- 202XP-A via CB 27LP -->
+                <SEQ2_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED)</SEQ2_POWERED>
+                <SEQ2_CODE>(L:A32NX_MASTER_CAUTION) (L:A32NX_OVHD_INTLT_ANN) 0 == (L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool) and or</SEQ2_CODE>
+                <SEQ1_EMISSIVE_DRIVES_VISIBILITY>True</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
+                <SEQ2_EMISSIVE_DRIVES_VISIBILITY>True</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+                <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
+                <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                 <TOOLTIPID>TT:COCKPIT.TOOLTIPS.MASTER_CAUTION_ACKNOWLEDGE</TOOLTIPID>
             </UseTemplate>
         </Component>
