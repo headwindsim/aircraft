@@ -27,6 +27,7 @@ jobs:
           prerelease: false
 
   build-a333x:
+    needs: create_github_release
     runs-on: ubuntu-latest
     env:
       HDW_PRODUCTION_BUILD: 1
@@ -84,6 +85,7 @@ jobs:
           ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a333x/out/build-modules
 
   build-a339x:
+    needs: create_github_release
     runs-on: ubuntu-latest
     env:
       HDW_PRODUCTION_BUILD: 1
@@ -160,6 +162,7 @@ jobs:
 
 
   build-su95x:
+    needs: create_github_release
     runs-on: ubuntu-latest
     env:
       HDW_PRODUCTION_BUILD: 1
