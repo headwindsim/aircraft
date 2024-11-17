@@ -5,7 +5,7 @@ let version;
 if (packageInfo.edition === 'stable') {
   version = `v${packageInfo.version}`;
 } else if (buildInfo?.tag) {
-  version = `v${buildInfo?.tag}`;
+  version = `${buildInfo?.tag}`;
 } else {
   const hash = buildInfo?.shortHash;
 
