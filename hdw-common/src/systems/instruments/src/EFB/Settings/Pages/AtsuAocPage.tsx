@@ -6,7 +6,6 @@ import React from 'react';
 
 import { usePersistentProperty, SENTRY_CONSENT_KEY, SentryConsentState } from '@flybywiresim/fbw-sdk';
 
-import { Hoppie } from '@flybywiresim/api-client';
 import { toast } from 'react-toastify';
 import { t } from '../../Localization/translation';
 import { useModals, PromptModal } from '../../UtilComponents/Modals/Modals';
@@ -14,7 +13,8 @@ import { Toggle } from '../../UtilComponents/Form/Toggle';
 import { SelectGroup, SelectItem } from '../../UtilComponents/Form/Select';
 import { SimpleInput } from '../../UtilComponents/Form/SimpleInput/SimpleInput';
 import { ButtonType, SettingItem, SettingsPage } from '../Settings';
-import { HoppieConnector } from '../../../../../datalink/router/src';
+import { AcarsConnector } from '../../../../../datalink/router/src';
+import { AcarsNetwork } from '../../../../../datalink/common/src/messages';
 
 export const AtsuAocPage = () => {
   const [atisSource, setAtisSource] = usePersistentProperty('CONFIG_ATIS_SRC', 'FAA');
@@ -22,35 +22,23 @@ export const AtsuAocPage = () => {
   const [tafSource, setTafSource] = usePersistentProperty('CONFIG_TAF_SRC', 'NOAA');
   const [telexEnabled, setTelexEnabled] = usePersistentProperty('CONFIG_ONLINE_FEATURES_STATUS', 'DISABLED');
 
-  const [hoppieEnabled, setHoppieEnabled] = usePersistentProperty('CONFIG_HOPPIE_ENABLED', 'DISABLED');
-  const [hoppieUserId, setHoppieUserId] = usePersistentProperty('CONFIG_HOPPIE_USERID');
+  const [acarsNetwork, setAcarsNetwork] = usePersistentProperty('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+  const [hoppieUserId, setHoppieUserId] = usePersistentProperty('CONFIG_ACARS_HOPPIE_USERID');
+  const [sayIntentionsKey, setSayIntentionsKey] = usePersistentProperty('CONFIG_ACARS_SAYINTENTIONS_KEY');
 
   const [sentryEnabled, setSentryEnabled] = usePersistentProperty(SENTRY_CONSENT_KEY, SentryConsentState.Refused);
 
-  const getHoppieResponse = (value: string): Promise<any> =>
-    new Promise((resolve, reject) => {
-      if (!value || value === '') {
-        resolve(value);
-      }
+  const handleAcarsNetwork = (network: string | AcarsNetwork) => {
+    setAcarsNetwork(network);
+    if (network === AcarsNetwork.Disabled) {
+      AcarsConnector.deactivate();
+    } else {
+      AcarsConnector.activate();
+    }
+  };
 
-      const body = {
-        logon: value,
-        from: 'HDWA339X',
-        to: 'ALL-CALLSIGNS',
-        type: 'ping',
-        packet: '',
-      };
-      return Hoppie.sendRequest(body).then((resp) => {
-        if (resp.response === 'error {illegal logon code}') {
-          reject(new Error(`Error: Unknown user ID: ${resp.response}`));
-        } else {
-          resolve(value);
-        }
-      });
-    });
-
-  const handleHoppieUsernameInput = (value: string) => {
-    getHoppieResponse(value)
+  const handleAcarsIdentifierInput = (network: string | AcarsNetwork, value: string) => {
+    AcarsConnector.validate(network, value)
       .then((response) => {
         if (!value) {
           toast.success(`${t('Settings.AtsuAoc.YourHoppieIdHasBeenRemoved')} ${response}`);
@@ -61,16 +49,6 @@ export const AtsuAocPage = () => {
       .catch((_error) => {
         toast.error(t('Settings.AtsuAoc.ThereWasAnErrorEncounteredWhenValidatingYourHoppieID'));
       });
-  };
-
-  const handleHoppieEnabled = (toggleValue: boolean) => {
-    if (toggleValue) {
-      setHoppieEnabled('ENABLED');
-      HoppieConnector.activateHoppie();
-    } else {
-      setHoppieEnabled('DISABLED');
-      HoppieConnector.deactivateHoppie();
-    }
   };
 
   const atisSourceButtons: ButtonType[] = [
@@ -85,6 +63,12 @@ export const AtsuAocPage = () => {
     { name: 'NOAA', setting: 'NOAA' },
     { name: 'PilotEdge', setting: 'PILOTEDGE' },
     { name: 'VATSIM', setting: 'VATSIM' },
+  ];
+
+  const acarsNetworkButtons: ButtonType[] = [
+    { name: 'Disabled', setting: AcarsNetwork.Disabled },
+    { name: 'Hoppie', setting: AcarsNetwork.Hoppie },
+    { name: 'SayIntentions', setting: AcarsNetwork.SayIntentions },
   ];
 
   const tafSourceButtons: ButtonType[] = [{ name: 'NOAA', setting: 'NOAA' }];
@@ -124,7 +108,7 @@ export const AtsuAocPage = () => {
 
   function handleWeatherSource(source: string, type: string) {
     if (type !== 'TAF') {
-      HoppieConnector.deactivateHoppie();
+      AcarsConnector.deactivate();
     }
 
     if (type === 'ATIS') {
@@ -136,7 +120,7 @@ export const AtsuAocPage = () => {
     }
 
     if (type !== 'TAF') {
-      HoppieConnector.activateHoppie();
+      AcarsConnector.activate();
     }
   }
 
@@ -195,18 +179,41 @@ export const AtsuAocPage = () => {
         <Toggle value={telexEnabled === 'ENABLED'} onToggle={(toggleValue) => handleTelexToggle(toggleValue)} />
       </SettingItem>
 
-      <SettingItem name={t('Settings.AtsuAoc.HoppieEnabled')}>
-        <Toggle value={hoppieEnabled === 'ENABLED'} onToggle={(toggleValue) => handleHoppieEnabled(toggleValue)} />
+      <SettingItem name={t('Settings.AtsuAoc.AcarsNetwork')}>
+        <SelectGroup>
+          {acarsNetworkButtons.map((button) => (
+            <SelectItem
+              key={button.setting}
+              onSelect={() => handleAcarsNetwork(button.setting)}
+              selected={acarsNetwork === button.setting}
+            >
+              {button.name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
       </SettingItem>
 
-      <SettingItem name={t('Settings.AtsuAoc.HoppieUserId')}>
-        <SimpleInput
-          className="w-30 text-center"
-          value={hoppieUserId}
-          onBlur={(value) => handleHoppieUsernameInput(value.replace(/\s/g, ''))}
-          onChange={(value) => setHoppieUserId(value)}
-        />
-      </SettingItem>
+      {acarsNetwork === AcarsNetwork.Hoppie && (
+        <SettingItem name={t('Settings.AtsuAoc.HoppieUserId')}>
+          <SimpleInput
+            className="w-30 text-center"
+            value={hoppieUserId}
+            onBlur={(value) => handleAcarsIdentifierInput(AcarsNetwork.Hoppie, value.replace(/\s/g, ''))}
+            onChange={(value) => setHoppieUserId(value)}
+          />
+        </SettingItem>
+      )}
+
+      {acarsNetwork === AcarsNetwork.SayIntentions && (
+        <SettingItem name={t('Settings.AtsuAoc.SayIntentionsKey')}>
+          <SimpleInput
+            className="w-30 text-center"
+            value={sayIntentionsKey}
+            onBlur={(value) => handleAcarsIdentifierInput(AcarsNetwork.SayIntentions, value.replace(/\s/g, ''))}
+            onChange={(value) => setSayIntentionsKey(value)}
+          />
+        </SettingItem>
+      )}
     </SettingsPage>
   );
 };

@@ -14,6 +14,9 @@ dependencies:
   '@flybywiresim/tailwind-config':
     specifier: ^0.5.0
     version: 0.5.2
+  '@headwindsimulations/api-client':
+    specifier: ^1.2.2
+    version: 1.2.2
   '@localazy/cli':
     specifier: ^1.6.0
     version: 1.7.5
@@ -2185,6 +2188,14 @@ packages:
 
   /@flybywiresim/tailwind-config@0.5.2:
     resolution: {integrity: sha512-MV0IZltNoHm2vAhpL+rOIgK6G7tUu4w7wQf+vPTQDmyCbNfpe5QwfbtF+yjKmqryclm3DQ8smPDDRPFuBAIgbQ==}
+    dev: false
+
+  /@headwindsimulations/api-client@1.2.2:
+    resolution: {integrity: sha512-xE0aE8dG9Fl41pB3TtFGHkR0IKhZL/cRNwu2ebk2nqqdewtm3mhvZ3/sjvIi7wssaWVIKMptAJ1T008OwUOfmw==}
+    dependencies:
+      axios: 0.21.4
+    transitivePeerDependencies:
+      - debug
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:

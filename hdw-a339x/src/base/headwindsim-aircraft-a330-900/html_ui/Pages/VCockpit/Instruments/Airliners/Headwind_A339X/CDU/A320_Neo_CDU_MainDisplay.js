@@ -1298,8 +1298,8 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
             case AtsuCommon.AtsuStatusCodes.CallsignInUse:
                 this.atsuScratchpad.setMessage(NXFictionalMessages.fltNbrInUse);
                 break;
-            case AtsuCommon.AtsuStatusCodes.NoHoppieConnection:
-                this.atsuScratchpad.setMessage(NXFictionalMessages.noHoppieConnection);
+            case AtsuCommon.AtsuStatusCodes.NoAcarsConnection:
+                this.atsuScratchpad.setMessage(NXFictionalMessages.noAcarsConnection);
                 break;
             case AtsuCommon.AtsuStatusCodes.ComFailed:
                 this.atsuScratchpad.setMessage(NXSystemMessages.comUnavailable);

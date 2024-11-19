@@ -64,9 +64,11 @@ const NXSystemMessages = {
     awyWptMismatch:         new TypeIMessage("AWY/WPT MISMATCH"),
     cancelAtisUpdate:       new TypeIMessage("CANCEL UPDATE BEFORE"),
     checkMinDestFob:        new TypeIIMessage("CHECK MIN DEST FOB"),
+    checkSpeedMode:         new TypeIIMessage("CHECK SPEED MODE"),
     checkToData:            new TypeIIMessage("CHECK TAKE OFF DATA", true),
     checkWeight:            new TypeIIMessage("CHECK WEIGHT", true),
     comUnavailable:         new TypeIMessage("COM UNAVAILABLE"),
+    cstrDelUpToWpt:         new TypeIIMessage("CSTR DEL UP TO WWWWW", false, "WWWWW"),
     databaseCodingError:    new TypeIIMessage("DATABASE CODING ERROR"),
     dcduFileFull:           new TypeIMessage("DCDU FILE FULL"),
     destEfobBelowMin:       new TypeIIMessage("DEST EFOB BELOW MIN", true),
@@ -98,6 +100,7 @@ const NXSystemMessages = {
     systemBusy:             new TypeIMessage("SYSTEM BUSY-TRY LATER"),
     toSpeedTooLow:          new TypeIIMessage("TO SPEEDS TOO LOW", true),
     uplinkInsertInProg:     new TypeIIMessage("UPLINK INSERT IN PROG"),
+    usingCostIndex:         new TypeIMessage("USING COST INDEX: NNN", false, "NNN"),
     vToDisagree:            new TypeIIMessage("V1/VR/V2 DISAGREE", true),
     waitForSystemResponse:  new TypeIMessage("WAIT FOR SYSTEM RESPONSE"),
     windDataUplink:         new TypeIIMessage("WIND DATA UPLINK"),
@@ -111,6 +114,7 @@ const NXSystemMessages = {
 
 const NXFictionalMessages = {
     noNavigraphUser:         new TypeIMessage("NO NAVIGRAPH USER"),
+    internalError:          new TypeIMessage("INTERNAL ERROR"),
     noAirportSpecified:     new TypeIMessage("NO AIRPORT SPECIFIED"),
     fltNbrInUse:            new TypeIMessage("FLT NBR IN USE"),
     fltNbrMissing:          new TypeIMessage("ENTER ATC FLT NBR"),
@@ -131,7 +135,7 @@ const NXFictionalMessages = {
     noWptInfos:             new TypeIMessage("NO WAYPOINT INFOS"),
     emptyMessage:           new TypeIMessage(""),
     reloadPlaneApply:       new TypeIIMessage("RELOAD A/C TO APPLY", true),
-    noHoppieConnection:     new TypeIMessage("NO HOPPIE CONNECTION"),
+    noAcarsConnection:     new TypeIMessage("NO ACARS CONNECTION"),
     unknownAtsuMessage:     new TypeIMessage("UNKNOWN ATSU MESSAGE"),
     reverseProxy:           new TypeIMessage("REVERSE PROXY ERROR")
 };
