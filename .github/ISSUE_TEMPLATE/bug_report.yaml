@@ -4,7 +4,7 @@ labels: [Bug]
 body:
 - type: markdown
   attributes:
-    value: "# A330-900 Bug Report Form"
+    value: "# Headwind Simulations Bug Report Form"
 - type: dropdown
   id: sim
   attributes:
@@ -18,8 +18,18 @@ body:
 - type: dropdown
   id: version
   attributes:
+    label: Aircraft
+    description: Which aircraft are you using?
+    options:
+    - A330-900x
+    - SU95x
+  validations:
+    required: true
+- type: dropdown
+  id: version
+  attributes:
     label: Aircraft Version
-    description: What version of the A330-900 are you using?
+    description: What version of the aircraft are you using?
     options:
     - Stable
     - Development
