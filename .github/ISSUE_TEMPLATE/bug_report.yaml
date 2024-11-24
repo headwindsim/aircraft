@@ -21,7 +21,7 @@ body:
     label: Aircraft
     description: What aircraft are you using?
     options:
-    - A330-900x
+    - A339x
     - SU95x
   validations:
     required: true
