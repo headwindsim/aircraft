@@ -19,7 +19,7 @@ body:
   id: aircraft
   attributes:
     label: Aircraft
-    description: Which aircraft are you using?
+    description: What aircraft are you using?
     options:
     - A330-900x
     - SU95x
