@@ -16,7 +16,7 @@ body:
   validations:
     required: true
 - type: dropdown
-  id: version
+  id: aircraft
   attributes:
     label: Aircraft
     description: Which aircraft are you using?
