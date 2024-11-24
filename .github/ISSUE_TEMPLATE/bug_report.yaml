@@ -21,8 +21,8 @@ body:
     label: Aircraft
     description: What aircraft are you using?
     options:
-    - A339x
-    - SU95x
+    - A339X
+    - SU95X
   validations:
     required: true
 - type: dropdown
@@ -32,7 +32,7 @@ body:
     description: What version of the aircraft are you using?
     options:
     - Stable
-    - Development
+    - Pre-Release
   validations:
     required: true
 - type: textarea
