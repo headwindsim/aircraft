@@ -26,7 +26,7 @@ const vnavConfig: VnavConfig = {
   ALLOW_DEBUG_PARAMETER_INJECTION: false,
   VNAV_USE_LATCHED_DESCENT_MODE: false,
   IDLE_N1_MARGIN: 3,
-  MAXIMUM_FUEL_ESTIMATE: 40000,
+  MAXIMUM_FUEL_ESTIMATE: 100_000,
 };
 
 const flightModelParams: FlightModelParameters = {
@@ -42,7 +42,7 @@ const flightModelParams: FlightModelParameters = {
   dragCoefficientCorrections: [0, 0.0002, 0.0003, 0.0004, 0.0008, 0.0015, 0.01],
   speedBrakeDrag: 0.01008,
   gearDrag: 0.0372,
-  dragCoeffFactor: 1,
+  dragCoeffFactor: 1.3,
 };
 
 const engineModelParams: EngineModelParameters = {
