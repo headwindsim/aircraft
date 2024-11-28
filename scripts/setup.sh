@@ -14,7 +14,11 @@ fi
 git config --global --add safe.directory "*"
 
 # initialize submodule
-git submodule update --init flybywire
+if [ "${GITHUB_ACTIONS}" == "true" ]; then
+  git submodule update --init flybywire
+else
+  git submodule update --init --recursive
+fi
 
 cd /external
 
@@ -22,6 +26,7 @@ for arg in "$@"; do
   if [ "$arg" = "--clean" ]; then
     echo "Removing node_modules..."
     rm -rf node_modules/
+    rm -rf flybywire/
   fi
 done
 
