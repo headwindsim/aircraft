@@ -88,7 +88,7 @@ impl A320RadioAltimeter {
                 Ala52BAircraftInstallationDelay::FiftySevenFeet,
                 powered_by,
             ),
-            transceivers: Ala52BTransceiverPair::new(context, transmitter, receiver),
+            transceivers: Ala52BTransceiverPair::new(context, number, transmitter, receiver),
         }
     }
 
