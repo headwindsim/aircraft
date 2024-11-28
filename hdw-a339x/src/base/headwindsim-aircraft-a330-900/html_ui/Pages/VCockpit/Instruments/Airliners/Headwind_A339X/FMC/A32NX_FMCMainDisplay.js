@@ -2424,26 +2424,22 @@ class FMCMainDisplay extends BaseAirliners {
     return SimVar.SetSimVarValue('L:A32NX_FM_LS_COURSE', 'number', course);
   }
 
-  updateFlightNo(flightNo, callback = EmptyCallback.Boolean) {
+  async updateFlightNo(flightNo, callback = EmptyCallback.Boolean) {
     if (flightNo.length > 7) {
       this.setScratchpadMessage(NXSystemMessages.notAllowed);
       return callback(false);
     }
 
-    SimVar.SetSimVarValue('ATC FLIGHT NUMBER', 'string', flightNo, 'FMC').then(() => {
-      this.atsu.connectToNetworks(flightNo).then((code) => {
-        if (code !== AtsuCommon.AtsuStatusCodes.Ok) {
-          SimVar.SetSimVarValue('L:A32NX_MCDU_FLT_NO_SET', 'boolean', 0);
-          this.addNewAtsuMessage(code);
-          this.flightNo = '';
-          return callback(false);
-        }
+    this.flightNumber = flightNo;
+    await SimVar.SetSimVarValue('ATC FLIGHT NUMBER', 'string', flightNo, 'FMC');
 
-        SimVar.SetSimVarValue('L:A32NX_MCDU_FLT_NO_SET', 'boolean', 1);
-        this.flightNumber = flightNo;
-        return callback(true);
-      });
-    });
+    // FIXME move ATSU code to ATSU
+    const code = await this.atsu.connectToNetworks(flightNo);
+    if (code !== AtsuCommon.AtsuStatusCodes.Ok) {
+      this.addNewAtsuMessage(code);
+    }
+
+    return callback(true);
   }
 
   async updateCoRoute(coRouteNum, callback = EmptyCallback.Boolean) {
@@ -2735,24 +2731,24 @@ class FMCMainDisplay extends BaseAirliners {
 
   insertTemporaryFlightPlan(callback = EmptyCallback.Void) {
     if (this.flightPlanService.hasTemporary) {
-        const oldCostIndex = this.costIndex;
-        const oldDestination = this.currFlightPlanService.active.destinationAirport
-            ? this.currFlightPlanService.active.destinationAirport.ident
-            : undefined;
-        const oldCruiseLevel = this.cruiseLevel;
-        this.flightPlanService.temporaryInsert();
-        this.checkCostIndex(oldCostIndex);
-        // FIXME I don't know if it is actually possible to insert TMPY with no FROM/TO, but we should not crash here, so check this for now
-        if (oldDestination !== undefined) {
-            this.checkDestination(oldDestination);
-        }
-        this.checkCruiseLevel(oldCruiseLevel);
+      const oldCostIndex = this.costIndex;
+      const oldDestination = this.currFlightPlanService.active.destinationAirport
+        ? this.currFlightPlanService.active.destinationAirport.ident
+        : undefined;
+      const oldCruiseLevel = this.cruiseLevel;
+      this.flightPlanService.temporaryInsert();
+      this.checkCostIndex(oldCostIndex);
+      // FIXME I don't know if it is actually possible to insert TMPY with no FROM/TO, but we should not crash here, so check this for now
+      if (oldDestination !== undefined) {
+        this.checkDestination(oldDestination);
+      }
+      this.checkCruiseLevel(oldCruiseLevel);
 
-        SimVar.SetSimVarValue("L:FMC_FLIGHT_PLAN_IS_TEMPORARY", "number", 0);
-        SimVar.SetSimVarValue("L:MAP_SHOW_TEMPORARY_FLIGHT_PLAN", "number", 0);
+      SimVar.SetSimVarValue('L:FMC_FLIGHT_PLAN_IS_TEMPORARY', 'number', 0);
+      SimVar.SetSimVarValue('L:MAP_SHOW_TEMPORARY_FLIGHT_PLAN', 'number', 0);
 
-        this.guidanceController.vnavDriver.invalidateFlightPlanProfile();
-        callback();
+      this.guidanceController.vnavDriver.invalidateFlightPlanProfile();
+      callback();
     }
   }
 
