@@ -25,14 +25,6 @@
         "maxLod": 0
       },
       {
-        "gltf": "./efb/efb.gltf",
-        "bin": "./efb/efb.bin"
-      },
-      {
-        "gltf": "./glass/glass.gltf",
-        "bin": "./glass/glass.bin"
-      },
-      {
         "combineFiles": [
           "./a330-interior/A330_NEO_INTERIOR_LOD00.gltf"
         ],
