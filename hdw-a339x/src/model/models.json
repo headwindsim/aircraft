@@ -28,46 +28,7 @@
         "combineFiles": [
           "./a330-interior/A330_NEO_INTERIOR_LOD00.gltf"
         ],
-        "nodes": [
-          {
-            "translation": [
-              0.575,
-              0.9002199172973633,
-              20.2373104095459
-            ],
-            "rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ],
-            "scale": [
-              1.0,
-              1.0,
-              1.0
-            ],
-            "name": "CAPTAIN_AVATAR"
-          },
-          {
-            "translation": [
-              -0.575,
-              0.9002199172973633,
-              20.2373104095459
-            ],
-            "rotation": [
-              0.0,
-              0.0,
-              0.0,
-              1.0
-            ],
-            "scale": [
-              1.0,
-              1.0,
-              1.0
-            ],
-            "name": "FIRSTOFFICER_AVATAR"
-          }
-        ]
+        "nodes": []
       }
     ],
     "modifications": [],
