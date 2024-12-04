@@ -1,3 +1,7 @@
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 /* eslint-disable camelcase */
 /* eslint-disable no-empty-function */
 /* eslint-disable no-useless-constructor */
@@ -41,8 +45,6 @@ export class NDTcasTraffic {
 
   relativeAlt: number;
 
-  heading: number;
-
   intrusionLevel: number;
 
   vertSpeed: number;
@@ -53,7 +55,6 @@ export class NDTcasTraffic {
     this.ID = traffic.ID;
     this.lat = traffic.lat;
     this.lon = traffic.lon;
-    this.heading = traffic.heading;
     this.relativeAlt = Math.round(traffic.relativeAlt / 100);
     this.intrusionLevel = traffic.intrusionLevel;
     this.vertSpeed = traffic.vertSpeed;
@@ -1309,6 +1310,10 @@ export class TcasComputer implements TcasComponent {
       this.advisoryState = TcasState.NONE;
       this.tcasState.setVar(TcasState.NONE);
       this.correctiveRa.setVar(false);
+      this.raType.setVar(RaType2.NONE);
+      this.rateToMaintain.setVar(0);
+      this.upAdvisoryStatus.setVar(UpDownAdvisoryStatus.NO_ADVISORY);
+      this.downAdvisoryStatus.setVar(UpDownAdvisoryStatus.NO_ADVISORY);
       SimVar.SetSimVarValue('L:A32NX_TCAS_VSPEED_RED:1', 'Number', 0);
       SimVar.SetSimVarValue('L:A32NX_TCAS_VSPEED_RED:2', 'Number', 0);
       SimVar.SetSimVarValue('L:A32NX_TCAS_VSPEED_GREEN:1', 'Number', 0);
