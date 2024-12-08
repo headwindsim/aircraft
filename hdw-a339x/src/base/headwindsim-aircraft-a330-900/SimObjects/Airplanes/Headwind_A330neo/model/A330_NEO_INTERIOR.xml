@@ -137,7 +137,7 @@
             </UseTemplate>
 
             <!-- Front Glareshields -->
-            <!-- CPT TABLE LIGHT -->
+            <!-- CPT TABLE LIGHT
             <UseTemplate Name="FBW_Stepless_Potentiometer">
                 <NODE_ID>LIGHTING_Knob_Glareshield_1</NODE_ID>
                 <PART_ID>Lighting_Knob_Glareshield_Pilot_0</PART_ID>
@@ -151,8 +151,9 @@
                 <POTENTIOMETER>10</POTENTIOMETER>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
+             -->
 
-            <!-- F/O TABLE LIGHT -->
+            <!-- F/O TABLE LIGHT
             <UseTemplate Name="FBW_Stepless_Potentiometer">
                 <NODE_ID>LIGHTING_Knob_Glareshield_4</NODE_ID>
                 <PART_ID>Lighting_Knob_Glareshield_Copilot_0</PART_ID>
@@ -166,11 +167,12 @@
                 <POTENTIOMETER>11</POTENTIOMETER>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
+             -->
 
             <!-- FLOOD LT MAIN PNL-->
             <UseTemplate Name="FBW_Stepless_Potentiometer">
                 <NODE_ID>LIGHTING_Knob_Glareshield</NODE_ID>
-                <PART_ID>Lighting_Knob_Glareshield_1</PART_ID>
+                <PART_ID>LIGHTING_Knob_Glareshield</PART_ID>
                 <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_LIGHT_GENERIC_DECREASE</ANIMTIP_0>
                 <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_LIGHT_GENERIC_INCREASE</ANIMTIP_1>
                 <POTENTIOMETER>83</POTENTIOMETER>
@@ -203,7 +205,7 @@
 
             <!-- FCU INTEG LT -->
             <UseTemplate Name="FBW_Stepless_Potentiometer">
-                <NODE_ID>LIGHTING_Knob_Glareshield_2</NODE_ID>
+                <NODE_ID>LIGHTING_Knob_Glareshield_1</NODE_ID>
                 <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_PANEL_DECREASE</ANIMTIP_0>
                 <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_PANEL_INCREASE</ANIMTIP_1>
                 <POTENTIOMETER>84</POTENTIOMETER>
@@ -219,7 +221,7 @@
 
             <!-- FCU LED DISPLAY LT -->
             <UseTemplate Name="FBW_Stepless_Potentiometer">
-                <NODE_ID>LIGHTING_Knob_Glareshield_3</NODE_ID>
+                <NODE_ID>LIGHTING_Knob_Glareshield_2</NODE_ID>
                 <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.FD_DISPLAY_BRIGHTNESS_DECREASE</ANIMTIP_0>
                 <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.FD_DISPLAY_BRIGHTNESS_INCREASE</ANIMTIP_1>
                 <POTENTIOMETER>87</POTENTIOMETER>
