@@ -118,7 +118,7 @@ PitchAlternateLaw::Parameters_PitchAlternateLaw_T PitchAlternateLaw::PitchAltern
 
   0.0,
 
-  350.0,
+  330.0,
 
   -0.1,
 
@@ -222,7 +222,7 @@ PitchAlternateLaw::Parameters_PitchAlternateLaw_T PitchAlternateLaw::PitchAltern
 
   -0.5,
 
-  0.82,
+  0.86,
 
   0.5,
 

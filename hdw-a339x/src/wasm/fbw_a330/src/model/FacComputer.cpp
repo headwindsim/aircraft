@@ -2,9 +2,12 @@
 #include "FacComputer_types.h"
 #include "rtwtypes.h"
 #include <cmath>
+#include "rt_remd.h"
 #include "look2_binlxpw.h"
 #include "look1_binlxpw.h"
 #include "look2_pbinlxpw.h"
+#include "plook_binx.h"
+#include "intrp3d_l_pw.h"
 
 const uint8_T FacComputer_IN_Flying{ 1U };
 
@@ -133,7 +136,7 @@ void FacComputer::FacComputer_LagFilter_k(real32_T rtu_U, real_T rtu_C1, real_T 
 
 void FacComputer::FacComputer_MATLABFunction2(real_T rtu_a, real_T rtu_b, real_T rtu_m_lbs, real_T *rty_v_s)
 {
-  *rty_v_s = (rtu_m_lbs / 2205.0 - 40.0) * rtu_b + rtu_a;
+  *rty_v_s = (rtu_m_lbs / 2205.0 - 100.0) * rtu_b + rtu_a;
 }
 
 void FacComputer::FacComputer_RateLimiter_o_Reset(rtDW_RateLimiter_FacComputer_b_T *localDW)
