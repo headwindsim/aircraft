@@ -47,6 +47,16 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
                 rdy: false,
                 blank: false,
                 fm2: false,
+            },
+            center: {
+                fmgc: false,
+                fail: false,
+                mcdu_menu: false,
+                fm1: false,
+                ind: false,
+                rdy: false,
+                blank: false,
+                fm2: false,
             }
         };
         /** MCDU request flags from subsystems */
@@ -479,7 +489,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
         // lights and MCDU are both AC2
         const centerAnnuncPower = SimVar.GetSimVarValue("L:A32NX_ELEC_AC_2_BUS_IS_POWERED", "bool");
-        this.updateAnnunciatorsForSide("center", lightTest, rightAnnuncPower, forceWrite);
+        this.updateAnnunciatorsForSide("center", lightTest, centerAnnuncPower, forceWrite);
     }
 
     updateBrightness() {
