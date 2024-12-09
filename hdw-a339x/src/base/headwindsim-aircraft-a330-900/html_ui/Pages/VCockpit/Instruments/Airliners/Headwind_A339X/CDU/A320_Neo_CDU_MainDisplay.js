@@ -476,6 +476,10 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
         // lights and MCDU are both AC2
         const rightAnnuncPower = SimVar.GetSimVarValue("L:A32NX_ELEC_AC_2_BUS_IS_POWERED", "bool");
         this.updateAnnunciatorsForSide("right", lightTest, rightAnnuncPower, forceWrite);
+
+        // lights and MCDU are both AC2
+        const centerAnnuncPower = SimVar.GetSimVarValue("L:A32NX_ELEC_AC_2_BUS_IS_POWERED", "bool");
+        this.updateAnnunciatorsForSide("center", lightTest, rightAnnuncPower, forceWrite);
     }
 
     updateBrightness() {
@@ -510,7 +514,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
     /**
      * Updates the annunciator light states for one MCDU.
-     * @param {'left' | 'right'} side Which MCDU to update.
+     * @param {'left' | 'right' | 'center'} side Which MCDU to update.
      * @param {boolean} lightTest Whether ANN LT TEST is active.
      * @param {boolean} powerOn Whether annunciator LED power is available.
      */
