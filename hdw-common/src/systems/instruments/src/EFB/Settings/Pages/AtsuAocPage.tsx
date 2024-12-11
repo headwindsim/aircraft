@@ -41,13 +41,13 @@ export const AtsuAocPage = () => {
     AcarsConnector.validate(network, value)
       .then((response) => {
         if (!value) {
-          toast.success(`${t('Settings.AtsuAoc.YourHoppieIdHasBeenRemoved')} ${response}`);
+          toast.success(`${t('Headwind.Settings.AtsuAoc.YourAcarsIdHasBeenRemoved')} ${response}`);
           return;
         }
-        toast.success(`${t('Settings.AtsuAoc.YourHoppieIdHasBeenValidated')} ${response}`);
+        toast.success(`${t('Headwind.Settings.AtsuAoc.YourAcarsIdHasBeenValidated')} ${response}`);
       })
       .catch((_error) => {
-        toast.error(t('Settings.AtsuAoc.ThereWasAnErrorEncounteredWhenValidatingYourHoppieID'));
+        toast.error(t('Headwind.Settings.AtsuAoc.ThereWasAnErrorEncounteredWhenValidatingYourAcarsID'));
       });
   };
 
@@ -179,7 +179,7 @@ export const AtsuAocPage = () => {
         <Toggle value={telexEnabled === 'ENABLED'} onToggle={(toggleValue) => handleTelexToggle(toggleValue)} />
       </SettingItem>
 
-      <SettingItem name={t('Settings.AtsuAoc.AcarsNetwork')}>
+      <SettingItem name={t('Headwind.Settings.AtsuAoc.AcarsNetwork')}>
         <SelectGroup>
           {acarsNetworkButtons.map((button) => (
             <SelectItem
@@ -205,7 +205,7 @@ export const AtsuAocPage = () => {
       )}
 
       {acarsNetwork === AcarsNetwork.SayIntentions && (
-        <SettingItem name={t('Settings.AtsuAoc.SayIntentionsKey')}>
+        <SettingItem name={t('Headwind.Settings.AtsuAoc.SayIntentionsKey')}>
           <SimpleInput
             className="w-30 text-center"
             value={sayIntentionsKey}

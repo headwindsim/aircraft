@@ -2,7 +2,12 @@
   "Headwind": {
     "Settings": {
       "AtsuAoc": {
-        "OptionalA32nxErrorReporting": "Optional Headwind Simulations Error Reporting"
+        "AcarsNetwork": "ACARS Network",
+        "OptionalA32nxErrorReporting": "Optional Headwind Simulations Error Reporting",
+        "SayIntentionsKey": "SayIntentions API Key",
+        "ThereWasAnErrorEncounteredWhenValidatingYourAcarsID": "There was an error validating your ACARS ID",
+        "YourAcarsIdHasBeenRemoved": "Your ACARS ID has been removed",
+        "YourAcarsIdHasBeenValidated": "Your ACARS ID has been validated"
       },
       "flyPad": {
         "Orange": "Orange"
