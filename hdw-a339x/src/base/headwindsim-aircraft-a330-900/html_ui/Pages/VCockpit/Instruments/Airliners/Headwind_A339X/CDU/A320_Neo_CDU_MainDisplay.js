@@ -71,6 +71,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
         this._lastAtsuMessageCount = 0;
         this.leftBrightness = 0;
         this.rightBrightness = 0;
+        this.centerBrightness = 0;
         this.onLeftInput = [];
         this.onRightInput = [];
         this.leftInputDelay = [];
@@ -507,6 +508,7 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
     updateBrightness() {
         const left = SimVar.GetSimVarValue("L:A32NX_MCDU_L_BRIGHTNESS", "number");
         const right = SimVar.GetSimVarValue("L:A32NX_MCDU_R_BRIGHTNESS", "number");
+        const center = SimVar.GetSimVarValue("L:A32NX_MCDU_C_BRIGHTNESS", "number");
 
         let updateNeeded = false;
 
@@ -517,6 +519,11 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
         if (right !== this.rightBrightness) {
             this.rightBrightness = right;
+            updateNeeded = true;
+        }
+
+        if (center !== this.centerBrightness) {
+            this.centerBrightness = center;
             updateNeeded = true;
         }
 
@@ -1397,10 +1404,12 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
         const isLeftMcduEvent = _event.indexOf("1_BTN_") !== -1;
         const isRightMcduEvent = _event.indexOf("2_BTN_") !== -1;
+        const isCenterMcduEvent = _event.indexOf("3_BTN_") !== -1;
 
-        if (isLeftMcduEvent || isRightMcduEvent || _event.indexOf("BTN_") !== -1) {
-            const input = _event.replace("1_BTN_", "").replace("2_BTN_", "").replace("BTN_", "");
-            if (this._keypad.onKeyPress(input, isRightMcduEvent ? 'R' : 'L')) {
+        if (isLeftMcduEvent || isRightMcduEvent || isCenterMcduEvent || _event.indexOf("BTN_") !== -1) {
+            const input = _event.replace("1_BTN_", "").replace("2_BTN_", "").replace("3_BTN_", "").replace("BTN_", "");
+            const side = isLeftMcduEvent ? 'L' : isRightMcduEvent ? 'R' : 'C';
+            if (this._keypad.onKeyPress(input, side)) {
                 return;
             }
 
@@ -1440,11 +1449,25 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
 
     /**
      * Handle brightness key events
-     * @param {'L' | 'R'} side
+     * @param {'L' | 'R' | 'C'} side
      * @param {-1 | 1} sign
      */
     onBrightnessKey(side, sign) {
-        const oldBrightness = side === "R" ? this.rightBrightness : this.leftBrightness;
+        let oldBrightness;
+
+        switch (side) {
+            case "R":
+                oldBrightness = this.rightBrightness;
+                break;
+            case "C":
+                oldBrightness = this.centerBrightness;
+                break;
+            case "L":
+            default:
+                oldBrightness = this.leftBrightness;
+                break;
+        }
+
         SimVar.SetSimVarValue(`L:A32NX_MCDU_${side}_BRIGHTNESS`, "number", Math.max(this.MIN_BRIGHTNESS, Math.min(this.MAX_BRIGHTNESS, oldBrightness + sign * 0.2 * oldBrightness)));
     }
 
@@ -1574,13 +1597,15 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
         }
         let left = this.emptyLines;
         let right = this.emptyLines;
+        let center = this.emptyLines;
 
         const mcdu1Powered = SimVar.GetSimVarValue("L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED", "bool");
         const mcdu2Powered = SimVar.GetSimVarValue("L:A32NX_ELEC_AC_2_BUS_IS_POWERED", "bool");
+        const mcdu3Powered = SimVar.GetSimVarValue("L:A32NX_ELEC_AC_2_BUS_IS_POWERED", "bool");
         const integralLightsPowered = SimVar.GetSimVarValue("L:A32NX_ELEC_AC_1_BUS_IS_POWERED", "bool");
 
         let screenState;
-        if (mcdu1Powered || mcdu2Powered) {
+        if (mcdu1Powered || mcdu2Powered || mcdu3Powered) {
             screenState = {
                 lines: [
                     this._labels[0],
@@ -1615,6 +1640,12 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
             right = Object.assign({}, screenState);
             right.annunciators = this.annunciators.right;
             right.displayBrightness = this.rightBrightness / this.MAX_BRIGHTNESS;
+        }
+
+        if (mcdu3Powered) {
+            center = Object.assign({}, screenState);
+            center.annunciators = this.annunciators.center;
+            center.displayBrightness = this.centerBrightness / this.MAX_BRIGHTNESS;
         }
 
         const content = {right, left};
