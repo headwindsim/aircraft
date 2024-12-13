@@ -738,6 +738,19 @@
                     <ID>L</ID>
                 </UseTemplate>
 
+                <!-- TRUE MAG REF -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
+                    <ANIM_TEMPLATE>FBW_AIRBUS_Push_TRUEMAG_SubTemplate</ANIM_TEMPLATE>
+                    <NODE_ID>PUSH_NORTHREF</NODE_ID>
+                    <ANIM_NAME>PUSH_NORTHREF</ANIM_NAME>
+                    <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
+                    <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
+                    <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+                    <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
+                    <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
+                </UseTemplate>
+
                 <!-- F/O TERR ON ND -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
