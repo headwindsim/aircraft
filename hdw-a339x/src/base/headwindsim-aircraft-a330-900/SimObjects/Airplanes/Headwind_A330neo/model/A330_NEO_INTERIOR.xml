@@ -4723,21 +4723,57 @@
                     <TYPE>AIR_DATA</TYPE>
                     <TIP_TEXT>AIR DATA</TIP_TEXT>
                 </UseTemplate>
-                <!-- SWITCHING EIS DMC -->
+                <!-- SWITCHING FM -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KNOB</ANIM_TYPE>
                     <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
                     <ID>3</ID>
-                    <TYPE>EIS_DMC</TYPE>
-                    <TIP_TEXT>EIS DMC</TIP_TEXT>
+                    <TYPE>FM</TYPE>
+                    <TIP_TEXT>FM (INOP)</TIP_TEXT>
                 </UseTemplate>
-                <!-- SWITCHING ECAM/ND XFR -->
+                <!-- SWITCHING AUDIO -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KNOB</ANIM_TYPE>
                     <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
                     <ID>4</ID>
+                    <TYPE>AUDIO</TYPE>
+                    <TIP_TEXT>AUDIO (INOP)</TIP_TEXT>
+                </UseTemplate>
+            </Component>
+            <Component ID="ECAM_Switching_Panel">
+                <!-- SWITCHING ECAM/ND -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KNOB</ANIM_TYPE>
+                    <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
+                    <ID>5</ID>
                     <TYPE>ECAM_ND_XFR</TYPE>
-                    <TIP_TEXT>ECAM/ND XFR</TIP_TEXT>
+                    <TIP_TEXT>ECAM/ND</TIP_TEXT>
+                </UseTemplate>
+                <!-- SWITCHING DMC -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KNOB</ANIM_TYPE>
+                    <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
+                    <ID>6</ID>
+                    <TYPE>EIS_DMC</TYPE>
+                    <TIP_TEXT>EIS DMC</TIP_TEXT>
+                </UseTemplate>
+            </Component>
+            <Component ID="EFIS_Switching_Panel">
+                <!-- SWITCHING ECAM/ND -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KNOB</ANIM_TYPE>
+                    <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
+                    <ID>7</ID>
+                    <TYPE>DMC_CS</TYPE>
+                    <TIP_TEXT>DMC CS (INOP)</TIP_TEXT>
+                </UseTemplate>
+                <!-- SWITCHING DMC -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KNOB</ANIM_TYPE>
+                    <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
+                    <ID>8</ID>
+                    <TYPE>DMC_FO</TYPE>
+                    <TIP_TEXT>DMC FO (INOP)</TIP_TEXT>
                 </UseTemplate>
             </Component>
         </Component>
