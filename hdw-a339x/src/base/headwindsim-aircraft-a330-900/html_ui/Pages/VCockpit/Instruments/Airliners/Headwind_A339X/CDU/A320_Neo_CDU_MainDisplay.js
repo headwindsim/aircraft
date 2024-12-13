@@ -277,7 +277,19 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
                 if (messageType === 'event') {
                     // backwards compatible with the old MCDU server...
                     // accepts either event:button_name (old), or event:side:button_name (current)
-                    const mcduIndex = (args.length > 1 && args[0] === 'right') ? 2 : 1;
+                    const mcduIndex = (args.length > 1) ?
+                        (() => {
+                            switch (args[0]) {
+                                case 'right':
+                                    return 2;
+                                case 'center':
+                                    return 3;
+                                case 'left':
+                                default:
+                                    return 1;
+                            }
+                        })()
+                        : 1;
                     const button = args.length > 1 ? args[1] : args[0];
                     SimVar.SetSimVarValue(`H:A320_Neo_CDU_${mcduIndex}_BTN_${button}`, "number", 0);
                     SimVar.SetSimVarValue(`L:A32NX_MCDU_PUSH_ANIM_${mcduIndex}_${button}`, "Number", 1);
@@ -1209,19 +1221,23 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
                     }
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_CLR", "Number", 1);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_CLR", "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_CLR", "Number", 1);
                 } else if (keycode >= KeyCode.KEY_0 && keycode <= KeyCode.KEY_9 || keycode >= KeyCode.KEY_A && keycode <= KeyCode.KEY_Z) {
                     const letter = String.fromCharCode(keycode);
                     this.onLetterInput(letter);
-                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_" + letter.toUpperCase(), "Number", 1); // TODO: L/R [1/2] side MCDU Split
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_" + letter.toUpperCase(), "Number", 1); // TODO: L/R/C [1/2/3] side MCDU Split
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_" + letter.toUpperCase(), "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_" + letter.toUpperCase(), "Number", 1);
                 } else if (keycode === KeyCode.KEY_PERIOD || keycode === KeyCode.KEY_DECIMAL) {
                     this.onDot();
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_DOT", "Number", 1);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_DOT", "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_DOT", "Number", 1);
                 } else if (keycode === KeyCode.KEY_SLASH || keycode === KeyCode.KEY_BACK_SLASH || keycode === KeyCode.KEY_DIVIDE || keycode === 226) {
                     this.onDiv();
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_SLASH", "Number", 1);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_SLASH", "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_SLASH", "Number", 1);
                 } else if (keycode === KeyCode.KEY_BACK_SPACE || keycode === KeyCode.KEY_DELETE) {
                     if (this.allSelected) {
                         this.setScratchpadText("");
@@ -1229,30 +1245,36 @@ class A320_Neo_CDU_MainDisplay extends FMCMainDisplay {
                         this.onClr();
                         SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_CLR", "Number", 1);
                         SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_CLR", "Number", 1);
+                        SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_CLR", "Number", 1);
                         this.clrStop = this.scratchpad.isClearStop();
                     }
                 } else if (keycode === KeyCode.KEY_SPACE) {
                     this.onSp();
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_SP", "Number", 1);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_SP", "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_SP", "Number", 1);
                 } else if (keycode === 189 || keycode === KeyCode.KEY_SUBTRACT) {
                     this.onPlusMinus("-");
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_PLUSMINUS", "Number", 1);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_PLUSMINUS", "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_PLUSMINUS", "Number", 1);
                 } else if (keycode === 187 || keycode === KeyCode.KEY_ADD) {
                     this.onPlusMinus("+");
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_PLUSMINUS", "Number", 1);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_PLUSMINUS", "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_PLUSMINUS", "Number", 1);
                 } else if (keycode >= KeyCode.KEY_F1 && keycode <= KeyCode.KEY_F6) {
                     const func_num = keycode - KeyCode.KEY_F1;
                     this.onLeftFunction(func_num);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_L" + (func_num + 1), "Number", 1);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_L" + (func_num + 1), "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_L" + (func_num + 1), "Number", 1);
                 } else if (keycode >= KeyCode.KEY_F7 && keycode <= KeyCode.KEY_F12) {
                     const func_num = keycode - KeyCode.KEY_F7;
                     this.onRightFunction(func_num);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_1_R" + (func_num + 1), "Number", 1);
                     SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_2_R" + (func_num + 1), "Number", 1);
+                    SimVar.SetSimVarValue("L:A32NX_MCDU_PUSH_ANIM_3_R" + (func_num + 1), "Number", 1);
                 }
             }
         });
