@@ -89,7 +89,7 @@
                 <!-- annunciators powered by transformer 36LP via C/B 27LP -->
                 <ANNUNC_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED, Bool)</ANNUNC_POWERED>
                 <!-- TODO: to be removed when MCDU is refactored. -->
-                <SIDE_NUMERIC>2</SIDE_NUMERIC>
+                <SIDE_NUMERIC>3</SIDE_NUMERIC>
             </UseTemplate>
         </Component>
 
