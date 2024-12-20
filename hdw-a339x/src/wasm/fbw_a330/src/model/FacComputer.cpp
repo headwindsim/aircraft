@@ -2,10 +2,8 @@
 #include "FacComputer_types.h"
 #include "rtwtypes.h"
 #include <cmath>
-#include "rt_remd.h"
 #include "look2_binlxpw.h"
 #include "look1_binlxpw.h"
-#include "look2_pbinlxpw.h"
 #include "plook_binx.h"
 #include "intrp3d_l_pw.h"
 
@@ -225,6 +223,7 @@ void FacComputer::FacComputer_MATLABFunction_g3(const boolean_T rtu_u[19], real3
 
 void FacComputer::step()
 {
+  real_T fractions[3];
   real_T Vcas;
   real_T rtb_BusAssignment_d_flight_envelope_alpha_filtered_deg;
   real_T rtb_BusAssignment_dj_flight_envelope_v_stall_warn_kn;
@@ -276,6 +275,7 @@ void FacComputer::step()
   real32_T rtb_theta_dot;
   real32_T rtb_y_a;
   real32_T rtb_y_mb;
+  uint32_T bpIndices[3];
   uint32_T rtb_y_ep;
   uint32_T rtb_y_ig;
   uint32_T rtb_y_k;
@@ -584,7 +584,7 @@ void FacComputer::step()
     rtb_BusAssignment_h_logic_speed_scale_visible = rtb_y_ool;
     Vcas = rtb_V_ias * 0.5144;
     if (rtb_V_ias >= 30.0F) {
-      rtb_beta = rtb_n_y * 9.81 / (Vcas * Vcas * 0.6125 * 122.0 / (70000.0 * Vcas) * -0.62 * Vcas) * 180.0 /
+      rtb_beta = rtb_n_y * 9.81 / (Vcas * Vcas * 0.6125 * 372.0 / (200000.0 * Vcas) * -0.62 * Vcas) * 180.0 /
         3.1415926535897931;
     } else {
       rtb_beta = 0.0;
@@ -790,23 +790,33 @@ void FacComputer::step()
       rtb_Y_g4 = FacComputer_P.Constant1_Value_e;
     }
 
-    rtb_Switch1 = FacComputer_U.in.bus_inputs.fmgc_own_bus.fm_cg_percent.Data * 100.0;
-    rtb_Gain_n = rtb_DataTypeConversion2 / 2205.0;
-    rtb_Switch4_f = (rtb_Gain_n * 0.19807001167721894 - 0.0347376119873668) * 1.3 - 5.9;
-    u0 = FacComputer_P.Gain_Gain_km * rtb_alt;
-    if (u0 > FacComputer_P.Saturation2_UpperSat) {
-      u0 = FacComputer_P.Saturation2_UpperSat;
-    } else if (u0 < FacComputer_P.Saturation2_LowerSat) {
-      u0 = FacComputer_P.Saturation2_LowerSat;
-    }
+    if (rtb_alt >= FacComputer_P.CompareToConstant_const) {
+      bpIndices[0U] = plook_binx(static_cast<real_T>(rtb_DataTypeConversion2), FacComputer_P.uDLookupTable_bp01Data, 5U,
+        &rtb_Switch1);
+      fractions[0U] = rtb_Switch1;
+      u0 = FacComputer_P.Gain_Gain * rtb_alt;
+      if (u0 > FacComputer_P.Saturation2_UpperSat) {
+        u0 = FacComputer_P.Saturation2_UpperSat;
+      } else if (u0 < FacComputer_P.Saturation2_LowerSat) {
+        u0 = FacComputer_P.Saturation2_LowerSat;
+      }
 
-    rtb_Switch1 = look2_pbinlxpw(std::fmax(rtb_Switch4_f - (rtb_Switch4_f - -6.5) / (rtb_Switch1 - -405.0) *
-      (rtb_Switch1 - 25.0), 1.0), u0, FacComputer_P.uDLookupTable_bp01Data_g, FacComputer_P.uDLookupTable_bp02Data,
-      FacComputer_P.uDLookupTable_tableData_c, FacComputer_DWork.m_bpIndex, FacComputer_P.uDLookupTable_maxIndex, 45U);
-    if (rtb_Switch1 > FacComputer_P.Saturation1_UpperSat_ok) {
-      rtb_Switch1 = FacComputer_P.Saturation1_UpperSat_ok;
-    } else if (rtb_Switch1 < FacComputer_P.Saturation1_LowerSat_o) {
-      rtb_Switch1 = FacComputer_P.Saturation1_LowerSat_o;
+      bpIndices[1U] = plook_binx(u0, FacComputer_P.uDLookupTable_bp02Data, 7U, &rtb_Switch1);
+      fractions[1U] = rtb_Switch1;
+      if (FacComputer_P.Saturation3_UpperSat < 1.0) {
+        u0 = FacComputer_P.Saturation3_UpperSat;
+      } else if (FacComputer_P.Saturation3_LowerSat > 1.0) {
+        u0 = FacComputer_P.Saturation3_LowerSat;
+      } else {
+        u0 = 1.0;
+      }
+
+      bpIndices[2U] = plook_binx(u0, FacComputer_P.uDLookupTable_bp03Data, 2U, &rtb_Switch1);
+      fractions[2U] = rtb_Switch1;
+      rtb_Switch1 = intrp3d_l_pw(bpIndices, fractions, FacComputer_P.uDLookupTable_tableData,
+        FacComputer_P.uDLookupTable_dimSizes);
+    } else {
+      rtb_Switch1 = FacComputer_P.Constant_Value_l;
     }
 
     if ((!rtb_AND1) && rtb_y_b4 && rtb_Switch_io_idx_1) {
@@ -816,11 +826,11 @@ void FacComputer::step()
     }
 
     if (rtb_Switch_i_idx_0 == 0.0F) {
-      u0 = 1.28;
-    } else if (FacComputer_DWork.takeoff_config != -1.0) {
-      u0 = 1.13;
-    } else {
       u0 = 1.23;
+    } else if (FacComputer_DWork.takeoff_config != -1.0) {
+      u0 = 1.18;
+    } else {
+      u0 = 1.13;
     }
 
     FacComputer_RateLimiter_f(u0, FacComputer_P.RateLimiterGenericVariableTs_up,
@@ -828,22 +838,15 @@ void FacComputer::step()
       FacComputer_P.RateLimiterGenericVariableTs_InitialCondition, FacComputer_P.reset_Value_m, &rtb_Switch4_f,
       &FacComputer_DWork.sf_RateLimiter_g);
     rtb_Switch4_f *= rtb_Y_br;
-    if (rtb_alt >= FacComputer_P.CompareToConstant_const) {
-      u0 = std::sqrt(std::pow((std::pow(rtb_Switch1 * rtb_Switch1 * 0.2 + 1.0, 3.5) - 1.0) * (rtb_p_s_c / 1013.25) + 1.0,
-        0.2857142857142857) - 1.0) * 1479.1;
-    } else {
-      u0 = FacComputer_P.Constant_Value_l;
-    }
-
-    rtb_Switch1 = std::fmax(std::fmax(u0, FacComputer_P.Vmcl_Value), rtb_Switch4_f);
+    rtb_Switch1 = std::fmax(std::fmax(rtb_Switch1, FacComputer_P.Vmcl_Value), rtb_Switch4_f);
     if (rtb_Y_g4 > FacComputer_P.Saturation_UpperSat_o) {
       rtb_Y_g4 = FacComputer_P.Saturation_UpperSat_o;
     } else if (rtb_Y_g4 < FacComputer_P.Saturation_LowerSat_b) {
       rtb_Y_g4 = FacComputer_P.Saturation_LowerSat_b;
     }
 
-    rtb_Switch_b = look1_binlxpw(rtb_Y_g4, FacComputer_P.uDLookupTable_bp01Data, FacComputer_P.uDLookupTable_tableData,
-      1U) + rtb_Switch1;
+    rtb_Switch_b = look1_binlxpw(rtb_Y_g4, FacComputer_P.uDLookupTable_bp01Data_b,
+      FacComputer_P.uDLookupTable_tableData_g, 1U) + rtb_Switch1;
     FacComputer_MATLABFunction2(look1_binlxpw(FacComputer_P.Constant_Value_k, FacComputer_P.uDLookupTable6_bp01Data,
       FacComputer_P.uDLookupTable6_tableData, 5U), look1_binlxpw(FacComputer_P.Constant_Value_k,
       FacComputer_P.uDLookupTable5_bp01Data, FacComputer_P.uDLookupTable5_tableData, 5U), static_cast<real_T>
@@ -855,7 +858,7 @@ void FacComputer::step()
       (rtb_DataTypeConversion2), &rtb_Switch4_f);
     rtb_Switch4_f = std::fmax(FacComputer_P.Gain_Gain_o * rtb_Switch4_f, FacComputer_P.Vmcl_Value_a +
       FacComputer_P.Bias2_Bias);
-    rtb_v_gd = (rtb_Gain_n * 2.0 + 85.0) + std::fmax(rtb_alt - 20000.0, 0.0) / 1000.0;
+    rtb_v_gd = (rtb_DataTypeConversion2 / 2205.0 * 0.6 + 106.0) + std::fmax(rtb_alt - 20000.0, 0.0) / 1000.0;
     rtb_BusAssignment_g5_flight_envelope_v_stall_kn = rtb_Y_br;
     rtb_DataTypeConversion_kr = ((rtb_Switch_i_idx_0 == FacComputer_P.CompareToConstant4_const) || (rtb_Switch_i_idx_0 ==
       FacComputer_P.CompareToConstant2_const));
@@ -995,7 +998,7 @@ void FacComputer::step()
         rtb_Y_g4 = FacComputer_U.in.bus_inputs.elac_2_bus.yaw_damper_command_deg.Data;
       }
     } else {
-      rtb_Y_g4 = FacComputer_P.Gain_Gain * FacComputer_DWork.pY;
+      rtb_Y_g4 = FacComputer_P.Gain_Gain_p * FacComputer_DWork.pY;
       if (rtb_Y_g4 > FacComputer_P.Saturation1_UpperSat) {
         rtb_Y_g4 = FacComputer_P.Saturation1_UpperSat;
       } else if (rtb_Y_g4 < FacComputer_P.Saturation1_LowerSat) {
