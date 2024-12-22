@@ -273,7 +273,7 @@
                 <STATE1_TEST>(A:LIGHT CABIN:1, Bool) 0 == (A:LIGHT POTENTIOMETER:7, Percent) 0 == and </STATE1_TEST>
                 <ANIM_NAME>SWITCH_CEILING_LIGHT_CAPTAIN</ANIM_NAME>
                 <ANIMTIP_0>Turn ON CPT LT Ceiling</ANIMTIP_0>
-                <ANIMTIP_1>Turn OFF CPT LT Map Ceiling</ANIMTIP_1
+                <ANIMTIP_1>Turn OFF CPT LT Map Ceiling</ANIMTIP_1>
             </UseTemplate>
 
             <!-- CPT DOME LT -->
