@@ -98,6 +98,8 @@
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
                 <ANIM_TEMPLATE>ASOBO_GT_Switch_2States</ANIM_TEMPLATE>
                 <SWITCH_DIRECTION>Vertical</SWITCH_DIRECTION>
+                <UPARROW>UpArrow</UPARROW>
+                <DOWNARROW>DownArrow</DOWNARROW>
                 <WWISE_EVENT>lswitch</WWISE_EVENT>
                 <SWITCH_POSITION_TYPE>L</SWITCH_POSITION_TYPE>
                 <SWITCH_POSITION_VAR>A339X_SWITCH_CS_LT_CEILING</SWITCH_POSITION_VAR>
