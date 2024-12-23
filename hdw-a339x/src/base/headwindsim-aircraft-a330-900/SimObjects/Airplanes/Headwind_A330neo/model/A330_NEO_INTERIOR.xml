@@ -276,18 +276,14 @@
             </UseTemplate>
 
             <!-- CPT LT CONSOLE -->
-            <Component ID="SWITCH_CONSOLE_LIGHT_CAPTAIN" Node="SWITCH_CONSOLE_LIGHT_CAPTAIN">
-                <UseTemplate Name="ASOBO_GT_Switch_Code">
-                    <NODE_ID>SWITCH_CONSOLE_LIGHT_CAPTAIN</NODE_ID>
-                    <ANIM_NAME>SWITCH_CONSOLE_LIGHT_CAPTAIN</ANIM_NAME>
-                    <ANIM_CODE>(L:A339X_CONSOLE_LIGHT_CAPTAIN, bool) 100 *</ANIM_CODE>
-                    <LEFT_SINGLE_CODE>
-                        (L:A339X_CONSOLE_LIGHT_CAPTAIN, bool) ! (&gt;L:A339X_CONSOLE_LIGHT_CAPTAIN, bool)
-                        (L:A339X_CONSOLE_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_8_SET)
-                    </LEFT_SINGLE_CODE>
-                    <TOOLTIPID>CONSOLE LIGHT CAPTAIN</TOOLTIPID>
-                </UseTemplate>
-            </Component>
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_LIGHTING_Switch_Console_Template</ANIM_TEMPLATE>
+                <POTENTIOMETER>8</POTENTIOMETER>
+                <NODE_ID>SWITCH_CONSOLE_LIGHT_CAPTAIN</NODE_ID>
+                <PART_ID>SWITCH_CONSOLE_LIGHT_CAPTAIN</PART_ID>
+                <ANIM_NAME>SWITCH_CONSOLE_LIGHT_CAPTAIN</ANIM_NAME>
+            </UseTemplate>
 
             <!-- FO LT CEILING -->
             <Component ID="SWITCH_CEILING_LIGHT_FO" Node="SWITCH_CEILING_LIGHT_FO">
@@ -331,18 +327,14 @@
         </Component>
 
         <!-- FO LT CONSOLE -->
-        <Component ID="SWITCH_CONSOLE_LIGHT_FO" Node="SWITCH_CONSOLE_LIGHT_FO">
-            <UseTemplate Name="ASOBO_GT_Switch_Code">
-                <NODE_ID>SWITCH_CONSOLE_LIGHT_FO</NODE_ID>
-                <ANIM_NAME>SWITCH_CONSOLE_LIGHT_FO</ANIM_NAME>
-                <ANIM_CODE>(L:A339X_CONSOLE_LIGHT_FO, bool) 100 *</ANIM_CODE>
-                <LEFT_SINGLE_CODE>
-                    (L:A339X_CONSOLE_LIGHT_FO, bool) ! (&gt;L:A339X_CONSOLE_LIGHT_FO, bool)
-                    (L:A339X_CONSOLE_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_9_SET)
-                </LEFT_SINGLE_CODE>
-                <TOOLTIPID>CONSOLE LIGHT FO</TOOLTIPID>
-            </UseTemplate>
-        </Component>
+        <UseTemplate Name="FBW_Anim_Interactions">
+            <ANIM_TYPE>SWITCH</ANIM_TYPE>
+            <ANIM_TEMPLATE>FBW_LIGHTING_Switch_Console_Template</ANIM_TEMPLATE>
+            <POTENTIOMETER>9</POTENTIOMETER>
+            <NODE_ID>SWITCH_CONSOLE_LIGHT_FO</NODE_ID>
+            <PART_ID>SWITCH_CONSOLE_LIGHT_FO</PART_ID>
+            <ANIM_NAME>SWITCH_CONSOLE_LIGHT_FO</ANIM_NAME>
+        </UseTemplate>
 
         <Component ID="Pedestal_Fwd">
             <UseTemplate Name="FBW_ENGINE_Lever_Throttle_Template">
