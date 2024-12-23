@@ -243,9 +243,7 @@
                     <ANIM_CODE>(L:A339X_CEILING_LIGHT_CAPTAIN, bool) 100 *</ANIM_CODE>
                     <LEFT_SINGLE_CODE>
                         (L:A339X_CEILING_LIGHT_CAPTAIN, bool) ! (&gt;L:A339X_CEILING_LIGHT_CAPTAIN, bool)
-                        (A:LIGHT CABIN ON:1, bool) 0 == if{ 1 (&gt;K:CABIN_LIGHTS_ON, bool) }
-                        (A:LIGHT CABIN ON:1, bool) 1 == if{ 1 (&gt;K:CABIN_LIGHTS_OFF, bool) }
-                        (L:A339X_CEILING_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_8_SET)
+                        (L:A339X_CEILING_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_10_SET)
                     </LEFT_SINGLE_CODE>
                     <TOOLTIPID>CEILING LIGHT CAPTAIN</TOOLTIPID>
                 </UseTemplate>
@@ -253,7 +251,7 @@
 
             <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>CEILING_LIGHT_CS</NODE_ID>
-                <POTENTIOMETER>8</POTENTIOMETER>
+                <POTENTIOMETER>10</POTENTIOMETER>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
 
@@ -265,9 +263,7 @@
                     <ANIM_CODE>(L:A339X_MAP_LIGHT_CAPTAIN, bool) 100 *</ANIM_CODE>
                     <LEFT_SINGLE_CODE>
                         (L:A339X_MAP_LIGHT_CAPTAIN, bool) ! (&gt;L:A339X_MAP_LIGHT_CAPTAIN, bool)
-                        (A:LIGHT CABIN ON:2, bool) 0 == if{ 2 (&gt;K:CABIN_LIGHTS_ON, bool) }
-                        (A:LIGHT CABIN ON:2, bool) 1 == if{ 2 (&gt;K:CABIN_LIGHTS_OFF, bool) }
-                        (L:A339X_MAP_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_9_SET)
+                        (L:A339X_MAP_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_11_SET)
                     </LEFT_SINGLE_CODE>
                     <TOOLTIPID>MAP LIGHT CAPTAIN</TOOLTIPID>
                 </UseTemplate>
@@ -275,9 +271,23 @@
 
             <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>MAP_LIGHT_CS</NODE_ID>
-                <POTENTIOMETER>9</POTENTIOMETER>
+                <POTENTIOMETER>11</POTENTIOMETER>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
+
+            <!-- CPT LT CONSOLE -->
+            <Component ID="SWITCH_CONSOLE_LIGHT_CAPTAIN" Node="SWITCH_CONSOLE_LIGHT_CAPTAIN">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SWITCH_CONSOLE_LIGHT_CAPTAIN</NODE_ID>
+                    <ANIM_NAME>SWITCH_CONSOLE_LIGHT_CAPTAIN</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_CONSOLE_LIGHT_CAPTAIN, bool) 100 *</ANIM_CODE>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_CONSOLE_LIGHT_CAPTAIN, bool) ! (&gt;L:A339X_CONSOLE_LIGHT_CAPTAIN, bool)
+                        (L:A339X_CONSOLE_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_8_SET)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>CONSOLE LIGHT CAPTAIN</TOOLTIPID>
+                </UseTemplate>
+            </Component>
 
             <!-- FO LT CEILING -->
             <Component ID="SWITCH_CEILING_LIGHT_FO" Node="SWITCH_CEILING_LIGHT_FO">
@@ -287,9 +297,7 @@
                     <ANIM_CODE>(L:A339X_CEILING_LIGHT_FO, bool) 100 *</ANIM_CODE>
                     <LEFT_SINGLE_CODE>
                         (L:A339X_CEILING_LIGHT_FO, bool) ! (&gt;L:A339X_CEILING_LIGHT_FO, bool)
-                        (A:LIGHT CABIN ON:4, bool) 0 == if{ 4 (&gt;K:CABIN_LIGHTS_ON, bool) }
-                        (A:LIGHT CABIN ON:4, bool) 1 == if{ 4 (&gt;K:CABIN_LIGHTS_OFF, bool) }
-                        (L:A339X_CEILING_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_10_SET)
+                        (L:A339X_CEILING_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_12_SET)
                     </LEFT_SINGLE_CODE>
                     <TOOLTIPID>CEILING LIGHT FO</TOOLTIPID>
                 </UseTemplate>
@@ -297,7 +305,7 @@
 
             <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>CEILING_LIGHT_FO</NODE_ID>
-                <POTENTIOMETER>10</POTENTIOMETER>
+                <POTENTIOMETER>12</POTENTIOMETER>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
 
@@ -309,9 +317,7 @@
                     <ANIM_CODE>(L:A339X_MAP_LIGHT_FO, bool) 100 *</ANIM_CODE>
                     <LEFT_SINGLE_CODE>
                         (L:A339X_MAP_LIGHT_FO, bool) ! (&gt;L:A339X_MAP_LIGHT_FO, bool)
-                        (A:LIGHT CABIN ON:5, bool) 0 == if{ 5 (&gt;K:CABIN_LIGHTS_ON, bool) }
-                        (A:LIGHT CABIN ON:5, bool) 1 == if{ 5 (&gt;K:CABIN_LIGHTS_OFF, bool) }
-                        (L:A339X_MAP_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_11_SET)
+                        (L:A339X_MAP_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_13_SET)
                     </LEFT_SINGLE_CODE>
                     <TOOLTIPID>MAP LIGHT FO</TOOLTIPID>
                 </UseTemplate>
@@ -319,8 +325,22 @@
 
             <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>MAP_LIGHT_FO</NODE_ID>
-                <POTENTIOMETER>11</POTENTIOMETER>
+                <POTENTIOMETER>13</POTENTIOMETER>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+            </UseTemplate>
+        </Component>
+
+        <!-- FO LT CONSOLE -->
+        <Component ID="SWITCH_CONSOLE_LIGHT_FO" Node="SWITCH_CONSOLE_LIGHT_FO">
+            <UseTemplate Name="ASOBO_GT_Switch_Code">
+                <NODE_ID>SWITCH_CONSOLE_LIGHT_FO</NODE_ID>
+                <ANIM_NAME>SWITCH_CONSOLE_LIGHT_FO</ANIM_NAME>
+                <ANIM_CODE>(L:A339X_CONSOLE_LIGHT_FO, bool) 100 *</ANIM_CODE>
+                <LEFT_SINGLE_CODE>
+                    (L:A339X_CONSOLE_LIGHT_FO, bool) ! (&gt;L:A339X_CONSOLE_LIGHT_FO, bool)
+                    (L:A339X_CONSOLE_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_9_SET)
+                </LEFT_SINGLE_CODE>
+                <TOOLTIPID>CONSOLE LIGHT FO</TOOLTIPID>
             </UseTemplate>
         </Component>
 
