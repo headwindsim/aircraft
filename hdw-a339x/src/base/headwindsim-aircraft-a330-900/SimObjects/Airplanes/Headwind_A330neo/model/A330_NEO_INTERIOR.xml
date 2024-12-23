@@ -251,11 +251,9 @@
                 </UseTemplate>
             </Component>
 
-            <UseTemplate Name="ASOBO_LIGHTING_Cabin_Emissive_Template">
+            <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>CEILING_LIGHT_CS</NODE_ID>
                 <POTENTIOMETER>8</POTENTIOMETER>
-                <FAILURE>1</FAILURE>
-                <SIMVAR_INDEX>1</SIMVAR_INDEX>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
 
@@ -275,11 +273,9 @@
                 </UseTemplate>
             </Component>
 
-            <UseTemplate Name="ASOBO_LIGHTING_Cabin_Emissive_Template">
+            <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>MAP_LIGHT_CS</NODE_ID>
                 <POTENTIOMETER>9</POTENTIOMETER>
-                <FAILURE>1</FAILURE>
-                <SIMVAR_INDEX>2</SIMVAR_INDEX>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
 
@@ -299,11 +295,9 @@
                 </UseTemplate>
             </Component>
 
-            <UseTemplate Name="ASOBO_LIGHTING_Cabin_Emissive_Template">
+            <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>CEILING_LIGHT_FO</NODE_ID>
                 <POTENTIOMETER>10</POTENTIOMETER>
-                <FAILURE>1</FAILURE>
-                <SIMVAR_INDEX>4</SIMVAR_INDEX>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
 
@@ -323,11 +317,9 @@
                 </UseTemplate>
             </Component>
 
-            <UseTemplate Name="ASOBO_LIGHTING_Cabin_Emissive_Template">
+            <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>MAP_LIGHT_FO</NODE_ID>
                 <POTENTIOMETER>11</POTENTIOMETER>
-                <FAILURE>1</FAILURE>
-                <SIMVAR_INDEX>5</SIMVAR_INDEX>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
         </Component>
