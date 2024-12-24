@@ -273,8 +273,8 @@ void FlyByWireInterface::loadConfiguration() {
   std::vector<std::pair<double, double>> mappingTable3d;
   mappingTable3d.emplace_back(-20.0, 0.0);
   mappingTable3d.emplace_back(0.0, 0.0);
-  mappingTable3d.emplace_back(25.0, 33.0);
-  mappingTable3d.emplace_back(35.0, 44.0);
+  mappingTable3d.emplace_back(25.0, 36.0);
+  mappingTable3d.emplace_back(35.0, 50.0);
   mappingTable3d.emplace_back(45.0, 100.0);
   idThrottlePositionLookupTable3d.initialize(mappingTable3d, 0, 100);
 }
