@@ -5294,10 +5294,14 @@
         <Component ID="SUNSHADES">
             <Component ID="SUNSHADE_MID" Node="SUNSHADE_MID">
                 <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SUNSHADE_MID</NODE_ID>
+                    <ANIM_NAME>SUNSHADE_MID</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_SUNSHADE_CS_VISIBLE, bool) 100 *</ANIM_CODE>
                     <LEFT_SINGLE_CODE>
                         (L:A339X_SUNSHADE_CS_VISIBLE, bool) ! (&gt;L:A339X_SUNSHADE_CS_VISIBLE, bool)
                         (L:A339X_SUNSHADE_FO_VISIBLE, bool) ! (&gt;L:A339X_SUNSHADE_FO_VISIBLE, bool)
                     </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>SUN COVER SHOW</TOOLTIPID>
                 </UseTemplate>
             </Component>
             <Component ID="SUNSHADE_CAPT" Node="SUNSHADE_CAPT">
