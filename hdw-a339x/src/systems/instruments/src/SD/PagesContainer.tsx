@@ -17,6 +17,7 @@ import { WheelPage } from './Pages/Wheel/Wheel';
 import { FctlPage } from './Pages/Fctl/Fctl';
 import { StatusPage } from './Pages/Status/Status';
 import { CrzPage } from './Pages/Crz/Crz';
+import { CBPage } from './Pages/CB/CB';
 
 enum SdPages {
   None = -1,
@@ -26,14 +27,15 @@ enum SdPages {
   ElecAC = 3,
   ElecDC = 4,
   Hyd = 5,
-  Fuel = 6,
-  Apu = 7,
-  Cond = 8,
-  Door = 9,
-  Wheel = 10,
-  Fctl = 11,
+  Apu = 6,
+  Cond = 7,
+  Door = 8,
+  Wheel = 9,
+  Fctl = 10,
+  Fuel = 11,
   Crz = 12,
   Status = 13,
+  CB = 14,
 }
 
 const CRZ_CONDITION_TIMER_DURATION = 60;
@@ -272,14 +274,15 @@ export const PagesContainer = () => {
     3: <ElecPage />,
     4: <ElecPage />,
     5: <HydPage />,
-    6: <FuelPage />,
-    7: <ApuPage />,
-    8: <CondPage />,
-    9: <DoorPage />,
-    10: <WheelPage />,
-    11: <FctlPage />,
+    6: <ApuPage />,
+    7: <CondPage />,
+    8: <DoorPage />,
+    9: <WheelPage />,
+    10: <FctlPage />,
+    11: <FuelPage />,
     12: <CrzPage />,
     13: <StatusPage />,
+    14: <CBPage />,
   };
 
   return (
