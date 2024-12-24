@@ -5291,6 +5291,31 @@
             </Component>
         </Component>
 
+        <Component ID="SUNSHADES">
+            <Component ID="SUNSHADE_MID" Node="SUNSHADE_MID">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_SUNSHADE_CS_VISIBLE, bool) ! (&gt;L:A339X_SUNSHADE_CS_VISIBLE, bool)
+                        (L:A339X_SUNSHADE_FO_VISIBLE, bool) ! (&gt;L:A339X_SUNSHADE_FO_VISIBLE, bool)
+                    </LEFT_SINGLE_CODE>
+                </UseTemplate>
+            </Component>
+            <Component ID="SUNSHADE_CAPT" Node="SUNSHADE_CAPT">
+                <UseTemplate Name="ASOBO_GT_Visibility_Code">
+                    <VISIBILITY_CODE>
+                        (L:A339X_SUNSHADE_CS_VISIBLE)
+                    </VISIBILITY_CODE>
+                </UseTemplate>
+            </Component>
+            <Component ID="SUNSHADE_FO" Node="SUNSHADE_FO">
+                <UseTemplate Name="ASOBO_GT_Visibility_Code">
+                    <VISIBILITY_CODE>
+                        (L:A339X_SUNSHADE_FO_VISIBLE)
+                    </VISIBILITY_CODE>
+                </UseTemplate>
+            </Component>
+        </Component>
+
         <Component ID="WINDSHIELD">
             <!-- Windshield Left -->
             <UseTemplate Name="FBW_Windshield_Wiped">
