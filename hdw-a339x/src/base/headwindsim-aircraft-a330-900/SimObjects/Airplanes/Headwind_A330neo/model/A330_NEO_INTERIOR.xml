@@ -252,7 +252,7 @@
             <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>CEILING_LIGHT_CS</NODE_ID>
                 <POTENTIOMETER>10</POTENTIOMETER>
-                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
 
             <!-- CPT LT MAP -->
@@ -272,7 +272,7 @@
             <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>MAP_LIGHT_CS</NODE_ID>
                 <POTENTIOMETER>11</POTENTIOMETER>
-                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
 
             <!-- CPT LT CONSOLE -->
@@ -302,7 +302,7 @@
             <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>CEILING_LIGHT_FO</NODE_ID>
                 <POTENTIOMETER>12</POTENTIOMETER>
-                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
 
             <!-- FO LT MAP -->
@@ -322,19 +322,19 @@
             <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
                 <NODE_ID>MAP_LIGHT_FO</NODE_ID>
                 <POTENTIOMETER>13</POTENTIOMETER>
-                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_GND_FLT_SVC_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+            </UseTemplate>
+
+            <!-- FO LT CONSOLE -->
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>SWITCH</ANIM_TYPE>
+                <ANIM_TEMPLATE>FBW_LIGHTING_Switch_Console_Template</ANIM_TEMPLATE>
+                <POTENTIOMETER>9</POTENTIOMETER>
+                <NODE_ID>SWITCH_CONSOLE_LIGHT_FO</NODE_ID>
+                <PART_ID>SWITCH_CONSOLE_LIGHT_FO</PART_ID>
+                <ANIM_NAME>SWITCH_CONSOLE_LIGHT_FO</ANIM_NAME>
             </UseTemplate>
         </Component>
-
-        <!-- FO LT CONSOLE -->
-        <UseTemplate Name="FBW_Anim_Interactions">
-            <ANIM_TYPE>SWITCH</ANIM_TYPE>
-            <ANIM_TEMPLATE>FBW_LIGHTING_Switch_Console_Template</ANIM_TEMPLATE>
-            <POTENTIOMETER>9</POTENTIOMETER>
-            <NODE_ID>SWITCH_CONSOLE_LIGHT_FO</NODE_ID>
-            <PART_ID>SWITCH_CONSOLE_LIGHT_FO</PART_ID>
-            <ANIM_NAME>SWITCH_CONSOLE_LIGHT_FO</ANIM_NAME>
-        </UseTemplate>
 
         <Component ID="Pedestal_Fwd">
             <UseTemplate Name="FBW_ENGINE_Lever_Throttle_Template">
