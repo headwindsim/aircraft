@@ -83,6 +83,14 @@
                 <!-- TODO: to be removed when MCDU is refactored. -->
                 <SIDE_NUMERIC>2</SIDE_NUMERIC>
             </UseTemplate>
+            <UseTemplate Name="FBW_MULTI_FUNCTION_CONTROL_DISPLAY_UNIT_Template">
+                <SIDE>C</SIDE>
+                <DISPLAY_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED, Bool)</DISPLAY_POWERED>
+                <!-- annunciators powered by transformer 36LP via C/B 27LP -->
+                <ANNUNC_POWERED>(L:A32NX_ELEC_AC_2_BUS_IS_POWERED, Bool)</ANNUNC_POWERED>
+                <!-- TODO: to be removed when MCDU is refactored. -->
+                <SIDE_NUMERIC>3</SIDE_NUMERIC>
+            </UseTemplate>
         </Component>
 
         <!-- Integrated lighting -->
@@ -129,7 +137,7 @@
             </UseTemplate>
 
             <!-- Front Glareshields -->
-            <!-- CPT TABLE LIGHT -->
+            <!-- CPT TABLE LIGHT
             <UseTemplate Name="FBW_Stepless_Potentiometer">
                 <NODE_ID>LIGHTING_Knob_Glareshield_1</NODE_ID>
                 <PART_ID>Lighting_Knob_Glareshield_Pilot_0</PART_ID>
@@ -143,8 +151,9 @@
                 <POTENTIOMETER>10</POTENTIOMETER>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
+             -->
 
-            <!-- F/O TABLE LIGHT -->
+            <!-- F/O TABLE LIGHT
             <UseTemplate Name="FBW_Stepless_Potentiometer">
                 <NODE_ID>LIGHTING_Knob_Glareshield_4</NODE_ID>
                 <PART_ID>Lighting_Knob_Glareshield_Copilot_0</PART_ID>
@@ -158,11 +167,12 @@
                 <POTENTIOMETER>11</POTENTIOMETER>
                 <EMISSIVE_CODE>(L:A32NX_ELEC_DC_2_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
             </UseTemplate>
+             -->
 
             <!-- FLOOD LT MAIN PNL-->
             <UseTemplate Name="FBW_Stepless_Potentiometer">
                 <NODE_ID>LIGHTING_Knob_Glareshield</NODE_ID>
-                <PART_ID>Lighting_Knob_Glareshield_1</PART_ID>
+                <PART_ID>LIGHTING_Knob_Glareshield</PART_ID>
                 <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_LIGHT_GENERIC_DECREASE</ANIMTIP_0>
                 <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_LIGHT_GENERIC_INCREASE</ANIMTIP_1>
                 <POTENTIOMETER>83</POTENTIOMETER>
@@ -195,7 +205,7 @@
 
             <!-- FCU INTEG LT -->
             <UseTemplate Name="FBW_Stepless_Potentiometer">
-                <NODE_ID>LIGHTING_Knob_Glareshield_2</NODE_ID>
+                <NODE_ID>LIGHTING_Knob_Glareshield_1</NODE_ID>
                 <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_PANEL_DECREASE</ANIMTIP_0>
                 <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_PANEL_INCREASE</ANIMTIP_1>
                 <POTENTIOMETER>84</POTENTIOMETER>
@@ -211,7 +221,7 @@
 
             <!-- FCU LED DISPLAY LT -->
             <UseTemplate Name="FBW_Stepless_Potentiometer">
-                <NODE_ID>LIGHTING_Knob_Glareshield_3</NODE_ID>
+                <NODE_ID>LIGHTING_Knob_Glareshield_2</NODE_ID>
                 <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.FD_DISPLAY_BRIGHTNESS_DECREASE</ANIMTIP_0>
                 <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.FD_DISPLAY_BRIGHTNESS_INCREASE</ANIMTIP_1>
                 <POTENTIOMETER>87</POTENTIOMETER>
@@ -225,24 +235,104 @@
             </UseTemplate>
             <CameraTitle>PA</CameraTitle>
 
-            <!-- CPT CONSOLE/FLOOR LT -->
+            <!-- CPT LT CEILING -->
+            <Component ID="SWITCH_CEILING_LIGHT_CAPTAIN" Node="SWITCH_CEILING_LIGHT_CAPTAIN">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SWITCH_CEILING_LIGHT_CAPTAIN</NODE_ID>
+                    <ANIM_NAME>SWITCH_CEILING_LIGHT_CAPTAIN</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_CEILING_LIGHT_CAPTAIN, bool) 100 *</ANIM_CODE>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_CEILING_LIGHT_CAPTAIN, bool) ! (&gt;L:A339X_CEILING_LIGHT_CAPTAIN, bool)
+                        (L:A339X_CEILING_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_10_SET)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>CEILING LIGHT CAPTAIN</TOOLTIPID>
+                </UseTemplate>
+            </Component>
+
+            <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
+                <NODE_ID>CEILING_LIGHT_CS</NODE_ID>
+                <POTENTIOMETER>10</POTENTIOMETER>
+                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+            </UseTemplate>
+
+            <!-- CPT LT MAP -->
+            <Component ID="SWITCH_MAP_LIGHT_CAPTAIN" Node="SWITCH_MAP_LIGHT_CAPTAIN">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SWITCH_MAP_LIGHT_CAPTAIN</NODE_ID>
+                    <ANIM_NAME>SWITCH_MAP_LIGHT_CAPTAIN</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_MAP_LIGHT_CAPTAIN, bool) 100 *</ANIM_CODE>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_MAP_LIGHT_CAPTAIN, bool) ! (&gt;L:A339X_MAP_LIGHT_CAPTAIN, bool)
+                        (L:A339X_MAP_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_11_SET)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>MAP LIGHT CAPTAIN</TOOLTIPID>
+                </UseTemplate>
+            </Component>
+
+            <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
+                <NODE_ID>MAP_LIGHT_CS</NODE_ID>
+                <POTENTIOMETER>11</POTENTIOMETER>
+                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+            </UseTemplate>
+
+            <!-- CPT LT CONSOLE -->
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_LIGHTING_Switch_Console_Template</ANIM_TEMPLATE>
                 <POTENTIOMETER>8</POTENTIOMETER>
-                <NODE_ID>SWITCH_EFIS_CS_CONSOLE</NODE_ID>
-                <PART_ID>SWITCH_EFIS_CS_CONSOLE</PART_ID>
-                <ANIM_NAME>SWITCH_EFIS_CS_CONSOLE</ANIM_NAME>
+                <NODE_ID>SWITCH_CONSOLE_LIGHT_CAPTAIN</NODE_ID>
+                <PART_ID>SWITCH_CONSOLE_LIGHT_CAPTAIN</PART_ID>
+                <ANIM_NAME>SWITCH_CONSOLE_LIGHT_CAPTAIN</ANIM_NAME>
             </UseTemplate>
 
-            <!-- F/O CONSOLE/FLOOR LT -->
+            <!-- FO LT CEILING -->
+            <Component ID="SWITCH_CEILING_LIGHT_FO" Node="SWITCH_CEILING_LIGHT_FO">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SWITCH_CEILING_LIGHT_FO</NODE_ID>
+                    <ANIM_NAME>SWITCH_CEILING_LIGHT_FO</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_CEILING_LIGHT_FO, bool) 100 *</ANIM_CODE>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_CEILING_LIGHT_FO, bool) ! (&gt;L:A339X_CEILING_LIGHT_FO, bool)
+                        (L:A339X_CEILING_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_12_SET)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>CEILING LIGHT FO</TOOLTIPID>
+                </UseTemplate>
+            </Component>
+
+            <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
+                <NODE_ID>CEILING_LIGHT_FO</NODE_ID>
+                <POTENTIOMETER>12</POTENTIOMETER>
+                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+            </UseTemplate>
+
+            <!-- FO LT MAP -->
+            <Component ID="SWITCH_MAP_LIGHT_FO" Node="SWITCH_MAP_LIGHT_FO">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SWITCH_MAP_LIGHT_FO</NODE_ID>
+                    <ANIM_NAME>SWITCH_MAP_LIGHT_FO</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_MAP_LIGHT_FO, bool) 100 *</ANIM_CODE>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_MAP_LIGHT_FO, bool) ! (&gt;L:A339X_MAP_LIGHT_FO, bool)
+                        (L:A339X_MAP_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_13_SET)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>MAP LIGHT FO</TOOLTIPID>
+                </UseTemplate>
+            </Component>
+
+            <UseTemplate Name="ASOBO_LIGHTING_Potentiometer_Emissive_Template">
+                <NODE_ID>MAP_LIGHT_FO</NODE_ID>
+                <POTENTIOMETER>13</POTENTIOMETER>
+                <EMISSIVE_CODE>(L:A32NX_ELEC_DC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+            </UseTemplate>
+
+            <!-- FO LT CONSOLE -->
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_LIGHTING_Switch_Console_Template</ANIM_TEMPLATE>
                 <POTENTIOMETER>9</POTENTIOMETER>
-                <NODE_ID>SWITCH_EFIS_FO_CONSOLE</NODE_ID>
-                <PART_ID>SWITCH_EFIS_FO_CONSOLE</PART_ID>
-                <ANIM_NAME>SWITCH_EFIS_FO_CONSOLE</ANIM_NAME>
+                <NODE_ID>SWITCH_CONSOLE_LIGHT_FO</NODE_ID>
+                <PART_ID>SWITCH_CONSOLE_LIGHT_FO</PART_ID>
+                <ANIM_NAME>SWITCH_CONSOLE_LIGHT_FO</ANIM_NAME>
             </UseTemplate>
         </Component>
 
@@ -282,6 +372,7 @@
 
             <UseTemplate Name="FBW_HANDLING_Wheel_ElevatorTrim_Template">
                 <ANIM_NAME>lever_trimtab_elevator_key_pct</ANIM_NAME>
+                <ANIM_NAME2>lever_trimtab_elevator_key_pct_2</ANIM_NAME2>
                 <NODE_ID>LEVER_ELEVATORTRIM_1</NODE_ID>
                 <NODE_ID2>LEVER_ELEVATORTRIM_2</NODE_ID2>
                 <REPEAT_ANIM>5</REPEAT_ANIM>
@@ -524,16 +615,16 @@
                 <ID>2</ID>
             </UseTemplate>
 
-            <Component ID="HANDLING_Steering_Tiller_1" Node="HANDLING_Steering_Tiller_1">
-                <UseTemplate Name="ASOBO_GT_Anim_Code">
-                    <NODE_ID>HANDLE_LEFT_YOKE</NODE_ID>
-                    <ANIM_NAME>HANDLE_LEFT_YOKE</ANIM_NAME>
-                    <!-- Convert a range of -1...1 to 0...1. -->
-                    <ANIM_CODE>(L:A32NX_TILLER_HANDLE_POSITION) 1 + 2 /</ANIM_CODE>
-                    <ANIM_LENGTH>1</ANIM_LENGTH>
-                </UseTemplate>
-            </Component>
-
+            <UseTemplate Name="ASOBO_GT_Anim">
+                <ANIM_NAME>HANDLE_LEFT_YOKE</ANIM_NAME>
+                <ANIM_CODE>(L:A32NX_TILLER_HANDLE_POSITION) 100 * 100 +</ANIM_CODE>
+                <ANIM_LENGTH>200</ANIM_LENGTH>
+	        </UseTemplate>
+	        <UseTemplate Name="ASOBO_GT_Anim">
+                <ANIM_NAME>HANDLE_RIGHT_YOKE</ANIM_NAME>
+                <ANIM_CODE>(L:A32NX_TILLER_HANDLE_POSITION) 100 * 100 +</ANIM_CODE>
+                <ANIM_LENGTH>200</ANIM_LENGTH>
+            </UseTemplate>
 
             <UseTemplate Name="ASOBO_GT_Component_Emissive_Gauge">
                 <NODE_ID>PUSH_HANDLE_LEFT_YOKE</NODE_ID>
@@ -573,6 +664,38 @@
                     <PLANE_NAME>A32NX</PLANE_NAME>
                 </DefaultTemplateParameters>
 
+
+                <!-- TODO: CHECK AGAIN LATER
+                <Component ID="CAPT_EFIS_KNOB_INTEG">
+                    <Parameters Type="Default">
+                        <POTENTIOMETER>85</POTENTIOMETER>
+                        <EMISSIVE_CODE>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+                    </Parameters>
+
+                    <UseTemplate Name="ASOBO_LIGHTING_Panel_Emissive_Template">
+                        <NODE_ID>KNOB_EFIS_CS_PFD</NODE_ID>
+                    </UseTemplate>
+                    <UseTemplate Name="ASOBO_LIGHTING_Panel_Emissive_Template">
+                        <NODE_ID>KNOB_EFIS_CS_ND</NODE_ID>
+                    </UseTemplate>
+                    <UseTemplate Name="ASOBO_LIGHTING_Panel_Emissive_Template">
+                        <NODE_ID>KNOB_EFIS_CS_ND_SMALL</NODE_ID>
+                    </UseTemplate>
+                    <UseTemplate Name="ASOBO_LIGHTING_Panel_Emissive_Template">
+                        <NODE_ID>KNOB_EFIS_CS_LOUDSPEAKER</NODE_ID>
+                    </UseTemplate>
+                </Component>
+                -->
+
+                <!-- CPT LOUDSPEAKER -->
+                <Component ID="KNOB_EFIS_CS_LOUDSPEAKER" Node="KNOB_EFIS_CS_LOUDSPEAKER">
+                    <UseTemplate Name="FBW_Continuous_Knob_Finite_From_Simvar">
+                        <NODE_ID>KNOB_EFIS_CS_LOUDSPEAKER</NODE_ID>
+                        <ANIM_NAME>KNOB_EFIS_CS_LOUDSPEAKER</ANIM_NAME>
+                        <ANIM_SIMVAR>L:XMLVAR_KNOB_EFIS_CS_LOUDSPEAKER</ANIM_SIMVAR>
+                    </UseTemplate>
+                </Component>
+
                 <!-- CPT PFD BRIGHTNESS -->
                 <UseTemplate Name="FBW_Stepless_Potentiometer">
                     <NODE_ID>KNOB_EFIS_CS_PFD</NODE_ID>
@@ -590,6 +713,15 @@
                     <CAMERA_TITLE>PFD</CAMERA_TITLE>
                     <!-- Effects such as pixels and glass reflections require the screen brightness to be increased -->
                     <EMISSIVE_CODE>12</EMISSIVE_CODE>
+                </UseTemplate>
+
+                <!-- CPT EFIS BKUP SPD ALT -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KORRY_HELD</ANIM_TYPE>
+                    <ANIM_TEMPLATE>FBW_AIRBUS_Push_BKUP_SPD_ALT_Template</ANIM_TEMPLATE>
+                    <NODE_ID>PUSH_EFIS_CS_BKUP_SPD_ALT</NODE_ID>
+                    <ANIM_NAME>PUSH_EFIS_CS_BKUP_SPD_ALT</ANIM_NAME>
+                    <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                 </UseTemplate>
 
                 <!-- CPT EFIS GPWS G/S -->
@@ -613,6 +745,19 @@
                     <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
                     <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                     <ID>L</ID>
+                </UseTemplate>
+
+                <!-- TRUE MAG REF -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
+                    <ANIM_TEMPLATE>FBW_AIRBUS_Push_TRUEMAG_Template</ANIM_TEMPLATE>
+                    <NODE_ID>PUSH_NORTHREF</NODE_ID>
+                    <ANIM_NAME>PUSH_NORTHREF</ANIM_NAME>
+                    <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
+                    <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
+                    <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+                    <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
+                    <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                 </UseTemplate>
 
                 <!-- F/O TERR ON ND -->
@@ -724,6 +869,37 @@
                     <PLANE_NAME>A32NX</PLANE_NAME>
                 </DefaultTemplateParameters>
 
+                <!-- TODO: CHECK AGAIN LATER
+                <Component ID="FO_EFIS_KNOB_INTEG">
+                    <Parameters Type="Default">
+                        <POTENTIOMETER>85</POTENTIOMETER>
+                        <EMISSIVE_CODE>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</EMISSIVE_CODE>
+                    </Parameters>
+
+                    <UseTemplate Name="ASOBO_LIGHTING_Panel_Emissive_Template">
+                        <NODE_ID>KNOB_EFIS_FO_PFD</NODE_ID>
+                    </UseTemplate>
+                    <UseTemplate Name="ASOBO_LIGHTING_Panel_Emissive_Template">
+                        <NODE_ID>KNOB_EFIS_FO_ND</NODE_ID>
+                    </UseTemplate>
+                    <UseTemplate Name="ASOBO_LIGHTING_Panel_Emissive_Template">
+                        <NODE_ID>KNOB_EFIS_FO_ND_SMALL</NODE_ID>
+                    </UseTemplate>
+                    <UseTemplate Name="ASOBO_LIGHTING_Panel_Emissive_Template">
+                        <NODE_ID>KNOB_EFIS_FO_LOUDSPEAKER</NODE_ID>
+                    </UseTemplate>
+                </Component>
+                -->
+
+                <!-- FO LOUDSPEAKER -->
+                <Component ID="KNOB_EFIS_FO_LOUDSPEAKER" Node="KNOB_EFIS_FO_LOUDSPEAKER">
+                    <UseTemplate Name="FBW_Continuous_Knob_Finite_From_Simvar">
+                        <NODE_ID>KNOB_EFIS_FO_LOUDSPEAKER</NODE_ID>
+                        <ANIM_NAME>KNOB_EFIS_FO_LOUDSPEAKER</ANIM_NAME>
+                        <ANIM_SIMVAR>L:XMLVAR_KNOB_EFIS_FO_LOUDSPEAKER</ANIM_SIMVAR>
+                    </UseTemplate>
+                </Component>
+
                 <!-- F/O PFD BRIGHTNESS -->
                 <UseTemplate Name="FBW_Stepless_Potentiometer">
                     <NODE_ID>KNOB_EFIS_FO_PFD</NODE_ID>
@@ -731,6 +907,15 @@
                     <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_R_PFD_DECREASE</ANIMTIP_0>
                     <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LIGHTING_KNOB_R_PFD_INCREASE</ANIMTIP_1>
                     <POTENTIOMETER>90</POTENTIOMETER>
+                </UseTemplate>
+
+                <!-- F/O EFIS BKUP SPD ALT -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KORRY_HELD</ANIM_TYPE>
+                    <ANIM_TEMPLATE>FBW_AIRBUS_Push_BKUP_SPD_ALT_Template</ANIM_TEMPLATE>
+                    <NODE_ID>PUSH_EFIS_FO_BKUP_SPD_ALT</NODE_ID>
+                    <ANIM_NAME>PUSH_EFIS_FO_BKUP_SPD_ALT</ANIM_NAME>
+                    <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
                 </UseTemplate>
 
                 <!-- F/O EFIS GPWS G/S -->
@@ -4471,6 +4656,34 @@
             </UseTemplate>
         </Component>
 
+        <Component ID="CS_Glareshild">
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>KNOB</ANIM_TYPE>
+                <ANIM_TEMPLATE>A32NX_AIRBUS_PACK_SELECTOR_TEMPLATE</ANIM_TEMPLATE>
+                <Node_ID>KNOB_EFIS_CS_NORM</Node_ID>
+                <PART_ID>KNOB_EFIS_CS_NORM</PART_ID>
+                <ANIM_NAME>KNOB_EFIS_CS_NORM</ANIM_NAME>
+                <ANIM_CODE>0</ANIM_CODE>
+                <ANIMTIP_0>Set EFIS DMC to NORM</ANIMTIP_0>
+                <ANIMTIP_1>Set EFIS DMC to 3</ANIMTIP_1>
+                <ANIMTIP_2>Set EFIS DMC to 2</ANIMTIP_2>
+            </UseTemplate>
+        </Component>
+
+        <Component ID="FO_Glareshild">
+            <UseTemplate Name="FBW_Anim_Interactions">
+                <ANIM_TYPE>KNOB</ANIM_TYPE>
+                <ANIM_TEMPLATE>A32NX_AIRBUS_PACK_SELECTOR_TEMPLATE</ANIM_TEMPLATE>
+                <Node_ID>KNOB_EFIS_FO_NORM</Node_ID>
+                <PART_ID>KNOB_EFIS_FO_NORM</PART_ID>
+                <ANIM_NAME>KNOB_EFIS_FO_NORM</ANIM_NAME>
+                <ANIM_CODE>0</ANIM_CODE>
+                <ANIMTIP_0>Set EFIS DMC to NORM</ANIMTIP_0>
+                <ANIMTIP_1>Set EFIS DMC to 3</ANIMTIP_1>
+                <ANIMTIP_2>Set EFIS DMC to 1</ANIMTIP_2>
+            </UseTemplate>
+        </Component>
+
         <!-- ACCU PRESS BRAKES -->
         <Component ID="Airbus_BRK">
             <Component ID="BRK_PRESS_ARC_L" Node="BRK_PRESS_ARC_L">
@@ -4559,21 +4772,57 @@
                     <TYPE>AIR_DATA</TYPE>
                     <TIP_TEXT>AIR DATA</TIP_TEXT>
                 </UseTemplate>
-                <!-- SWITCHING EIS DMC -->
+                <!-- SWITCHING FM -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KNOB</ANIM_TYPE>
                     <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
                     <ID>3</ID>
-                    <TYPE>EIS_DMC</TYPE>
-                    <TIP_TEXT>EIS DMC</TIP_TEXT>
+                    <TYPE>FM</TYPE>
+                    <TIP_TEXT>FM (INOP)</TIP_TEXT>
                 </UseTemplate>
-                <!-- SWITCHING ECAM/ND XFR -->
+                <!-- SWITCHING AUDIO -->
                 <UseTemplate Name="FBW_Anim_Interactions">
                     <ANIM_TYPE>KNOB</ANIM_TYPE>
                     <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
                     <ID>4</ID>
+                    <TYPE>AUDIO</TYPE>
+                    <TIP_TEXT>AUDIO (INOP)</TIP_TEXT>
+                </UseTemplate>
+            </Component>
+            <Component ID="ECAM_Switching_Panel">
+                <!-- SWITCHING ECAM/ND -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KNOB</ANIM_TYPE>
+                    <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
+                    <ID>5</ID>
                     <TYPE>ECAM_ND_XFR</TYPE>
-                    <TIP_TEXT>ECAM/ND XFR</TIP_TEXT>
+                    <TIP_TEXT>ECAM/ND</TIP_TEXT>
+                </UseTemplate>
+                <!-- SWITCHING DMC -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KNOB</ANIM_TYPE>
+                    <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
+                    <ID>6</ID>
+                    <TYPE>EIS_DMC</TYPE>
+                    <TIP_TEXT>EIS DMC</TIP_TEXT>
+                </UseTemplate>
+            </Component>
+            <Component ID="EFIS_Switching_Panel">
+                <!-- SWITCHING ECAM/ND -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KNOB</ANIM_TYPE>
+                    <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
+                    <ID>7</ID>
+                    <TYPE>DMC_CS</TYPE>
+                    <TIP_TEXT>DMC CS (INOP)</TIP_TEXT>
+                </UseTemplate>
+                <!-- SWITCHING DMC -->
+                <UseTemplate Name="FBW_Anim_Interactions">
+                    <ANIM_TYPE>KNOB</ANIM_TYPE>
+                    <ANIM_TEMPLATE>A32NX_AIRBUS_DATA_SWITCHING_TEMPLATE</ANIM_TEMPLATE>
+                    <ID>8</ID>
+                    <TYPE>DMC_FO</TYPE>
+                    <TIP_TEXT>DMC FO (INOP)</TIP_TEXT>
                 </UseTemplate>
             </Component>
         </Component>
@@ -5119,6 +5368,35 @@
                 <UseTemplate Name="ASOBO_GT_Visibility_Code">
                     <VISIBILITY_CODE>
                         (L:A32NX_PILOT_AVATAR_VISIBLE_1) ! (L:A32NX_PILOT_AVATAR_HIDDEN_1) or
+                    </VISIBILITY_CODE>
+                </UseTemplate>
+            </Component>
+        </Component>
+
+        <Component ID="SUNSHADES">
+            <Component ID="SUNSHADE_MID" Node="SUNSHADE_MID">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SUNSHADE_MID</NODE_ID>
+                    <ANIM_NAME>SUNSHADE_MID</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_SUNSHADE_CS_VISIBLE, bool) 100 *</ANIM_CODE>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_SUNSHADE_CS_VISIBLE, bool) ! (&gt;L:A339X_SUNSHADE_CS_VISIBLE, bool)
+                        (L:A339X_SUNSHADE_FO_VISIBLE, bool) ! (&gt;L:A339X_SUNSHADE_FO_VISIBLE, bool)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>SUN COVER SHOW</TOOLTIPID>
+                </UseTemplate>
+            </Component>
+            <Component ID="SUNSHADE_CAPT" Node="SUNSHADE_CAPT">
+                <UseTemplate Name="ASOBO_GT_Visibility_Code">
+                    <VISIBILITY_CODE>
+                        (L:A339X_SUNSHADE_CS_VISIBLE)
+                    </VISIBILITY_CODE>
+                </UseTemplate>
+            </Component>
+            <Component ID="SUNSHADE_FO" Node="SUNSHADE_FO">
+                <UseTemplate Name="ASOBO_GT_Visibility_Code">
+                    <VISIBILITY_CODE>
+                        (L:A339X_SUNSHADE_FO_VISIBLE)
                     </VISIBILITY_CODE>
                 </UseTemplate>
             </Component>

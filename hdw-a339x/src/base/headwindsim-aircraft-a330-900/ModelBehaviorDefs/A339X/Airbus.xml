@@ -139,6 +139,46 @@
         </UseTemplate>
     </Template>
 
+    <Template Name="FBW_AIRBUS_Push_TRUEMAG_Template">
+        <DefaultTemplateParameters>
+            <NODE_ID>PUSH_NORTHREF</NODE_ID>
+            <ANIM_NAME>PUSH_NORTHREF</ANIM_NAME>
+            <PART_ID>PUSH_NORTHREF</PART_ID>
+            <WWISE_EVENT_1>mpb1on</WWISE_EVENT_1>
+            <WWISE_EVENT_2>mpb1off</WWISE_EVENT_2>
+            <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
+            <NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
+            <TOOLTIPID>%((L:A32NX_PUSH_TRUE_REF, bool))%{if}TT:COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_AP_ON%{else}TT:COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_AP_OFF%{end}</TOOLTIPID>
+        </DefaultTemplateParameters>
+
+        <UseTemplate Name="FBW_AIRLINER_SubNodes_Setter_Template">
+            <TEMPLATE_TO_CALL>ASOBO_GT_Push_Button_Airliner</TEMPLATE_TO_CALL>
+            <LEFT_SINGLE_CODE>(L:A32NX_PUSH_TRUE_REF) ! (&gt;L:A32NX_PUSH_TRUE_REF)</LEFT_SINGLE_CODE>
+            <SEQ1_EMISSIVE_CODE>0</SEQ1_EMISSIVE_CODE>
+            <SEQ2_EMISSIVE_CODE>(L:A32NX_PUSH_TRUE_REF)</SEQ2_EMISSIVE_CODE>
+        </UseTemplate>
+    </Template>
+
+    <Template Name="FBW_AIRBUS_Push_BKUP_SPD_ALT_Template">
+        <DefaultTemplateParameters>
+            <NODE_ID>PUSH_EFIS_CS_BKUP_SPD_ALT</NODE_ID>
+            <ANIM_NAME>PUSH_EFIS_CS_BKUP_SPD_ALT</ANIM_NAME>
+            <PART_ID>PUSH_EFIS_CS_BKUP_SPD_ALT</PART_ID>
+            <WWISE_EVENT_1>mpb1on</WWISE_EVENT_1>
+            <WWISE_EVENT_2>mpb1off</WWISE_EVENT_2>
+            <NORMALIZED_TIME_1>0.1</NORMALIZED_TIME_1>
+            <NORMALIZED_TIME_2>0.5</NORMALIZED_TIME_2>
+            <TOOLTIPID>%((L:A32NX_PUSH_BKUP_SPD_ALT, bool))%{if}TT:COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_AP_ON%{else}TT:COCKPIT.TOOLTIPS.AUTOPILOT_PANEL_AP_OFF%{end}</TOOLTIPID>
+        </DefaultTemplateParameters>
+
+        <UseTemplate Name="FBW_AIRLINER_SubNodes_Setter_Template">
+            <TEMPLATE_TO_CALL>ASOBO_GT_Push_Button_Airliner</TEMPLATE_TO_CALL>
+            <LEFT_SINGLE_CODE>(L:A32NX_PUSH_BKUP_SPD_ALT) ! (&gt;L:A32NX_PUSH_BKUP_SPD_ALT)</LEFT_SINGLE_CODE>
+            <SEQ1_EMISSIVE_CODE>0</SEQ1_EMISSIVE_CODE>
+            <SEQ2_EMISSIVE_CODE>(L:A32NX_PUSH_BKUP_SPD_ALT)</SEQ2_EMISSIVE_CODE>
+        </UseTemplate>
+    </Template>
+
     <Template Name="FBW_ECAM_PAGE_BUTTON_SubTemplate">
         <DefaultTemplateParameters>
             <NODE_ID>PUSH_ECAM_#BASE_NAME#</NODE_ID>
@@ -405,13 +445,23 @@
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_PRESS</TOOLTIPID>
         </UseTemplate>
 
-        <!-- ECAM ELEC -->
+        <!-- ECAM ELEC AC-->
         <UseTemplate Name="FBW_Anim_Interactions">
             <ANIM_TYPE>BUTTON</ANIM_TYPE>
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
-            <BASE_NAME>ELEC</BASE_NAME>
-            <PART_ID>ECAM_ELEC</PART_ID>
+            <BASE_NAME>ELECAC</BASE_NAME>
+            <PART_ID>ECAM_ELECAC</PART_ID>
             <GROUP_INDEX>3</GROUP_INDEX> <!--Change to positive to activate-->
+            <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_ELEC</TOOLTIPID>
+        </UseTemplate>
+
+        <!-- ECAM ELEC DC -->
+        <UseTemplate Name="FBW_Anim_Interactions">
+            <ANIM_TYPE>BUTTON</ANIM_TYPE>
+            <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
+            <BASE_NAME>ELECDC</BASE_NAME>
+            <PART_ID>ECAM_ELECDC</PART_ID>
+            <GROUP_INDEX>4</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_ELEC</TOOLTIPID>
         </UseTemplate>
 
@@ -421,18 +471,8 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>HYD</BASE_NAME>
             <PART_ID>ECAM_HYD</PART_ID>
-            <GROUP_INDEX>4</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>5</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_HYD</TOOLTIPID>
-        </UseTemplate>
-
-        <!-- ECAM FUEL -->
-        <UseTemplate Name="FBW_Anim_Interactions">
-            <ANIM_TYPE>BUTTON</ANIM_TYPE>
-            <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
-            <BASE_NAME>FUEL</BASE_NAME>
-            <PART_ID>ECAM_FUEL</PART_ID>
-            <GROUP_INDEX>5</GROUP_INDEX>
-            <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_FUEL</TOOLTIPID>
         </UseTemplate>
 
         <!-- ECAM APU -->
@@ -485,6 +525,16 @@
             <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_FCTL</TOOLTIPID>
         </UseTemplate>
 
+        <!-- ECAM FUEL -->
+        <UseTemplate Name="FBW_Anim_Interactions">
+            <ANIM_TYPE>BUTTON</ANIM_TYPE>
+            <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
+            <BASE_NAME>FUEL</BASE_NAME>
+            <PART_ID>ECAM_FUEL</PART_ID>
+            <GROUP_INDEX>11</GROUP_INDEX>
+            <TOOLTIPID>TT:COCKPIT.TOOLTIPS.PUSH_ECAM_FUEL</TOOLTIPID>
+        </UseTemplate>
+
         <!-- ECAM ALL -->
         <UseTemplate Name="FBW_Anim_Interactions">
             <ANIM_TYPE>BUTTON_HELD</ANIM_TYPE>
@@ -502,8 +552,18 @@
             <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
             <BASE_NAME>STS</BASE_NAME>
             <Part_ID>STS</Part_ID>
-            <GROUP_INDEX>12</GROUP_INDEX> <!--Change to positive to activate-->
+            <GROUP_INDEX>13</GROUP_INDEX> <!--Change to positive to activate-->
             <TOOLTIPID>Display STS informations on ECAM</TOOLTIPID>
+        </UseTemplate>
+
+        <!-- ECAM CB -->
+        <UseTemplate Name="FBW_Anim_Interactions">
+            <ANIM_TYPE>BUTTON</ANIM_TYPE>
+            <ANIM_TEMPLATE>FBW_ECAM_PAGE_BUTTON_Template</ANIM_TEMPLATE>
+            <BASE_NAME>CB</BASE_NAME>
+            <Part_ID>ECAM_CB</Part_ID>
+            <GROUP_INDEX>14</GROUP_INDEX> <!--Change to positive to activate-->
+            <TOOLTIPID>Display C/B informations on ECAM</TOOLTIPID>
         </UseTemplate>
 
         <!-- ECAM T.O CONFIG -->
