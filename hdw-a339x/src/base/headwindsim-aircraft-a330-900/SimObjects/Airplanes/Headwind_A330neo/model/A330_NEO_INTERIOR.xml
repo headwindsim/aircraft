@@ -664,6 +664,8 @@
                     <PLANE_NAME>A32NX</PLANE_NAME>
                 </DefaultTemplateParameters>
 
+
+                <!-- TODO: CHECK AGAIN LATER
                 <Component ID="CAPT_EFIS_KNOB_INTEG">
                     <Parameters Type="Default">
                         <POTENTIOMETER>85</POTENTIOMETER>
@@ -683,6 +685,7 @@
                         <NODE_ID>KNOB_EFIS_CS_LOUDSPEAKER</NODE_ID>
                     </UseTemplate>
                 </Component>
+                -->
 
                 <!-- CPT LOUDSPEAKER -->
                 <Component ID="KNOB_EFIS_CS_LOUDSPEAKER" Node="KNOB_EFIS_CS_LOUDSPEAKER">
@@ -866,6 +869,7 @@
                     <PLANE_NAME>A32NX</PLANE_NAME>
                 </DefaultTemplateParameters>
 
+                <!-- TODO: CHECK AGAIN LATER
                 <Component ID="FO_EFIS_KNOB_INTEG">
                     <Parameters Type="Default">
                         <POTENTIOMETER>85</POTENTIOMETER>
@@ -885,6 +889,7 @@
                         <NODE_ID>KNOB_EFIS_FO_LOUDSPEAKER</NODE_ID>
                     </UseTemplate>
                 </Component>
+                -->
 
                 <!-- FO LOUDSPEAKER -->
                 <Component ID="KNOB_EFIS_FO_LOUDSPEAKER" Node="KNOB_EFIS_FO_LOUDSPEAKER">
