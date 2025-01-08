@@ -3785,7 +3785,7 @@ export class PseudoFWC {
       codesToReturn: ['290012601', '290012602'],
       memoInhibit: () => false,
       failure: 2,
-      sysPage: 4,
+      sysPage: 5,
       side: 'LEFT',
     },
     2900127: {
@@ -3801,7 +3801,7 @@ export class PseudoFWC {
       codesToReturn: ['290012701', '290012702', '290012703', '290012704'],
       memoInhibit: () => false,
       failure: 2,
-      sysPage: 4,
+      sysPage: 5,
       side: 'LEFT',
     },
     2900128: {
@@ -3812,7 +3812,7 @@ export class PseudoFWC {
       codesToReturn: ['290012801', '290012802', '290012803'],
       memoInhibit: () => false,
       failure: 2,
-      sysPage: 4,
+      sysPage: 5,
       side: 'LEFT',
     },
     2900310: {
@@ -3836,7 +3836,7 @@ export class PseudoFWC {
       codesToReturn: ['290031001'],
       memoInhibit: () => false,
       failure: 2,
-      sysPage: 4,
+      sysPage: 5,
       side: 'RIGHT',
     },
     2900312: {
@@ -3856,7 +3856,7 @@ export class PseudoFWC {
       codesToReturn: ['290031201'],
       memoInhibit: () => false,
       failure: 2,
-      sysPage: 4,
+      sysPage: 5,
       side: 'RIGHT',
     },
     2800145: {
@@ -3897,7 +3897,7 @@ export class PseudoFWC {
       ],
       memoInhibit: () => false,
       failure: 2,
-      sysPage: 5,
+      sysPage: 11,
       side: 'LEFT',
     },
     2800130: {
@@ -3916,7 +3916,7 @@ export class PseudoFWC {
       codesToReturn: ['280013001', '280013002', '280013003', '280013004', '280013005', '280013006', '280013007'],
       memoInhibit: () => false,
       failure: 2,
-      sysPage: 5,
+      sysPage: 11,
       side: 'LEFT',
     },
     2800140: {
@@ -3935,7 +3935,7 @@ export class PseudoFWC {
       codesToReturn: ['280014001', '280014002', '280014003', '280014004', '280014005', '280014006', '280014007'],
       memoInhibit: () => false,
       failure: 2,
-      sysPage: 5,
+      sysPage: 11,
       side: 'LEFT',
     },
   };
