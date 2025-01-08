@@ -4067,7 +4067,7 @@
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_AIRBUS_NAV_AID_SWITCH_Template</ANIM_TEMPLATE>
-                <BASE_NAME>A32NX_SWITCH_AUTOPILOT_ADF1_L</BASE_NAME>
+                <BASE_NAME>SWITCH_AUTOPILOT_ADF1_L</BASE_NAME>
                 <SIDE>L</SIDE>
                 <INDEX>1</INDEX>
             </UseTemplate>
@@ -4076,7 +4076,7 @@
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_AIRBUS_NAV_AID_SWITCH_Template</ANIM_TEMPLATE>
-                <BASE_NAME>A32NX_SWITCH_AUTOPILOT_ADF2_L</BASE_NAME>
+                <BASE_NAME>SWITCH_AUTOPILOT_ADF2_L</BASE_NAME>
                 <SIDE>L</SIDE>
                 <INDEX>2</INDEX>
             </UseTemplate>
@@ -4182,7 +4182,7 @@
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_AIRBUS_NAV_AID_SWITCH_Template</ANIM_TEMPLATE>
-                <BASE_NAME>A32NX_SWITCH_AUTOPILOT_ADF1_R</BASE_NAME>
+                <BASE_NAME>SWITCH_AUTOPILOT_ADF1_R</BASE_NAME>
                 <SIDE>R</SIDE>
                 <INDEX>1</INDEX>
             </UseTemplate>
@@ -4191,7 +4191,7 @@
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>SWITCH</ANIM_TYPE>
                 <ANIM_TEMPLATE>FBW_AIRBUS_NAV_AID_SWITCH_Template</ANIM_TEMPLATE>
-                <BASE_NAME>A32NX_SWITCH_AUTOPILOT_ADF2_R</BASE_NAME>
+                <BASE_NAME>SWITCH_AUTOPILOT_ADF2_R</BASE_NAME>
                 <SIDE>R</SIDE>
                 <INDEX>2</INDEX>
             </UseTemplate>
