@@ -719,19 +719,19 @@ export const A330Services: React.FC = () => {
       {cargoDoorOpen >= 1.0 && (
         <div>
           <div
-            className="text-utility-amber text-xl font-bold"
+            className="text-xl font-bold text-utility-amber"
             style={{ position: 'absolute', left: 700, right: 0, top: 155 }}
           >
             FWD CARGO
           </div>
           <div
-            className="text-utility-amber text-xl font-bold"
+            className="text-xl font-bold text-utility-amber"
             style={{ position: 'absolute', left: 700, right: 0, top: 530 }}
           >
             AFT CARGO
           </div>
           <div
-            className="text-utility-amber text-xl font-bold"
+            className="text-xl font-bold text-utility-amber"
             style={{ position: 'absolute', left: 700, right: 0, top: 585 }}
           >
             BULK

@@ -55,12 +55,12 @@ export const OverviewPage = () => {
         {(() => {
           switch (airframeInfo.variant) {
             case AirframeType.A330_941:
-              return <A330NoseOutline className="flip-horizontal text-theme-text -ml-96 mr-32 h-64" />;
+              return <A330NoseOutline className="flip-horizontal -ml-96 mr-32 h-64 text-theme-text" />;
             case AirframeType.SU100_95:
-              return <SU95NoseOutline className="flip-horizontal text-theme-text -ml-96 mr-32 h-64" />;
+              return <SU95NoseOutline className="flip-horizontal -ml-96 mr-32 h-64 text-theme-text" />;
             case AirframeType.A320:
             default:
-              return <A320NoseOutline className="flip-horizontal text-theme-text -ml-96 mr-32 h-64" />;
+              return <A320NoseOutline className="flip-horizontal -ml-96 mr-32 h-64 text-theme-text" />;
           }
         })()}
       </div>

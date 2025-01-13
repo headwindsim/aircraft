@@ -4,7 +4,7 @@ class CDU_CMS_TestMenu {
         mcdu.page.Current = mcdu.page.MenuPage;
         const activeSystem = mcdu.activeSystem;
 
-        let selectedReturn = false;
+        const selectedReturn = false;
 
         const updateView = () => {
             const getColor = (system, isSelected) => isSelected ? Column.cyan : system === activeSystem ? Column.green : Column.white;
@@ -91,7 +91,7 @@ class CDU_CMS_TestMenu {
         mcdu.page.Current = mcdu.page.MenuPage;
         const activeSystem = mcdu.activeSystem;
 
-        let selectedReturn = false;
+        const selectedReturn = false;
 
         const updateView = () => {
             const getColor = (system, isSelected) => isSelected ? Column.cyan : system === activeSystem ? Column.green : Column.white;
@@ -162,7 +162,7 @@ class CDU_CMS_TestMenu {
         mcdu.page.Current = mcdu.page.MenuPage;
         const activeSystem = mcdu.activeSystem;
 
-        let selectedReturn = false;
+        const selectedReturn = false;
 
         const updateView = () => {
             const getColor = (system, isSelected) => isSelected ? Column.cyan : system === activeSystem ? Column.green : Column.white;
@@ -240,7 +240,7 @@ class CDU_CMS_TestMenu {
         mcdu.page.Current = mcdu.page.MenuPage;
         const activeSystem = mcdu.activeSystem;
 
-        let selectedReturn = false;
+        const selectedReturn = false;
 
         const updateView = () => {
             const getColor = (system, isSelected) => isSelected ? Column.cyan : system === activeSystem ? Column.green : Column.white;
@@ -296,7 +296,7 @@ class CDU_CMS_TestMenu {
         mcdu.page.Current = mcdu.page.MenuPage;
         const activeSystem = mcdu.activeSystem;
 
-        let selectedReturn = false;
+        const selectedReturn = false;
 
         const updateView = () => {
             const getColor = (system, isSelected) => isSelected ? Column.cyan : system === activeSystem ? Column.green : Column.white;
@@ -340,7 +340,7 @@ class CDU_CMS_TestMenu {
         mcdu.page.Current = mcdu.page.MenuPage;
         const activeSystem = mcdu.activeSystem;
 
-        let selectedReturn = false;
+        const selectedReturn = false;
 
         const updateView = () => {
             const getColor = (system, isSelected) => isSelected ? Column.cyan : system === activeSystem ? Column.green : Column.white;

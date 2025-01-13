@@ -16,7 +16,6 @@ import { VersionCheck } from './modules/version_check/VersionCheck';
 import { AircraftSync } from './modules/aircraft_sync/AircraftSync';
 import { LightSync } from 'extras-host/modules/light_sync/LightSync';
 
-
 /**
  * This is the main class for the extras-host instrument.
  *

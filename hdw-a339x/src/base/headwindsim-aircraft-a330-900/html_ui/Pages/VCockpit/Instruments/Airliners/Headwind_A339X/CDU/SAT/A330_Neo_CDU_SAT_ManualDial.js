@@ -6,7 +6,7 @@ class CDU_SAT_ManualDial {
 
         const [phoneNumberAction, phoneNumberText, phoneNumberColor] = new CDU_SingleValueField(mcdu,
             "string",
-            phoneNumber ? "["+phoneNumber+"]" : null,
+            phoneNumber ? "[" + phoneNumber + "]" : null,
             {
                 clearable: true,
                 emptyValue: "________________[color]amber",

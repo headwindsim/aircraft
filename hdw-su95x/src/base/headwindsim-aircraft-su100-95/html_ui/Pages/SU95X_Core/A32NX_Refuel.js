@@ -81,8 +81,7 @@ class A32NX_Refuel {
             SimVar.SetSimVarValue("FUEL TANK LEFT AUX QUANTITY", "Gallons", LOutTarget);
             SimVar.SetSimVarValue("FUEL TANK RIGHT MAIN QUANTITY", "Gallons", RInnTarget);
             SimVar.SetSimVarValue("FUEL TANK RIGHT AUX QUANTITY", "Gallons", ROutTarget);
-        }
-        else {
+        } else {
             let multiplier = 1;
             if (refuelRate == '1') { // fast
                 multiplier = 5;
