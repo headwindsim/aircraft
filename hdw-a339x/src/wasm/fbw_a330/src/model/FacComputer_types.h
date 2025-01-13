@@ -1,5 +1,5 @@
-#ifndef RTW_HEADER_FacComputer_types_h_
-#define RTW_HEADER_FacComputer_types_h_
+#ifndef FacComputer_types_h_
+#define FacComputer_types_h_
 #include "rtwtypes.h"
 #ifndef DEFINED_TYPEDEF_FOR_SignStatusMatrix_
 #define DEFINED_TYPEDEF_FOR_SignStatusMatrix_
@@ -37,7 +37,7 @@ struct base_fac_bus
   base_arinc_429 center_of_gravity_pos_percent;
   base_arinc_429 sideslip_target_deg;
   base_arinc_429 fac_slat_angle_deg;
-  base_arinc_429 fac_flap_angle;
+  base_arinc_429 fac_flap_angle_deg;
   base_arinc_429 discrete_word_2;
   base_arinc_429 rudder_travel_limit_command_deg;
   base_arinc_429 delta_r_yaw_damper_deg;
@@ -62,6 +62,18 @@ struct base_fac_bus
 
 #endif
 
+#ifndef DEFINED_TYPEDEF_FOR_base_fac_analog_outputs_
+#define DEFINED_TYPEDEF_FOR_base_fac_analog_outputs_
+
+struct base_fac_analog_outputs
+{
+  real_T yaw_damper_order_deg;
+  real_T rudder_trim_order_deg;
+  real_T rudder_travel_limit_order_deg;
+};
+
+#endif
+
 #ifndef DEFINED_TYPEDEF_FOR_base_fac_discrete_outputs_
 #define DEFINED_TYPEDEF_FOR_base_fac_discrete_outputs_
 
@@ -73,18 +85,6 @@ struct base_fac_discrete_outputs
   boolean_T rudder_travel_lim_engaged;
   boolean_T rudder_travel_lim_emergency_reset;
   boolean_T yaw_damper_avail_for_norm_law;
-};
-
-#endif
-
-#ifndef DEFINED_TYPEDEF_FOR_base_fac_analog_outputs_
-#define DEFINED_TYPEDEF_FOR_base_fac_analog_outputs_
-
-struct base_fac_analog_outputs
-{
-  real_T yaw_damper_order_deg;
-  real_T rudder_trim_order_deg;
-  real_T rudder_travel_limit_order_deg;
 };
 
 #endif
@@ -386,6 +386,12 @@ struct base_fac_logic_outputs
   boolean_T left_main_gear_pressed;
   boolean_T right_main_gear_pressed;
   boolean_T main_gear_out;
+  boolean_T sfcc_own_valid;
+  boolean_T all_sfcc_lost;
+  real32_T flap_handle_index;
+  real32_T flap_angle_deg;
+  real32_T slat_angle_deg;
+  real32_T slat_flap_actual_pos;
   boolean_T on_ground;
   boolean_T tracking_mode_on;
   boolean_T double_self_detected_adr_failure;
