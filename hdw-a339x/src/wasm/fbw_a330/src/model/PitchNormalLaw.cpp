@@ -1444,7 +1444,7 @@ void PitchNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_nz_
         PitchNormalLaw_B.flare_Theta_c_rate_deg_s = -(std::fmax(-2.0, rtb_Y_j) + 2.0) / 8.0;
         PitchNormalLaw_DWork.is_c2_PitchNormalLaw = PitchNormalLaw_IN_Flare_Active_Armed;
         rtb_in_flare = 1;
-      } else if ((*rtu_In_in_flight == 1.0) && (*rtu_In_H_radio_ft > 50.0) && (rtb_ManualSwitch == 0.0)) {
+      } else if ((*rtu_In_in_flight == 1.0) && (*rtu_In_H_radio_ft > 100.0) && (rtb_ManualSwitch == 0.0)) {
         PitchNormalLaw_DWork.is_c2_PitchNormalLaw = PitchNormalLaw_IN_Flight;
         rtb_in_flare = 0;
       } else {
@@ -1453,7 +1453,7 @@ void PitchNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_nz_
       break;
 
      case PitchNormalLaw_IN_Flight:
-      if ((*rtu_In_H_radio_ft <= 50.0) || (rtb_ManualSwitch == 1.0)) {
+      if ((*rtu_In_H_radio_ft <= 100.0) || (rtb_ManualSwitch == 1.0)) {
         PitchNormalLaw_B.flare_Theta_c_rate_deg_s = -1000.0;
         PitchNormalLaw_B.flare_Theta_c_deg = rtb_Y_j;
         PitchNormalLaw_DWork.is_c2_PitchNormalLaw = PitchNormalLaw_IN_Flare_Prepare;
