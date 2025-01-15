@@ -3996,14 +3996,14 @@
                 <SEQ2_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ2_POWERED>
             </UseTemplate>
 
-            <!-- FCU EXPED -->
+            <!-- FCU ALT PB -->
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>BUTTON</ANIM_TYPE>
-                <ANIM_TEMPLATE>FBW_AIRBUS_Push_Expedite_Template</ANIM_TEMPLATE>
-                <NODE_ID>PUSH_AUTOPILOT_EXPED</NODE_ID>
-                <ANIM_NAME>PUSH_AUTOPILOT_EXPED</ANIM_NAME>
-                <ACTIVE_NODE_ID>PUSH_AUTOPILOT_EXPED_SEQ1</ACTIVE_NODE_ID>
-                <EMISSIVE_NODE_ID>PUSH_AUTOPILOT_EXPED_SEQ2</EMISSIVE_NODE_ID>
+                <ANIM_TEMPLATE>FBW_AIRBUS_Push_Altitude_Template</ANIM_TEMPLATE>
+                <NODE_ID>PUSH_AUTOPILOT_ALT_PB</NODE_ID>
+                <ANIM_NAME>PUSH_AUTOPILOT_ALT_PB</ANIM_NAME>
+                <ACTIVE_NODE_ID>PUSH_AUTOPILOT_ALT_PB_SEQ1</ACTIVE_NODE_ID>
+                <EMISSIVE_NODE_ID>PUSH_AUTOPILOT_ALT_PB_SEQ2</EMISSIVE_NODE_ID>
                 <POTENTIOMETER>84</POTENTIOMETER>
                 <SEQ1_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED, Bool)</SEQ1_POWERED>
                 <SEQ2_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ2_POWERED>
@@ -4098,7 +4098,7 @@
                 <ANIM_TEMPLATE>FBW_AIRLINER_Knob_ND_Template</ANIM_TEMPLATE>
                 <NODE_ID>KNOB_AUTOPILOT_ROSE_L</NODE_ID>
                 <PART_ID>KNOB_AUTOPILOT_ROSE_L</PART_ID>
-                <ANIM_NAME>KNOB_AUTOPILOT_ROSE_L_</ANIM_NAME>
+                <ANIM_NAME>KNOB_AUTOPILOT_ROSE_L</ANIM_NAME>
             </UseTemplate>
 
             <!-- FCU ND RANGE -->
