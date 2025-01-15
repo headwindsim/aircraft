@@ -3999,7 +3999,7 @@
             <!-- FCU ALT PB -->
             <UseTemplate Name="FBW_Anim_Interactions">
                 <ANIM_TYPE>BUTTON</ANIM_TYPE>
-                <ANIM_TEMPLATE>FBW_AIRBUS_Push_Altitude_Template</ANIM_TEMPLATE>
+                <ANIM_TEMPLATE>FBW_AIRBUS_Push_Altitude_Pb_Template</ANIM_TEMPLATE>
                 <NODE_ID>PUSH_AUTOPILOT_ALT_PB</NODE_ID>
                 <ANIM_NAME>PUSH_AUTOPILOT_ALT_PB</ANIM_NAME>
                 <ACTIVE_NODE_ID>PUSH_AUTOPILOT_ALT_PB_SEQ1</ACTIVE_NODE_ID>
