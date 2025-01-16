@@ -47,7 +47,7 @@ A32NX_Util.createMachine = (machineDef) => {
             if (valid) {
                 machine.value = newState;
             }
-        },
+        }
     };
     return machine;
 };
@@ -59,7 +59,7 @@ A32NX_Util.createMachine = (machineDef) => {
  * @returns magnetic heading
  */
 A32NX_Util.trueToMagnetic = (heading, magVar) => {
-    return (720 + heading - (magVar || SimVar.GetSimVarValue('MAGVAR', 'degree'))) % 360;
+    return (720 + heading - (magVar || SimVar.GetSimVarValue("MAGVAR", "degree"))) % 360;
 };
 
 /**
@@ -69,7 +69,7 @@ A32NX_Util.trueToMagnetic = (heading, magVar) => {
  * @returns true heading
  */
 A32NX_Util.magneticToTrue = (heading, magVar) => {
-    return (720 + heading + (magVar || SimVar.GetSimVarValue('MAGVAR', 'degree'))) % 360;
+    return (720 + heading + (magVar || SimVar.GetSimVarValue("MAGVAR", "degree"))) % 360;
 };
 
 /**
@@ -80,7 +80,7 @@ A32NX_Util.latLonToSpherical = (ll) => {
     return [
         Math.cos(ll.lat * Avionics.Utils.DEG2RAD) * Math.cos(ll.long * Avionics.Utils.DEG2RAD),
         Math.cos(ll.lat * Avionics.Utils.DEG2RAD) * Math.sin(ll.long * Avionics.Utils.DEG2RAD),
-        Math.sin(ll.lat * Avionics.Utils.DEG2RAD),
+        Math.sin(ll.lat * Avionics.Utils.DEG2RAD)
     ];
 };
 
@@ -174,9 +174,9 @@ A32NX_Util.getIsaTempDeviation = (alt = Simplane.getAltitude(), sat = Simplane.g
 };
 
 /**
- * Get the magvar to use for radials from a wp.
+* Get the magvar to use for radials from a wp.
  * @param {VhfNavaid} facility The waypoint.
- */
+*/
 A32NX_Util.getRadialMagVar = (facility) => {
     if (facility.subSectionCode === 0 /* VhfNavaid */) {
         if (facility.stationDeclination !== undefined) {
@@ -191,9 +191,10 @@ A32NX_Util.getRadialMagVar = (facility) => {
  * Utility class to throttle instrument updates
  */
 class UpdateThrottler {
+
     /**
-   * @param {number} intervalMs Interval between updates, in milliseconds
-   */
+     * @param {number} intervalMs Interval between updates, in milliseconds
+     */
     constructor(intervalMs) {
         this.intervalMs = intervalMs;
         this.currentTime = 0;
@@ -206,14 +207,14 @@ class UpdateThrottler {
     }
 
     /**
-   * Checks whether the instrument should be updated in the current frame according to the
-   * configured update interval.
-   *
-   * @param {number} deltaTime
-   * @param {boolean} [forceUpdate = false] - True if you want to force an update during this frame.
-   * @returns -1 if the instrument should not update, or the time elapsed since the last
-   *          update in milliseconds
-   */
+     * Checks whether the instrument should be updated in the current frame according to the
+     * configured update interval.
+     *
+     * @param {number} deltaTime
+     * @param {boolean} [forceUpdate = false] - True if you want to force an update during this frame.
+     * @returns -1 if the instrument should not update, or the time elapsed since the last
+     *          update in milliseconds
+     */
     canUpdate(deltaTime, forceUpdate = false) {
         this.currentTime += deltaTime;
         const number = Math.floor((this.currentTime + this.refreshOffset) / this.intervalMs);
@@ -236,9 +237,9 @@ A32NX_Util.UpdateThrottler = UpdateThrottler;
  */
 class NotificationParams {
     constructor() {
-        this.__Type = 'SNotificationParams';
+        this.__Type = "SNotificationParams";
         this.buttons = [];
-        this.style = 'normal';
+        this.style = "normal";
         this.displayGlobalPopup = true;
     }
 }
@@ -250,33 +251,33 @@ class NXPopUp {
     constructor() {
         this.params = new NotificationParams();
         this.popupListener;
-        this.params.title = 'A339X POPUP';
+        this.params.title = "HDW POPUP";
         this.params.time = new Date().getTime();
-        this.params.id = this.params.title + '_' + this.params.time;
-        this.params.contentData = 'Default Message';
-        this.params.style = 'small';
-        this.params.buttons.push(new NotificationButton('TT:MENU.YES', 'HDW_POP_' + this.params.id + '_YES'));
-        this.params.buttons.push(new NotificationButton('TT:MENU.NO', 'HDW_POP_' + this.params.id + '_NO'));
+        this.params.id = this.params.title + "_" + this.params.time;
+        this.params.contentData = "Default Message";
+        this.params.style = "small";
+        this.params.buttons.push(new NotificationButton("TT:MENU.YES", "HDW_POP_" + this.params.id + "_YES"));
+        this.params.buttons.push(new NotificationButton("TT:MENU.NO", "HDW_POP_" + this.params.id + "_NO"));
     }
 
     _showPopUp(params) {
         try {
             Coherent.trigger('UNFOCUS_INPUT_FIELD'); // Needed to return focus back to camera if it has been taken elsewhere.
             SimVar.SetSimVarValue('A:COCKPIT CAMERA HEADLOOK', 'Enum', 2); // Toggles freelook off if it is on and forces on the mouse cursor
-            Coherent.trigger('SHOW_POP_UP', params);
+            Coherent.trigger("SHOW_POP_UP", params);
         } catch (e) {
             console.error(e);
         }
     }
 
     /**
-   * Show popup with given or already initiated parameters
-   * @param {string} title Title for popup - will show in menu bar
-   * @param {string} message Popup message
-   * @param {string} style Style/Type of popup. Valid types are small|normal|big|big-help
-   * @param {function} callbackYes Callback function -> YES button is clicked.
-   * @param {function} callbackNo Callback function -> NO button is clicked.
-   */
+     * Show popup with given or already initiated parameters
+     * @param {string} title Title for popup - will show in menu bar
+     * @param {string} message Popup message
+     * @param {string} style Style/Type of popup. Valid types are small|normal|big|big-help
+     * @param {function} callbackYes Callback function -> YES button is clicked.
+     * @param {function} callbackNo Callback function -> NO button is clicked.
+     */
     showPopUp(title, message, style, callbackYes, callbackNo) {
         if (title) {
             this.params.title = title;
@@ -288,14 +289,14 @@ class NXPopUp {
             this.params.style = style;
         }
         if (callbackYes) {
-            const yes = typeof callbackYes === 'function' ? callbackYes : () => callbackYes;
+            const yes = (typeof callbackYes === "function") ? callbackYes : () => callbackYes;
             Coherent.on(`HDW_POP_${this.params.id}_YES`, () => {
                 Coherent.off(`HDW_POP_${this.params.id}_YES`, null, null);
                 yes();
             });
         }
         if (callbackNo) {
-            const no = typeof callbackNo === 'function' ? callbackNo : () => callbackNo;
+            const no = (typeof callbackNo === "function") ? callbackNo : () => callbackNo;
             Coherent.on(`HDW_POP_${this.params.id}_NO`, () => {
                 Coherent.off(`HDW_POP_${this.params.id}_NO`, null, null);
                 no();
@@ -303,7 +304,7 @@ class NXPopUp {
         }
 
         if (!this.popupListener) {
-            this.popupListener = RegisterViewListener('JS_LISTENER_POPUP', this._showPopUp.bind(null, this.params));
+            this.popupListener = RegisterViewListener("JS_LISTENER_POPUP", this._showPopUp.bind(null, this.params));
         } else {
             this._showPopUp();
         }
@@ -315,21 +316,22 @@ class NXPopUp {
  */
 
 class NXNotifManager {
+
     constructor() {
-        Coherent.on('keyIntercepted', (key) => this.registerIntercepts(key));
-        Coherent.call('INTERCEPT_KEY_EVENT', 'PAUSE_TOGGLE', 0);
-        Coherent.call('INTERCEPT_KEY_EVENT', 'PAUSE_ON', 0);
-        Coherent.call('INTERCEPT_KEY_EVENT', 'PAUSE_OFF', 0);
-        Coherent.call('INTERCEPT_KEY_EVENT', 'PAUSE_SET', 0);
+        Coherent.on("keyIntercepted", (key) => this.registerIntercepts(key));
+        Coherent.call("INTERCEPT_KEY_EVENT", "PAUSE_TOGGLE", 0);
+        Coherent.call("INTERCEPT_KEY_EVENT", "PAUSE_ON", 0);
+        Coherent.call("INTERCEPT_KEY_EVENT", "PAUSE_OFF", 0);
+        Coherent.call("INTERCEPT_KEY_EVENT", "PAUSE_SET", 0);
         this.notifications = [];
     }
 
     registerIntercepts(key) {
         switch (key) {
-            case 'PAUSE_TOGGLE':
-            case 'PAUSE_ON':
-            case 'PAUSE_OFF':
-            case 'PAUSE_SET':
+            case "PAUSE_TOGGLE":
+            case "PAUSE_ON":
+            case "PAUSE_OFF":
+            case "PAUSE_SET":
                 this.notifications.forEach((notif) => {
                     notif.hideNotification();
                 });
@@ -349,15 +351,15 @@ class NXNotifManager {
 
 class NXNotif {
     constructor() {
-        const title = 'A339X ALERT';
+        const title = "HDW ALERT";
         this.time = new Date().getTime();
         this.params = {
             id: `${title}_${this.time}`,
             title,
-            type: 'MESSAGE',
-            theme: 'GAMEPLAY',
-            image: 'IMAGE_NOTIFICATION',
-            description: 'Default Message',
+            type: "MESSAGE",
+            theme: "GAMEPLAY",
+            image: "IMAGE_NOTIFICATION",
+            description: "Default Message",
             timeout: 10000,
             time: this.time,
         };
@@ -386,21 +388,21 @@ class NXNotif {
     }
 
     /**
-   * Show notification with given or already initiated parametrs.
-   * @param {string} params.title Title for notification - will show as the message header
-   * @param {string} params.type Type of Notification - Valid types are MESSAGE|SUBTITLES
-   * @param {string} params.theme Theme of Notification. Valid types are TIPS|GAMEPLAY|SYSTEM
-   * @param {string} params.image Notification image. Valid types are IMAGE_NOTIFICATION|IMAGE_SCORE
-   * @param {string} params.message Notification message
-   * @param {number} params.timeout Time in ms before notification message will disappear
-   */
+     * Show notification with given or already initiated parametrs.
+     * @param {string} params.title Title for notification - will show as the message header
+     * @param {string} params.type Type of Notification - Valid types are MESSAGE|SUBTITLES
+     * @param {string} params.theme Theme of Notification. Valid types are TIPS|GAMEPLAY|SYSTEM
+     * @param {string} params.image Notification image. Valid types are IMAGE_NOTIFICATION|IMAGE_SCORE
+     * @param {string} params.message Notification message
+     * @param {number} params.timeout Time in ms before notification message will disappear
+     */
     showNotification(params = {}) {
         this.setData(params);
 
         if (!nxNotificationsListener) {
-            nxNotificationsListener = RegisterViewListener('JS_LISTENER_NOTIFICATIONS');
+            nxNotificationsListener = RegisterViewListener("JS_LISTENER_NOTIFICATIONS");
         }
-        nxNotificationsListener.triggerToAllSubscribers('SendNewNotification', this.params);
+        nxNotificationsListener.triggerToAllSubscribers("SendNewNotification", this.params);
         setTimeout(() => {
             this.hideNotification();
         }, this.params.timeout);
@@ -408,7 +410,7 @@ class NXNotif {
 
     // TODO FIXME: May break in the future, check every update
     hideNotification() {
-        nxNotificationsListener.triggerToAllSubscribers('HideNotification', this.params.type, null, this.params.id);
+        nxNotificationsListener.triggerToAllSubscribers("HideNotification", this.params.type, null, this.params.id);
     }
 }
 
