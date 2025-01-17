@@ -1,18 +1,18 @@
-name: Bug Report
+name: Bug Report - A339X
 description: File a bug report
 labels: [Bug]
 body:
 - type: markdown
   attributes:
-    value: "# A330-900 Bug Report Form"
+    value: "# A339X Bug Report Form"
 - type: dropdown
   id: version
   attributes:
     label: Aircraft Version
-    description: What version of the A330-900 are you using?
+    description: What version of the A339X are you using?
     options:
-    - Stable
-    - Development
+    - Release
+    - Pre-Release
   validations:
     required: true
 - type: textarea

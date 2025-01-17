@@ -1,18 +1,18 @@
-name: Bug Report
+name: Bug Report - SU95X
 description: File a bug report
 labels: [Bug]
 body:
 - type: markdown
   attributes:
-    value: "# Su95 Bug Report Form"
+    value: "# SU95X Bug Report Form"
 - type: dropdown
   id: version
   attributes:
     label: Aircraft Version
-    description: What version of the SU95 are you using?
+    description: What version of the SU95X are you using?
     options:
-    - Stable
-    - Development
+    - Release
+    - Pre-Release
   validations:
     required: true
 - type: textarea
