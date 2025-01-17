@@ -3029,6 +3029,7 @@
                                 if any of the buses is powered.
                             -->
                             <EMISSIVE_POWERED>(L:A32NX_ELEC_AC_ESS_SHED_BUS_IS_POWERED, Bool) (L:A32NX_ELEC_AC_STAT_INV_BUS_IS_POWERED, Bool) or (L:A32NX_ELEC_AC_2_BUS_IS_POWERED, Bool) or</EMISSIVE_POWERED>
+                            <ON_FIRE>(A:APU ON FIRE DETECTED)</ON_FIRE>
                         </UseTemplate>
                     </Component>
 
