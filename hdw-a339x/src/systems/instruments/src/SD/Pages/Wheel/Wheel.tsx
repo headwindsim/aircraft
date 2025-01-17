@@ -13,27 +13,22 @@ const roundTemperature = (rawTemp: number): number => Math.min(995, Math.max(0, 
 const maxStaleness = 300;
 
 export const WheelPage = () => {
-  const [rawTempBrake1] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_1', 'celsius', maxStaleness);
-  const [rawTempBrake2] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_2', 'celsius', maxStaleness);
-  const [rawTempBrake3] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_3', 'celsius', maxStaleness);
-  const [rawTempBrake4] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_4', 'celsius', maxStaleness);
-  const [rawTempBrake5] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_5', 'celsius', maxStaleness);
-  const [rawTempBrake6] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_6', 'celsius', maxStaleness);
-  const [rawTempBrake7] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_7', 'celsius', maxStaleness);
-  const [rawTempBrake8] = useSimVar('L:A32NX_REPORTED_BRAKE_TEMPERATURE_8', 'celsius', maxStaleness);
+  const tempBrake1 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_1', maxStaleness);
+  const tempBrake2 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_2', maxStaleness);
+  const tempBrake3 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_3', maxStaleness);
+  const tempBrake4 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_4', maxStaleness);
+  const tempBrake5 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_5', maxStaleness);
+  const tempBrake6 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_6', maxStaleness);
+  const tempBrake7 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_7', maxStaleness);
+  const tempBrake8 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_8', maxStaleness);
 
-  const roundedTemperatures = [
-    roundTemperature(rawTempBrake1),
-    roundTemperature(rawTempBrake2),
-    roundTemperature(rawTempBrake3),
-    roundTemperature(rawTempBrake4),
-    roundTemperature(rawTempBrake5),
-    roundTemperature(rawTempBrake6),
-    roundTemperature(rawTempBrake7),
-    roundTemperature(rawTempBrake8),
-  ];
-
-  const maxTemperature = roundedTemperatures.reduce((maxTemp, element) => Math.max(maxTemp, element), 0);
+  const roundedTemperatures = [tempBrake1, tempBrake2, tempBrake3, tempBrake4, tempBrake5, tempBrake6, tempBrake7, tempBrake8].map((temp) =>
+    temp.isNormalOperation() ? roundTemperature(temp.value) : null,
+  );
+  const maxTemperature = roundedTemperatures
+    .filter((temp) => temp !== null)
+    .reduce((maxTemp, element) => Math.max(maxTemp, element), 0);
+  const isHottest = roundedTemperatures.map((temp) => temp !== null && temp == maxTemperature);
 
   const lgciu1DiscreteWord1 = useArinc429Var('L:A32NX_LGCIU_1_DISCRETE_WORD_1');
   const lgciu2DiscreteWord1 = useArinc429Var('L:A32NX_LGCIU_2_DISCRETE_WORD_1');
@@ -82,15 +77,15 @@ export const WheelPage = () => {
       <Wheels
         x={36}
         y={350}
-        left={{ number: 1, temperature: rawTempBrake1, hottest: maxTemperature === roundedTemperatures[0] }}
-        right={{ number: 2, temperature: rawTempBrake2, hottest: maxTemperature === roundedTemperatures[1] }}
+        left={{ number: 1, temperature: tempBrake1, hottest: isHottest[0] }}
+        right={{ number: 2, temperature: tempBrake2, hottest: isHottest[1] }}
       />
 
       <Wheels
         x={36}
         y={500}
-        left={{ number: 5, temperature: rawTempBrake5, hottest: maxTemperature === roundedTemperatures[4] }}
-        right={{ number: 6, temperature: rawTempBrake6, hottest: maxTemperature === roundedTemperatures[5] }}
+        left={{ number: 5, temperature: tempBrake1, hottest: isHottest[4] }}
+        right={{ number: 6, temperature: tempBrake2, hottest: isHottest[5] }}
       />
 
       <Gear
@@ -117,15 +112,15 @@ export const WheelPage = () => {
       <Wheels
         x={551}
         y={350}
-        left={{ number: 3, temperature: rawTempBrake3, hottest: maxTemperature === roundedTemperatures[2] }}
-        right={{ number: 4, temperature: rawTempBrake4, hottest: maxTemperature === roundedTemperatures[3] }}
+        left={{ number: 3, temperature: tempBrake1, hottest: isHottest[2] }}
+        right={{ number: 4, temperature: tempBrake2, hottest: isHottest[3] }}
       />
 
       <Wheels
         x={551}
         y={500}
-        left={{ number: 7, temperature: rawTempBrake7, hottest: maxTemperature === roundedTemperatures[6] }}
-        right={{ number: 8, temperature: rawTempBrake8, hottest: maxTemperature === roundedTemperatures[7] }}
+        left={{ number: 7, temperature: tempBrake1, hottest: isHottest[6] }}
+        right={{ number: 8, temperature: tempBrake2, hottest: isHottest[7] }}
       />
     </svg>
   );
@@ -571,7 +566,7 @@ const WheelArch = ({ x, y, type, green, amber }: WheelArchProps) => {
 
 interface Brake {
   number: number;
-  temperature: number;
+  temperature: Arinc429Word;
   hottest: boolean;
 }
 
@@ -582,6 +577,8 @@ interface WheelsProps extends ComponentPositionProps {
 
 const Wheels = ({ x, y, left, right }: WheelsProps) => {
   const brakeAmberThreshold = 300;
+  const leftTemperature = left.temperature.valueOr(NaN);
+  const rightTemperature = right.temperature.valueOr(NaN);
 
   return (
     <SvgGroup x={x} y={y}>
@@ -589,15 +586,15 @@ const Wheels = ({ x, y, left, right }: WheelsProps) => {
         x={0}
         y={0}
         type="top"
-        green={left.hottest && left.temperature > 100}
-        amber={left.hottest && left.temperature > 300}
+        green={left.hottest && leftTemperature > 100}
+        amber={left.hottest && leftTemperature > 300}
       />
       <WheelArch
         x={124}
         y={0}
         type="top"
-        green={right.hottest && right.temperature > 100}
-        amber={right.hottest && right.temperature > 300}
+        green={right.hottest && rightTemperature > 100}
+        amber={right.hottest && rightTemperature > 300}
       />
 
       <WheelArch x={0} y={103} type="bottom" />
@@ -610,11 +607,19 @@ const Wheels = ({ x, y, left, right }: WheelsProps) => {
         R
       </text>
 
-      <text className={`${left.temperature > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`} x={57} y={33}>
-        {roundTemperature(left.temperature)}
+      <text
+        className={`${!left.temperature.isNormalOperation() || left.temperature.value > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`}
+        x={57}
+        y={33}
+      >
+        {left.temperature.isNormalOperation() ? roundTemperature(left.temperature.value) : 'XX'}
       </text>
-      <text className={`${right.temperature > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`} x={181} y={33}>
-        {roundTemperature(right.temperature)}
+      <text
+        className={`${!right.temperature.isNormalOperation() || right.temperature.value > brakeAmberThreshold ? 'Amber' : 'Green'} Large End`}
+        x={181}
+        y={33}
+      >
+        {right.temperature.isNormalOperation() ? roundTemperature(right.temperature.value) : 'XX'}
       </text>
 
       <text className="Large" x={22} y={66}>
