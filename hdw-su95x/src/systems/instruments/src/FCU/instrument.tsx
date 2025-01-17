@@ -12,7 +12,7 @@ import {
 } from '../../../shared/src/publishers/A32NXElectricalSystemPublisher';
 
 // eslint-disable-next-line camelcase
-class A339X_FCU extends BaseInstrument {
+class SU95X_FCU extends BaseInstrument {
   private readonly bus = new EventBus();
   private readonly backplane = new InstrumentBackplane();
 
@@ -50,7 +50,7 @@ class A339X_FCU extends BaseInstrument {
   }
 
   get templateID(): string {
-    return 'A339X_FCU';
+    return 'SU95X_FCU';
   }
 
   private updateDisplayBrightness() {
@@ -98,4 +98,4 @@ class A339X_FCU extends BaseInstrument {
   }
 }
 
-registerInstrument('a339x-fcu', A339X_FCU);
+registerInstrument('su95x-fcu', SU95X_FCU);
