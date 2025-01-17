@@ -4,12 +4,12 @@ labels: [Bug]
 body:
 - type: markdown
   attributes:
-    value: "# A330-900 Bug Report Form"
+    value: "# Su95 Bug Report Form"
 - type: dropdown
   id: version
   attributes:
     label: Aircraft Version
-    description: What version of the A330-900 are you using?
+    description: What version of the SU95 are you using?
     options:
     - Stable
     - Development
@@ -27,7 +27,7 @@ body:
         "actor": "HEADWIND",
         "event_name": "manual"
       }
-    description: Please paste the contents from the a339x_build_info.json (located inside main aircraft folder) into the field.
+    description: Please paste the contents from the su95x_build_info.json (located inside main aircraft folder) into the field.
     render: json
   validations:
     required: true
