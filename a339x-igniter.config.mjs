@@ -57,7 +57,8 @@ export default new TaskOfTasks("all", [
                     'npm run build-a339x:extras-host',
                     [
                         'build-a339x/src/systems/extras-host',
-                        'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/ExtrasHost'
+                        'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/ExtrasHost',
+                        'build-common/src/systems/shared/src/extras',
                     ]
                 ),
                 new ExecTask("failures",

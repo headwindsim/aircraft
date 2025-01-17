@@ -57,7 +57,8 @@ export default new TaskOfTasks("all", [
                     'npm run build-su95x:extras-host',
                     [
                         'build-su95x/src/systems/extras-host',
-                        'build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/su95x/ExtrasHost'
+                        'build-su95x/out/headwindsim-aircraft-su100-95/html_ui/Pages/VCockpit/Instruments/su95x/ExtrasHost',
+                        'build-common/src/systems/shared/src/extras',
                     ]
                 ),
                 new ExecTask("failures",
