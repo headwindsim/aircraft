@@ -54,7 +54,7 @@ export class AcarsConnector {
       const body = {
         logon: value,
         from: 'HDWA339X',
-        to: 'ALL-CALLSIGNS',
+        to: 'SERVER',
         type: 'ping',
         packet: '',
       };
@@ -63,7 +63,7 @@ export class AcarsConnector {
         case AcarsNetwork.Hoppie:
           Hoppie.sendRequest(body)
             .then((resp) => {
-              if (resp.response === 'error {invalid logon code}') {
+              if (resp.response !== 'error {invalid logon code}') {
                 reject(new Error(`Error: Unknown user ID: ${resp.response}`));
               } else {
                 resolve(value);
@@ -156,7 +156,7 @@ export class AcarsConnector {
     const body = {
       logon: identifier,
       from: station,
-      to: 'ALL-CALLSIGNS',
+      to: 'SERVER',
       type: 'ping',
       packet: station,
     };
@@ -171,7 +171,7 @@ export class AcarsConnector {
         break;
     }
 
-    if (text === 'error {callsign already in use}') {
+    if (text === 'error {callsign already in use}' || text.includes(station)) {
       return AtsuStatusCodes.CallsignInUse;
     }
     if (text.includes('error')) {
@@ -208,7 +208,7 @@ export class AcarsConnector {
     const body = {
       logon: identifier,
       from: AcarsConnector.flightNumber,
-      to: 'ALL-CALLSIGNS',
+      to: 'SERVER',
       type: 'ping',
       packet: station,
     };

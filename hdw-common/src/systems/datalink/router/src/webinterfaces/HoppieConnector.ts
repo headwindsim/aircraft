@@ -44,13 +44,13 @@ export class HoppieConnector {
     const body = {
       logon: NXDataStore.get('CONFIG_HOPPIE_USERID', ''),
       from: `HDW${this.aircraftProjectPrefix}`,
-      to: 'ALL-CALLSIGNS',
+      to: 'SERVER',
       type: 'ping',
       packet: '',
     };
 
     Hoppie.sendRequest(body).then((resp) => {
-      if (resp.response !== 'error {illegal logon code}') {
+      if (resp.response !== 'error {invalid logon code}') {
         SimVar.SetSimVarValue('L:A32NX_HOPPIE_ACTIVE', 'number', 1);
         console.log('Activated Hoppie ID');
       } else {
@@ -91,13 +91,13 @@ export class HoppieConnector {
     const body = {
       logon: NXDataStore.get('CONFIG_HOPPIE_USERID', ''),
       from: station,
-      to: 'ALL-CALLSIGNS',
+      to: 'SERVER',
       type: 'ping',
       packet: station,
     };
     const text = await Hoppie.sendRequest(body).then((resp) => resp.response);
 
-    if (text === 'error {callsign already in use}') {
+    if (text === 'error {callsign already in use}' || text.includes(station)) {
       return AtsuStatusCodes.CallsignInUse;
     }
     if (text.includes('error')) {
@@ -122,7 +122,7 @@ export class HoppieConnector {
     const body = {
       logon: NXDataStore.get('CONFIG_HOPPIE_USERID', ''),
       from: HoppieConnector.flightNumber,
-      to: 'ALL-CALLSIGNS',
+      to: 'SERVER',
       type: 'ping',
       packet: station,
     };
