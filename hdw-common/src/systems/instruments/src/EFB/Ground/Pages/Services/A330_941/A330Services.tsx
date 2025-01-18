@@ -19,7 +19,7 @@ import {
 import { ActionCreatorWithOptionalPayload } from '@reduxjs/toolkit';
 import {
   t,
-  GroundServiceOutline,
+  A330GroundServiceOutline,
   useAppDispatch,
   useAppSelector,
   setBoarding1DoorButtonState,
@@ -553,7 +553,7 @@ export const A330Services: React.FC = () => {
 
   return (
     <div className="relative h-content-section-reduced">
-      <GroundServiceOutline
+      <A330GroundServiceOutline
         fwdLeftStatus={false}
         fwdRightStatus={fwdRightDoorOpen >= 1.0}
         midLeftStatus={midLeftDoorOpen >= 1.0}
