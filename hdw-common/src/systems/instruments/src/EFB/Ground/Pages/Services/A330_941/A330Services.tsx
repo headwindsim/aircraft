@@ -701,22 +701,22 @@ export const A330Services: React.FC = () => {
         </div>
       )}
       {fwdRightDoorOpen >= 1.0 && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 100 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 105 }}>
           CABIN
         </div>
       )}
       {midLeftDoorOpen >= 1.0 && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 500, right: 0, top: 227 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 500, right: 0, top: 230 }}>
           CABIN
         </div>
       )}
       {midRightDoorOpen >= 1.0 && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 227 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 230 }}>
           CABIN
         </div>
       )}
       {aftLeftDoorOpen >= 1.0 && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 500, right: 0, top: 665 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 500, right: 0, top: 655 }}>
           CABIN
         </div>
       )}
@@ -724,7 +724,7 @@ export const A330Services: React.FC = () => {
         <div>
           <div
             className="text-xl font-bold text-utility-amber"
-            style={{ position: 'absolute', left: 700, right: 0, top: 155 }}
+            style={{ position: 'absolute', left: 700, right: 0, top: 160 }}
           >
             FWD CARGO
           </div>
