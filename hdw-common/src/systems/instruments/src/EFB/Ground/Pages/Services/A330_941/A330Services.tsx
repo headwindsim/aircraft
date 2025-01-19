@@ -620,15 +620,6 @@ export const A330Services: React.FC = () => {
           <DoorClosedFill size={36} />
         </GroundServiceButton>
 
-        {/* CABIN DOOR */}
-        <GroundServiceButton
-          name={t('Ground.Services.DoorFwd')}
-          state={service2DoorButtonState}
-          onClick={() => handleButtonClick(ServiceButton.MidRightDoor)}
-        >
-          <DoorClosedFill size={36} />
-        </GroundServiceButton>
-
         {/* CATERING TRUCK */}
         <GroundServiceButton
           name={t('Ground.Services.CateringTruck')}
@@ -636,6 +627,15 @@ export const A330Services: React.FC = () => {
           onClick={() => handleButtonClick(ServiceButton.CateringTruck)}
         >
           <ArchiveFill size={36} />
+        </GroundServiceButton>
+
+        {/* CABIN DOOR */}
+        <GroundServiceButton
+          name={t('Ground.Services.DoorFwd')}
+          state={service2DoorButtonState}
+          onClick={() => handleButtonClick(ServiceButton.MidRightDoor)}
+        >
+          <DoorClosedFill size={36} />
         </GroundServiceButton>
       </ServiceButtonWrapper>
 
@@ -701,7 +701,7 @@ export const A330Services: React.FC = () => {
 
       {/* Visual indications for tug and doors */}
       {!!pushBackAttached && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 620, right: 0, top: 0 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 618, right: 0, top: 0 }}>
           TUG
         </div>
       )}
