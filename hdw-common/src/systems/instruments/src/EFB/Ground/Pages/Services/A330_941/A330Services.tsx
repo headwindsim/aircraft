@@ -19,7 +19,7 @@ import {
 import { ActionCreatorWithOptionalPayload } from '@reduxjs/toolkit';
 import {
   t,
-  GroundServiceOutline,
+  A330GroundServiceOutline,
   useAppDispatch,
   useAppSelector,
   setBoarding1DoorButtonState,
@@ -553,7 +553,7 @@ export const A330Services: React.FC = () => {
 
   return (
     <div className="relative h-content-section-reduced">
-      <GroundServiceOutline
+      <A330GroundServiceOutline
         fwdLeftStatus={false}
         fwdRightStatus={fwdRightDoorOpen >= 1.0}
         midLeftStatus={midLeftDoorOpen >= 1.0}
@@ -628,9 +628,7 @@ export const A330Services: React.FC = () => {
         >
           <ArchiveFill size={36} />
         </GroundServiceButton>
-      </ServiceButtonWrapper>
 
-      <ServiceButtonWrapper xl={900} y={600} className="">
         {/* CABIN DOOR */}
         <GroundServiceButton
           name={t('Ground.Services.DoorFwd')}
@@ -639,6 +637,9 @@ export const A330Services: React.FC = () => {
         >
           <DoorClosedFill size={36} />
         </GroundServiceButton>
+      </ServiceButtonWrapper>
+
+      <ServiceButtonWrapper xl={900} y={600} className="">
         {/* CARGO DOOR */}
         <GroundServiceButton
           name={t('Ground.Services.DoorCargo')}
@@ -658,10 +659,8 @@ export const A330Services: React.FC = () => {
         </GroundServiceButton>
       </ServiceButtonWrapper>
 
-      {/* Wheel Chocks and Security Cones are only visual information. To reuse styling */}
-      {/* the ServiceButtonWrapper has been re-used. */}
-      <ServiceButtonWrapper xr={800} y={600} className="divide-y-0 border-0">
-        {/* CABIN DOOR */}
+      <ServiceButtonWrapper xr={800} y={600} className="">
+        {/* AFT DOOR */}
         <GroundServiceButton
           name={t('Ground.Services.DoorAft')}
           state={boarding2DoorButtonState}
@@ -669,54 +668,60 @@ export const A330Services: React.FC = () => {
         >
           <DoorClosedFill size={36} />
         </GroundServiceButton>
-        {!!wheelChocksEnabled && (
-          <div
-            className={`flex cursor-pointer flex-row items-center space-x-6 p-6${wheelChocksVisible ? 'text-green-500' : 'text-gray-500'}`}
-          >
-            <div
-              className={`-ml-2 mr-[2px] flex items-end justify-center ${wheelChocksVisible ? 'text-green-500' : 'text-gray-500'}`}
-            >
-              <Chock size="12" stroke="4" />
-              <Wheel size="36" stroke="5" className="-mx-0.5" />
-              <Chock size="12" stroke="4" />
-            </div>
-            <h1 className="shrink-0 text-2xl font-medium text-current">{t('Ground.Services.WheelChocks')}</h1>
-          </div>
-        )}
-
-        {!!conesEnabled && (
-          <div
-            className={`flex cursor-pointer flex-row items-center space-x-6 p-6${conesVisible ? 'text-green-500' : 'text-gray-500'}`}
-          >
-            <ConeStriped size="38" stroke="1.5" className="mr-2" />
-            <h1 className="shrink-0 text-2xl font-medium text-current">{t('Ground.Services.Cones')}</h1>
-          </div>
-        )}
       </ServiceButtonWrapper>
+
+      {/* TODO FIXME: Redesign chocks and security cones UI */}
+      {/* Wheel Chocks and Security Cones are only visual information. To reuse styling */}
+      {/* the ServiceButtonWrapper has been re-used. */}
+      {/*
+      <ServiceButtonWrapper xr={800} y={600} className="border-0 divide-y-0">
+          {!!wheelChocksEnabled && (
+              <div className={`flex flex-row items-center space-x-6 py-6 px-6 cursor-pointer ${(wheelChocksVisible) ? 'text-green-500' : 'text-gray-500'}`}>
+                  <div className={`flex justify-center items-end -ml-2 -mr-[2px] ${(wheelChocksVisible) ? 'text-green-500' : 'text-gray-500'}`}>
+                      <Chock size="12" stroke="4" />
+                      <Wheel size="36" stroke="5" className="-mx-0.5" />
+                      <Chock size="12" stroke="4" />
+                  </div>
+                  <h1 className="flex-shrink-0 text-2xl font-medium text-current">
+                      {t('Ground.Services.WheelChocks')}
+                  </h1>
+              </div>
+          )}
+
+          {!!conesEnabled && (
+              <div className={`flex flex-row items-center space-x-6 py-6 px-6 cursor-pointer ${(conesVisible) ? 'text-green-500' : 'text-gray-500'}`}>
+                  <ConeStriped size="38" stroke="1.5" className="mr-2" />
+                  <h1 className="flex-shrink-0 text-2xl font-medium text-current">
+                      {t('Ground.Services.Cones')}
+                  </h1>
+              </div>
+          )}
+      </ServiceButtonWrapper>
+      */}
 
       {/* Visual indications for tug and doors */}
       {!!pushBackAttached && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 540, right: 0, top: 0 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 618, right: 0, top: 0 }}>
           TUG
         </div>
       )}
       {fwdRightDoorOpen >= 1.0 && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 100 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 120 }}>
           CABIN
         </div>
       )}
       {midLeftDoorOpen >= 1.0 && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 500, right: 0, top: 227 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 500, right: 0, top: 245 }}>
           CABIN
         </div>
       )}
       {midRightDoorOpen >= 1.0 && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 227 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 245 }}>
           CABIN
         </div>
       )}
       {aftLeftDoorOpen >= 1.0 && (
-        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 500, right: 0, top: 665 }}>
+        <div className={serviceIndicationCss} style={{ position: 'absolute', left: 500, right: 0, top: 625 }}>
           CABIN
         </div>
       )}
@@ -724,7 +729,7 @@ export const A330Services: React.FC = () => {
         <div>
           <div
             className="text-xl font-bold text-utility-amber"
-            style={{ position: 'absolute', left: 700, right: 0, top: 155 }}
+            style={{ position: 'absolute', left: 700, right: 0, top: 160 }}
           >
             FWD CARGO
           </div>
