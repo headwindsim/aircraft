@@ -53,7 +53,7 @@ export class AcarsConnector {
 
       const body = {
         logon: value,
-        from: 'HDWA339X',
+        from: `HDW${this.aircraftProjectPrefix}`,
         to: 'SERVER',
         type: 'ping',
         packet: '',
@@ -63,7 +63,7 @@ export class AcarsConnector {
         case AcarsNetwork.Hoppie:
           Hoppie.sendRequest(body)
             .then((resp) => {
-              if (resp.response !== 'error {invalid logon code}') {
+              if (resp.response === 'error {invalid logon code}') {
                 reject(new Error(`Error: Unknown user ID: ${resp.response}`));
               } else {
                 resolve(value);
