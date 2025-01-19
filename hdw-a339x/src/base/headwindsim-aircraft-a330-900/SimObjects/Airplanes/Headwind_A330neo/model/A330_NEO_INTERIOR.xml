@@ -1716,17 +1716,53 @@
                 </Update>
 
                 <!-- INT SEATBELTS -->
-                <UseTemplate Name="FBW_Anim_Interactions">
-                    <ANIM_TYPE>SWITCH</ANIM_TYPE>
-                    <ANIM_TEMPLATE>FBW_Switch_LeftClick_MouseWheel</ANIM_TEMPLATE>
-                    <ANIM_NAME>SWITCH_OVHD_INTLT_SEATBELT</ANIM_NAME>
+                <UseTemplate Name="A32NX_GT_Switch_Dummy">
                     <NODE_ID>SWITCH_OVHD_INTLT_SEATBELT</NODE_ID>
                     <PART_ID>Seatbelt_Switch</PART_ID>
-                    <TOGGLE_EVENT>CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE</TOGGLE_EVENT>
-                    <SIMVAR_NAME>CABIN SEATBELTS ALERT SWITCH</SIMVAR_NAME>
-                    <LIGHT_TYPE>SEATBELT</LIGHT_TYPE>
-                    <ANIMTIP_0>Turn ON seatbelt light</ANIMTIP_0>
-                    <ANIMTIP_1>Turn OFF seatbelt light</ANIMTIP_1>
+                    <ANIM_NAME>SWITCH_OVHD_INTLT_SEATBELT</ANIM_NAME>
+                    <NUM_STATES>3</NUM_STATES>
+                    <SWITCH_DIRECTION>Vertical</SWITCH_DIRECTION>
+                    <INVERT_ANIM>True</INVERT_ANIM>
+                    <SWITCH_POSITION_TYPE>L</SWITCH_POSITION_TYPE>
+                    <SWITCH_POSITION_VAR>XMLVAR_SWITCH_OVHD_INTLT_SEATBELT_Position</SWITCH_POSITION_VAR>
+                    <LIGHT_TYPE>SEATBELTS</LIGHT_TYPE>
+                    <ANIMTIP_1_ON_PERCENT>0.5</ANIMTIP_1_ON_PERCENT>
+                    <ANIMTIP_0>TT:COCKPIT.TOOLTIPS.LIGHTS_SEATBELT_ON</ANIMTIP_0>
+                    <ANIMTIP_1>TT:COCKPIT.TOOLTIPS.LIGHTS_SEATBELT_AUTO</ANIMTIP_1>
+                    <ANIMTIP_2>TT:COCKPIT.TOOLTIPS.LIGHTS_SEATBELT_OFF</ANIMTIP_2>
+                    <WWISE_EVENT>lswitch</WWISE_EVENT>
+                    <CODE_POS_0>
+                        (A:CABIN SEATBELTS ALERT SWITCH, bool) 0 == if{
+                            (&gt;K:CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE)
+                        }
+                    </CODE_POS_0>
+                    <CODE_POS_1>
+                    <!-- In the auto position, the seatbelt signs come on when engines are running and either slats are extended or main gear is downlocked -->
+                    <!-- TODO: Move logic to responsible system -->
+                        (L:A32NX_ENGINE_N1:1) 10 &gt;
+                        (L:A32NX_ENGINE_N1:2) 10 &gt; or
+
+                        (L:A32NX_LEFT_SLATS_POSITION_PERCENT, percent) 0 &gt;
+                        (L:A32NX_RIGHT_SLATS_POSITION_PERCENT, percent) 0 &gt; or
+
+                        (L:A32NX_LGCIU_1_LEFT_GEAR_DOWNLOCKED, bool) 1 ==
+                        (L:A32NX_LGCIU_2_LEFT_GEAR_DOWNLOCKED, bool) 1 == or
+                        (L:A32NX_LGCIU_1_RIGHT_GEAR_DOWNLOCKED, bool) 1 == or
+                        (L:A32NX_LGCIU_2_RIGHT_GEAR_DOWNLOCKED, bool) 1 == or or and if{
+                            (A:CABIN SEATBELTS ALERT SWITCH, bool) 0 == if{
+                                (&gt;K:CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE)
+                            }
+                        } els{
+                            (A:CABIN SEATBELTS ALERT SWITCH, bool) 1 == if{
+                                (&gt;K:CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE)
+                            }
+                        }
+                    </CODE_POS_1>
+                    <CODE_POS_2>
+                        (A:CABIN SEATBELTS ALERT SWITCH, bool) 1 == if{
+                            (&gt;K:CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE)
+                        }
+                    </CODE_POS_2>
                 </UseTemplate>
 
                 <!-- INT LT NO SMOKING -->
@@ -5462,6 +5498,77 @@
             <UseTemplate Name="FBW_Coffee_Cup">
                 <NODE_ID>COCKPIT_COFFEE_R</NODE_ID>
             </UseTemplate>
+        </Component>
+
+        <Component ID="SEATS">
+            <DefaultTemplateParameters>
+                <!-- disable lock mode blue highlight -->
+                <NO_HIGHLIGHT_NODE_ID>@StopLockHighlight</NO_HIGHLIGHT_NODE_ID>
+            </DefaultTemplateParameters>
+
+            <!-- SEAT_JUMPER_AREA -->
+            <Component ID="SEAT_JUMPER_AREA" Node="SEAT_JUMPER_AREA">
+                <UseTemplate Name = "ASOBO_GT_Anim_Code">
+                    <ANIM_NAME>SEAT_JUMPER_AREA</ANIM_NAME>
+                    <ANIM_LAG>150</ANIM_LAG>
+                    <ANIM_CODE>(L:A32NX_SEAT_JUMPER_AREA) 100 *</ANIM_CODE>
+                </UseTemplate>
+                <UseTemplate Name = "ASOBO_GT_Interaction_LeftSingle_Leave_Code">
+                    <LEFT_SINGLE_CODE>
+                        (L:A32NX_SEAT_JUMPER_AREA) ! (&gt;L:A32NX_SEAT_JUMPER_AREA)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>Fold down the jumper seat.</TOOLTIPID>
+                </UseTemplate>
+                <UseTemplate Name="ASOBO_GT_AnimTriggers_SoundEvent">
+                    <ANIM_NAME>SEAT_JUMPER_AREA</ANIM_NAME>
+                    <WWISE_EVENT>rear_seat_slide</WWISE_EVENT>
+                </UseTemplate>
+            </Component>
+
+            <!-- SMALLARMREST FO STOW -->
+            <Component ID="ARMREST_SFO" Node="ARMREST_SFO">
+                <UseTemplate Name = "ASOBO_GT_Anim_Code">
+                    <ANIM_NAME>ARMREST_SFO</ANIM_NAME>
+                    <ANIM_LAG>150</ANIM_LAG>
+                    <ANIM_CODE>(L:A32NX_ARMREST_SFO) 100 *</ANIM_CODE>
+                </UseTemplate>
+                <UseTemplate Name = "ASOBO_GT_Interaction_LeftSingle_Leave_Code">
+                    <LEFT_SINGLE_CODE>
+                        (L:A32NX_ARMREST_SFO) ! (&gt;L:A32NX_ARMREST_SFO)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>Stow Armrest</TOOLTIPID>
+                </UseTemplate>
+            </Component>
+
+            <!-- SMALLARMREST FO STOW -->
+            <Component ID="ARMREST_FO" Node="ARMREST_FO">
+                <UseTemplate Name = "ASOBO_GT_Anim_Code">
+                    <ANIM_NAME>ARMREST_FO</ANIM_NAME>
+                    <ANIM_LAG>150</ANIM_LAG>
+                    <ANIM_CODE>(L:A32NX_ARMREST_FO) 100 *</ANIM_CODE>
+                </UseTemplate>
+                <UseTemplate Name = "ASOBO_GT_Interaction_LeftSingle_Leave_Code">
+                    <LEFT_SINGLE_CODE>
+                        (L:A32NX_ARMREST_FO) ! (&gt;L:A32NX_ARMREST_FO)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>Stow Armrest</TOOLTIPID>
+                </UseTemplate>
+            </Component>
+
+            <!-- SMALLARMREST CPT STOW -->
+            <Component ID="ARMREST_CPT" Node="ARMREST_CPT">
+                <UseTemplate Name = "ASOBO_GT_Anim_Code">
+                    <ANIM_NAME>ARMREST_CPT</ANIM_NAME>
+                    <ANIM_LAG>150</ANIM_LAG>
+                    <ANIM_CODE>(L:A32NX_ARMREST_CPT) 100 *</ANIM_CODE>
+                </UseTemplate>
+                <UseTemplate Name = "ASOBO_GT_Interaction_LeftSingle_Leave_Code">
+                    <LEFT_SINGLE_CODE>
+                        (L:A32NX_ARMREST_CPT) ! (&gt;L:A32NX_ARMREST_CPT)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>Stow Armrest</TOOLTIPID>
+                </UseTemplate>
+            </Component>
         </Component>
 
         <Component ID="Pilot_Avatars">
