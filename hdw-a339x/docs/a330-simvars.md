@@ -1322,6 +1322,7 @@ These variables are the interface between the 3D model and the systems/code.
     - {side}
         - L
         - R
+        - C
 
 ## EIS Display System
 
@@ -1581,6 +1582,7 @@ These variables are the interface between the 3D model and the systems/code.
     - {side}
         - L
         - R
+        - C
     - {annunciator}
         - FAIL
         - FMGC
