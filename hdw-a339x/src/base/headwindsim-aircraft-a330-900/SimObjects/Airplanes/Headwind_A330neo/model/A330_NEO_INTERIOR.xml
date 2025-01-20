@@ -261,6 +261,8 @@
                         (L:A339X_CEILING_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_10_SET)
                     </LEFT_SINGLE_CODE>
                     <TOOLTIPID>CEILING LIGHT CAPTAIN</TOOLTIPID>
+                    <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
                 </UseTemplate>
             </Component>
 
@@ -281,6 +283,8 @@
                         (L:A339X_MAP_LIGHT_CAPTAIN, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_11_SET)
                     </LEFT_SINGLE_CODE>
                     <TOOLTIPID>MAP LIGHT CAPTAIN</TOOLTIPID>
+                    <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
                 </UseTemplate>
             </Component>
 
@@ -311,6 +315,8 @@
                         (L:A339X_CEILING_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_12_SET)
                     </LEFT_SINGLE_CODE>
                     <TOOLTIPID>CEILING LIGHT FO</TOOLTIPID>
+                    <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
                 </UseTemplate>
             </Component>
 
@@ -331,6 +337,8 @@
                         (L:A339X_MAP_LIGHT_FO, bool) if{ 100 } els{ 0 } (&gt;K:LIGHT_POTENTIOMETER_13_SET)
                     </LEFT_SINGLE_CODE>
                     <TOOLTIPID>MAP LIGHT FO</TOOLTIPID>
+                    <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
                 </UseTemplate>
             </Component>
 
