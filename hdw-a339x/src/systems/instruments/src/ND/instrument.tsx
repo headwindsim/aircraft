@@ -10,6 +10,7 @@ import {
   HEventPublisher,
   InstrumentBackplane,
   Subject,
+  AdcPublisher
 } from '@microsoft/msfs-sdk';
 import { a320EfisRangeSettings, a320TerrainThresholdPadValue, ArincEventBus, EfisSide } from '@flybywiresim/fbw-sdk';
 import { NDComponent } from '@flybywiresim/navigation-display';
@@ -27,6 +28,10 @@ import { EgpwcBusPublisher } from '../MsfsAvionicsCommon/providers/EgpwcBusPubli
 import { DmcPublisher } from '../MsfsAvionicsCommon/providers/DmcPublisher';
 import { FMBusPublisher } from '../MsfsAvionicsCommon/providers/FMBusPublisher';
 import { FcuBusPublisher } from '../MsfsAvionicsCommon/providers/FcuBusPublisher';
+import { FuelSystemPublisher } from '@instruments/FuelSystemPublisher';
+import { EwdSimvarPublisher } from '@flybywiresim/ewd/shared/EwdSimvarPublisher';
+import { ArincValueProvider } from '@flybywiresim/ewd/shared/ArincValueProvider';
+
 
 import './style.scss';
 
@@ -63,6 +68,14 @@ class NDInstrument implements FsInstrument {
 
   private readonly adirsValueProvider: AdirsValueProvider<NDSimvars>;
 
+  private readonly ewdSimVarPublisher: EwdSimvarPublisher;
+
+  private readonly arincProvider: ArincValueProvider;
+
+  private readonly adcPublisher: AdcPublisher;
+
+  private readonly fuelSystemPublisher: FuelSystemPublisher;
+
   private readonly clock: Clock;
 
   private displayBrightness = Subject.create(0);
@@ -90,6 +103,12 @@ class NDInstrument implements FsInstrument {
     this.egpwcBusPublisher = new EgpwcBusPublisher(this.bus, side);
     this.hEventPublisher = new HEventPublisher(this.bus);
 
+    this.ewdSimVarPublisher = new EwdSimvarPublisher(this.bus);
+    this.arincProvider = new ArincValueProvider(this.bus);
+    this.fuelSystemPublisher = new FuelSystemPublisher(this.bus);
+    this.adcPublisher = new AdcPublisher(this.bus);
+
+
     this.adirsValueProvider = new AdirsValueProvider(this.bus, this.simVarPublisher, side);
 
     this.clock = new Clock(this.bus);
@@ -105,6 +124,10 @@ class NDInstrument implements FsInstrument {
     this.backplane.addPublisher('dmc', this.dmcPublisher);
     this.backplane.addPublisher('egpwc', this.egpwcBusPublisher);
 
+    this.backplane.addPublisher('SimVars', this.ewdSimVarPublisher);
+    this.backplane.addPublisher('FuelSystem', this.fuelSystemPublisher);
+    this.backplane.addPublisher('adc', this.adcPublisher);
+
     this.backplane.addInstrument('clock', this.clock);
 
     this.doInit();
@@ -114,6 +137,8 @@ class NDInstrument implements FsInstrument {
     this.backplane.init();
 
     this.adirsValueProvider.start();
+
+    this.arincProvider.init();
 
     const sub = this.bus.getSubscriber<NDSimvars>();
 

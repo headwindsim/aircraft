@@ -27,6 +27,7 @@ export enum EfisNdMode {
   ROSE_NAV,
   ARC,
   PLAN,
+  ENG
 }
 
 export enum EfisOption {

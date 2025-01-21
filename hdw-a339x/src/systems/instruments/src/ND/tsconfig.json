@@ -30,7 +30,9 @@
         "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index-no-react.ts"],
         "@flybywiresim/navigation-display": ["../../../build-common/src/systems/instruments/src/ND/index.ts"],
         "@flybywiresim/oanc": ["../../../build-common/src/systems/instruments/src/OANC/index.ts"],
-        "@flybywiresim/msfs-avionics-common": ["../../../build-common/src/systems/instruments/src/MsfsAvionicsCommon/index.ts"]
+        "@flybywiresim/msfs-avionics-common": ["../../../build-common/src/systems/instruments/src/MsfsAvionicsCommon/index.ts"],
+        "@flybywiresim/ewd/*": ["../../../build-a339x/src/systems/instruments/src/EWD/*"],
+        "@instruments/FuelSystemPublisher": ["../../../build-a339x/src/systems/instruments/src/MsfsAvionicsCommon/providers/FuelSystemPublisher.ts"],
       }
     }
   }
