@@ -28,6 +28,8 @@
         "@typings/*": ["../../../build-common/src/typings/*"],
         "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index-no-react.ts"],
         "@flybywiresim/oanc": ["../../../build-common/src/systems/instruments/src/OANC/index.ts"],
+        "@ewd/*": ["../../../build-a339x/src/systems/instruments/src/EWD/*"],
+
       }
     }
   }
