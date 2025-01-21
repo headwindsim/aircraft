@@ -1348,6 +1348,7 @@ These variables are the interface between the 3D model and the systems/code.
       2 | ROSE NAV
       3 | ARC
       4 | PLAN
+      5 | ENG
     - {side}
         - L
         - R
