@@ -755,11 +755,15 @@
 
                 <!-- CPT EFIS BKUP SPD ALT -->
                 <UseTemplate Name="FBW_Anim_Interactions">
-                    <ANIM_TYPE>KORRY_HELD</ANIM_TYPE>
+                    <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_AIRBUS_Push_BKUP_SPD_ALT_Template</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_EFIS_CS_BKUP_SPD_ALT</NODE_ID>
                     <ANIM_NAME>PUSH_EFIS_CS_BKUP_SPD_ALT</ANIM_NAME>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
+                    <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
+                    <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+                    <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
+                    <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                 </UseTemplate>
 
                 <!-- CPT EFIS GPWS G/S -->
@@ -949,11 +953,15 @@
 
                 <!-- F/O EFIS BKUP SPD ALT -->
                 <UseTemplate Name="FBW_Anim_Interactions">
-                    <ANIM_TYPE>KORRY_HELD</ANIM_TYPE>
+                    <ANIM_TYPE>KORRY_BUTTON</ANIM_TYPE>
                     <ANIM_TEMPLATE>FBW_AIRBUS_Push_BKUP_SPD_ALT_Template</ANIM_TEMPLATE>
                     <NODE_ID>PUSH_EFIS_FO_BKUP_SPD_ALT</NODE_ID>
                     <ANIM_NAME>PUSH_EFIS_FO_BKUP_SPD_ALT</ANIM_NAME>
                     <SEQ_POWERED>(L:A32NX_ELEC_AC_1_BUS_IS_POWERED, Bool)</SEQ_POWERED>
+                    <SEQ1_EMISSIVE_DRIVES_VISIBILITY>False</SEQ1_EMISSIVE_DRIVES_VISIBILITY>
+                    <SEQ2_EMISSIVE_DRIVES_VISIBILITY>False</SEQ2_EMISSIVE_DRIVES_VISIBILITY>
+                    <SEQ1_CODE_DRIVES_VISIBILITY>False</SEQ1_CODE_DRIVES_VISIBILITY>
+                    <SEQ2_CODE_DRIVES_VISIBILITY>False</SEQ2_CODE_DRIVES_VISIBILITY>
                 </UseTemplate>
 
                 <!-- F/O EFIS GPWS G/S -->
