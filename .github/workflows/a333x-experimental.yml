@@ -9,6 +9,7 @@ on:
       - 'hdw-a333x/**'
       - 'scripts/build-a333x.js'
       - 'scripts/build-a333x.sh'
+      - 'textures/**'
       - 'a333x-igniter.config.mjs'
       - 'package.json'
       - 'package-lock.json'

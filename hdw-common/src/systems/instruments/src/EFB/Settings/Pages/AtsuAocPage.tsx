@@ -4,7 +4,7 @@
 /* eslint-disable max-len */
 import React from 'react';
 
-import { usePersistentProperty, SENTRY_CONSENT_KEY, SentryConsentState } from '@flybywiresim/fbw-sdk';
+import { usePersistentProperty, SENTRY_CONSENT_KEY, SentryConsentState, isMsfs2024 } from '@flybywiresim/fbw-sdk';
 
 import { toast } from 'react-toastify';
 import { t } from '../../Localization/translation';
@@ -19,7 +19,7 @@ import { AcarsNetwork } from '../../../../../datalink/common/src/messages';
 export const AtsuAocPage = () => {
   const [atisSource, setAtisSource] = usePersistentProperty('CONFIG_ATIS_SRC', 'FAA');
   const [metarSource, setMetarSource] = usePersistentProperty('CONFIG_METAR_SRC', 'MSFS');
-  const [tafSource, setTafSource] = usePersistentProperty('CONFIG_TAF_SRC', 'NOAA');
+  const [tafSource, setTafSource] = usePersistentProperty('CONFIG_TAF_SRC', isMsfs2024() ? 'MSFS' : 'NOAA');
   const [telexEnabled, setTelexEnabled] = usePersistentProperty('CONFIG_ONLINE_FEATURES_STATUS', 'DISABLED');
 
   const [acarsNetwork, setAcarsNetwork] = usePersistentProperty('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
@@ -71,7 +71,13 @@ export const AtsuAocPage = () => {
     { name: 'SayIntentions', setting: AcarsNetwork.SayIntentions },
   ];
 
-  const tafSourceButtons: ButtonType[] = [{ name: 'NOAA', setting: 'NOAA' }];
+  let tafSourceButtons: ButtonType[] = [
+    { name: 'MSFS', setting: 'MSFS' },
+    { name: 'NOAA', setting: 'NOAA' },
+  ];
+  if (!isMsfs2024()) {
+    tafSourceButtons = tafSourceButtons.slice(1);
+  }
 
   const { showModal } = useModals();
 

@@ -13,6 +13,7 @@ on:
       - 'scripts/copy_a339x.sh'
       - 'scripts/fragment-a339x.js'
       - 'scripts/install-source-a339x.js'
+      - 'textures/**'
       - 'a339x-igniter.config.mjs'
       - 'package.json'
       - 'package-lock.json'
@@ -23,7 +24,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      HDW_PRODUCTION_BUILD: 1      
+      HDW_PRODUCTION_BUILD: 1
       STANDALONE_ZIP_NAME: headwindsim-aircraft-a330-900-dev.zip
       BUILD_DIR_NAME: experimental
       CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
