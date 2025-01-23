@@ -117,6 +117,17 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
       `${intruder.relativeAlt > 0 ? '+' : '-'}${Math.abs(intruder.relativeAlt) < 10 ? '0' : ''}${Math.abs(intruder.relativeAlt)}`,
       color,
     );
+    if(intruder.vatsimEntry) {
+      const textWidth = context.measureText(intruder.vatsimEntry.callsign);
+     PaintUtils.paintText(
+      isColorLayer,
+      context,
+      x - (24 + textWidth.width),
+      y,
+      intruder.vatsimEntry.callsign,
+      color,
+    );
+    }
   }
 
   private paintVertArrow(

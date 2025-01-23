@@ -32,6 +32,8 @@ import {
   UpDownAdvisoryStatus,
 } from '../lib/TcasConstants';
 import { TcasSoundManager } from './TcasSoundManager';
+import {getData as fetchVatsimPilots } from "../lib/VatsimDataProvider";
+
 
 export class NDTcasTraffic {
   ID: string;
@@ -50,6 +52,8 @@ export class NDTcasTraffic {
 
   bitfield: number;
 
+  vatsimEntry?: VatsimData;
+
   constructor(traffic: TcasTraffic) {
     this.ID = traffic.ID;
     this.lat = traffic.lat;
@@ -58,8 +62,10 @@ export class NDTcasTraffic {
     this.relativeAlt = Math.round(traffic.relativeAlt / 100);
     this.intrusionLevel = traffic.intrusionLevel;
     this.vertSpeed = traffic.vertSpeed;
+    this.vatsimEntry = traffic.vatsimEntry;
   }
 }
+
 
 export class NDTcasDebugTraffic extends NDTcasTraffic {
   seen: number;
@@ -86,6 +92,14 @@ export class NDTcasDebugTraffic extends NDTcasTraffic {
     this.closureRate = traffic.closureRate;
     this.closureAccel = traffic.closureAccel;
   }
+}
+
+interface VatsimData {
+  callsign: string;
+  transponder: string;
+  groundspeed: number;
+  aircraft_faa: string;
+  delta: number;
 }
 
 export class TcasTraffic {
@@ -131,6 +145,8 @@ export class TcasTraffic {
 
   secondsSinceLastTa: number;
 
+  vatsimEntry?: VatsimData;
+
   constructor(tf: JS_NPCPlane, ppos: Coordinates, alt: number) {
     this.alive = true;
     this.seen = 0;
@@ -151,6 +167,9 @@ export class TcasTraffic {
     this.raTau = Infinity;
     this.vTau = Infinity;
     this.secondsSinceLastTa = 0;
+  }
+  setVatsimData(e){
+    this.vatsimEntry = e;
   }
 }
 
@@ -178,6 +197,8 @@ export class TcasComputer implements TcasComponent {
   private syncer: GenericDataListenerSync = new GenericDataListenerSync();
 
   private updateThrottler: UpdateThrottler; // Utility to restrict updates
+
+  private vatsimDataThrottler: any;
 
   private airTraffic: TcasTraffic[]; // Air Traffic List
 
@@ -275,6 +296,7 @@ export class TcasComputer implements TcasComponent {
     this.sensitivity = new LocalSimVar('L:A32NX_TCAS_SENSITIVITY', 'number');
     this.sensitivity.setVar(1);
     this.updateThrottler = new UpdateThrottler(TCAS.REFRESH_RATE); // P5566074 pg 11:45
+    this.vatsimDataThrottler = null;
     this.inhibitions = Inhibit.NONE;
     this.ppos = { lat: NaN, long: NaN };
     this._newRa = new ResAdvisory(null, false, 0, false);
@@ -284,6 +306,43 @@ export class TcasComputer implements TcasComponent {
     this.soundManager = new TcasSoundManager();
   }
 
+  updateVatsimData(){
+    if(Number.isNaN(this.ppos.lat) || Number.isNaN(this.ppos.long))
+      return;
+    fetchVatsimPilots().then(response => {
+        const pilots = response.data.pilots;
+        this.vatsimPilots = [];
+        for(const pilot of pilots){
+            const diffLat = Math.abs(pilot.latitude - this.ppos.lat);
+            const diffLong = Math.abs(pilot.longitude  - this.ppos.long);
+            if (diffLat > 2 || diffLong > 2)
+              continue;
+            pilot.distance = MathUtils.computeDistance3D(pilot.latitude, pilot.longitude, pilot.altitude, this.ppos.lat, this.ppos.long, this.planeAlt);
+            this.vatsimPilots.push(pilot);
+        }
+        this.vatsimPilots = this.vatsimPilots.sort((a,b) => a.distance - b.distance).slice(0, TCAS.MEMORY_MAX);
+        for(const traffic of this.airTraffic){
+           for(const pilot of this.vatsimPilots) {
+              const distance = MathUtils.computeDistance3D(
+                traffic.lat,
+                traffic.lon,
+                traffic.alt,
+                pilot.latitude,
+                pilot.longitude,
+                pilot.altitude,
+              );
+              if(!traffic.vatsimEntry || traffic.vatsimEntry.delta > distance) {
+                traffic.vatsimEntry = pilot;
+                traffic.vatsimEntry.delta = distance;
+              }
+            }
+        }
+    }).catch(err => {
+      console.error(err);
+      this.vatsimPilots = [];
+    });
+    this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 45);
+  }
   /**
    * Read from SimVars
    */
@@ -328,6 +387,9 @@ export class TcasComputer implements TcasComponent {
         ? TcasMode.STBY
         : this.tcasSwitchPos,
     ); // 34-43-00:A32
+
+    if(this.vatsimPilots === undefined && this.vatsimDataThrottler === null)
+      this.updateVatsimData();
   }
 
   /**
@@ -472,8 +534,30 @@ export class TcasComputer implements TcasComponent {
           if (!traffic) {
             traffic = new TcasTraffic(tf, this.ppos, this.planeAlt);
             this.airTraffic.push(traffic);
-          }
+           if(this.vatsimPilots) {
+              let current = null;
+              let lastDistance;
+              for(const pilot of this.vatsimPilots) {
+                const distance = MathUtils.computeDistance3D(
+                  traffic.lat,
+                  traffic.lon,
+                  traffic.alt,
+                  pilot.latitude,
+                  pilot.longitude,
+                  pilot.altitude,
+                );
+                if(current === null || lastDistance > distance) {
+                  current = pilot;
+                  lastDistance = distance;
+                }
+              }
+              if(current){
+                current.delta = lastDistance;
+                traffic.setVatsimData(current);
 
+              }
+            }
+          }
           traffic.alive = true;
           traffic.seen = Math.min(traffic.seen + 1, 10);
           const newAlt = tf.alt * 3.281;
@@ -1315,6 +1399,14 @@ export class TcasComputer implements TcasComponent {
     this.updateVars();
     this.updateInhibitions();
     this.updateStatusFaults();
+
+    if(this.vatsimPilots) {
+       for(const pilot of this.vatsimPilots){
+          pilot.distance = MathUtils.computeDistance3D(pilot.latitude, pilot.longitude, pilot.altitude, this.ppos.lat, this.ppos.long, this.planeAlt);
+      }
+      this.vatsimPilots = this.vatsimPilots.sort((a,b) => a.distance - b.distance);
+    }
+
     if (this.tcasMode.getVar() === TcasMode.STBY) {
       this.advisoryState = TcasState.NONE;
       this.tcasState.setVar(TcasState.NONE);

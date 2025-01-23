@@ -137,6 +137,14 @@ export enum EfisVectorsGroup {
   ACTIVE_EOSID,
 }
 
+export interface NdVatsimData {
+  callsign: string;
+  transponder: string;
+  groundspeed: number;
+  aircraft_faa: string;
+  delta: number;
+}
+
 export interface NdTraffic {
   alive?: boolean;
   ID: string;
@@ -148,6 +156,7 @@ export interface NdTraffic {
   heading: number;
   posX?: number;
   posY?: number;
+  vatsimEntry?: NdVatsimData;
   // debug
   seen?: number;
   hidden?: boolean;
