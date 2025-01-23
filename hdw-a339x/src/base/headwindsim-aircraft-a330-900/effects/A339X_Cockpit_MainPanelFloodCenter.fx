@@ -68,7 +68,7 @@ Extrude Heading Max=0.00
 [LightAttributes.0]
 Type=spot
 Size=0.001
-Range=0.5
+Range=0.47
 Intensity=30
 Softness=0
 SpotInner=0
