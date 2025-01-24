@@ -321,6 +321,21 @@
                 <ANIM_NAME>SWITCH_CONSOLE_LIGHT_CAPTAIN</ANIM_NAME>
             </UseTemplate>
 
+            <!-- CPT FOOT WARMER MAP -->
+            <Component ID="SWITCH_FOOT_WARMER_CAPTAIN" Node="SWITCH_FOOT_WARMER_CAPTAIN">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SWITCH_FOOT_WARMER_CAPTAIN</NODE_ID>
+                    <ANIM_NAME>SWITCH_FOOT_WARMER_CAPTAIN</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_FOOT_WARMER_CAPTAIN, bool) 100 *</ANIM_CODE>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_FOOT_WARMER_CAPTAIN, bool) ! (&gt;L:A339X_FOOT_WARMER_CAPTAIN, bool)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>FOOT WARMER CAPTAIN</TOOLTIPID>
+                    <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
+                </UseTemplate>
+            </Component>
+
             <!-- FO LT CEILING -->
             <Component ID="SWITCH_CEILING_LIGHT_FO" Node="SWITCH_CEILING_LIGHT_FO">
                 <UseTemplate Name="ASOBO_GT_Switch_Code">
@@ -374,6 +389,21 @@
                 <PART_ID>SWITCH_CONSOLE_LIGHT_FO</PART_ID>
                 <ANIM_NAME>SWITCH_CONSOLE_LIGHT_FO</ANIM_NAME>
             </UseTemplate>
+
+            <!-- FO FOOT WARMER MAP -->
+            <Component ID="SWITCH_FOOT_WARMER_FO" Node="SWITCH_FOOT_WARMER_FO">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>SWITCH_FOOT_WARMER_FO</NODE_ID>
+                    <ANIM_NAME>SWITCH_FOOT_WARMER_FO</ANIM_NAME>
+                    <ANIM_CODE>(L:A339X_FOOT_WARMER_FO, bool) 100 *</ANIM_CODE>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_FOOT_WARMER_FO, bool) ! (&gt;L:A339X_FOOT_WARMER_FO, bool)
+                    </LEFT_SINGLE_CODE>
+                    <TOOLTIPID>FOOT WARMER FO</TOOLTIPID>
+                    <WWISE_EVENT_1>lswitch</WWISE_EVENT_1>
+                    <WWISE_EVENT_2>lswitch</WWISE_EVENT_2>
+                </UseTemplate>
+            </Component>
         </Component>
 
         <Component ID="Pedestal_Fwd">

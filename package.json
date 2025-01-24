@@ -1,6 +1,6 @@
 {
   "name": "aircraft",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "edition": "development",
   "imports": {
     "#build-utils": "./build-utils.js"
