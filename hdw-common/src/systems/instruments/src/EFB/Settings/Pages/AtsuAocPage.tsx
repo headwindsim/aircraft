@@ -26,6 +26,8 @@ export const AtsuAocPage = () => {
   const [hoppieUserId, setHoppieUserId] = usePersistentProperty('CONFIG_ACARS_HOPPIE_USERID');
   const [sayIntentionsKey, setSayIntentionsKey] = usePersistentProperty('CONFIG_ACARS_SAYINTENTIONS_KEY');
 
+  const [trafficSource, setTrafficSource] = usePersistentProperty('CONFIG_TRAFFIC_SOURCE', "NONE");
+
   const [sentryEnabled, setSentryEnabled] = usePersistentProperty(SENTRY_CONSENT_KEY, SentryConsentState.Refused);
 
   const handleAcarsNetwork = (network: string | AcarsNetwork) => {
@@ -36,6 +38,12 @@ export const AtsuAocPage = () => {
       AcarsConnector.activate();
     }
   };
+
+  const handleTrafficSourceChange = (entry: string) => {
+    const map = {"NONE": 0, "SIM":1, "VATSIM": 2};
+    setTrafficSource(entry);
+    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_SOURCE', 'number', map[entry]);
+  }
 
   const handleAcarsIdentifierInput = (network: string | AcarsNetwork, value: string) => {
     AcarsConnector.validate(network, value)
@@ -74,6 +82,12 @@ export const AtsuAocPage = () => {
   let tafSourceButtons: ButtonType[] = [
     { name: 'MSFS', setting: 'MSFS' },
     { name: 'NOAA', setting: 'NOAA' },
+  ];
+
+  let trafficSourceButtons: ButtonType[] = [
+    { name: 'None', setting: 'NONE' },
+    { name: 'Sim', setting: 'SIM' },
+    { name: 'Vatsim', setting: 'VATSIM' },
   ];
   if (!isMsfs2024()) {
     tafSourceButtons = tafSourceButtons.slice(1);
@@ -173,7 +187,19 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-
+      <SettingItem name={t('Settings.AtsuAoc.TrafficSource')}>
+        <SelectGroup>
+          {trafficSourceButtons.map((button) => (
+            <SelectItem
+              key={button.setting}
+              onSelect={() => handleTrafficSourceChange(button.setting)}
+              selected={trafficSource === button.setting}
+            >
+              {button.name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SettingItem>
       <SettingItem name={t('Settings.AtsuAoc.ErrorReporting')}>
         <Toggle
           value={sentryEnabled === SentryConsentState.Given}

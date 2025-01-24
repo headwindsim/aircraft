@@ -200,6 +200,8 @@ export class TcasComputer implements TcasComponent {
 
   private vatsimDataThrottler: any;
 
+  private selectedTrafficDataSource: number;
+
   private airTraffic: TcasTraffic[]; // Air Traffic List
 
   private raTraffic: TcasTraffic[]; // Traffic with RA
@@ -291,6 +293,7 @@ export class TcasComputer implements TcasComponent {
     this.rateToMaintain = new LocalSimVar('L:A32NX_TCAS_RA_RATE_TO_MAINTAIN', 'number');
     this.upAdvisoryStatus = new LocalSimVar('L:A32NX_TCAS_RA_UP_ADVISORY_STATUS', 'Enum');
     this.downAdvisoryStatus = new LocalSimVar('L:A32NX_TCAS_RA_DOWN_ADVISORY_STATUS', 'Enum');
+    this.selectedTrafficDataSource = ({"NONE": 0, "SIM": 1, "VATSIM": 2})[NXDataStore.get("CONFIG_TRAFFIC_SOURCE", "NONE")];
     this.airTraffic = [];
     this.raTraffic = [];
     this.sensitivity = new LocalSimVar('L:A32NX_TCAS_SENSITIVITY', 'number');
@@ -309,7 +312,12 @@ export class TcasComputer implements TcasComponent {
   updateVatsimData(){
     if(Number.isNaN(this.ppos.lat) || Number.isNaN(this.ppos.long))
       return;
-    fetchVatsimPilots().then(response => {
+    if(this.selectedTrafficDataSource !== 2) {
+      this.vatsimDataThrottler = null;
+      return;
+    }
+
+      fetchVatsimPilots().then(response => {
         const pilots = response.data.pilots;
         this.vatsimPilots = [];
         for(const pilot of pilots){
@@ -341,7 +349,8 @@ export class TcasComputer implements TcasComponent {
       console.error(err);
       this.vatsimPilots = [];
     });
-    this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 45);
+
+  this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 45);
   }
   /**
    * Read from SimVars
@@ -388,7 +397,18 @@ export class TcasComputer implements TcasComponent {
         : this.tcasSwitchPos,
     ); // 34-43-00:A32
 
-    if(this.vatsimPilots === undefined && this.vatsimDataThrottler === null)
+    this.selectedTrafficDataSource = SimVar.GetSimVarValue("L:A32NX_TRAFFIC_SELECTOR_SOURCE", 'number');
+    if(this.selectedTrafficDataSource !== 2 && this.vatsimPilots) {
+      this.vatsimPilots = [];
+       for(const traffic of this.airTraffic){
+        traffic.vatsimEntry = null;
+      }
+    }
+    if(this.selectedTrafficDataSource !== 2 && this.vatsimDataThrottler) {
+      clearTimeout(this.vatsimDataThrottler);
+      this.vatsimDataThrottler = null;
+    }
+    if(!this.vatsimPilots && this.vatsimDataThrottler === null && this.selectedTrafficDataSource === 2)
       this.updateVatsimData();
   }
 
@@ -558,6 +578,8 @@ export class TcasComputer implements TcasComponent {
               }
             }
           }
+          if(this.selectedTrafficDataSource === 1)
+            traffic.vatsimEntry = {callsign: tf.name};
           traffic.alive = true;
           traffic.seen = Math.min(traffic.seen + 1, 10);
           const newAlt = tf.alt * 3.281;

@@ -3,6 +3,7 @@
     "Settings": {
       "AtsuAoc": {
         "AcarsNetwork": "ACARS Network",
+        "TrafficSource": "Traffic Selector Source",
         "OptionalA32nxErrorReporting": "Optional Headwind Simulations Error Reporting",
         "SayIntentionsKey": "SayIntentions API Key",
         "ThereWasAnErrorEncounteredWhenValidatingYourAcarsID": "There was an error validating your ACARS ID",
