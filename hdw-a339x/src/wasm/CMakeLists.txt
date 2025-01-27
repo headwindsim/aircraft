@@ -5,7 +5,7 @@ set(OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../build-a339x/out/headwi
 add_definitions(-DA32NX)
 
 add_subdirectory(extra-backend-a339x)
-add_subdirectory(fadec_a339x)
+add_subdirectory(fadec_a330x)
 
 # these are only here to allow CMake compatible IDEs (JetBrains' Clion for example) to show systax
 # highlighting and allow code navigation
