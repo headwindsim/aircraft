@@ -227,25 +227,72 @@ export const A330Fuel: React.FC<FuelProps> = ({
   };
 
   const setDesiredFuel = (fuel: number) => {
-    fuel -= OUTER_CELL_GALLONS * 2;
-    const outerTank = (OUTER_CELL_GALLONS * 2 + Math.min(fuel, 0)) / 2;
-    setLOutTarget(outerTank);
-    setROutTarget(outerTank);
-    if (fuel <= 0) {
-      setLInnTarget(0);
-      setRInnTarget(0);
+  	let remainingFuel = fuel;
+
+    // DSC-28-10-110-00001467.0040001
+    // Source FCOM: A330 GENERAL - REFUEL DISTRIBUTION
+    // STEP 1: Fill each INNER cell up to 1480 gallons
+    // ------------------------------------------------
+    const firstInnerLimit = 1480;
+    // Each side can get up to 1480, so let's see how much we can allocate per side:
+    const firstInnerAllocation = Math.min(firstInnerLimit, remainingFuel / 2);
+    setLInnTarget(firstInnerAllocation);
+    setRInnTarget(firstInnerAllocation);
+
+		// Subtract what we allocated to both sides:
+    remainingFuel -= firstInnerAllocation * 2;
+    if (remainingFuel <= 0) {
+      // If we've used all fuel before outer or center, set everything else to 0
+      setLOutTarget(0);
+      setROutTarget(0);
       setCenterTarget(0);
       return;
     }
-    fuel -= INNER_CELL_GALLONS * 2;
-    const innerTank = (INNER_CELL_GALLONS * 2 + Math.min(fuel, 0)) / 2;
-    setLInnTarget(innerTank);
-    setRInnTarget(innerTank);
-    if (fuel <= 0) {
+
+    // STEP 2: Fill each OUTER tank up to 964 gallons
+    // ------------------------------------------------
+    const outerLimit = OUTER_CELL_GALLONS;
+    const outerAllocation = Math.min(outerLimit, remainingFuel / 2);
+    setLOutTarget(outerAllocation);
+    setROutTarget(outerAllocation);
+
+    remainingFuel -= outerAllocation * 2;
+    if (remainingFuel <= 0) {
+      // If we've used all fuel, set the center to 0
       setCenterTarget(0);
       return;
     }
-    setCenterTarget(fuel);
+
+    // STEP 3: Return to INNER cell and fill up to 11095 gallons each
+    // ------------------------------------------------
+    // We've already put `firstInnerLimit` into each side. Each side can now get up to (11095 - 1480) more.
+    const secondInnerLimit = INNER_CELL_GALLONS - firstInnerLimit; // i.e. 11095 - 1480 = 9615
+    const secondInnerAllocation = Math.min(secondInnerLimit, remainingFuel / 2);
+
+    // The new total in each inner cell is what we already put in plus this new allocation
+    const finalInnerCell = firstInnerLimit + secondInnerAllocation;
+    setLInnTarget(finalInnerCell);
+    setRInnTarget(finalInnerCell);
+
+    remainingFuel -= secondInnerAllocation * 2;
+    if (remainingFuel <= 0) {
+      // No fuel left for center tank
+      setCenterTarget(0);
+      return;
+    }
+
+    // STEP 4: Fill the CENTER tank up to 12625 gallons
+    // ------------------------------------------------
+    const centerAllocation = Math.min(CENTER_TANK_GALLONS, remainingFuel);
+    setCenterTarget(centerAllocation);
+
+    remainingFuel -= centerAllocation;
+
+    // If there is still leftover (remainingFuel > 0), you may want to decide what to do:
+    // either ignore it, or log a warning, etc.
+    if (remainingFuel > 0) {
+      console.log(`Warning: Fuel remaining (${remainingFuel} gallons) beyond maximum tank capacities`);
+    }
   };
 
   const updateDesiredFuel = (value: string) => {
