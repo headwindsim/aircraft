@@ -57,18 +57,6 @@ void EngineControl_A330X::update() {
   for (int engine = 1; engine <= 2; engine++) {
     const int engineIdx = engine - 1;
 
-    const bool engineStarter = static_cast<bool>(simData.simVarsDataPtr->data().engineStarter[engineIdx]);
-    const int  engineIgniter = static_cast<int>(simData.simVarsDataPtr->data().engineIgniter[engineIdx]);
-
-    // determine the current engine state based on the previous state and the current ignition, starter and other parameters
-    // also resets the engine timer if the engine is starting or restarting
-    EngineState engineState = engineStateMachine(engine,                      //
-                                                 engineIgniter,               //
-                                                 engineStarter,               //
-                                                 prevSimEngineN3[engineIdx],  //
-                                                 idleN3,                      //
-                                                 ambientTemperature);         //
-
     const bool   simOnGround   = msfsHandlerPtr->getSimOnGround();
     const double engineTimer   = simData.engineTimer[engineIdx]->get();
     const double simCN1        = simData.engineCorrectedN1DataPtr[engineIdx]->data().correctedN1;
@@ -76,6 +64,46 @@ void EngineControl_A330X::update() {
     const double simN3         = simData.simVarsDataPtr->data().simEngineN2[engineIdx];  // as the sim does not have N3, we use N2
     const double deltaN3       = simN3 - prevSimEngineN3[engineIdx];
     prevSimEngineN3[engineIdx] = simN3;
+
+    bool engineStarter = static_cast<bool>(simData.simVarsDataPtr->data().engineStarter[engineIdx]);
+    const int  engineIgniter = static_cast<int>(simData.simVarsDataPtr->data().engineIgniter[engineIdx]);
+
+    const double engineStarterPressurized   = simData.engineStarterPressurized[engineIdx]->get();
+    const double engineFuelValveOpen        = simData.simVarsDataPtr->data().engineFuelValveOpen[engineIdx];
+    const bool   engineFuelValveFullyClosed = engineFuelValveOpen == 0;
+    const bool   engineFuelValveFullyOpen   = engineFuelValveOpen == 1;
+
+    // simulates delay to start valve open through fuel valve travel time
+    const bool engineMasterTurnedOn  = (prevEngineMasterPos[engineIdx] < 1 && engineFuelValveFullyOpen);
+    const bool engineMasterTurnedOff = (prevEngineMasterPos[engineIdx] > 0 && engineFuelValveFullyClosed);
+
+    // starts engines if Engine Master is turned on and Starter is pressurized
+    // or the engine is still spinning fast enough
+    if (!engineStarter && engineFuelValveFullyOpen && (engineStarterPressurized || simN3 >= 20)) {
+      simData.setStarterHeldEvent[engineIdx]->trigger(1);
+      engineStarter = true;
+    }
+    // shuts off engines if Engine Master is turned off or starter is depressurized while N3 is below 20%
+    else if (engineStarter && (engineFuelValveFullyClosed || (engineFuelValveFullyOpen && !engineStarterPressurized && simN3 < 20))) {
+      simData.setStarterHeldEvent[engineIdx]->trigger(0);
+      simData.setStarterEvent[engineIdx]->trigger(0);
+      engineStarter = false;
+    }
+
+    const bool engineStarterTurnedOff = prevEngineStarterState[engineIdx] == 1 && !engineStarter;
+
+    // determine the current engine state based on the previous state and the current ignition, starter and other parameters
+    // also resets the engine timer if the engine is starting or restarting
+    EngineState engineState = engineStateMachine(engine,                      //
+                                                 engineIgniter,               //
+                                                 engineStarter,               //
+                                                 engineStarterTurnedOff,  //
+                                                 engineMasterTurnedOn,    //
+                                                 engineMasterTurnedOff,   //
+                                                 prevSimEngineN3[engineIdx],  //
+                                                 idleN3,                      //
+                                                 ambientTemperature);         //
+
 
     // Update various engine values based on the current engine state
     switch (static_cast<int>(engineState)) {
@@ -239,6 +267,9 @@ void EngineControl_A330X::generateIdleParameters(double pressAltitude, double ma
 EngineControl_A330X::EngineState EngineControl_A330X::engineStateMachine(int    engine,
                                                                          int    engineIgniter,
                                                                          bool   engineStarter,
+                                                                         bool   engineStarterTurnedOff,  //
+                                                                         bool   engineMasterTurnedOn,    //
+                                                                         bool   engineMasterTurnedOff,   //
                                                                          double simN3,
                                                                          double idleN3,
                                                                          double ambientTemperature) {
@@ -256,7 +287,7 @@ EngineControl_A330X::EngineState EngineControl_A330X::engineStateMachine(int    
   if (engineState == OFF) {
     if (engineIgniter == 1 && engineStarter && simN3 > 20) {
       engineState = ON;
-    } else if (engineIgniter == 2 && engineStarter) {
+    } else if (engineIgniter == 2 && engineMasterTurnedOn) {
       engineState = STARTING;
     } else {
       engineState = OFF;
@@ -275,7 +306,7 @@ EngineControl_A330X::EngineState EngineControl_A330X::engineStateMachine(int    
     if (engineStarter && simN3 >= (idleN3 - 0.1)) {
       engineState = ON;
       resetTimer  = true;
-    } else if (!engineStarter) {
+    } else if (engineStarterTurnedOff || engineMasterTurnedOff) {
       engineState = SHUTTING;
       resetTimer  = true;
     } else {
@@ -287,7 +318,7 @@ EngineControl_A330X::EngineState EngineControl_A330X::engineStateMachine(int    
     if (engineStarter && simN3 >= (idleN3 - 0.1)) {
       engineState = ON;
       resetTimer  = true;
-    } else if (!engineStarter) {
+    } else if (engineStarterTurnedOff || engineMasterTurnedOff) {
       engineState = SHUTTING;
       resetTimer  = true;
     } else {
@@ -296,7 +327,7 @@ EngineControl_A330X::EngineState EngineControl_A330X::engineStateMachine(int    
   }
   // Current State: Shutting
   else if (engineState == SHUTTING) {
-    if (engineIgniter == 2 && engineStarter) {
+    if (engineIgniter == 2 && engineMasterTurnedOn) {
       engineState = RESTARTING;
       resetTimer  = true;
     } else if (!engineStarter && simN3 < 0.05 && simData.engineEgt[engineIdx]->get() <= ambientTemperature) {
@@ -553,6 +584,23 @@ void EngineControl_A330X::updateFuel(double deltaTimeSeconds) {
 
   bool uiFuelTamper = false;
 
+  const double pumpStateLeft          = simData.fuelPumpState[E1]->get();
+  const double pumpStateRight         = simData.fuelPumpState[E2]->get();
+  const bool   xfrCenterLeftManual    = simData.simVarsDataPtr->data().xfrCenterManual[E1] > 1.5;                              // junction 4
+  const bool   xfrCenterRightManual   = simData.simVarsDataPtr->data().xfrCenterManual[E2] > 1.5;                              // junction 5
+  const bool   xfrCenterLeftAuto      = simData.simVarsDataPtr->data().xfrValveCenterAuto[E1] > 0.0 && !xfrCenterLeftManual;   // valve 11
+  const bool   xfrCenterRightAuto     = simData.simVarsDataPtr->data().xfrValveCenterAuto[E2] > 0.0 && !xfrCenterRightManual;  // valve 12
+  const bool   xfrValveCenterLeftOpen = simData.simVarsDataPtr->data().xfrValveCenterOpen[E1] > 0.0                            //
+                                      && (xfrCenterLeftAuto || xfrCenterLeftManual);                                          // valve 9
+  const bool xfrValveCenterRightOpen = simData.simVarsDataPtr->data().xfrValveCenterOpen[E2] > 0.0                             //
+                                       && (xfrCenterRightAuto || xfrCenterRightManual);                                       // valve 10
+  const double xfrValveOuterLeft1    = simData.simVarsDataPtr->data().xfrValveOuter1[E1];                                      // valve 6
+  const double xfrValveOuterRight1   = simData.simVarsDataPtr->data().xfrValveOuter1[E2];                                      // valve 7
+  const double xfrValveOuterLeft2    = simData.simVarsDataPtr->data().xfrValveOuter2[E1];                                      // valve 4
+  const double xfrValveOuterRight2   = simData.simVarsDataPtr->data().xfrValveOuter2[E2];                                      // valve 5
+  const double lineLeftToCenterFlow  = simData.simVarsDataPtr->data().lineToCenterFlow[E1];
+  const double lineRightToCenterFlow = simData.simVarsDataPtr->data().lineToCenterFlow[E2];
+
   const double engine1PreFF = simData.enginePreFF[E1]->get();
   const double engine2PreFF = simData.enginePreFF[E2]->get();
 
@@ -583,97 +631,60 @@ void EngineControl_A330X::updateFuel(double deltaTimeSeconds) {
   const EngineState engine1State = static_cast<EngineState>(simData.engineState[E1]->get());
   const EngineState engine2State = static_cast<EngineState>(simData.engineState[E2]->get());
 
+  const double xFeedValve  = simData.simVarsDataPtr->data().xFeedValve;
+  const double leftPump1   = simData.simVarsDataPtr->data().fuelPump1[E1];
+  const double rightPump1  = simData.simVarsDataPtr->data().fuelPump1[E2];
+  const double leftPump2   = simData.simVarsDataPtr->data().fuelPump2[E1];
+  const double rightPump2  = simData.simVarsDataPtr->data().fuelPump2[E2];
+  const double apuNpercent = simData.apuRpmPercent->get();
+
+  int isTankClosed = 0;
+
   /// Delta time for this update in hours
   const double deltaTimeHours = deltaTimeSeconds / 3600;
 
-  // TODO:  Pump Logic - TO BE IMPLEMENTED
-  /*
-
-  const double pumpStateEngine1 = simData.pumpStateDataPtr->data().pumpStateEngine1;
-  const double pumpStateEngine2 = simData.pumpStateDataPtr->data().pumpStateEngine2;
-  const double pumpStateEngine3 = simData.pumpStateDataPtr->data().pumpStateEngine3;
-  const double pumpStateEngine4 = simData.pumpStateDataPtr->data().pumpStateEngine4;
-
-  // Pump State Logic for Engine 1
-  if (pumpStateEngine1 == 0 && (timerEngine1.elapsed() == 0 || timerEngine1.elapsed() >= 1000)) {
-    if (fuelLeftPre - leftQuantity > 0 && leftQuantity == 0) {
-      timerEngine1.reset();
-      simVars->setPumpStateEngine1(1);
-    } else if (fuelLeftPre == 0 && leftQuantity - fuelLeftPre > 0) {
-      timerEngine1.reset();
-      simVars->setPumpStateEngine1(2);
+  // Pump State Logic for Left Wing
+  // TODO: unclear why a timer is used here
+  const double time        = msfsHandlerPtr->getSimulationTime();
+  const double elapsedLeft = time - pumpStateLeftTimeStamp;
+  if (pumpStateLeft == 0 && elapsedLeft >= 1.0) {
+    if (fuelLeftInnerPre - leftInnerQty > 0 && leftInnerQty == 0) {
+      pumpStateLeftTimeStamp = time;
+      simData.fuelPumpState[E1]->set(1);
+    } else if (fuelLeftInnerPre == 0 && leftInnerQty - fuelLeftInnerPre > 0) {
+      pumpStateLeftTimeStamp = time;
+      simData.fuelPumpState[E1]->set(2);
     } else {
-      simVars->setPumpStateEngine1(0);
+      simData.fuelPumpState[E1]->set(0);
     }
-  } else if (pumpStateEngine1 == 1 && timerEngine1.elapsed() >= 2100) {
-    simVars->setPumpStateEngine1(0);
-    fuelLeftPre = 0;
-    timerEngine1.reset();
-  } else if (pumpStateEngine1 == 2 && timerEngine1.elapsed() >= 2700) {
-    simVars->setPumpStateEngine1(0);
-    timerEngine1.reset();
+  } else if (pumpStateLeft == 1 && elapsedLeft >= 2.1) {
+    pumpStateLeftTimeStamp = time;
+    simData.fuelPumpState[E1]->set(0);
+  } else if (pumpStateLeft == 2 && elapsedLeft >= 2.7) {
+    pumpStateLeftTimeStamp = time;
+    simData.fuelPumpState[E1]->set(0);
   }
 
-  // Pump State Logic for Engine 2
-  if (pumpStateEngine2 == 0 && (timerEngine2.elapsed() == 0 || timerEngine2.elapsed() >= 1000)) {
-    if (fuelLeftPre - leftQuantity > 0 && leftQuantity == 0) {
-      timerEngine2.reset();
-      simVars->setPumpStateEngine2(1);
-    } else if (fuelLeftPre == 0 && leftQuantity - fuelLeftPre > 0) {
-      timerEngine2.reset();
-      simVars->setPumpStateEngine2(2);
+  // Pump State Logic for Right Wing
+  // TODO: unclear why a timer is used here
+  const double elapsedRight = time - pumpStateRightTimeStamp;
+  if (pumpStateRight == 0 && (elapsedRight >= 1.0)) {
+    if (fuelRightInnerPre - rightInnerQty > 0 && rightInnerQty == 0) {
+      pumpStateRightTimeStamp = time;
+      simData.fuelPumpState[E2]->set(1);
+    } else if (fuelRightInnerPre == 0 && rightInnerQty - fuelRightInnerPre > 0) {
+      pumpStateRightTimeStamp = time;
+      simData.fuelPumpState[E2]->set(2);
     } else {
-      simVars->setPumpStateEngine2(0);
+      simData.fuelPumpState[E2]->set(0);
     }
-  } else if (pumpStateEngine2 == 1 && timerEngine2.elapsed() >= 2100) {
-    simVars->setPumpStateEngine2(0);
-    fuelLeftPre = 0;
-    timerEngine2.reset();
-  } else if (pumpStateEngine2 == 2 && timerEngine2.elapsed() >= 2700) {
-    simVars->setPumpStateEngine2(0);
-    timerEngine2.reset();
+  } else if (pumpStateRight == 1 && elapsedRight >= 2.1) {
+    pumpStateRightTimeStamp = time;
+    simData.fuelPumpState[E2]->set(0);
+  } else if (pumpStateRight == 2 && elapsedRight >= 2.7) {
+    pumpStateRightTimeStamp = time;
+    simData.fuelPumpState[E2]->set(0);
   }
-
-  // Pump State Logic for Engine 3
-  if (pumpStateEngine3 == 0 && (timerEngine3.elapsed() == 0 || timerEngine3.elapsed() >= 1000)) {
-    if (fuelRightPre - rightQuantity > 0 && rightQuantity == 0) {
-      timerEngine3.reset();
-      simVars->setPumpStateEngine3(1);
-    } else if (fuelRightPre == 0 && rightQuantity - fuelRightPre > 0) {
-      timerEngine3.reset();
-      simVars->setPumpStateEngine3(2);
-    } else {
-      simVars->setPumpStateEngine3(0);
-    }
-  } else if (pumpStateEngine3 == 1 && timerEngine3.elapsed() >= 2100) {
-    simVars->setPumpStateEngine3(0);
-    fuelRightPre = 0;
-    timerEngine3.reset();
-  } else if (pumpStateEngine3 == 2 && timerEngine3.elapsed() >= 2700) {
-    simVars->setPumpStateEngine3(0);
-    timerEngine3.reset();
-  }
-
-  // Pump State Logic for Engine 4
-  if (pumpStateEngine4 == 0 && (timerEngine4.elapsed() == 0 || timerEngine4.elapsed() >= 1000)) {
-    if (fuelRightPre - rightQuantity > 0 && rightQuantity == 0) {
-      timerEngine4.reset();
-      simVars->setPumpStateEngine4(1);
-    } else if (fuelRightPre == 0 && rightQuantity - fuelRightPre > 0) {
-      timerEngine4.reset();
-      simVars->setPumpStateEngine4(2);
-    } else {
-      simVars->setPumpStateEngine4(0);
-    }
-  } else if (pumpStateEngine4 == 1 && timerEngine4.elapsed() >= 2100) {
-    simVars->setPumpStateEngine4(0);
-    fuelRightPre = 0;
-    timerEngine4.reset();
-  } else if (pumpStateEngine4 == 2 && timerEngine4.elapsed() >= 2700) {
-    simVars->setPumpStateEngine4(0);
-    timerEngine4.reset();
-  }
-  --------------------------------------------*/
 
   // Checking for in-game UI Fuel tampering
   const bool   isReadyVar          = msfsHandlerPtr->getAircraftIsReadyVar();
@@ -701,7 +712,7 @@ void EngineControl_A330X::updateFuel(double deltaTimeSeconds) {
     simData.fuelFeedTankDataPtr->data().fuelSystemRightInner   = fuelRightInnerPre / weightLbsPerGallon;
     simData.fuelFeedTankDataPtr->writeDataToSim();
 
-    simData.fuelTankDataPtr->data().fuelSystemCenter  = fuelCenterPre / weightLbsPerGallon; 
+    simData.fuelTankDataPtr->data().fuelSystemCenter  = fuelCenterPre / weightLbsPerGallon;
     simData.fuelTankDataPtr->data().fuelSystemLeftOuter  = fuelLeftOuterPre / weightLbsPerGallon;
     simData.fuelTankDataPtr->data().fuelSystemRightOuter = fuelRightOuterPre / weightLbsPerGallon;
     // simData.fuelTankDataPtr->data().fuelSystemTrim       = fuelTrimPre / weightLbsPerGallon; // TODO: ADD TRIM
@@ -724,11 +735,35 @@ void EngineControl_A330X::updateFuel(double deltaTimeSeconds) {
       fuelRightOuterPre = rightOuterQty;  // in Pounds
       // fuelTrimPre       = trimQty;        // in Pounds // TODO: ADD TRIM
     }
+    //-----------------------------------------------------------
+    // Cross-feed Logic
+    // isTankClosed = 0, x-feed valve closed
+    // isTankClosed = 1, left tank does not supply fuel
+    // isTankClosed = 2, right tank does not supply fuel
+    // isTankClosed = 3, left & right tanks do not supply fuel
+    // isTankClosed = 4, both tanks supply fuel
+    if (xFeedValve > 0.0) {
+      if (leftPump1 == 0 && leftPump2 == 0 && rightPump1 == 0 && rightPump2 == 0)
+        isTankClosed = 3;
+      else if (leftPump1 == 0 && leftPump2 == 0)
+        isTankClosed = 1;
+      else if (rightPump1 == 0 && rightPump2 == 0)
+        isTankClosed = 2;
+      else
+        isTankClosed = 4;
+    }
+
+    double xfrCenterToLeft  = 0;
+    double xfrCenterToRight = 0;
+    double xfrAuxLeft       = 0;
+    double xfrAuxRight      = 0;
 
     double fuelFlowRateChange   = 0;  // was m in the original code
     double previousFuelFlowRate = 0;  // was b in the original code
     double fuelBurn1            = 0;  // in kg
     double fuelBurn2            = 0;  // in kg
+    double apuBurn1             = 0;
+    double apuBurn2             = 0;
 
     double fuelUsedEngine1 = simData.engineFuelUsed[E1]->get();
     double fuelUsedEngine2 = simData.engineFuelUsed[E2]->get();
@@ -750,6 +785,19 @@ void EngineControl_A330X::updateFuel(double deltaTimeSeconds) {
           previousFuelFlowRate = *enginePreFF[i];
           *fuelBurn[i]         = (fuelFlowRateChange * std::pow(deltaTimeHours, 2) / 2) + (previousFuelFlowRate * deltaTimeHours);  // KG
         }
+
+        if (i == 0) {
+          // Fuel transfer routine for Left Wing
+          if (xfrValveOuterLeft1 > 0.0 || xfrValveOuterLeft2 > 0.0) {
+            xfrAuxLeft = fuelLeftOuterPre - leftOuterQty;
+          }
+        } else if (i == 1) {
+          // Fuel transfer routine for Left Wing
+          if (xfrValveOuterRight1 > 0.0 || xfrValveOuterRight2 > 0.0) {
+            xfrAuxRight = fuelRightOuterPre - rightOuterQty;
+          }
+        }
+
         // Fuel Used Accumulators
         *fuelUsedEngine[i] += *fuelBurn[i];
       } else {
@@ -758,8 +806,64 @@ void EngineControl_A330X::updateFuel(double deltaTimeSeconds) {
       }
     }
 
-    const double fuelLeftInner   = std::max(leftInnerQty - (fuelBurn1 * Fadec::KGS_TO_LBS), 0.0);    // Pounds
-    const double fuelRightInner   = std::max(rightInnerQty - (fuelBurn2 * Fadec::KGS_TO_LBS), 0.0);    // Pounds
+      /// apu fuel consumption for this frame in pounds
+    double apuFuelConsumption = simData.simVarsDataPtr->data().apuFuelConsumption * weightLbsPerGallon * deltaTimeHours;
+
+    // check if APU is actually running instead of just the ASU which doesn't consume fuel
+    if (apuNpercent <= 0.0) {
+      apuFuelConsumption = 0.0;
+    }
+
+    apuBurn1 = apuFuelConsumption;
+    apuBurn2 = 0;
+
+    //--------------------------------------------
+    // Cross-feed fuel burn routine
+    // If fuel pumps for a given tank are closed,
+    // all fuel will be burnt on the other tank
+    switch (isTankClosed) {
+      case 1:
+        fuelBurn2 = fuelBurn1 + fuelBurn2;
+        fuelBurn1 = 0;
+        apuBurn1  = 0;
+        apuBurn2  = apuFuelConsumption;
+        break;
+      case 2:
+        fuelBurn1 = fuelBurn1 + fuelBurn2;
+        fuelBurn2 = 0;
+        break;
+      case 3:
+        fuelBurn1 = 0;
+        fuelBurn2 = 0;
+        apuBurn1  = apuFuelConsumption * 0.5;
+        apuBurn2  = apuFuelConsumption * 0.5;
+        break;
+      case 4:
+        apuBurn1 = apuFuelConsumption * 0.5;
+        apuBurn2 = apuFuelConsumption * 0.5;
+        break;
+      default:
+        break;
+    }
+
+    //--------------------------------------------
+    // Center Tank transfer routine
+    double lineFlowRatio = 0;
+    if (xfrValveCenterLeftOpen && xfrValveCenterRightOpen) {
+      if (lineLeftToCenterFlow < 0.1 && lineRightToCenterFlow < 0.1)
+        lineFlowRatio = 0.5;
+      else
+        lineFlowRatio = lineLeftToCenterFlow / (lineLeftToCenterFlow + lineRightToCenterFlow);
+
+      xfrCenterToLeft  = (fuelCenterPre - centerQty) * lineFlowRatio;
+      xfrCenterToRight = (fuelCenterPre - centerQty) * (1 - lineFlowRatio);
+    } else if (xfrValveCenterLeftOpen)
+      xfrCenterToLeft = fuelCenterPre - centerQty;
+    else if (xfrValveCenterRightOpen)
+      xfrCenterToRight = fuelCenterPre - centerQty;
+
+    const double fuelLeftInner   = std::max(leftInnerQty - (fuelBurn1 * Fadec::KGS_TO_LBS) + xfrAuxLeft + xfrCenterToLeft - apuBurn1, 0.0);    // Pounds
+    const double fuelRightInner   = std::max(rightInnerQty - (fuelBurn2 * Fadec::KGS_TO_LBS) + xfrAuxRight + xfrCenterToRight - apuBurn2, 0.0);    // Pounds
 
     // Setting new pre-cycle conditions
     simData.enginePreFF[E1]->set(engine1FF);

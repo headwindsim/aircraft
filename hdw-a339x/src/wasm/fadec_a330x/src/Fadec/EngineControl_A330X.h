@@ -43,6 +43,10 @@ class EngineControl_A330X {
   FLOAT64                 lastFuelSaveTime   = 0;
   static constexpr double FUEL_SAVE_INTERVAL = 5.0;  // seconds
 
+  // some pump timings - unclear why these are needed
+  double pumpStateLeftTimeStamp = 0.0;
+  double pumpStateRightTimeStamp = 0.0;
+
   // thrust limits transition for flex
   bool                    isTransitionActive   = false;
   static constexpr double TRANSITION_WAIT_TIME = 10;
@@ -50,6 +54,8 @@ class EngineControl_A330X {
   // values that need previous state
   double prevFlexTemperature = 0.0;
   double prevThrustLimitType = 0.0;
+  double prevEngineMasterPos[2]  = {0, 0};
+  bool   prevEngineStarterState[2] = {false, false};
 
   // FLX->CLB thrust limit transition
   bool   wasFlexActive;
@@ -149,6 +155,9 @@ class EngineControl_A330X {
    * @param engine The engine number (1-2).
    * @param engineIgniter The status of the engine igniter (enum 0=Crank, 1=Norm, 2=Ign).
    * @param engineStarter The status of the engine starter as bool.
+   * @param engineStarterTurnedOff The status of the engine starter being turned off.
+   * @param engineMasterTurnedOn The status of the engine master switch being turned on.
+   * @param engineMasterTurnedOff The status of the engine master switch being turned off.
    * @param simN3 The current N2 value from the simulator used as N3 for the A330X in percent.
    * @param idleN3 The idle N3 value in percent.
    * @param ambientTemperature The current ambient temperature in degrees Celsius.
@@ -158,6 +167,9 @@ class EngineControl_A330X {
   EngineControl_A330X::EngineState engineStateMachine(int    engine,
                                                       int    engineIgniter,
                                                       bool   engineStarter,
+                                                      bool   engineStarterTurnedOff,
+                                                      bool   engineMasterTurnedOn,
+                                                      bool   engineMasterTurnedOff,
                                                       double simN3,
                                                       double idleN3,
                                                       double ambientTemperature);

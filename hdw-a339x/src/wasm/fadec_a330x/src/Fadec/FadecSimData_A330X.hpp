@@ -125,6 +125,17 @@ class FadecSimData_A330X {
     FLOAT64 simEngineN1[2];          // in Percent
     FLOAT64 simEngineN2[2];          // in Percent
     FLOAT64 simEngineThrust[2];      // in Pounds
+    FLOAT64 engineFuelValveOpen[2];    // Number
+    FLOAT64 apuFuelConsumption;        // Gallons per hour
+    FLOAT64 lineToCenterFlow[2];       // Gallons per hour
+    FLOAT64 fuelPump1[2];              // Number
+    FLOAT64 fuelPump2[2];              // Number
+    FLOAT64 xFeedValve;                // Number
+    FLOAT64 xfrCenterManual[2];        // Number
+    FLOAT64 xfrValveCenterAuto[2];     // Number
+    FLOAT64 xfrValveCenterOpen[2];     // Number
+    FLOAT64 xfrValveOuter1[2];         // Number
+    FLOAT64 xfrValveOuter2[2];         // Number
   };
   DataDefinitionVector simVarsDataDef = {
       {"ANIMATION DELTA TIME",         0, UNITS.Seconds  }, //
@@ -145,6 +156,26 @@ class FadecSimData_A330X {
       {"TURB ENG N2",                  2, UNITS.Percent  }, //
       {"TURB ENG JET THRUST",          1, UNITS.Pounds   }, //
       {"TURB ENG JET THRUST",          2, UNITS.Pounds   }, //
+      {"FUELSYSTEM VALVE OPEN",        1,  UNITS.Number   }, // engineFuelValveOpen[0]
+      {"FUELSYSTEM VALVE OPEN",        2,  UNITS.Number   }, // engineFuelValveOpen[1]
+      {"FUELSYSTEM LINE FUEL FLOW",    18, UNITS.Gph      }, // apuFuelConsumption
+      {"FUELSYSTEM LINE FUEL FLOW",    27, UNITS.Gph      }, // lineToCenterFlow[0]
+      {"FUELSYSTEM LINE FUEL FLOW",    28, UNITS.Gph      }, // lineToCenterFlow[1]
+      {"FUELSYSTEM PUMP ACTIVE",       2,  UNITS.Number   }, // fuelPump1[0]
+      {"FUELSYSTEM PUMP ACTIVE",       3,  UNITS.Number   }, // fuelPump1[1]
+      {"FUELSYSTEM PUMP ACTIVE",       5,  UNITS.Number   }, // fuelPump2[0]
+      {"FUELSYSTEM PUMP ACTIVE",       6,  UNITS.Number   }, // fuelPump2[1]
+      {"FUELSYSTEM VALVE OPEN",        3,  UNITS.Number   }, // xFeedValve
+      {"FUELSYSTEM JUNCTION SETTING",  4,  UNITS.Number   }, // xfrCenterManual[0]
+      {"FUELSYSTEM JUNCTION SETTING",  5,  UNITS.Number   }, // xfrCenterManual[1]
+      {"FUELSYSTEM VALVE OPEN",        11, UNITS.Number   }, // xfrValveCenterAuto[0]
+      {"FUELSYSTEM VALVE OPEN",        12, UNITS.Number   }, // xfrValveCenterAuto[1]
+      {"FUELSYSTEM VALVE OPEN",        9,  UNITS.Number   }, // xfrValveCenterOpen[0]
+      {"FUELSYSTEM VALVE OPEN",        10, UNITS.Number   }, // xfrValveCenterOpen[1]
+      {"FUELSYSTEM VALVE OPEN",        6,  UNITS.Number   }, // xfrValveOuter1[0]
+      {"FUELSYSTEM VALVE OPEN",        7,  UNITS.Number   }, // xfrValveOuter1[1]
+      {"FUELSYSTEM VALVE OPEN",        4,  UNITS.Number   }, // xfrValveOuter2[0]
+      {"FUELSYSTEM VALVE OPEN",        5,  UNITS.Number   }, // xfrValveOuter2[1]
   };
   DataDefinitionVariablePtr<SimVarsData> simVarsDataPtr;
 
@@ -179,6 +210,7 @@ class FadecSimData_A330X {
   NamedVariablePtr engineOilTotal[2];
   NamedVariablePtr engineOil[2];
   NamedVariablePtr enginePreFF[2];  // kg/hour
+  NamedVariablePtr engineStarterPressurized[2];
   NamedVariablePtr engineState[2];
   NamedVariablePtr engineTimer[2];
   NamedVariablePtr fuelCenterPre;   // Pounds
@@ -312,6 +344,9 @@ class FadecSimData_A330X {
 
     engineTimer[E1] = dm->make_named_var("A32NX_ENGINE_TIMER:1", UNITS.Number, AUTO_READ_WRITE);
     engineTimer[E2] = dm->make_named_var("A32NX_ENGINE_TIMER:2", UNITS.Number, AUTO_READ_WRITE);
+
+    engineStarterPressurized[E1] = dm->make_named_var("A32NX_PNEU_ENG_1_STARTER_PRESSURIZED", UNITS.Number, AUTO_READ);
+    engineStarterPressurized[E2] = dm->make_named_var("A32NX_PNEU_ENG_2_STARTER_PRESSURIZED", UNITS.Number, AUTO_READ);
 
     fuelLeftOuterPre  = dm->make_named_var("A32NX_FUEL_LEFTOUTER_PRE", UNITS.Number, AUTO_READ_WRITE);
     fuelLeftInnerPre  = dm->make_named_var("A32NX_FUEL_LEFTINNER_PRE", UNITS.Number, AUTO_READ_WRITE);
