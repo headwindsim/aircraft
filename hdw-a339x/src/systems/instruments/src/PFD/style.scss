@@ -208,6 +208,11 @@ text.Amber {
   stroke: none;
 }
 
+.DimmedAmber.Fill {
+  fill: scale-color($display-amber, $lightness: -30%);
+  stroke: none;
+}
+
 .Yellow {
   stroke: $display-yellow;
   fill: none;
