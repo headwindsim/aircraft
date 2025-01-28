@@ -1412,7 +1412,7 @@ void PitchNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_nz_
         rtb_Switch_f = PitchNormalLaw_rtP.Constant_Value_p;
       }
 
-      if ((*rtu_In_H_radio_ft <= 30.0) || (rtb_Switch_f == 1.0)) {
+      if ((*rtu_In_H_radio_ft <= 50.0) || (rtb_Switch_f == 1.0)) {
         PitchNormalLaw_DWork.is_c2_PitchNormalLaw = PitchNormalLaw_IN_Flare_Active_Reduce;
         rtb_in_flare = 1;
         PitchNormalLaw_B.flare_Theta_c_deg = -2.0;
@@ -1481,7 +1481,7 @@ void PitchNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_nz_
     PitchNormalLaw_DWork.is_c9_PitchNormalLaw = PitchNormalLaw_IN_running;
     rtb_eta_trim_deg_should_freeze = false;
   } else if (PitchNormalLaw_DWork.is_c9_PitchNormalLaw == PitchNormalLaw_IN_frozen) {
-    if ((rtb_in_flare == 0) && (*rtu_In_nz_g < 1.25) && (*rtu_In_nz_g > 0.5) && (std::abs(*rtu_In_Phi_deg) <= 30.0)) {
+    if ((rtb_in_flare == 0) && (*rtu_In_nz_g < 1.25) && (*rtu_In_nz_g > 0.5) && (std::abs(*rtu_In_Phi_deg) <= 50.0)) {
       PitchNormalLaw_DWork.is_c9_PitchNormalLaw = PitchNormalLaw_IN_running;
       rtb_eta_trim_deg_should_freeze = false;
     } else {
@@ -1546,8 +1546,8 @@ void PitchNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_nz_
   if (PitchNormalLaw_DWork.is_active_c7_PitchNormalLaw == 0) {
     PitchNormalLaw_DWork.is_active_c7_PitchNormalLaw = 1U;
     PitchNormalLaw_DWork.is_c7_PitchNormalLaw = PitchNormalLaw_IN_ground;
-    rtb_Gain1 = 0.7;
-    rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.7;
+    rtb_Gain1 = 0.5;
+    rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.5;
     rtb_nz_limit_up_g = 2.0;
     rtb_nz_limit_lo_g = 0.0;
   } else {
@@ -1555,19 +1555,19 @@ void PitchNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_nz_
      case PitchNormalLaw_IN_flight_clean:
       if (*rtu_In_flaps_handle_index != 0.0) {
         PitchNormalLaw_DWork.is_c7_PitchNormalLaw = PitchNormalLaw_IN_flight_flaps;
-        rtb_Gain1 = 0.7;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.7;
+        rtb_Gain1 = 0.5;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.5;
         rtb_nz_limit_up_g = 2.0;
         rtb_nz_limit_lo_g = 0.0;
       } else if (*rtu_In_in_flight == 0.0) {
         PitchNormalLaw_DWork.is_c7_PitchNormalLaw = PitchNormalLaw_IN_ground;
-        rtb_Gain1 = 0.7;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.7;
+        rtb_Gain1 = 0.5;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.5;
         rtb_nz_limit_up_g = 2.0;
         rtb_nz_limit_lo_g = 0.0;
       } else {
-        rtb_Gain1 = 0.3;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.3;
+        rtb_Gain1 = 0.225;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.225;
         rtb_nz_limit_up_g = 2.5;
         rtb_nz_limit_lo_g = -1.0;
       }
@@ -1576,19 +1576,19 @@ void PitchNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_nz_
      case PitchNormalLaw_IN_flight_flaps:
       if (*rtu_In_flaps_handle_index == 0.0) {
         PitchNormalLaw_DWork.is_c7_PitchNormalLaw = PitchNormalLaw_IN_flight_clean;
-        rtb_Gain1 = 0.3;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.3;
+        rtb_Gain1 = 0.225;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.225;
         rtb_nz_limit_up_g = 2.5;
         rtb_nz_limit_lo_g = -1.0;
       } else if (*rtu_In_in_flight == 0.0) {
         PitchNormalLaw_DWork.is_c7_PitchNormalLaw = PitchNormalLaw_IN_ground;
-        rtb_Gain1 = 0.7;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.7;
+        rtb_Gain1 = 0.5;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.5;
         rtb_nz_limit_up_g = 2.0;
         rtb_nz_limit_lo_g = 0.0;
       } else {
-        rtb_Gain1 = 0.7;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.7;
+        rtb_Gain1 = 0.5;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.5;
         rtb_nz_limit_up_g = 2.0;
         rtb_nz_limit_lo_g = 0.0;
       }
@@ -1597,19 +1597,19 @@ void PitchNormalLaw::step(const real_T *rtu_In_time_dt, const real_T *rtu_In_nz_
      default:
       if ((*rtu_In_in_flight != 0.0) && (*rtu_In_flaps_handle_index == 0.0)) {
         PitchNormalLaw_DWork.is_c7_PitchNormalLaw = PitchNormalLaw_IN_flight_clean;
-        rtb_Gain1 = 0.3;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.3;
+        rtb_Gain1 = 0.225;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.225;
         rtb_nz_limit_up_g = 2.5;
         rtb_nz_limit_lo_g = -1.0;
       } else if ((*rtu_In_in_flight != 0.0) && (*rtu_In_flaps_handle_index != 0.0)) {
         PitchNormalLaw_DWork.is_c7_PitchNormalLaw = PitchNormalLaw_IN_flight_flaps;
-        rtb_Gain1 = 0.7;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.7;
+        rtb_Gain1 = 0.5;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.5;
         rtb_nz_limit_up_g = 2.0;
         rtb_nz_limit_lo_g = 0.0;
       } else {
-        rtb_Gain1 = 0.7;
-        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.7;
+        rtb_Gain1 = 0.5;
+        rtb_eta_trim_deg_rate_limit_lo_deg_s = -0.5;
         rtb_nz_limit_up_g = 2.0;
         rtb_nz_limit_lo_g = 0.0;
       }
