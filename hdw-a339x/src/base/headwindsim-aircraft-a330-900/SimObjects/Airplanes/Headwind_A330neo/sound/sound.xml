@@ -8,6 +8,7 @@
         <AdditionalPackage Name="FBW_A320_NEO_1" />
         <AdditionalPackage Name="FBW_A320_NEO_2" />
 		<AdditionalPackage Name="A330_NEO_Sp"/>
+		<AdditionalPackage Name="Headwind_A330neo"/>
     </WwisePackages>
 
     <AcousticParameters>
@@ -1842,6 +1843,8 @@
 
         </Sound>
 
+
+
         <Sound WwiseData="true" WwiseEvent="identbeep" NodeName="WIPER_BASE_L" ViewPoint="Inside" LocalVar="A32NX_ACP_BEEP_IDENT_NAV1">
             <Range LowerBound="1" />
             <WwiseRTPC LocalVar="A32NX_NAV_VOLUME:1" RTPCName="LOCALVAR_ACP_VOLUME"/>
@@ -2067,7 +2070,9 @@
         <Sound WwiseData="true" WwiseEvent="improved_tone_caution" NodeName="PEDALS_LEFT" ViewPoint="Inside" LocalVar="A32NX_FWC_SC" Continuous="false">
             <Range LowerBound="0.5" />
         </Sound>
-
+        <Sound WwiseEvent="v1_callout" WwiseData="true" NodeName="Wiper_Base_l" LocalVar="A32NX_AUDIO_V1_CALLOUT" Continuous="false">
+            <Range LowerBound="1"/>
+        </Sound>
     </SimVarSounds>
 
     <!-- AvionicSounds ========================================================================================== -->
