@@ -159,7 +159,6 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-
       <SettingItem name={t('Settings.AtsuAoc.MetarSource')}>
         <SelectGroup>
           {metarSourceButtons.map((button) => (
@@ -173,7 +172,6 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-
       <SettingItem name={t('Settings.AtsuAoc.TafSource')}>
         <SelectGroup>
           {tafSourceButtons.map((button) => (

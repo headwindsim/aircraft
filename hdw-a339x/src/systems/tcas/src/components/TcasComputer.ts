@@ -294,6 +294,7 @@ export class TcasComputer implements TcasComponent {
     this.upAdvisoryStatus = new LocalSimVar('L:A32NX_TCAS_RA_UP_ADVISORY_STATUS', 'Enum');
     this.downAdvisoryStatus = new LocalSimVar('L:A32NX_TCAS_RA_DOWN_ADVISORY_STATUS', 'Enum');
     this.selectedTrafficDataSource = ({"NONE": 0, "SIM": 1, "VATSIM": 2})[NXDataStore.get("CONFIG_TRAFFIC_SOURCE", "NONE")];
+    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_SOURCE', 'number', this.selectedTrafficDataSource);
     this.airTraffic = [];
     this.raTraffic = [];
     this.sensitivity = new LocalSimVar('L:A32NX_TCAS_SENSITIVITY', 'number');
@@ -399,7 +400,7 @@ export class TcasComputer implements TcasComponent {
 
     this.selectedTrafficDataSource = SimVar.GetSimVarValue("L:A32NX_TRAFFIC_SELECTOR_SOURCE", 'number');
     if(this.selectedTrafficDataSource !== 2 && this.vatsimPilots) {
-      this.vatsimPilots = [];
+      this.vatsimPilots = null;
        for(const traffic of this.airTraffic){
         traffic.vatsimEntry = null;
       }
