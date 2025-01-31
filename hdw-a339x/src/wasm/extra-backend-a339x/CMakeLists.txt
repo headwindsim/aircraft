@@ -11,6 +11,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Pushback
     ${FBW_COMMON}/cpp-msfs-framework/
     ${FBW_COMMON}/extra-backend/
+     ${FBW_COMMON}/fbw_common/src/
 )
 
 # define the source files
@@ -18,6 +19,7 @@ set(SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Gauge_Extra_Backend.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LightingPresets/LightingPresets_A32NX.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Pushback/Pushback_A339X.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/PortFetcher/Portfetcher_A339X.cpp
     ${FBW_COMMON}/cpp-msfs-framework/Example/ExampleModule.cpp
     ${FBW_COMMON}/extra-backend/Pushback/Pushback.cpp
     ${FBW_COMMON}/extra-backend/AircraftPresets/AircraftPresets.cpp
@@ -27,6 +29,7 @@ set(SOURCE_FILES
 set(INCLUDE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/src/LightingPresets/LightingPresets_A32NX.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Pushback/Pushback_A339X.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/PortFetcher/Portfetcher_A339X.h
     ${FBW_COMMON}/cpp-msfs-framework/Example/ExampleModule.h
     ${FBW_COMMON}/cpp-msfs-framework/Example/longtext.h
     ${FBW_COMMON}/extra-backend/Pushback/Pushback.h

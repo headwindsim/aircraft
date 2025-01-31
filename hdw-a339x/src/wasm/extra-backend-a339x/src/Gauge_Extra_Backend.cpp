@@ -23,6 +23,7 @@
 #include "AircraftPresets/AircraftPresets.h"
 #include "LightingPresets/LightingPresets_A32NX.h"
 #include "Pushback/Pushback_A339X.h"
+#include "PortFetcher/Portfetcher_A339X.h"
 
 MsfsHandler msfsHandler("Gauge_Extra_Backend_A339X", "A32NX_");
 #ifdef EXAMPLES
@@ -33,6 +34,7 @@ ExampleModule exampleModule(msfsHandler);
 // This is the only place these have to be added - everything else is handled automatically
 LightingPresets_A32NX lightingPresets(msfsHandler);
 Pushback_A339X        pushback(msfsHandler);
+PortFetcher           portfetcher(msfsHandler);
 AircraftPresets       aircraftPresets(msfsHandler, "./config/a339x/a330-941/aircraft_preset_procedures.xml");
 
 /**
