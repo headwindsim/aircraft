@@ -29,6 +29,13 @@ function calculateActiveDate(dbIdent) {
     return `${effDay}${DB_MONTHS[effMonth]}-${expDay}${DB_MONTHS[expMonth]}`;
 }
 
+function calculateSecondDate(dbIdent) {
+    const [effYear, effMonth, effDay] = dbIdent.effectiveFrom.split('-');
+    const [expYear, expMonth, expDay] = dbIdent.effectiveTo.split('-');
+
+    return `${effDay}${DB_MONTHS[effMonth]}${effYear}-${expDay}${DB_MONTHS[expMonth]}${expYear}`;
+}
+
 async function switchDataBase(mcdu) {
     await mcdu.switchNavDatabase();
 }
@@ -96,23 +103,24 @@ class CDUIdentPage {
         }
 
         const dbCycle = mcdu.getNavDatabaseIdent();
-        const navCycleDates = dbCycle === null ? '' : calculateActiveDate(dbCycle);
+        const activeCycleDates = dbCycle === null ? '' : calculateActiveDate(dbCycle);
+        const secondCycleDates = dbCycle === null ? '' : calculateSecondDate(dbCycle);
         const navSerial = dbCycle === null ? '' : `${dbCycle.provider.substring(0, 2).toUpperCase()}${dbCycle.airacCycle}0001`;
 
-        // H4+ only confirm prompt
+        // H4+ only confirm prompt + year on second dates
         if (confirmDataBaseSwitch) {
             secondaryDBTopLine =
-                confirmType === ConfirmType.SwitchDataBase
-                    ? `{amber}{small}\xa0${navCycleDates}{end}`
-                    : "\xa0SECOND\xa0NAV\xa0DATA\xa0BASE";
+            confirmType === ConfirmType.SwitchDataBase
+                ? `{amber}{small}\xa0${secondCycleDates}{end}`
+                : "\xa0SECOND\xa0NAV\xa0DATA\xa0BASE";
             secondaryDBSubLine =
                 confirmType === ConfirmType.SwitchDataBase
-                    ? "{amber}{CANCEL\xa0\xa0\xa0\xa0SWAP\xa0CONFIRM*{end}"
-                    : `{small}{cyan}{${navCycleDates}{end}{end}`;
+                    ? "{amber}{CANCEL\xa0\xa0\xa0SWAP\xa0\xa0CONFIRM*{end}"
+                    : `{small}{cyan}{${secondCycleDates}{end}{end}`;
         } else {
             secondaryDBTopLine = "\xa0SECOND\xa0NAV\xa0DATA\xa0BASE";
             secondaryDBSubLine =
-                `{small}{cyan}{${navCycleDates}{end}{end}`;
+                `{small}{cyan}{${secondCycleDates}{end}{end}`;
         }
 
         mcdu.leftInputDelay[2] = () => {
@@ -146,12 +154,12 @@ class CDUIdentPage {
         };
 
         mcdu.setTemplate([
-            ["A330-941"], //This aircraft code is correct and does not include the engine type.
+            ["A330-941\xa0\xa0\xa0\xa0"], //This aircraft code is correct and does not include the engine type.
             ["\xa0ENG"],
             ["TRENT7072[color]green"],
             ["\xa0ACTIVE NAV DATA BASE"],
             [
-                `{cyan}\xa0${navCycleDates}{end}`,
+                `{cyan}\xa0${activeCycleDates}{end}`,
                 `{green}${navSerial}{end}`,
             ],
             [secondaryDBTopLine],
@@ -159,9 +167,9 @@ class CDUIdentPage {
             ["", storedTitleCell],
             ["", storedRoutesRunwaysCell],
             ["CHG CODE", storedWaypointsNavaidsCell],
-            ["{small}[  ]{end}[color]inop", storedDeleteCell],
-            ["IDLE/PERF", "SOFTWARE"],
-            ["+0.0/+0.0[color]green", "STATUS/XLOAD>[color]inop"],
+            ["[\xa0][color]inop", storedDeleteCell],
+            ["IDLE/PERF", "SOFTWARE\xa0\xa0"],
+            ["{small}{green}+0.0/+0.0{end}{end}", "STATUS/XLOAD>[color]inop"],
         ]);
     }
 }
