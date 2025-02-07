@@ -2117,12 +2117,16 @@
         <Sound WwiseData="true" WwiseEvent="cpdlc_ring" NodeName="WIPER_BASE_L" />
 
         <!-- New RA callouts ====================================================================================-->
-        <Sound WwiseData="true" WwiseEvent="new_5" NodeName="WIPER_BASE_L" />
-        <Sound WwiseData="true" WwiseEvent="new_10" NodeName="WIPER_BASE_L" />
-        <Sound WwiseData="true" WwiseEvent="new_20" NodeName="WIPER_BASE_L" />
-        <Sound WwiseData="true" WwiseEvent="new_30" NodeName="WIPER_BASE_L" />
-        <Sound WwiseData="true" WwiseEvent="new_40" NodeName="WIPER_BASE_L" />
-        <Sound WwiseData="true" WwiseEvent="new_50" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="5_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="10_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="20_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="30_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="40_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="50_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="60_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="70_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="80_330" NodeName="WIPER_BASE_L" />
+        <Sound WwiseData="true" WwiseEvent="90_330" NodeName="WIPER_BASE_L" />
         <Sound WwiseData="true" WwiseEvent="new_100" NodeName="WIPER_BASE_L" />
         <Sound WwiseData="true" WwiseEvent="new_200" NodeName="WIPER_BASE_L" />
         <Sound WwiseData="true" WwiseEvent="new_300" NodeName="WIPER_BASE_L" />
