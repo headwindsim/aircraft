@@ -143,31 +143,31 @@ export const soundList: Record<string, SoundDefinition> = {
     length: 1.047,
   },
   alt_2000: {
-    name: 'new_2000',
+    name: '2000_330',
     length: 0.72,
   },
   alt_1000: {
-    name: 'new_1000',
+    name: '1000_330',
     length: 0.9,
   },
   alt_500: {
-    name: 'new_500',
+    name: '500_330',
     length: 0.6,
   },
   alt_400: {
-    name: 'new_400',
+    name: '400_330',
     length: 0.6,
   },
   alt_300: {
-    name: 'new_300',
+    name: '300_330',
     length: 0.6,
   },
   alt_200: {
-    name: 'new_200',
+    name: '200_330',
     length: 0.6,
   },
   alt_100: {
-    name: 'new_100',
+    name: '100_330',
     length: 0.6,
   },
   alt_90: {

@@ -1081,10 +1081,50 @@ const AltCallStateMachine = {
   over100: {
     transitions: {
       down: {
-        target: 'over50',
+        target: 'over90',
       },
       up: {
         target: 'over200',
+      },
+    },
+  },
+  over90: {
+    transitions: {
+      down: {
+        target: 'over80',
+      },
+      up: {
+        target: 'over100',
+      },
+    },
+  },
+  over80: {
+    transitions: {
+      down: {
+        target: 'over70',
+      },
+      up: {
+        target: 'over90',
+      },
+    },
+  },
+  over70: {
+    transitions: {
+      down: {
+        target: 'over60',
+      },
+      up: {
+        target: 'over80',
+      },
+    },
+  },
+  over60: {
+    transitions: {
+      down: {
+        target: 'over50',
+      },
+      up: {
+        target: 'over70',
       },
     },
   },
@@ -1094,7 +1134,7 @@ const AltCallStateMachine = {
         target: 'over40',
       },
       up: {
-        target: 'over100',
+        target: 'over60',
       },
     },
   },
