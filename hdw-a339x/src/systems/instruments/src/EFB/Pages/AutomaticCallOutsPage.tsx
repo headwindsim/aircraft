@@ -9,7 +9,7 @@ import { A330X_DEFAULT_RADIO_AUTO_CALL_OUTS, A330XRadioAutoCallOutFlags } from '
 
 export const AutomaticCallOutsPage: React.FC = () => {
   const [autoCallOuts, setAutoCallOuts] = usePersistentNumberProperty(
-    'CONFIG_A32NX_FWC_RADIO_AUTO_CALL_OUT_PINS',
+    'CONFIG_A330X_FWC_RADIO_AUTO_CALL_OUT_PINS',
     A330X_DEFAULT_RADIO_AUTO_CALL_OUTS,
   );
 

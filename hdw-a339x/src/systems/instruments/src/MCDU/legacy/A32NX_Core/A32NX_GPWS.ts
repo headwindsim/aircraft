@@ -185,8 +185,8 @@ export class A32NX_GPWS {
     this.setGpwsWarning(false);
 
     NXDataStore.getAndSubscribe(
-      'CONFIG_A32NX_FWC_RADIO_AUTO_CALL_OUT_PINS',
-      (k, v) => k === 'CONFIG_A32NX_FWC_RADIO_AUTO_CALL_OUT_PINS' && (this.autoCallOutPins = Number(v)),
+      'CONFIG_A330X_FWC_RADIO_AUTO_CALL_OUT_PINS',
+      (k, v) => k === 'CONFIG_A330X_FWC_RADIO_AUTO_CALL_OUT_PINS' && (this.autoCallOutPins = Number(v)),
       A330X_DEFAULT_RADIO_AUTO_CALL_OUTS.toString(),
     );
   }

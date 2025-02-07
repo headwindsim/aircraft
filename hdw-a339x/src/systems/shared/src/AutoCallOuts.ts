@@ -1,4 +1,4 @@
-/** Bit flags for the radio auto call outs (for CONFIG_A32NX_FWC_RADIO_AUTO_CALL_OUT_PINS). */
+/** Bit flags for the radio auto call outs (for CONFIG_A330X_FWC_RADIO_AUTO_CALL_OUT_PINS). */
 export enum A330XRadioAutoCallOutFlags {
   TwoThousandFiveHundred = 1 << 0,
   TwentyFiveHundred = 1 << 1,

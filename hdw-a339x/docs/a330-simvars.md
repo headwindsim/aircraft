@@ -1265,7 +1265,7 @@
     - Persistent
     - Enables developer-specific options like direct payload adjustments
 
-- A32NX_FWC_RADIO_AUTO_CALL_OUT_PINS
+- A330X_FWC_RADIO_AUTO_CALL_OUT_PINS
     - Flags
     - Radio altitude automatic call out pin programs
     - | Bit   | Meaning                   |
@@ -1279,12 +1279,16 @@
       | 6     | Three Hundred             |
       | 7     | Two Hundred               |
       | 8     | One Hundred               |
-      | 9     | Fifty                     |
-      | 10    | Forty                     |
-      | 11    | Thirty                    |
-      | 12    | Twenty                    |
-      | 13    | Ten                       |
-      | 14    | Five                      |
+      | 9     | Ninety                    |
+      | 10    | Eighty                    |
+      | 11    | Seventy                   |
+      | 12    | Sixty                     |
+      | 13    | Fifty                     |
+      | 14    | Forty                     |
+      | 15    | Thirty                    |
+      | 16    | Twenty                    |
+      | 17    | Ten                       |
+      | 18    | Five                      |
 
 - A32NX_LANDING_{ID}_POSITION
     - Percent
