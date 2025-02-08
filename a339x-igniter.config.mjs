@@ -33,25 +33,6 @@ export default new TaskOfTasks("all", [
                         "build-a339x/src/behavior",
                         "build-a339x/out/headwindsim-aircraft-a330-900/ModelBehaviorDefs/A339X/generated"
                     ]),
-                new TaskOfTasks('atsu', [
-                    new ExecTask(
-                        'common',
-                        'npm run build-a339x:atsu-common',
-                        [
-                            'build-a339x/src/systems/atsu/common',
-                            'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X/atsu/common.js'
-                        ]
-                    ),
-                    new ExecTask(
-                        'fmsclient',
-                        'npm run build-a339x:atsu-fms-client',
-                        [
-                            'build-a339x/src/systems/atsu/common',
-                            'build-a339x/src/systems/atsu/fmsclient',
-                            'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/JS/A339X/atsu/fmsclient.js'
-                        ]
-                    ),
-                ]),
                 new ExecTask(
                     'extras-host',
                     'npm run build-a339x:extras-host',
@@ -61,30 +42,6 @@ export default new TaskOfTasks("all", [
                         'build-common/src/systems/shared/src/extras',
                     ]
                 ),
-                new ExecTask("failures",
-                    "npm run build-a339x:failures",
-                    [
-                        "build-a339x/src/systems/failures",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/failures/failures.js"
-                    ]),
-                new ExecTask("fmgc",
-                    "npm run build-a339x:fmgc",
-                    [
-                        "build-a339x/src/systems/fmgc",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/fmgc"
-                    ]),
-                new ExecTask("sentry-client",
-                    "npm run build-a339x:sentry-client",
-                    [
-                        "build-a339x/src/systems/sentry-client",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/sentry-client"
-                    ]),
-                new ExecTask("simbridge-client",
-                    "npm run build-a339x:simbridge-client",
-                    [
-                        "build-a339x/src/systems/simbridge-client",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/simbridge-client"
-                    ]),
                 new ExecTask(
                     'systems-host',
                     'npm run build-a339x:systems-host',
@@ -94,13 +51,6 @@ export default new TaskOfTasks("all", [
                         'build-a339x/out/headwindsim-aircraft-a330-900/html_ui/Pages/VCockpit/Instruments/A339X/SystemsHost'
                     ]
                 ),
-                new ExecTask("tcas",
-                    "npm run build-a339x:tcas",
-                    [
-                        "build-a339x/src/systems/tcas",
-                        "build-a339x/out/headwindsim-aircraft-a330-900/html_ui/A339X_JS/tcas"
-                    ]),
-
                 new TaskOfTasks("instruments", getInstrumentsIgniterTasks(), true),
             ], true),
 
