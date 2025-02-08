@@ -86,8 +86,8 @@ export const AtsuAocPage = () => {
 
   let trafficSourceButtons: ButtonType[] = [
     { name: 'None', setting: 'NONE' },
-    { name: 'Sim', setting: 'SIM' },
-    { name: 'Vatsim', setting: 'VATSIM' },
+    { name: 'MSFS', setting: 'SIM' },
+    { name: 'VATSIM', setting: 'VATSIM' },
   ];
   if (!isMsfs2024()) {
     tafSourceButtons = tafSourceButtons.slice(1);
@@ -185,7 +185,7 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-      <SettingItem name={t('Settings.AtsuAoc.TrafficSource')}>
+      <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficSource')}>
         <SelectGroup>
           {trafficSourceButtons.map((button) => (
             <SelectItem
