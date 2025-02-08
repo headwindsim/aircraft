@@ -320,18 +320,27 @@ export class TcasComputer implements TcasComponent {
   const port = SimVar.GetSimVarValue('L:A32NX_A339X_TRAFFIC_PORT', 'number');
   if(port === 0)
     return;
+    (async() => {
      for(const traffic of this.airTraffic){
         if(!traffic.alive)
           continue;
-        fetchPilotInfo(traffic.ID, port).then(resp => {
-          const data = resp.data;
-          if(this.selectedTrafficDataSource === 1 || !data.vatsim) {
-            traffic.setVatsimData({callsign: data.atcId, groundspeed: data.groundSpeed, aircraft_faa: data.type, tranponder: `${data.transponder}`});
-          } else {
-            traffic.setVatsimData({callsign: data.vatsim.callsign, groundspeed: data.vatsim.groundspeed, aircraft_faa: data.vatsim.flight_plan ? data.vatsim.flight_plan.aircraft_short : null, transponder: data.vatsim.transponder});
-          }
-        });
+        try {
+            const resp = await fetchPilotInfo(traffic.ID, port);
+    
+            const data = resp.data;
+            if(this.selectedTrafficDataSource === 1 || !data.vatsim) {
+              traffic.setVatsimData({callsign: data.atcId, groundspeed: data.groundSpeed, aircraft_faa: data.type, tranponder: `${data.transponder}`});
+            } else {
+              traffic.setVatsimData({callsign: data.vatsim.callsign, groundspeed: data.vatsim.groundspeed, aircraft_faa: data.vatsim.flight_plan ? data.vatsim.flight_plan.aircraft_short : null, transponder: data.vatsim.transponder});
+            }
+  
+        } catch {
+          
+        }
      }
+       this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 5);
+
+   })();
 
     //   fetchVatsimPilots().then(response => {
     //     const pilots = response.data.pilots;
@@ -366,7 +375,6 @@ export class TcasComputer implements TcasComponent {
     //   this.vatsimPilots = [];
     // });
 
-  this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 5);
   }
   /**
    * Read from SimVars
