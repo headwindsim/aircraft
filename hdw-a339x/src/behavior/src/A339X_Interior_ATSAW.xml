@@ -1,0 +1,48 @@
+<!-- Copyright (c) 2025 Headwind Simulations -->
+<!-- SPDX-License-Identifier: GPL-3.0 -->
+
+<ModelBehaviors>
+    <Template Name="HDW_Airbus_ATSAW_TrafficSelector_Knob">
+        <DefaultTemplateParameters>
+            <ID>1</ID>
+        </DefaultTemplateParameters>
+
+        <UseTemplate Name="ASOBO_GT_Helper_Suffix_ID_Appender">
+            <TEMPLATE_TO_CALL>HDW_Airbus_ATSAW_TrafficSelector_Knob_SubTemplate</TEMPLATE_TO_CALL>
+        </UseTemplate>
+    </Template>
+
+    <Template Name="HDW_Airbus_ATSAW_TrafficSelector_Knob_SubTemplate">
+        <DefaultTemplateParameters>
+            <ANIM_NAME>AUTOPILOT_Knob_Altitude#SUFFIX_ID#</ANIM_NAME>
+            <ANIM_NAME_PUSHPULL>AUTOPILOT_Knob_Altitude_PushPull#SUFFIX_ID#</ANIM_NAME_PUSHPULL>
+            <HELPID>HELPID_AUTOPILOT_ALTITUDE_INDICATOR</HELPID>
+            <ID>1</ID>
+            <NODE_ID>AUTOPILOT_Knob_Altitude#SUFFIX_ID#</NODE_ID>
+            <PART_ID>AUTOPILOT_Knob_Altitude</PART_ID>
+        </DefaultTemplateParameters>
+
+        <Component ID="#NODE_ID#" Node="#NODE_ID#">
+            <UseTemplate Name="ASOBO_GT_Knob_Infinite_PushPull">
+                <ANTICLOCKWISE_CODE>
+                    (&gt;H:A330_Neo_ATSAW_TRAFFIC_DEC)
+                </ANTICLOCKWISE_CODE>
+                <CLOCKWISE_CODE>
+                    (&gt;H:A330_Neo_ATSAW_TRAFFIC_INC)
+                </CLOCKWISE_CODE>
+                <PULL_CODE>
+                    (&gt;H:A330_Neo_ATSAW_TRAFFIC_PULL)
+                </PULL_CODE>
+                <PUSH_CODE>
+                    (&gt;H:A330_Neo_ATSAW_TRAFFIC_PUSH)
+                </PUSH_CODE>
+
+                <CENTER_RADIUS>0</CENTER_RADIUS>
+                <COUNT>36</COUNT>
+                <WWISE_EVENT>QNHknob</WWISE_EVENT>
+                <WWISE_EVENT_1>QNHknob</WWISE_EVENT_1>
+                <WWISE_EVENT_2>QNHknob</WWISE_EVENT_2>
+            </UseTemplate>
+        </Component>
+    </Template>
+</ModelBehaviors>
