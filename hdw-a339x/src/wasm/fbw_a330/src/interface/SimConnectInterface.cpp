@@ -2975,13 +2975,13 @@ void SimConnectInterface::processEvent(const DWORD eventId, const DWORD data0, c
       break;
     }
 
-    case Events::A339X_ATSAW_TRAFFIC_PUSH:
+    case Events::A339X_ATSAW_TRAFFIC_PUSH: {
     execute_calculator_code("(>H:A330_Neo_ATSAW_TRAFFIC_PUSH)", nullptr, nullptr, nullptr);
       std::cout << "WASM: event triggered: A339X_ATSAW_TRAFFIC_PUSH" << std::endl;
       break;
     }
 
-    case Events::A339X_ATSAW_TRAFFIC_PULL:
+    case Events::A339X_ATSAW_TRAFFIC_PULL: {
     execute_calculator_code("(>H:A330_Neo_ATSAW_TRAFFIC_PULL)", nullptr, nullptr, nullptr);
       std::cout << "WASM: event triggered: A339X_ATSAW_TRAFFIC_PULL" << std::endl;
       break;
