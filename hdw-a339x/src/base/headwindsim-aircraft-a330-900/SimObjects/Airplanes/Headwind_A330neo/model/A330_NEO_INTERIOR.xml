@@ -5730,6 +5730,12 @@
                 </UseTemplate>
             </Component>
             <Component ID="SUNSHADE_CAPT" Node="RUBBERDUCK">
+                <UseTemplate Name="ASOBO_GT_Switch_Code">
+                    <NODE_ID>RUBBERDUCK</NODE_ID>
+                    <LEFT_SINGLE_CODE>
+                        (L:A339X_RUBBERDUCK_SOUND, bool) ! (&gt;L:A339X_RUBBERDUCK_SOUND, bool)
+                    </LEFT_SINGLE_CODE>
+                </UseTemplate>
                 <UseTemplate Name="ASOBO_GT_Visibility_Code">
                     <VISIBILITY_CODE>(L:A339X_RUBBERDUCK, Bool)</VISIBILITY_CODE>
                 </UseTemplate>

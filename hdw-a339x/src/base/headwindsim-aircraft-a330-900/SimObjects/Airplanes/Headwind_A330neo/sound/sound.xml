@@ -2073,6 +2073,11 @@
         <Sound WwiseEvent="v1_callout" WwiseData="true" NodeName="Wiper_Base_l" LocalVar="A32NX_AUDIO_V1_CALLOUT" Continuous="false">
             <Range LowerBound="1"/>
         </Sound>
+
+        <!-- MISC -->
+        <Sound WwiseEvent="rubber_duck" WwiseData="true" NodeName="RUBBERDUCK" LocalVar="A339X_RUBBERDUCK_SOUND" Continuous="false">
+            <Range LowerBound="1"/>
+        </Sound>
     </SimVarSounds>
 
     <!-- AvionicSounds ========================================================================================== -->
@@ -2165,7 +2170,6 @@
         <Sound WwiseData="true" WwiseEvent="keep_max_reverse" NodeName="WIPER_BASE_L" />
         <Sound WwiseData="true" WwiseEvent="runway_too_short" NodeName="WIPER_BASE_L" />
         <Sound WwiseData="true" WwiseEvent="set_max_reverse" NodeName="WIPER_BASE_L" />
-
     </AvionicSounds>
 
     <!-- AnimationSounds ========================================================================================== -->
@@ -2345,7 +2349,6 @@
         <!-- Exterior ========================================================================================== -->
         <Sound WwiseData="true" WwiseEvent="wipers_forward" NodeName="WIPER_BASE_L"/>
         <Sound WwiseData="true" WwiseEvent="wipers_backward" NodeName="WIPER_BASE_L"/>
-
     </AnimationSounds>
 
 </SoundInfo>
