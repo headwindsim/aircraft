@@ -331,14 +331,14 @@ export class TcasComputer implements TcasComponent {
             if(this.selectedTrafficDataSource === 1 || !data.vatsim) {
               traffic.setVatsimData({callsign: data.atcId, groundspeed: data.groundSpeed, aircraft_faa: data.type, tranponder: `${data.transponder}`});
             } else {
-              traffic.setVatsimData({callsign: data.vatsim.callsign, groundspeed: data.vatsim.groundspeed, aircraft_faa: data.vatsim.flight_plan ? data.vatsim.flight_plan.aircraft_short : null, transponder: data.vatsim.transponder});
+              traffic.setVatsimData({callsign: data.vatsim.callsign, groundspeed: data.groundSpeed, aircraft_faa: data.vatsim.flight_plan ? data.vatsim.flight_plan.aircraft_faa : null, transponder: data.vatsim.transponder});
             }
   
         } catch {
-          
+
         }
      }
-       this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 5);
+       this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 20);
 
    })();
 

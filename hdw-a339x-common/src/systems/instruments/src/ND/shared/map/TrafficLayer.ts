@@ -20,6 +20,10 @@ const DiamondWidth = 12 * 2;
 
 export class TrafficLayer implements MapLayer<NdTraffic> {
   public data: NdTraffic[] = [];
+  public trafficIsSelected: bool = false;
+  public selectedTrafficId: string = "";
+  public activeTrafficId: string = "";
+
 
   constructor(private readonly canvasMap: CanvasMap) {}
 
@@ -55,10 +59,13 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
     let color;
     const ownHeading = Math.round(SimVar.GetSimVarValue('PLANE HEADING DEGREES MAGNETIC', 'degree'));
     const trafficRotation = 360 - ((ownHeading - intruder.heading) % 360);
+    const trafficActive = this.activeTrafficId === intruder.ID;
+    const isSelected = trafficActive || this.selectedTrafficId === intruder.ID;
+
     switch (intruder.intrusionLevel) {
       case TaRaIntrusion.TRAFFIC:
         // paint intruder symbol
-        color = '#fff';
+        color = trafficActive ? '#22c0b6' : '#fff';
         this.paintNormalIntruder(
           context,
           x,
@@ -69,7 +76,7 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
         );
         break;
       case TaRaIntrusion.PROXIMITY:
-        color = '#fff';
+        color = trafficActive ? '#22c0b6' : '#fff';
         this.paintProximityIntruder(
           context,
           x,
@@ -107,6 +114,14 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
     // paint vertical speed arrow (-/+ 500 fpm)
     this.paintVertArrow(intruder.vertSpeed, context, x, y, isColorLayer ? color : '#040405', isColorLayer ? 1.6 : 3.5);
 
+    if(isSelected && this.selectedTrafficId === intruder.ID){
+        context.strokeStyle = "#22c0b6";
+        context.lineWidth =  isColorLayer ? 1.6 : 3.5;
+        context.beginPath();
+        context.arc(x, y, DiamondWidth, 0, 2 * Math.PI);
+        context.stroke();
+    }
+
     // paint relative altitude
     context.font = '21px Ecam';
     PaintUtils.paintText(
@@ -118,15 +133,38 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
       color,
     );
     if(intruder.vatsimEntry) {
-      const textWidth = context.measureText(intruder.vatsimEntry.callsign);
-     PaintUtils.paintText(
-      isColorLayer,
-      context,
-      x - (24 + textWidth.width),
-      y,
-      intruder.vatsimEntry.callsign,
-      color,
-    );
+      let textWidth = context.measureText(intruder.vatsimEntry.callsign);
+       PaintUtils.paintText(
+        isColorLayer,
+        context,
+        x - (24 + textWidth.width),
+        y,
+        intruder.vatsimEntry.callsign,
+        color,
+      );
+      if(isSelected){
+        PaintUtils.paintText(
+          isColorLayer,
+          context,
+          x - (24 + textWidth.width),
+          y + 21 ,
+          `${intruder.vatsimEntry.groundspeed}`,
+          color,
+        );
+        const t = intruder.vatsimEntry.aircraft_faa;
+        const cat = t && t.length > 1 && t[1] === "/" ? t[0] : "M";
+
+        textWidth = context.measureText(cat);
+        PaintUtils.paintText(
+          isColorLayer,
+          context,
+          x - (24 + textWidth.width),
+          y + 21,
+          cat,
+          color,
+        );
+          
+      }
     }
   }
 
