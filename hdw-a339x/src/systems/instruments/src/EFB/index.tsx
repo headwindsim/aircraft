@@ -61,6 +61,7 @@ render(
           registrationDecal: false,
           wheelChocks: true,
           cabinLighting: false,
+          oansPerformanceMode: false,
         },
         throttle: {
           numberOfAircraftThrottles: 2,
