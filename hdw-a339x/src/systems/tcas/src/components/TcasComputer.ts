@@ -320,7 +320,7 @@ export class TcasComputer implements TcasComponent {
       this.vatsimDataThrottler = null;
       return;
     }
-    const port = SimVar.GetSimVarValue('L:A32NX_A339X_TRAFFIC_PORT', 'number');
+    const port = SimVar.GetSimVarValue('L:A339X_TRAFFIC_PORT', 'number');
     if (port === 0 || this.sendAirTraffic.length === 0) {
       this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 5);
       return;

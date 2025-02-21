@@ -447,6 +447,7 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
   }
 
   private handleFrame(_deltaTime: number) {
+
     const canvas = this.canvasRef.instance;
     const context = canvas.getContext('2d');
 

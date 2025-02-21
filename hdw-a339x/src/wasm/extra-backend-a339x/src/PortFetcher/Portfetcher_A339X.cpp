@@ -6,7 +6,7 @@ bool PortFetcher::initialize() {
   dataManager = &msfsHandler.getDataManager();
   portVar = dataManager->make_clientdataarea_var<uint16_t>("HDW_TRAFFIC_PORT");
   portVar->setSkipChangeCheck(true);
-  var = dataManager->make_named_var("A339X_TRAFFIC_PORT", UNITS.Number, UpdateMode::NO_AUTO_UPDATE, 0, 0);
+  var = dataManager->make_named_var("A339X_TRAFFIC_PORT", UNITS.Number, UpdateMode::NO_AUTO_UPDATE, 0, 0, true);
   portVar->addCallback([&]() {
     uint16_t port = portVar->data();
     if(port != last_value)
