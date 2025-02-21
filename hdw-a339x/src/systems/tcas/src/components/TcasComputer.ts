@@ -147,6 +147,8 @@ export class TcasTraffic {
 
   vatsimEntry?: VatsimData;
 
+  vatsimFetchCount: number;
+
   constructor(tf: JS_NPCPlane, ppos: Coordinates, alt: number) {
     this.alive = true;
     this.seen = 0;
@@ -167,9 +169,11 @@ export class TcasTraffic {
     this.raTau = Infinity;
     this.vTau = Infinity;
     this.secondsSinceLastTa = 0;
+    this.vatsimFetchCount = 0;
   }
-  setVatsimData(e){
+  setVatsimData(e, count){
     this.vatsimEntry = e;
+    this.vatsimFetchCount = count;
   }
 }
 
@@ -295,6 +299,7 @@ export class TcasComputer implements TcasComponent {
     this.downAdvisoryStatus = new LocalSimVar('L:A32NX_TCAS_RA_DOWN_ADVISORY_STATUS', 'Enum');
     this.selectedTrafficDataSource = ({"NONE": 0, "SIM": 1, "VATSIM": 2})[NXDataStore.get("CONFIG_TRAFFIC_SOURCE", "NONE")];
     SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_SOURCE', 'number', this.selectedTrafficDataSource);
+    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY', 'number', NXDataStore.get("CONFIG_TRAFFIC_DISPLAY_DEFAULT", "NO") === "YES" ? 1 : 0);
     this.airTraffic = [];
     this.raTraffic = [];
     this.sensitivity = new LocalSimVar('L:A32NX_TCAS_SENSITIVITY', 'number');
@@ -310,71 +315,67 @@ export class TcasComputer implements TcasComponent {
     this.soundManager = new TcasSoundManager();
   }
 
-  updateVatsimData(){
-    if(Number.isNaN(this.ppos.lat) || Number.isNaN(this.ppos.long))
-      return;
-    if(this.selectedTrafficDataSource === 0) {
+  updateVatsimData() {
+    if (this.selectedTrafficDataSource === 0) {
       this.vatsimDataThrottler = null;
       return;
     }
-  const port = SimVar.GetSimVarValue('L:A32NX_A339X_TRAFFIC_PORT', 'number');
-  if(port === 0)
-    return;
-    (async() => {
-     for(const traffic of this.airTraffic){
-        if(!traffic.alive)
-          continue;
-        try {
-            const resp = await fetchPilotInfo(traffic.ID, port);
-    
-            const data = resp.data;
-            if(this.selectedTrafficDataSource === 1 || !data.vatsim) {
-              traffic.setVatsimData({callsign: data.atcId, groundspeed: data.groundSpeed, aircraft_faa: data.type, tranponder: `${data.transponder}`});
-            } else {
-              traffic.setVatsimData({callsign: data.vatsim.callsign, groundspeed: data.groundSpeed, aircraft_faa: data.vatsim.flight_plan ? data.vatsim.flight_plan.aircraft_faa : null, transponder: data.vatsim.transponder});
-            }
-  
-        } catch {
-
-        }
-     }
-       this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 20);
-
-   })();
-
-    //   fetchVatsimPilots().then(response => {
-    //     const pilots = response.data.pilots;
-    //     this.vatsimPilots = [];
-    //     for(const pilot of pilots){
-    //         const diffLat = Math.abs(pilot.latitude - this.ppos.lat);
-    //         const diffLong = Math.abs(pilot.longitude  - this.ppos.long);
-    //         if (diffLat > 2 || diffLong > 2)
-    //           continue;
-    //         pilot.distance = MathUtils.computeDistance3D(pilot.latitude, pilot.longitude, pilot.altitude, this.ppos.lat, this.ppos.long, this.planeAlt);
-    //         this.vatsimPilots.push(pilot);
-    //     }
-    //     this.vatsimPilots = this.vatsimPilots.sort((a,b) => a.distance - b.distance).slice(0, TCAS.MEMORY_MAX);
-    //     for(const traffic of this.airTraffic){
-    //        for(const pilot of this.vatsimPilots) {
-    //           const distance = MathUtils.computeDistance3D(
-    //             traffic.lat,
-    //             traffic.lon,
-    //             traffic.alt,
-    //             pilot.latitude,
-    //             pilot.longitude,
-    //             pilot.altitude,
-    //           );
-    //           if(!traffic.vatsimEntry || traffic.vatsimEntry.delta > distance) {
-    //             traffic.vatsimEntry = pilot;
-    //             traffic.vatsimEntry.delta = distance;
-    //           }
-    //         }
-    //     }
-    // }).catch(err => {
-    //   console.error(err);
-    //   this.vatsimPilots = [];
-    // });
-
+    const port = SimVar.GetSimVarValue('L:A32NX_A339X_TRAFFIC_PORT', 'number');
+    if (port === 0 || this.sendAirTraffic.length === 0) {
+      this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 5);
+      return;
+    }
+    const list = this.airTraffic.filter((entry) => entry.alive && entry.isDisplayed);
+    if (list.length) {
+      Promise.all(
+        list.map(
+          (traffic) =>
+            new Promise((resolve) => {
+              const existing = traffic.vatsimEntry;
+              fetchPilotInfo(
+                traffic.ID,
+                port,
+                traffic.vatsimFetchCount < 5 && typeof existing === 'object' && existing !== null,
+              )
+                .then((resp) => {
+                  const data = resp.data;
+                  if (existing && traffic.vatsimFetchCount < 5) {
+                    traffic.setVatsimData({ ...existing, groundspeed: data.groundSpeed }, traffic.vatsimFetchCount + 1);
+                  } else {
+                    if (this.selectedTrafficDataSource === 1 || !data.vatsim) {
+                      traffic.setVatsimData({
+                        callsign: data.atcId,
+                        groundspeed: data.groundSpeed,
+                        aircraft_faa: data.type,
+                        tranponder: `${data.transponder}`,
+                      }, 0);
+                    } else {
+                      traffic.setVatsimData({
+                        callsign: data.vatsim.callsign,
+                        groundspeed: data.groundSpeed,
+                        aircraft_faa: data.vatsim.flight_plan ? data.vatsim.flight_plan.aircraft_faa : null,
+                        transponder: data.vatsim.transponder,
+                      }, 0);
+                    }
+                    
+                  }
+                  resolve(null);
+                })
+                .catch((err) => {
+                  resolve(null);
+                });
+            }),
+        ),
+      )
+        .then((_unused) => {
+          this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 5);
+        })
+        .catch((_unused) => {
+          this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 5);
+        });
+    } else {
+      this.vatsimDataThrottler = setTimeout(() => this.updateVatsimData(), 1000 * 5);
+    }
   }
   /**
    * Read from SimVars
@@ -1396,12 +1397,14 @@ export class TcasComputer implements TcasComponent {
         this.sendAirTraffic.push(new NDTcasTraffic(traffic));
       }
     });
-    this.raTraffic.forEach((tf) => {
-      const traffic: TcasTraffic | undefined = sentAirTraffic.find((p) => p && p.ID === tf.ID);
-      if (!traffic && this.debug) {
-        console.log(`ERROR: RA ${tf.ID} NOT SENT`);
-      }
+    if(this.debug){
+      this.raTraffic.forEach((tf) => {
+        const traffic: TcasTraffic | undefined = sentAirTraffic.find((p) => p && p.ID === tf.ID);
+        if (!traffic) {
+          console.log(`ERROR: RA ${tf.ID} NOT SENT`);
+        }
     });
+    }
 
     this.syncer.sendEvent('A32NX_TCAS_TRAFFIC', this.sendAirTraffic);
   }
@@ -1420,13 +1423,6 @@ export class TcasComputer implements TcasComponent {
     this.updateVars();
     this.updateInhibitions();
     this.updateStatusFaults();
-
-    // if(this.vatsimPilots) {
-    //    for(const pilot of this.vatsimPilots){
-    //       pilot.distance = MathUtils.computeDistance3D(pilot.latitude, pilot.longitude, pilot.altitude, this.ppos.lat, this.ppos.long, this.planeAlt);
-    //   }
-    //   this.vatsimPilots = this.vatsimPilots.sort((a,b) => a.distance - b.distance);
-    // }
 
     if (this.tcasMode.getVar() === TcasMode.STBY) {
       this.advisoryState = TcasState.NONE;
