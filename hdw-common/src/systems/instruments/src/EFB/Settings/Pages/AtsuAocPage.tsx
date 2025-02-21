@@ -26,6 +26,9 @@ export const AtsuAocPage = () => {
   const [hoppieUserId, setHoppieUserId] = usePersistentProperty('CONFIG_ACARS_HOPPIE_USERID');
   const [sayIntentionsKey, setSayIntentionsKey] = usePersistentProperty('CONFIG_ACARS_SAYINTENTIONS_KEY');
 
+  const [trafficSource, setTrafficSource] = usePersistentProperty('CONFIG_TRAFFIC_SOURCE', "NONE");
+  const [trafficDisplayDefault, setTrafficDisplayDefault] = usePersistentProperty('CONFIG_TRAFFIC_DISPLAY_DEFAULT', "NO");
+
   const [sentryEnabled, setSentryEnabled] = usePersistentProperty(SENTRY_CONSENT_KEY, SentryConsentState.Refused);
 
   const handleAcarsNetwork = (network: string | AcarsNetwork) => {
@@ -36,6 +39,17 @@ export const AtsuAocPage = () => {
       AcarsConnector.activate();
     }
   };
+
+  const handleTrafficSourceChange = (entry: string) => {
+    const map = {"NONE": 0, "SIM":1, "VATSIM": 2};
+    setTrafficSource(entry);
+    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_SOURCE', 'number', map[entry]);
+  }
+
+  const handleTrafficDefaultChange = (entry: string) => {
+    setTrafficDisplayDefault(entry);
+    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY', 'number', entry === "YES" ? 1 : 0);
+  }
 
   const handleAcarsIdentifierInput = (network: string | AcarsNetwork, value: string) => {
     AcarsConnector.validate(network, value)
@@ -74,6 +88,17 @@ export const AtsuAocPage = () => {
   let tafSourceButtons: ButtonType[] = [
     { name: 'MSFS', setting: 'MSFS' },
     { name: 'NOAA', setting: 'NOAA' },
+  ];
+
+  let trafficSourceButtons: ButtonType[] = [
+    { name: 'None', setting: 'NONE' },
+    { name: 'MSFS', setting: 'SIM' },
+    { name: 'VATSIM', setting: 'VATSIM' },
+  ];
+
+ let trafficDisplayButtons: ButtonType[] = [
+    { name: 'No', setting: 'NO' },
+    { name: 'Yes', setting: 'YES' },
   ];
   if (!isMsfs2024()) {
     tafSourceButtons = tafSourceButtons.slice(1);
@@ -145,7 +170,6 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-
       <SettingItem name={t('Settings.AtsuAoc.MetarSource')}>
         <SelectGroup>
           {metarSourceButtons.map((button) => (
@@ -159,7 +183,6 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-
       <SettingItem name={t('Settings.AtsuAoc.TafSource')}>
         <SelectGroup>
           {tafSourceButtons.map((button) => (
@@ -173,7 +196,32 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-
+      <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficSource')}>
+        <SelectGroup>
+          {trafficSourceButtons.map((button) => (
+            <SelectItem
+              key={button.setting}
+              onSelect={() => handleTrafficSourceChange(button.setting)}
+              selected={trafficSource === button.setting}
+            >
+              {button.name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SettingItem>
+            <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficDefault')}>
+        <SelectGroup>
+          {trafficDisplayButtons.map((button) => (
+            <SelectItem
+              key={button.setting}
+              onSelect={() => handleTrafficDefaultChange(button.setting)}
+              selected={trafficDisplayDefault === button.setting}
+            >
+              {button.name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SettingItem>
       <SettingItem name={t('Settings.AtsuAoc.ErrorReporting')}>
         <Toggle
           value={sentryEnabled === SentryConsentState.Given}

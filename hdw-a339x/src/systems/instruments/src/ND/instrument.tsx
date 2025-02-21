@@ -188,8 +188,16 @@ class NDInstrument implements FsInstrument {
   }
 
   public onInteractionEvent(args: string[]): void {
+    const trafficSelectorMap = {
+      "A330_Neo_ATSAW_TRAFFIC_DEC": ["traffic_selector_value", -1],
+      "A330_Neo_ATSAW_TRAFFIC_INC": ["traffic_selector_value", 1],
+      "A330_Neo_ATSAW_TRAFFIC_PULL": ["traffic_selector_state", true],
+      "A330_Neo_ATSAW_TRAFFIC_PUSH": ["traffic_selector_state", false],
+    }
     if (args[0].endsWith(`A32NX_EFIS_${this.efisSide}_CHRONO_PUSHED`)) {
       this.bus.getPublisher<NDControlEvents>().pub('chrono_pushed', undefined);
+    } else if (trafficSelectorMap[args[0]]) {
+         this.bus.getPublisher<NDControlEvents>().pub(trafficSelectorMap[args[0]][0], trafficSelectorMap[args[0]][1]);
     }
 
     this.hEventPublisher.dispatchHEvent(args[0]);

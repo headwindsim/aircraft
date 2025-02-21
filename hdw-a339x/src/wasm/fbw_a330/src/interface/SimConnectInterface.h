@@ -213,6 +213,11 @@ class SimConnectInterface {
     SIM_RATE_DECR,
     SIM_RATE_SET,
     SYSTEM_EVENT_PAUSE,
+    A339X_ATSAW_TRAFFIC_INC,
+    A339X_ATSAW_TRAFFIC_DEC,
+    A339X_ATSAW_TRAFFIC_SET,
+    A339X_ATSAW_TRAFFIC_PUSH,
+    A339X_ATSAW_TRAFFIC_PULL,
   };
 
   SimConnectInterface() = default;

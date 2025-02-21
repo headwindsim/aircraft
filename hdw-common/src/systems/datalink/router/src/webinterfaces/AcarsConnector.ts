@@ -171,7 +171,7 @@ export class AcarsConnector {
         break;
     }
 
-    if (text === 'error {callsign already in use}' || text.includes(station)) {
+    if (text === 'error {callsign already in use}') {
       return AtsuStatusCodes.CallsignInUse;
     }
     if (text.includes('error')) {

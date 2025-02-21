@@ -467,6 +467,12 @@ bool SimConnectInterface::prepareSimInputSimConnectDataDefinitions() {
   result &= addInputDataDefinition(hSimConnect, 0, Events::SIM_RATE_DECR, "SIM_RATE_DECR", true);
   result &= addInputDataDefinition(hSimConnect, 0, Events::SIM_RATE_SET, "SIM_RATE_SET", true);
 
+  result &= addInputDataDefinition(hSimConnect, 0, Events::A339X_ATSAW_TRAFFIC_INC, "A339X.TSAW_TRAFFIC_INC", false);
+  result &= addInputDataDefinition(hSimConnect, 0, Events::A339X_ATSAW_TRAFFIC_DEC, "A339X.TSAW_TRAFFIC_DEC", false);
+  result &= addInputDataDefinition(hSimConnect, 0, Events::A339X_ATSAW_TRAFFIC_SET, "A339X.TSAW_TRAFFIC_SET", false);
+  result &= addInputDataDefinition(hSimConnect, 0, Events::A339X_ATSAW_TRAFFIC_PUSH, "A339X.TSAW_TRAFFIC_PUSH", false);
+  result &= addInputDataDefinition(hSimConnect, 0, Events::A339X_ATSAW_TRAFFIC_PULL, "A339X.TSAW_TRAFFIC_PULL", false);
+
   return result;
 }
 
@@ -2948,6 +2954,36 @@ void SimConnectInterface::processEvent(const DWORD eventId, const DWORD data0, c
       long targetSimulationRate = std::min(static_cast<long>(maxSimulationRate), std::max(1l, static_cast<long>(data0)));
       sendEvent(SIM_RATE_SET, targetSimulationRate, SIMCONNECT_GROUP_PRIORITY_DEFAULT);
       std::cout << "WASM: Simulation Rate set to " << targetSimulationRate << std::endl;
+      break;
+    }
+
+    case Events::A339X_ATSAW_TRAFFIC_INC: {
+      execute_calculator_code("(>H:A330_Neo_ATSAW_TRAFFIC_INC)", nullptr, nullptr, nullptr);
+      std::cout << "WASM: event triggered: A339X_ATSAW_TRAFFIC_INC" << std::endl;
+      break;
+    }
+
+    case Events::A339X_ATSAW_TRAFFIC_DEC: {
+      execute_calculator_code("(>H:A330_Neo_ATSAW_TRAFFIC_DEC)", nullptr, nullptr, nullptr);
+      std::cout << "WASM: event triggered: A339X_ATSAW_TRAFFIC_DEC" << std::endl;
+      break;
+    }
+
+    case Events::A339X_ATSAW_TRAFFIC_SET: {
+      simInputAutopilot.SPD_MACH_set = static_cast<long>(data0);
+      std::cout << "WASM: event triggered: A339X_ATSAW_TRAFFIC_SET: " << static_cast<long>(data0) << std::endl;
+      break;
+    }
+
+    case Events::A339X_ATSAW_TRAFFIC_PUSH: {
+    execute_calculator_code("(>H:A330_Neo_ATSAW_TRAFFIC_PUSH)", nullptr, nullptr, nullptr);
+      std::cout << "WASM: event triggered: A339X_ATSAW_TRAFFIC_PUSH" << std::endl;
+      break;
+    }
+
+    case Events::A339X_ATSAW_TRAFFIC_PULL: {
+    execute_calculator_code("(>H:A330_Neo_ATSAW_TRAFFIC_PULL)", nullptr, nullptr, nullptr);
+      std::cout << "WASM: event triggered: A339X_ATSAW_TRAFFIC_PULL" << std::endl;
       break;
     }
 

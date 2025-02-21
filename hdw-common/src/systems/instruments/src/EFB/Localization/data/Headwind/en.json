@@ -3,6 +3,8 @@
     "Settings": {
       "AtsuAoc": {
         "AcarsNetwork": "ACARS Network",
+        "TrafficSource": "ATSAW Traffic Selector Data Source",
+        "TrafficDefault": "Display Aicraft callsigns by default",
         "OptionalA32nxErrorReporting": "Optional Headwind Simulations Error Reporting",
         "SayIntentionsKey": "SayIntentions API Key",
         "ThereWasAnErrorEncounteredWhenValidatingYourAcarsID": "There was an error validating your ACARS ID",
