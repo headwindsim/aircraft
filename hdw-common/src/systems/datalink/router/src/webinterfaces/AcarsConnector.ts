@@ -229,9 +229,6 @@ export class AcarsConnector {
     if (text.startsWith('ok') !== true) {
       return AtsuStatusCodes.ComFailed;
     }
-    if (text !== `ok {${station}}`) {
-      return AtsuStatusCodes.NoAtc;
-    }
 
     return AtsuStatusCodes.Ok;
   }
