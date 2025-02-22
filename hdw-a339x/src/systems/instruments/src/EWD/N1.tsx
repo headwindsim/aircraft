@@ -354,9 +354,9 @@ export class N1 extends DisplayComponent<N1Props> {
 
   private readonly gaugeStartAngle = Subject.create(220);
 
-  private readonly gaugeStartAngleRed = Subject.create(50);
+  private readonly gaugeStartAngleRed = Subject.create(68);
 
-  private readonly gaugeEndAngle = Subject.create(70);
+  private readonly gaugeEndAngle = Subject.create(88);
 
   private gaugeN1Limit = Subject.create(0);
 
@@ -448,7 +448,7 @@ export class N1 extends DisplayComponent<N1Props> {
               y={0}
               radius={gaugeRadius}
               startAngle={this.gaugeStartAngleRed}
-              endAngle={this.gaugeEndAngle}
+              endAngle={Subject.create(90)}
               class="GaugeComponent Gauge RedLine"
             />
             <rect x={-17} y={18} width={96} height={34} class="DarkGreyBox" />
