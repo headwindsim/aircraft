@@ -21,11 +21,9 @@ const DiamondWidth = 12 * 2;
 export class TrafficLayer implements MapLayer<NdTraffic> {
   public data: NdTraffic[] = [];
   public trafficIsSelected: boolean = false;
-  public displayCallsignDefault: boolean = false;
+  public displayHideCallsign: boolean = false;
   public selectedTrafficId: string = "";
   public activeTrafficId: string = "";
-
-
 
   constructor(private readonly canvasMap: CanvasMap) {}
 
@@ -134,27 +132,31 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
       `${intruder.relativeAlt > 0 ? '+' : '-'}${Math.abs(intruder.relativeAlt) < 10 ? '0' : ''}${Math.abs(intruder.relativeAlt)}`,
       color,
     );
-    if(intruder.vatsimEntry && (isSelected || this.displayCallsignDefault)) {
-      let textWidth = context.measureText(intruder.vatsimEntry.callsign);
-       PaintUtils.paintText(
-        isColorLayer,
-        context,
-        x - (24 + textWidth.width),
-        y,
-        intruder.vatsimEntry.callsign,
-        color,
-      );
+    if(intruder.trafficData) {
+      let textWidth = context.measureText(intruder.trafficData.callsign);
+
+      if(!this.displayHideCallsign || isSelected) {
+        PaintUtils.paintText(
+          isColorLayer,
+          context,
+          x - (24 + textWidth.width),
+          y,
+          intruder.trafficData.callsign,
+          color,
+        );
+      }
+
       if(isSelected){
         PaintUtils.paintText(
           isColorLayer,
           context,
           x - (24 + textWidth.width),
           y + 21 ,
-          `${intruder.vatsimEntry.groundspeed}`,
+          `${intruder.trafficData.groundspeed}`,
           color,
         );
-        const t = intruder.vatsimEntry.aircraft_faa;
-        const cat = t && t.length > 1 && t[1] === "/" ? t[0] : "M";
+
+        const cat = intruder.trafficData.wtc;
 
         textWidth = context.measureText(cat);
         PaintUtils.paintText(
@@ -165,7 +167,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
           cat,
           color,
         );
-          
       }
     }
   }

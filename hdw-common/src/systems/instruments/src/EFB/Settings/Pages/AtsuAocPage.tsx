@@ -27,7 +27,7 @@ export const AtsuAocPage = () => {
   const [sayIntentionsKey, setSayIntentionsKey] = usePersistentProperty('CONFIG_ACARS_SAYINTENTIONS_KEY');
 
   const [trafficSource, setTrafficSource] = usePersistentProperty('CONFIG_TRAFFIC_SOURCE', "NONE");
-  const [trafficDisplayDefault, setTrafficDisplayDefault] = usePersistentProperty('CONFIG_TRAFFIC_DISPLAY_DEFAULT', "NO");
+  const [trafficDisplayHideCallsign, setTrafficDisplayHideCallsign] = usePersistentProperty('CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN', "NO");
 
   const [sentryEnabled, setSentryEnabled] = usePersistentProperty(SENTRY_CONSENT_KEY, SentryConsentState.Refused);
 
@@ -41,14 +41,14 @@ export const AtsuAocPage = () => {
   };
 
   const handleTrafficSourceChange = (entry: string) => {
-    const map = {"NONE": 0, "SIM":1, "VATSIM": 2};
+    const map = {"NONE": 0, "SIM":1, "VATSIM": 2, "IVAO": 3};
     setTrafficSource(entry);
     SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_SOURCE', 'number', map[entry]);
   }
 
   const handleTrafficDefaultChange = (entry: string) => {
-    setTrafficDisplayDefault(entry);
-    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY', 'number', entry === "YES" ? 1 : 0);
+    setTrafficDisplayHideCallsign(entry);
+    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', entry === "YES" ? 1 : 0);
   }
 
   const handleAcarsIdentifierInput = (network: string | AcarsNetwork, value: string) => {
@@ -94,6 +94,7 @@ export const AtsuAocPage = () => {
     { name: 'None', setting: 'NONE' },
     { name: 'MSFS', setting: 'SIM' },
     { name: 'VATSIM', setting: 'VATSIM' },
+    { name: 'IVAO', setting: 'IVAO'},
   ];
 
  let trafficDisplayButtons: ButtonType[] = [
@@ -209,13 +210,13 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-            <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficDefault')}>
+            <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficHideCallsign')} unrealistic>
         <SelectGroup>
           {trafficDisplayButtons.map((button) => (
             <SelectItem
               key={button.setting}
               onSelect={() => handleTrafficDefaultChange(button.setting)}
-              selected={trafficDisplayDefault === button.setting}
+              selected={trafficDisplayHideCallsign === button.setting}
             >
               {button.name}
             </SelectItem>

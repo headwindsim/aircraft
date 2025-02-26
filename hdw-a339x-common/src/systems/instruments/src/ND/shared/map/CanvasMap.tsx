@@ -87,7 +87,7 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
   private readonly mapMode = Subject.create<EfisNdMode | -1>(-1);
 
   private readonly mapVisible = Subject.create<boolean>(false);
- 
+
   private readonly mapRecomputing = Subject.create<boolean>(false);
 
   private readonly vectors: { [k in EfisVectorsGroup]: PathVector[] } = {
@@ -252,7 +252,7 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
     });
 
     sub.on('traffic').handle((data: NdTraffic[]) => {
-      this.trafficLayer.displayCallsignDefault = SimVar.GetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY', 'number') === 1;
+      this.trafficLayer.displayHideCallsign = SimVar.GetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number') === 1;
       this.handleNewTraffic(data);
     });
 
