@@ -27,7 +27,7 @@ export const AtsuAocPage = () => {
   const [sayIntentionsKey, setSayIntentionsKey] = usePersistentProperty('CONFIG_ACARS_SAYINTENTIONS_KEY');
 
   const [trafficSource, setTrafficSource] = usePersistentProperty('CONFIG_TRAFFIC_SOURCE', "NONE");
-  const [trafficDisplayHideCallsign, setTrafficDisplayHideCallsign] = usePersistentProperty('CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN', "NO");
+  const [trafficDisplayHideCallsign, setTrafficDisplayHideCallsign] = usePersistentProperty('CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN', "YES");
 
   const [sentryEnabled, setSentryEnabled] = usePersistentProperty(SENTRY_CONSENT_KEY, SentryConsentState.Refused);
 
@@ -210,7 +210,7 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-            <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficHideCallsign')} unrealistic>
+            <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficHideCallsign')}>
         <SelectGroup>
           {trafficDisplayButtons.map((button) => (
             <SelectItem
