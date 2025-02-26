@@ -336,36 +336,31 @@ export class TcasComputer implements TcasComponent {
               const existing = traffic.trafficData;
               fetchPilotInfo(
                 traffic.ID,
-                port
+                port,
               )
                 .then((resp) => {
                   const data = resp.data;
                   if (existing) {
-                    existing.groundspeed = data.groundSpeed.toString();
+                    existing.groundspeed = data.groundSpeed;
                     traffic.setTrafficData(existing);
                   } else {
                     let callsign = data.msfs.callsign;
-                    let groundspeed = data.groundSpeed.toString();
-                    let transponder = data.transponder.toString();
+                    const groundspeed = data.groundSpeed;
+                    const transponder = data.transponder;
                     let wtc = data.msfs.wtc;
 
                     if (this.selectedTrafficDataSource === 2 && data.vatsim.callsign && data.vatsim.wtc) {
                       callsign = data.vatsim.callsign;
-                      groundspeed = data.groundSpeed.toString();
-                      transponder = data.transponder.toString();
                       wtc = data.vatsim.wtc;
                     } else if (this.selectedTrafficDataSource === 3 && data.ivao.callsign && data.ivao.wtc) {
                       callsign = data.ivao.callsign;
-                      groundspeed = data.groundSpeed.toString();
-                      transponder = data.transponder.toString();
                       wtc = data.ivao.wtc;
                     }
-
                     traffic.setTrafficData({
-                      callsign: callsign,
-                      groundspeed: groundspeed,
-                      wtc: wtc,
-                      transponder: transponder,
+                      callsign,
+                      groundspeed,
+                      wtc,
+                      transponder,
                     });
                   }
                   resolve(null);
@@ -379,9 +374,6 @@ export class TcasComputer implements TcasComponent {
       .then((_unused) => {
         this.secondsSinceLastTrafficDataUpdate = 0;
       })
-      .catch((_unused) => {
-        this.secondsSinceLastTrafficDataUpdate = 0;
-      });
     }
   }
   /**
