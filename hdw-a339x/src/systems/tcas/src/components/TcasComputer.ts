@@ -294,7 +294,7 @@ export class TcasComputer implements TcasComponent {
     this.downAdvisoryStatus = new LocalSimVar('L:A32NX_TCAS_RA_DOWN_ADVISORY_STATUS', 'Enum');
     this.selectedTrafficDataSource = ({"NONE": 0, "SIM": 1, "VATSIM": 2, "IVAO": 3})[NXDataStore.get("CONFIG_TRAFFIC_SOURCE", "NONE")];
     SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_SOURCE', 'number', this.selectedTrafficDataSource);
-    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY', 'number', NXDataStore.get("CONFIG_TRAFFIC_DISPLAY_DEFAULT", "NO") === "YES" ? 1 : 0);
+    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', NXDataStore.get("CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN", "YES") === "YES" ? 1 : 0);
     this.airTraffic = [];
     this.raTraffic = [];
     this.sensitivity = new LocalSimVar('L:A32NX_TCAS_SENSITIVITY', 'number');
@@ -336,36 +336,32 @@ export class TcasComputer implements TcasComponent {
               const existing = traffic.trafficData;
               fetchPilotInfo(
                 traffic.ID,
-                port
+                port,
+                this.selectedTrafficDataSource
               )
                 .then((resp) => {
                   const data = resp.data;
                   if (existing) {
-                    existing.groundspeed = data.groundSpeed.toString();
+                    existing.groundspeed = data.groundSpeed;
                     traffic.setTrafficData(existing);
                   } else {
                     let callsign = data.msfs.callsign;
-                    let groundspeed = data.groundSpeed.toString();
-                    let transponder = data.transponder.toString();
+                    const groundspeed = data.groundSpeed;
+                    const transponder = data.transponder;
                     let wtc = data.msfs.wtc;
 
                     if (this.selectedTrafficDataSource === 2 && data.vatsim.callsign && data.vatsim.wtc) {
                       callsign = data.vatsim.callsign;
-                      groundspeed = data.groundSpeed.toString();
-                      transponder = data.transponder.toString();
                       wtc = data.vatsim.wtc;
                     } else if (this.selectedTrafficDataSource === 3 && data.ivao.callsign && data.ivao.wtc) {
                       callsign = data.ivao.callsign;
-                      groundspeed = data.groundSpeed.toString();
-                      transponder = data.transponder.toString();
                       wtc = data.ivao.wtc;
                     }
-
                     traffic.setTrafficData({
-                      callsign: callsign,
-                      groundspeed: groundspeed,
-                      wtc: wtc,
-                      transponder: transponder,
+                      callsign,
+                      groundspeed,
+                      wtc,
+                      transponder,
                     });
                   }
                   resolve(null);
@@ -379,9 +375,6 @@ export class TcasComputer implements TcasComponent {
       .then((_unused) => {
         this.secondsSinceLastTrafficDataUpdate = 0;
       })
-      .catch((_unused) => {
-        this.secondsSinceLastTrafficDataUpdate = 0;
-      });
     }
   }
   /**
@@ -428,6 +421,8 @@ export class TcasComputer implements TcasComponent {
         ? TcasMode.STBY
         : this.tcasSwitchPos,
     ); // 34-43-00:A32
+
+   this.selectedTrafficDataSource = SimVar.GetSimVarValue("L:A32NX_TRAFFIC_SELECTOR_SOURCE", 'number');
   }
 
   /**
