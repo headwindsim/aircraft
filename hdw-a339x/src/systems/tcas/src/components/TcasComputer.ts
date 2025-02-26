@@ -146,8 +146,6 @@ export class TcasTraffic {
 
   trafficData?: TrafficData;
 
-  dataFetchCount: number;
-
   constructor(tf: JS_NPCPlane, ppos: Coordinates, alt: number) {
     this.alive = true;
     this.seen = 0;
@@ -168,11 +166,9 @@ export class TcasTraffic {
     this.raTau = Infinity;
     this.vTau = Infinity;
     this.secondsSinceLastTa = 0;
-    this.dataFetchCount = 0;
   }
-  setTrafficData(e: TrafficData, count: number){
+  setTrafficData(e: TrafficData){
     this.trafficData = e;
-    this.dataFetchCount = count;
   }
 }
 
@@ -315,7 +311,7 @@ export class TcasComputer implements TcasComponent {
   }
 
   private updateTrafficData(_deltaTime: number): void {
-    if (this.selectedTrafficDataSource === 0) {
+    if (this.selectedTrafficDataSource === 0 || this.secondsSinceLastTrafficDataUpdate === -1) {
       return;
     }
 
@@ -324,13 +320,14 @@ export class TcasComputer implements TcasComponent {
       return;
     }
 
-    this.secondsSinceLastTrafficDataUpdate = 0;
-
     const port = SimVar.GetSimVarValue('L:A339X_TRAFFIC_PORT', 'number');
     if (port === 0 || this.sendAirTraffic.length === 0) {
       return;
     }
-    const list = this.airTraffic.filter((traffic) => traffic.alive === true && this.sendAirTraffic.some(x => x.ID === traffic.ID))
+
+    this.secondsSinceLastTrafficDataUpdate = -1;
+
+    const list = this.airTraffic.filter((entry) => entry.alive && entry.isDisplayed);
     if (list.length) {
       Promise.all(
         list.map(
@@ -339,13 +336,13 @@ export class TcasComputer implements TcasComponent {
               const existing = traffic.trafficData;
               fetchPilotInfo(
                 traffic.ID,
-                port,
-                traffic.dataFetchCount < 5 && typeof existing === 'object' && existing !== null,
+                port
               )
                 .then((resp) => {
                   const data = resp.data;
-                  if (existing && traffic.dataFetchCount < 5) {
-                    traffic.setTrafficData({ ...existing, groundspeed: data.groundSpeed }, traffic.dataFetchCount + 1);
+                  if (existing) {
+                    existing.groundspeed = data.groundSpeed.toString();
+                    traffic.setTrafficData(existing);
                   } else {
                     let callsign = data.msfs.callsign;
                     let groundspeed = data.groundSpeed.toString();
@@ -354,13 +351,13 @@ export class TcasComputer implements TcasComponent {
 
                     if (this.selectedTrafficDataSource === 2 && data.vatsim.callsign && data.vatsim.wtc) {
                       callsign = data.vatsim.callsign;
-                      groundspeed = data.groundSpeed;
-                      transponder = data.transponder;
+                      groundspeed = data.groundSpeed.toString();
+                      transponder = data.transponder.toString();
                       wtc = data.vatsim.wtc;
                     } else if (this.selectedTrafficDataSource === 3 && data.ivao.callsign && data.ivao.wtc) {
                       callsign = data.ivao.callsign;
-                      groundspeed = data.groundSpeed;
-                      transponder = data.transponder;
+                      groundspeed = data.groundSpeed.toString();
+                      transponder = data.transponder.toString();
                       wtc = data.ivao.wtc;
                     }
 
@@ -369,7 +366,7 @@ export class TcasComputer implements TcasComponent {
                       groundspeed: groundspeed,
                       wtc: wtc,
                       transponder: transponder,
-                    }, 0);
+                    });
                   }
                   resolve(null);
                 })
@@ -380,10 +377,10 @@ export class TcasComputer implements TcasComponent {
         ),
       )
       .then((_unused) => {
-        // _unused
+        this.secondsSinceLastTrafficDataUpdate = 0;
       })
       .catch((_unused) => {
-        // _unused
+        this.secondsSinceLastTrafficDataUpdate = 0;
       });
     }
   }

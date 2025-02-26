@@ -21,6 +21,7 @@ const DiamondWidth = 12 * 2;
 export class TrafficLayer implements MapLayer<NdTraffic> {
   public data: NdTraffic[] = [];
   public trafficIsSelected: boolean = false;
+  public displayHideCallsign: boolean = false;
   public selectedTrafficId: string = "";
   public activeTrafficId: string = "";
 
@@ -133,14 +134,18 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
     );
     if(intruder.trafficData) {
       let textWidth = context.measureText(intruder.trafficData.callsign);
-       PaintUtils.paintText(
-        isColorLayer,
-        context,
-        x - (24 + textWidth.width),
-        y,
-        intruder.trafficData.callsign,
-        color,
-      );
+
+      if(!this.displayHideCallsign || isSelected) {
+        PaintUtils.paintText(
+          isColorLayer,
+          context,
+          x - (24 + textWidth.width),
+          y,
+          intruder.trafficData.callsign,
+          color,
+        );
+      }
+
       if(isSelected){
         PaintUtils.paintText(
           isColorLayer,
@@ -162,7 +167,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
           cat,
           color,
         );
-
       }
     }
   }

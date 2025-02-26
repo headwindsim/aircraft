@@ -3,8 +3,8 @@
     "Settings": {
       "AtsuAoc": {
         "AcarsNetwork": "ACARS Network",
-        "TrafficSource": "ATSAW Traffic Selector Data Source",
-        "TrafficDefault": "Display Aircraft callsigns by default",
+        "TrafficSource": "ATSAW Traffic: Data Source",
+        "TrafficHideCallsign": "ATSAW Traffic: Hide Aircraft Callsigns",
         "OptionalA32nxErrorReporting": "Optional Headwind Simulations Error Reporting",
         "SayIntentionsKey": "SayIntentions API Key",
         "ThereWasAnErrorEncounteredWhenValidatingYourAcarsID": "There was an error validating your ACARS ID",
