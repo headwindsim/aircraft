@@ -485,7 +485,7 @@ export class NDComponent<T extends number> extends DisplayComponent<NDProps<T>> 
           </svg>
 
           {/* ND Raster map - middle layer */}
-          <CanvasMap bus={this.props.bus} x={Subject.create(384)} y={Subject.create(384)} />
+          <CanvasMap bus={this.props.bus} x={Subject.create(384)} y={Subject.create(384)} side={this.props.side} />
 
           {/* ND Vector graphics - top layer */}
           <svg class="nd-svg nd-top-layer" viewBox="0 0 768 768" style="transform: rotateX(0deg);">

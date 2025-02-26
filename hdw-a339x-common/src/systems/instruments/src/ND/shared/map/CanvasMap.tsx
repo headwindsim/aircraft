@@ -15,6 +15,7 @@ import {
 } from '@microsoft/msfs-sdk';
 import {
   EfisNdMode,
+  EfisSide,
   EfisVectorsGroup,
   NdSymbol,
   NdSymbolTypeFlags,
@@ -62,6 +63,7 @@ const DASHES = [15, 12];
 const NO_DASHES = [];
 
 export interface CanvasMapProps {
+  side: EfisSide;
   bus: EventBus;
   x: Subscribable<number>;
   y: Subscribable<number>;
@@ -143,18 +145,18 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
     sub.on('set_map_up_course').handle((v) => this.mapRotation.set(v));
     sub.on('set_map_pixel_radius').handle((v) => this.mapPixelRadius.set(v));
     sub.on('set_map_range_radius').handle((v) => this.mapRangeRadius.set(v));
-    sub.on('traffic_selector_state').handle((v) => {
-      if(!v) {
+    sub.on('traffic_selector_state').handle((tdata: {side: EfisSide, value: boolean}) => {
+      if(!tdata.value) {
         if(this.trafficLayer.activeTrafficId === this.selectedTrafficId) {
           this.trafficLayer.activeTrafficId = "";
           return;
         }
         this.selectedTrafficIndex = -1;
         this.selectedTrafficId = "";
-        this.trafficLayer.selectedTrafficId = "";
+        this.trafficLayer.selectedTrafficId[tdata.side] = "";
       }
-      if(v && this.selectedTrafficIndex !== -1){
-        this.trafficLayer.activeTrafficId = this.trafficLayer.selectedTrafficId;
+      if(tdata.value && this.selectedTrafficIndex !== -1){
+        this.trafficLayer.activeTrafficId = this.trafficLayer.selectedTrafficId[tdata.side];
       }
     });
     // sub.on('set_map_efis_mode').handle((v) => this.mapMode.set(v));
@@ -256,10 +258,10 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
       this.handleNewTraffic(data);
     });
 
-    sub.on("traffic_selector_value").handle((v: number) => {
+    sub.on("traffic_selector_value").handle((tdata: {side: EfisSide, value: number}) => {
       if(!this.traffic.length)
         return;
-      let index = this.selectedTrafficIndex + v;
+      let index = this.selectedTrafficIndex + tdata.value;
       if(index < 0){
         index = this.traffic.length -1;
       } else if (index >= this.traffic.length) {
@@ -267,7 +269,7 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
       }
       this.selectedTrafficIndex = index;
       this.selectedTrafficId = this.traffic[index].ID;
-      this.trafficLayer.selectedTrafficId = this.selectedTrafficId;
+      this.trafficLayer.selectedTrafficId[tdata.side] = this.selectedTrafficId;
     });
 
     sub
