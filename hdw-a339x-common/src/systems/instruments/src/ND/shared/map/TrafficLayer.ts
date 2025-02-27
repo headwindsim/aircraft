@@ -23,7 +23,6 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
   public trafficIsSelected: boolean = false;
   public displayHideCallsign: boolean = false;
   public selectedTrafficId: string = "";
-  public activeTrafficId: string = "";
 
   constructor(private readonly canvasMap: CanvasMap) {}
 
@@ -57,9 +56,10 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
     intruder: NdTraffic,
   ) {
     let color;
+    const activeTrafficId = String(SimVar.GetSimVarValue('L:A339X_TRAFFIC_ACTIVE_ID', 'number'));
     const ownHeading = Math.round(SimVar.GetSimVarValue('PLANE HEADING DEGREES MAGNETIC', 'degree'));
     const trafficRotation = 360 - ((ownHeading - intruder.heading) % 360);
-    const trafficActive = this.activeTrafficId === intruder.ID;
+    const trafficActive = activeTrafficId === intruder.ID;
     const isSelected = trafficActive || this.selectedTrafficId === intruder.ID;
 
     switch (intruder.intrusionLevel) {

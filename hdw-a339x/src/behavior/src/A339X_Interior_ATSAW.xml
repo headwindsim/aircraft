@@ -25,16 +25,16 @@
         <Component ID="#NODE_ID#" Node="#NODE_ID#">
             <UseTemplate Name="ASOBO_GT_Knob_Infinite_PushPull">
                 <ANTICLOCKWISE_CODE>
-                    (&gt;H:A330_Neo_ATSAW_TRAFFIC_DEC)
+                    (&gt;H:A330_Neo_#SIDE#_ATSAW_TRAFFIC_DEC)
                 </ANTICLOCKWISE_CODE>
                 <CLOCKWISE_CODE>
-                    (&gt;H:A330_Neo_ATSAW_TRAFFIC_INC)
+                    (&gt;H:A330_Neo_#SIDE#_ATSAW_TRAFFIC_INC)
                 </CLOCKWISE_CODE>
                 <PULL_CODE>
-                    (&gt;H:A330_Neo_ATSAW_TRAFFIC_PULL)
+                    (&gt;H:A330_Neo_#SIDE#_ATSAW_TRAFFIC_PULL)
                 </PULL_CODE>
                 <PUSH_CODE>
-                    (&gt;H:A330_Neo_ATSAW_TRAFFIC_PUSH)
+                    (&gt;H:A330_Neo_#SIDE#_ATSAW_TRAFFIC_PUSH)
                 </PUSH_CODE>
 
                 <CENTER_RADIUS>0</CENTER_RADIUS>

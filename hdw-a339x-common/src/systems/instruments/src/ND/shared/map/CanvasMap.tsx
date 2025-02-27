@@ -145,16 +145,17 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
     sub.on('set_map_range_radius').handle((v) => this.mapRangeRadius.set(v));
     sub.on('traffic_selector_state').handle((v) => {
       if(!v) {
-        if(this.trafficLayer.activeTrafficId === this.selectedTrafficId) {
-          this.trafficLayer.activeTrafficId = "";
+        const activeTrafficId = String(SimVar.GetSimVarValue('L:A339X_TRAFFIC_ACTIVE_ID', 'number'));
+        if(activeTrafficId === this.selectedTrafficId) {
+          SimVar.SetSimVarValue('L:A339X_TRAFFIC_ACTIVE_ID', 'number', '-1');
           return;
         }
         this.selectedTrafficIndex = -1;
         this.selectedTrafficId = "";
         this.trafficLayer.selectedTrafficId = "";
       }
-      if(v && this.selectedTrafficIndex !== -1){
-        this.trafficLayer.activeTrafficId = this.trafficLayer.selectedTrafficId;
+      if(v && this.trafficLayer.selectedTrafficId === this.selectedTrafficId){
+        SimVar.SetSimVarValue('L:A339X_TRAFFIC_ACTIVE_ID', 'number', parseInt(this.trafficLayer.selectedTrafficId));
       }
     });
     // sub.on('set_map_efis_mode').handle((v) => this.mapMode.set(v));
@@ -252,7 +253,7 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
     });
 
     sub.on('traffic').handle((data: NdTraffic[]) => {
-      this.trafficLayer.displayHideCallsign = SimVar.GetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number') === 1;
+      this.trafficLayer.displayHideCallsign = SimVar.GetSimVarValue('L:A339X_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number') === 1;
       this.handleNewTraffic(data);
     });
 
@@ -429,8 +430,9 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
         this.traffic.push(intruder);
       });
     }
-    if(this.trafficLayer.activeTrafficId.length && !this.traffic.find(e => e.ID === this.trafficLayer.activeTrafficId)) {
-      this.trafficLayer.activeTrafficId = "";
+    const activeTrafficId = String(SimVar.GetSimVarValue('L:A339X_TRAFFIC_ACTIVE_ID', 'number'));
+    if(activeTrafficId !== "-1" && activeTrafficId.length && !this.traffic.find(e => String(e.ID) === activeTrafficId)) {
+      SimVar.SetSimVarValue('L:A339X_TRAFFIC_ACTIVE_ID', 'number', '-1');
     }
     if(this.selectedTrafficId.length) {
       this.selectedTrafficIndex = -1;
