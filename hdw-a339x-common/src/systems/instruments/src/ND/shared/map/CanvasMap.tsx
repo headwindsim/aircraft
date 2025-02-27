@@ -253,7 +253,7 @@ export class CanvasMap extends DisplayComponent<CanvasMapProps> {
     });
 
     sub.on('traffic').handle((data: NdTraffic[]) => {
-      this.trafficLayer.displayHideCallsign = SimVar.GetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number') === 1;
+      this.trafficLayer.displayHideCallsign = SimVar.GetSimVarValue('L:A339X_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number') === 1;
       this.handleNewTraffic(data);
     });
 

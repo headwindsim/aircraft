@@ -43,12 +43,12 @@ export const AtsuAocPage = () => {
   const handleTrafficSourceChange = (entry: string) => {
     const map = {"NONE": 0, "SIM":1, "VATSIM": 2, "IVAO": 3};
     setTrafficSource(entry);
-    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_SOURCE', 'number', map[entry]);
+    SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_SOURCE', 'number', map[entry]);
   }
 
   const handleTrafficDefaultChange = (entry: string) => {
     setTrafficDisplayHideCallsign(entry);
-    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', entry === "YES" ? 1 : 0);
+    SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', entry === "YES" ? 1 : 0);
   }
 
   const handleAcarsIdentifierInput = (network: string | AcarsNetwork, value: string) => {

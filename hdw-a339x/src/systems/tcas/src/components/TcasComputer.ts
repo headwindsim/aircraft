@@ -293,8 +293,8 @@ export class TcasComputer implements TcasComponent {
     this.upAdvisoryStatus = new LocalSimVar('L:A32NX_TCAS_RA_UP_ADVISORY_STATUS', 'Enum');
     this.downAdvisoryStatus = new LocalSimVar('L:A32NX_TCAS_RA_DOWN_ADVISORY_STATUS', 'Enum');
     this.selectedTrafficDataSource = ({"NONE": 0, "SIM": 1, "VATSIM": 2, "IVAO": 3})[NXDataStore.get("CONFIG_TRAFFIC_SOURCE", "NONE")];
-    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_SOURCE', 'number', this.selectedTrafficDataSource);
-    SimVar.SetSimVarValue('L:A32NX_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', NXDataStore.get("CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN", "YES") === "YES" ? 1 : 0);
+    SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_SOURCE', 'number', this.selectedTrafficDataSource);
+    SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', NXDataStore.get("CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN", "YES") === "YES" ? 1 : 0);
     this.airTraffic = [];
     this.raTraffic = [];
     this.sensitivity = new LocalSimVar('L:A32NX_TCAS_SENSITIVITY', 'number');
@@ -414,7 +414,7 @@ export class TcasComputer implements TcasComponent {
         : this.tcasSwitchPos,
     ); // 34-43-00:A32
    const currentSource = this.selectedTrafficDataSource;
-   this.selectedTrafficDataSource = SimVar.GetSimVarValue("L:A32NX_TRAFFIC_SELECTOR_SOURCE", 'number');
+   this.selectedTrafficDataSource = SimVar.GetSimVarValue("L:A339X_TRAFFIC_SELECTOR_SOURCE", 'number');
    if(this.selectedTrafficDataSource === 0 && currentSource > 0) {
     for(const entry of this.airTraffic)
       entry.setTrafficData(null);
