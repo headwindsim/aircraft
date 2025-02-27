@@ -5,7 +5,7 @@
 /**
  * Events for internal ND communication between components
  */
-import { EfisNdMode, EfisSide } from '@flybywiresim/fbw-sdk';
+import { EfisNdMode } from '@flybywiresim/fbw-sdk';
 
 export interface NDControlEvents {
   /**
@@ -78,7 +78,7 @@ export interface NDControlEvents {
    */
   chrono_pushed: void;
 
-  traffic_selector_state: { side: EfisSide, value: boolean };
+  traffic_selector_state: boolean;
 
-  traffic_selector_value: { side: EfisSide, value: number };
+  traffic_selector_value: number;
 }

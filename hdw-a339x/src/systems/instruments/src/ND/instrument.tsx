@@ -188,24 +188,17 @@ class NDInstrument implements FsInstrument {
   }
 
   public onInteractionEvent(args: string[]): void {
-    switch(true) {
-      case args[0].endsWith(`A32NX_EFIS_${this.efisSide}_CHRONO_PUSHED`):
-        this.bus.getPublisher<NDControlEvents>().pub('chrono_pushed', undefined);
-        break;
-      case args[0].endsWith(`A330_Neo_${this.efisSide}_ATSAW_TRAFFIC_DEC`):
-        this.bus.getPublisher<NDControlEvents>().pub('traffic_selector_value', { side: this.efisSide, value: -1 });
-        break;
-      case args[0].endsWith(`A330_Neo_${this.efisSide}_ATSAW_TRAFFIC_INC`):
-        this.bus.getPublisher<NDControlEvents>().pub('traffic_selector_value', { side: this.efisSide, value: -1 });
-        break;
-      case args[0].endsWith(`A330_Neo_${this.efisSide}_ATSAW_TRAFFIC_PULL`):
-        this.bus.getPublisher<NDControlEvents>().pub('traffic_selector_state', { side: this.efisSide, value: true });
-        break;
-      case args[0].endsWith(`A330_Neo_${this.efisSide}_ATSAW_TRAFFIC_PUSH`):
-        this.bus.getPublisher<NDControlEvents>().pub('traffic_selector_state', { side: this.efisSide, value: false });
-        break;
-      default:
-        break;
+     const trafficSelectorMap = {
+      `A330_Neo_${this.efisSide}_ATSAW_TRAFFIC_DEC`: ["traffic_selector_value", -1],
+      `A330_Neo_${this.efisSide}_ATSAW_TRAFFIC_INC`: ["traffic_selector_value", 1],
+      `A330_Neo_${this.efisSide}_ATSAW_TRAFFIC_PULL`: ["traffic_selector_state", true],
+      `A330_Neo_${this.efisSide}_ATSAW_TRAFFIC_PUSH`: ["traffic_selector_state", false],
+    }
+    if (args[0].endsWith(`A32NX_EFIS_${this.efisSide}_CHRONO_PUSHED`)) {
+      this.bus.getPublisher<NDControlEvents>().pub('chrono_pushed', undefined);
+    } else if (trafficSelectorMap[args[0]]) {
+         this.bus.getPublisher<NDControlEvents>().pub(trafficSelectorMap[args[0]][0], trafficSelectorMap[args[0]][1]);
+
     }
 
     this.hEventPublisher.dispatchHEvent(args[0]);

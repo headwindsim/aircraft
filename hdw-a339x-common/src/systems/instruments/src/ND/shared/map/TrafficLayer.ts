@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: GPL-3.0
 
-import { EfisSide, NdTraffic } from '@flybywiresim/fbw-sdk';
+import { NdTraffic } from '@flybywiresim/fbw-sdk';
 import { MapLayer } from './MapLayer';
 import { PaintUtils } from './PaintUtils';
 import { CanvasMap } from './CanvasMap';
@@ -22,7 +22,7 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
   public data: NdTraffic[] = [];
   public trafficIsSelected: boolean = false;
   public displayHideCallsign: boolean = false;
-  public selectedTrafficId: Record<EfisSide, string> = { L: "", R: "" };
+  public selectedTrafficId: string = "";
   public activeTrafficId: string = "";
 
   constructor(private readonly canvasMap: CanvasMap) {}
@@ -60,7 +60,7 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
     const ownHeading = Math.round(SimVar.GetSimVarValue('PLANE HEADING DEGREES MAGNETIC', 'degree'));
     const trafficRotation = 360 - ((ownHeading - intruder.heading) % 360);
     const trafficActive = this.activeTrafficId === intruder.ID;
-    const isSelected = trafficActive || this.selectedTrafficId[this.canvasMap.props.side] === intruder.ID;
+    const isSelected = trafficActive || this.selectedTrafficId === intruder.ID;
 
     switch (intruder.intrusionLevel) {
       case TaRaIntrusion.TRAFFIC:
@@ -114,7 +114,7 @@ export class TrafficLayer implements MapLayer<NdTraffic> {
     // paint vertical speed arrow (-/+ 500 fpm)
     this.paintVertArrow(intruder.vertSpeed, context, x, y, isColorLayer ? color : '#040405', isColorLayer ? 1.6 : 3.5);
 
-    if(isSelected && this.selectedTrafficId[this.canvasMap.props.side] === intruder.ID){
+    if(isSelected && this.selectedTrafficId === intruder.ID){
         context.strokeStyle = "#22c0b6";
         context.lineWidth =  isColorLayer ? 1.6 : 3.5;
         context.beginPath();
