@@ -1,6 +1,7 @@
 // Copyright (c) 2021-2023, 2025 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
+import { isMsfs2024} from '@flybywiresim/fbw-sdk';
 import { AtsuStatusCodes, DclMessage } from '@datalink/common';
 import { CDU_SingleValueField } from '../../legacy/A320_Neo_CDU_Field';
 import { Keypad } from '../../legacy/A320_Neo_CDU_Keypad';
@@ -47,8 +48,12 @@ export class CDUAtcDepartReq {
     mcdu.page.Current = mcdu.page.ATCDepartReq;
 
     if (store.firstCall && store.callsign === '') {
-      if (mcdu.atsu.flightNumber().length !== 0) {
-        store.callsign = mcdu.atsu.flightNumber();
+      if(isMsfs2024()) {
+          store.callsign = mcdu.flightNumber;
+      } else {
+        if (mcdu.atsu.flightNumber().length !== 0) {
+          store.callsign = mcdu.atsu.flightNumber();
+        }
       }
     }
 
