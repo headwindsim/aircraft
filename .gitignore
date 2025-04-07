@@ -35,8 +35,7 @@ Cargo.toml
 !package.json
 !pnpm-lock.yaml
 
-!jest.config.js
-!/jest/**
+!vitest.config.mjs
 
 CMakeLists.txt
 !CMakeLists-A333X.txt

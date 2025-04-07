@@ -28,4 +28,3 @@ build-**/src/*
 **/src/systems/fmgc/src/flightplanning/WorldMagneticModel.ts
 **/src/systems/fmgc/src/utils/LzUtf8.js
 **/src/systems/fmgc/src/flightplanning/new/test/*
-**/src/systems/fmgc/src/flightplanning/**/*.spec.ts

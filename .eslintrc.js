@@ -27,6 +27,7 @@ module.exports = {
     {
       files: [
         '.eslintrc.js',
+        'vitest.config.mjs',
         'scripts/**/*.js',
         '**/mach.config.js',
         '**/rollup.config.js',
@@ -40,23 +41,15 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
       },
     },
-    {
-      files: ['hdw-common/src/jest/**/*.js'],
-      env: {
-        node: true,
-      },
-      plugins: ['jest'],
-      extends: ['plugin:jest/recommended'],
-    },
   ],
   settings: {
     tailwindcss: {
       groupByResponsive: true,
-      config: path.join(__dirname, 'hdw-common/src/systems/instruments/src/EFB/tailwind.config.js'),
+      config: path.join(__dirname, 'build-common/src/systems/instruments/src/EFB/tailwind.config.js'),
     },
     react: { version: 'detect' },
   },
-  ignorePatterns: ['hdw-common/src/typings/*'],
+  ignorePatterns: ['build-common/src/typings/*'],
   rules: {
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
 
