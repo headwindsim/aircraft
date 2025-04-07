@@ -19,6 +19,7 @@ export * from './publishers';
 export * from './RadioTypes';
 export * from './RadioUtils';
 export * from './RunwayUtils';
+export * from './TrafficListener';
 export * from './UpdateThrottler';
 export * from './UniversalConfigProvider';
 export * from './unifiedConfig';

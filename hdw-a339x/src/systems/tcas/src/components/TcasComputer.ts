@@ -1,8 +1,7 @@
-/* eslint-disable camelcase */
-/* eslint-disable no-empty-function */
-/* eslint-disable no-useless-constructor */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-console */
+// Copyright (c) 2021-2023 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
 import {
   MathUtils,
   Arinc429Word,
@@ -11,9 +10,9 @@ import {
   UpdateThrottler,
   LocalSimVar,
   AirDataSwitchingKnob,
+  registerTrafficListener,
 } from '@flybywiresim/fbw-sdk';
 import { Coordinates } from 'msfs-geo';
-import { TcasComponent } from '../lib/TcasComponent';
 import {
   TCAS_CONST as TCAS,
   JS_NPCPlane,
@@ -184,14 +183,11 @@ export class ResAdvisory {
 /**
  * TCAS computer singleton
  */
-export class TcasComputer implements TcasComponent {
-  private static _instance?: TcasComputer; // for debug
+export class TcasComputer {
+  private static instance?: TcasComputer;
 
-  private recListener: ViewListener.ViewListener = RegisterViewListener('JS_LISTENER_MAPS', () => {
-    this.recListener.trigger('JS_BIND_BINGMAP', 'nxMap', false);
-  }); // bind to listener
-
-  private debug: boolean; // TCAS_DEBUG on/off
+  /** TCAS_DEBUG on/off */
+  private debug = false;
 
   private syncer: GenericDataListenerSync = new GenericDataListenerSync();
 
@@ -267,21 +263,26 @@ export class TcasComputer implements TcasComponent {
 
   private secondsSinceLastTrafficDataUpdate: number; // Time since last traffic data update
 
-  public static get instance(): TcasComputer {
-    // for debug
-    if (!this._instance) {
-      this._instance = new TcasComputer();
-    }
-    return this._instance;
+  // private since this is a singleton class
+  private constructor() {
+    registerTrafficListener();
   }
 
   /**
    * Initialise TCAS singleton
    */
-  init(): void {
+  public static init(): void {
+    if (!this.instance) {
+      this.instance = new TcasComputer();
+    }
+    this.instance.init();
+  }
+
+  /**
+   * Initialise TCAS singleton
+   */
+  private init(): void {
     SimVar.SetSimVarValue('L:A32NX_TCAS_STATE', 'Enum', 0);
-    this.debug = false;
-    NXDataStore.set('TCAS_DEBUG', '0'); // force debug off
     this.tcasPower = false;
     this.tcasMode = new LocalSimVar('L:A32NX_TCAS_MODE', 'Enum');
     this.tcasState = new LocalSimVar('L:A32NX_TCAS_STATE', 'Enum');
@@ -374,7 +375,6 @@ export class TcasComputer implements TcasComponent {
    */
   private updateVars(): void {
     // Note: these values are calculated/not used in the real TCAS computer, here we just read SimVars
-    // this.debug = NXDataStore.get('TCAS_DEBUG', '0') !== '0';
     this.verticalSpeed = SimVar.GetSimVarValue('VERTICAL SPEED', 'feet per minute');
     this.ppos.lat = SimVar.GetSimVarValue('PLANE LATITUDE', 'degree latitude');
     this.ppos.long = SimVar.GetSimVarValue('PLANE LONGITUDE', 'degree longitude');
@@ -388,8 +388,8 @@ export class TcasComputer implements TcasComponent {
     this.activeXpdr = SimVar.GetSimVarValue('L:A32NX_TRANSPONDER_SYSTEM', 'number');
 
     const alternateAirDataSourceSelect =
-    SimVar.GetSimVarValue('L:A32NX_AIR_DATA_SWITCHING_KNOB', 'enum') ===
-    (this.activeXpdr === 0 ? AirDataSwitchingKnob.Capt : AirDataSwitchingKnob.Fo);
+      SimVar.GetSimVarValue('L:A32NX_AIR_DATA_SWITCHING_KNOB', 'enum') ===
+      (this.activeXpdr === 0 ? AirDataSwitchingKnob.Capt : AirDataSwitchingKnob.Fo);
     this.pressureAlt = Arinc429Word.fromSimVarValue(
       alternateAirDataSourceSelect
         ? `L:A32NX_ADIRS_ADR_3_ALTITUDE`
@@ -564,6 +564,7 @@ export class TcasComputer implements TcasComponent {
             traffic = new TcasTraffic(tf, this.ppos, this.planeAlt);
             this.airTraffic.push(traffic);
           }
+
           traffic.alive = true;
           traffic.seen = Math.min(traffic.seen + 1, 10);
           const newAlt = tf.alt * 3.281;
@@ -1381,23 +1382,29 @@ export class TcasComputer implements TcasComponent {
         this.sendAirTraffic.push(new NDTcasTraffic(traffic));
       }
     });
-    if(this.debug){
-      this.raTraffic.forEach((tf) => {
-        const traffic: TcasTraffic | undefined = sentAirTraffic.find((p) => p && p.ID === tf.ID);
-        if (!traffic) {
-          console.log(`ERROR: RA ${tf.ID} NOT SENT`);
-        }
+    this.raTraffic.forEach((tf) => {
+      const traffic: TcasTraffic | undefined = sentAirTraffic.find((p) => p && p.ID === tf.ID);
+      if (!traffic && this.debug) {
+        console.log(`ERROR: RA ${tf.ID} NOT SENT`);
+      }
     });
-    }
 
     this.syncer.sendEvent('A32NX_TCAS_TRAFFIC', this.sendAirTraffic);
   }
 
   /**
    * Main update loop
+   * @param deltaTime delta time of this frame
+   */
+  public static update(deltaTime: number): void {
+    this.instance?.update(deltaTime);
+  }
+
+  /**
+   * Main update loop
    * @param _deltaTime delta time of this frame
    */
-  update(_deltaTime: number): void {
+  private update(_deltaTime: number): void {
     this.soundManager.update(_deltaTime);
 
     const deltaTime = this.updateThrottler.canUpdate(_deltaTime * (this.simRate || 1));
@@ -1407,11 +1414,14 @@ export class TcasComputer implements TcasComponent {
     this.updateVars();
     this.updateInhibitions();
     this.updateStatusFaults();
-
     if (this.tcasMode.getVar() === TcasMode.STBY) {
       this.advisoryState = TcasState.NONE;
       this.tcasState.setVar(TcasState.NONE);
       this.correctiveRa.setVar(false);
+      this.raType.setVar(RaType2.NONE);
+      this.rateToMaintain.setVar(0);
+      this.upAdvisoryStatus.setVar(UpDownAdvisoryStatus.NO_ADVISORY);
+      this.downAdvisoryStatus.setVar(UpDownAdvisoryStatus.NO_ADVISORY);
       SimVar.SetSimVarValue('L:A32NX_TCAS_VSPEED_RED:1', 'Number', 0);
       SimVar.SetSimVarValue('L:A32NX_TCAS_VSPEED_RED:2', 'Number', 0);
       SimVar.SetSimVarValue('L:A32NX_TCAS_VSPEED_GREEN:1', 'Number', 0);
