@@ -76,6 +76,10 @@ export interface NDProps<T extends number> {
   rangeValues: T[];
 
   terrainThresholdPaddingText: string;
+
+  rangeChangeMessage: string;
+
+  modeChangeMessage: string;
 }
 
 export class NDComponent<T extends number> extends DisplayComponent<NDProps<T>> {
@@ -217,6 +221,10 @@ export class NDComponent<T extends number> extends DisplayComponent<NDProps<T>> 
       .whenChanged()
       .handle(() => {
         this.invalidateRange();
+      });
+
+      this.rangeChangeInProgress.sub((rangechange) => {
+        this.props.bus.getPublisher<NDControlEvents>().pub('set_range_change', rangechange);
       });
 
     sub
@@ -463,7 +471,7 @@ export class NDComponent<T extends number> extends DisplayComponent<NDProps<T>> 
             </Flag>
 
             <Flag visible={this.rangeChangeInProgress} x={384} y={320} class="Green FontIntermediate">
-              RANGE CHANGE
+              {this.props.rangeChangeMessage}
             </Flag>
             <Flag
               visible={MappedSubject.create(
@@ -473,9 +481,9 @@ export class NDComponent<T extends number> extends DisplayComponent<NDProps<T>> 
               )}
               x={384}
               y={320}
-              class="Green FontIntermediate"
+              class="Green mode-range-change"
             >
-              MODE CHANGE
+              {this.props.modeChangeMessage}
             </Flag>
 
             <TerrainMapThresholds bus={this.props.bus} paddingText={this.props.terrainThresholdPaddingText} />
