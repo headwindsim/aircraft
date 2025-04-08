@@ -22,13 +22,12 @@ const lnavConfig: LnavConfig = {
 const vnavConfig: VnavConfig = {
   VNAV_DESCENT_MODE: VnavDescentMode.NORMAL,
   VNAV_EMIT_CDA_FLAP_PWP: false,
-  DEBUG_PROFILE: false,
-  DEBUG_GUIDANCE: false,
-  ALLOW_DEBUG_PARAMETER_INJECTION: false,
   VNAV_USE_LATCHED_DESCENT_MODE: false,
   IDLE_N1_MARGIN: 3,
   MAXIMUM_FUEL_ESTIMATE: 110_000,
   LIM_PSEUDO_WPT_LABEL: '(LIM)',
+  VMO: 330,
+  MMO: 0.86,
 };
 
 const flightModelParams: FlightModelParameters = {
