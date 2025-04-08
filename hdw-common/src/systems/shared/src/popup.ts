@@ -12,9 +12,43 @@ export type NotificationParams = {
   contentTemplate: string;
   id: string;
   title: string;
-  time: number;
+  description: string;
+  duration: number;
+  closePopupTitle: string;
+  closePopup: boolean;
 };
 
+export class NotificationButton {
+  __Type: string;
+  toGlobalFlow: boolean;
+  close: boolean;
+  selected: boolean;
+  id: string;
+  strParam: string;
+  title: string;
+  event: string;
+  theme: string;
+  enabled: boolean;
+
+  constructor(
+    title: string = '',
+    event: string = '',
+    close: boolean = true,
+    theme: string | null = null,
+    toGlobalFlow: boolean = false,
+  ) {
+    this.__Type = 'NotificationButton';
+    this.toGlobalFlow = toGlobalFlow;
+    this.close = close;
+    this.selected = false;
+    this.id = '';
+    this.strParam = '';
+    this.title = title;
+    this.event = event;
+    this.theme = theme || '';
+    this.enabled = true;
+  }
+}
 /**
  * PopUpDialog utility class to create a pop-up UI element
  *
@@ -50,7 +84,10 @@ export class PopUpDialog {
       contentTemplate: '', // i.e. "popup-edit-preset";
       id: `${title}_${time}`,
       title,
-      time,
+      description: '',
+      duration: 0,
+      closePopupTitle: '',
+      closePopup: false,
     };
   }
 
@@ -85,6 +122,7 @@ export class PopUpDialog {
     }
     if (message) {
       this.params.contentData = message;
+      this.params.description = message;
     }
     if (style) {
       this.params.style = style;
@@ -129,6 +167,7 @@ export class PopUpDialog {
     }
     if (message) {
       this.params.contentData = message;
+      this.params.description = message;
     }
     if (style) {
       this.params.style = style;
