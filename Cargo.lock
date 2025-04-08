@@ -962,6 +962,8 @@ dependencies = [
  "enum_dispatch",
  "fxhash",
  "msfs",
+ "serde",
+ "serde_json",
  "systems",
  "uom",
 ]

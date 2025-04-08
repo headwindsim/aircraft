@@ -10,7 +10,7 @@
   },
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features",
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -30,7 +30,7 @@
   },
   "[rust]": {
     "editor.defaultFormatter": "rust-lang.rust-analyzer",
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
@@ -40,7 +40,7 @@
   "files.trimFinalNewlines": true,
   "[cpp]": {
     "editor.defaultFormatter": "ms-vscode.cpptools",
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "editor.formatOnPaste": false
   },
   "cmake.configureOnOpen": false,
@@ -144,7 +144,17 @@
     "__functional_03": "cpp",
     "memory_resource": "cpp",
     "numbers": "cpp",
-    "xmemory0": "cpp"
+    "xmemory0": "cpp",
+    "any": "cpp",
+    "random": "cpp",
+    "codecvt": "cpp",
+    "complex": "cpp",
+    "coroutine": "cpp",
+    "numeric": "cpp",
+    "span": "cpp",
+    "valarray": "cpp",
+    "ranges": "cpp",
+    "source_location": "cpp"
   },
   "typescript.preferences.quoteStyle": "single",
   "typescript.preferences.importModuleSpecifier": "project-relative"

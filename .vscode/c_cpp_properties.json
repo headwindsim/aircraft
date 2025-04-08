@@ -16,7 +16,8 @@
                 "${workspaceFolder}/flybywire/fbw-a32nx/src/wasm/fadec_a320/src/**",
                 "${workspaceFolder}/flybywire/fbw-a380x/src/wasm/fadec_a380/src/**",
                 "${workspaceFolder}/fbw-common/src/wasm/fadec_common/src",
-                "${workspaceFolder}/fbw-common/src/wasm/**"
+                "${workspaceFolder}/fbw-common/src/wasm/**",
+                "${workspaceFolder}/fbw-common/src/wasm/fbw_common/src"
             ],
             "defines": [
                 "_MSFS_WASM=1",
