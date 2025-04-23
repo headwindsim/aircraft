@@ -151,7 +151,7 @@ export class AircraftGithubVersionChecker {
    */
   private static async initialize(aircraft: string) {
     this.releaseInfo = await GitVersions.getReleases('headwindsim', aircraft, false, 0, 1);
-    this.newestCommit = await GitVersions.getNewestCommit('headwindsim', aircraft, 'master');
+    this.newestCommit = await GitVersions.getNewestCommit('headwindsim', aircraft, 'main');
     this.newestExpCommit = await GitVersions.getNewestCommit('headwindsim', aircraft, 'experimental');
     this.buildInfo = await AircraftGithubVersionChecker.getBuildInfo(aircraft);
   }
@@ -256,7 +256,7 @@ export class AircraftGithubVersionChecker {
                         Latest ${branchName} version is <br>
                         <strong>${releaseVersion}</strong><br/><br/>
 
-                        Please update your aircraft using the FlyByWire Installer.
+                        Please update your aircraft using the Headwind Simulations Installer.
                     </div>`,
       'normal',
       () => {},
