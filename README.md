@@ -71,7 +71,7 @@ For Git Bash/Linux:
 ./scripts/dev-env/run.sh ./scripts/build_su95x.sh
 ```
 
-#### 4. The package is now ready to use. Copy the folder "headwind-aircraft-a330-900" to your CommunityPackage folder in MSFS.
+#### 4. The package is now ready to use. Copy the folder "headwind-aircraft-a330-900" to your Community Package folder in MSFS.
 
 ## Open source
 Open Source Projects contributing to the realisation of this MSFS A330-900 Neo :
