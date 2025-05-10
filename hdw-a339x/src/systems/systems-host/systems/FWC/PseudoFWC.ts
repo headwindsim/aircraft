@@ -724,8 +724,6 @@ export class PseudoFWC {
 
   private readonly brakesHot = Subject.create(false);
 
-  private readonly landingLight = Subject.create(false);
-
   private readonly lgciu1Fault = Subject.create(false);
 
   private readonly lgciu2Fault = Subject.create(false);
@@ -1468,7 +1466,6 @@ export class PseudoFWC {
     this.antiskidActive.set(SimVar.GetSimVarValue('ANTISKID BRAKES ACTIVE', 'bool'));
     this.brakeFan.set(SimVar.GetSimVarValue('L:A32NX_BRAKE_FAN_RUNNING', 'bool'));
     this.brakesHot.set(SimVar.GetSimVarValue('L:A32NX_BRAKES_HOT', 'bool'));
-    this.landingLight.set(SimVar.GetSimVarValue('LIGHT LANDING ON:2', 'bool'));
     this.lgciu1Fault.set(SimVar.GetSimVarValue('L:A32NX_LGCIU_1_FAULT', 'bool'));
     this.lgciu2Fault.set(SimVar.GetSimVarValue('L:A32NX_LGCIU_2_FAULT', 'bool'));
     this.lgciu1DiscreteWord1.setFromSimVar('L:A32NX_LGCIU_1_DISCRETE_WORD_1');
@@ -4990,17 +4987,6 @@ export class PseudoFWC {
       ),
       whichCodeToReturn: () => [0],
       codesToReturn: ['000018001'],
-      memoInhibit: () => false,
-      failure: 0,
-      sysPage: -1,
-      side: 'RIGHT',
-    },
-    '0000190': {
-      // LDG LT
-      flightPhaseInhib: [],
-      simVarIsActive: this.landingLight,
-      whichCodeToReturn: () => [0],
-      codesToReturn: ['000019001'],
       memoInhibit: () => false,
       failure: 0,
       sysPage: -1,
