@@ -109,6 +109,9 @@ export const OilComponent = () => {
       <path className="WingPlaneSym" d="M230 250 l20 -2" />
       <path className="WingPlaneSym" d="M370 250 l-20 -2" />
 
+      <path className="WingPlaneSym" d="M230 280 l20 -2" />
+      <path className="WingPlaneSym" d="M370 280 l-20 -2" />
+
       <text id="OilQuantityLeft" className="Large Green" x="195" y="185" textAnchor="end">
         {oilLeft[0]}.
       </text>
