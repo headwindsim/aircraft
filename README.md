@@ -8,7 +8,7 @@
 
 [![Discord](https://img.shields.io/discord/965000103150645258?label=Discord&style=for-the-badge&color=dd6b20)](https://discord.com/invite/headwindsim)
 
-Welcome to the Headwind Simulations A339X Project! This is a open source project to create a free Airbus A330-900neo in Microsoft Flight Simulator and is based on the FlyByWire System A32NX. If you only want to use the aircraft in MSFS please download the Addon here: https://headwindsim.net/a339x.html
+Welcome to the Headwind Simulations A339X Project! This is an open source project to create a free Airbus A330-900neo in Microsoft Flight Simulator and is based on the FlyByWire System A32NX. If you only want to use the aircraft in MSFS please download the Addon here: https://headwindsim.net/a339x.html
 
 ### A330neo
 
@@ -29,7 +29,7 @@ The present aircraft setup is either being simulated or targeted. It's important
 
 
 ## How to build
-Make sure docker are installed. Prefferably with WSL2 backend.
+Make sure docker is installed. Prefferably with WSL2 backend.
 
 #### 1. First, run following command on powershell. This will install the A32NX docker images and node modules.
 
@@ -71,7 +71,7 @@ For Git Bash/Linux:
 ./scripts/dev-env/run.sh ./scripts/build_su95x.sh
 ```
 
-#### 4. The package is now ready to use. Copy the folder "headwind-aircraft-a330-900" to your CommunityPackage folder in MSFS.
+#### 4. The package is now ready to use. Copy the folder "headwind-aircraft-a330-900" to your Community Package folder in MSFS.
 
 ## Open source
 Open Source Projects contributing to the realisation of this MSFS A330-900 Neo :
