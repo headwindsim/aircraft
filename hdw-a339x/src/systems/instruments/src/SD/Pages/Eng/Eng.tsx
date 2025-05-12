@@ -204,8 +204,8 @@ const PressureGauge = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) 
 
 const QuantityGauge = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) => {
   const [engineOilQuantity] = useSimVar(`ENG OIL QUANTITY:${engineNumber}`, 'percent', 100);
-  const OIL_QTY_MAX = 24.25;
-  const OIL_QTY_LOW_ADVISORY = 1.35;
+  const OIL_QTY_MAX = 20;
+  const OIL_QTY_LOW_ADVISORY = 1.5;
   const displayedEngineOilQuantity =
     engineOilQuantity === 100 ? OIL_QTY_MAX : Math.round(((engineOilQuantity / 100) * OIL_QTY_MAX) / 0.5) * 0.5; // Engine oil quantity has a step of 0.2
   const [quantityAtOrBelowLow, setQuantityAtOrBelowLow] = useState(false);
