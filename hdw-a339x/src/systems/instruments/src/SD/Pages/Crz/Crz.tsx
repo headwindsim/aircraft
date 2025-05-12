@@ -72,8 +72,8 @@ export const OilComponent = () => {
   const [oilQuantLeft] = useSimVar('ENG OIL QUANTITY:1', 'percent', 1000);
   const [oilQuantRight] = useSimVar('ENG OIL QUANTITY:2', 'percent', 1000);
 
-  const oilLeft = splitDecimals(oilQuantLeft * 0.01 * 25);
-  const oilRight = splitDecimals(oilQuantRight * 0.01 * 25);
+  const oilLeft = splitDecimals(oilQuantLeft * 0.01 * 20);
+  const oilRight = splitDecimals(oilQuantRight * 0.01 * 20);
 
   const [leftVIBN1] = useSimVar('TURB ENG VIBRATION:1', 'Number', 1000);
   const [rightVIBN1] = useSimVar('TURB ENG VIBRATION:2', 'Number', 1000);
