@@ -226,11 +226,11 @@ const FuelFlow = ({ unit }: FuelFlowProps) => {
         :
       </text>
 
-      <text id="FuelFlowValue" x={201} y={455}>
+      <text id="FuelFlowValue" x={160} y={455}>
         {fuelForDisplay(leftFuelFlow + rightFuelFlow, unit, 60)}
       </text>
 
-      <text id="FuelFlowUnit" x={215} y={455}>
+      <text id="FuelFlowUnit" x={190} y={455}>
         {unit === '1' ? 'KG' : 'LBS'}
         /MIN
       </text>
@@ -247,8 +247,6 @@ const FOB = ({ unit }: FOBProps) => {
 
   return (
     <>
-      <path className="ThickShape" d="m 5 499 v -30 h 250 v 30 z" />
-
       <text id="FobLabel" x={18} y={491}>
         FOB
       </text>
