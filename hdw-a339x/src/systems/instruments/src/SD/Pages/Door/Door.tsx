@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSimVar } from '@flybywiresim/fbw-sdk';
+import { useSimVar, useArinc429Var } from '@flybywiresim/fbw-sdk';
 
 import './Door.scss';
 
@@ -12,6 +12,15 @@ export const DoorPage = () => {
   const [oxygen] = useSimVar('L:PUSH_OVHD_OXYGEN_CREW', 'bool', 1000);
   const [slides] = useSimVar('L:A32NX_SLIDES_ARMED', 'bool', 1000);
   const [cockpit] = useSimVar('L:A32NX_COCKPIT_DOOR_LOCKED', 'bool', 1000);
+
+  const cpc1DiscreteWord = useArinc429Var('L:A32NX_PRESS_CPC_1_DISCRETE_WORD');
+
+  const [autoMode] = useSimVar('L:A32NX_OVHD_PRESS_MODE_SEL_PB_IS_AUTO', 'Bool', 1000);
+
+  const activeCpcNumber = cpc1DiscreteWord.bitValueOr(11, false) ? 1 : 2;
+  const arincCabinVs = useArinc429Var(`L:A32NX_PRESS_CPC_${activeCpcNumber}_CABIN_VS`, 500);
+  const [manCabinVs] = useSimVar('L:A32NX_PRESS_MAN_CABIN_VS', 'feet per minute', 500);
+  const cabinVs = arincCabinVs.isNormalOperation() ? arincCabinVs.value : manCabinVs;
 
   return (
     <>
@@ -305,6 +314,16 @@ export const DoorPage = () => {
           </text>
           <text id="psi_val_right" className="Value" x="538" y="42" textAnchor="middle" alignmentBaseline="central">
             1700
+          </text>
+
+          <text className="Standard" x="480" y="380">
+            CAB V/S
+          </text>
+          <text id="CabinVerticalSpeed" className="Large Green" x="515" y="405" textAnchor="end">
+            {!autoMode ? Math.round(cabinVs / 50) * 50 : Math.abs(Math.round(cabinVs / 50) * 50)}
+          </text>
+          <text className="Medium Cyan" x="525" y="405">
+            FT/MIN
           </text>
         </g>
       </svg>
