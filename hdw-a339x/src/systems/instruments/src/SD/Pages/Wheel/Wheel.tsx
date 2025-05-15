@@ -22,9 +22,16 @@ export const WheelPage = () => {
   const tempBrake7 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_7', maxStaleness);
   const tempBrake8 = useArinc429Var('L:A32NX_REPORTED_BRAKE_TEMPERATURE_8', maxStaleness);
 
-  const roundedTemperatures = [tempBrake1, tempBrake2, tempBrake3, tempBrake4, tempBrake5, tempBrake6, tempBrake7, tempBrake8].map((temp) =>
-    temp.isNormalOperation() ? roundTemperature(temp.value) : null,
-  );
+  const roundedTemperatures = [
+    tempBrake1,
+    tempBrake2,
+    tempBrake3,
+    tempBrake4,
+    tempBrake5,
+    tempBrake6,
+    tempBrake7,
+    tempBrake8,
+  ].map((temp) => (temp.isNormalOperation() ? roundTemperature(temp.value) : null));
   const maxTemperature = roundedTemperatures
     .filter((temp) => temp !== null)
     .reduce((maxTemp, element) => Math.max(maxTemp, element), 0);
@@ -63,7 +70,7 @@ export const WheelPage = () => {
         <AlternateBraking x={276} y={433} />
       </HydraulicsProvider>
 
-      <AutoBrake x={318} y={570} />
+      <AutoBrake x={318} y={465} />
 
       <Gear
         x={40}
