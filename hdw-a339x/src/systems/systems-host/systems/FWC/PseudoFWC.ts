@@ -166,7 +166,7 @@ export class PseudoFWC {
 
   private readonly stallWarning = Subject.create(false);
 
-    /** If one of the ADR's CAS is above V1 - 4kts, confirm for 0.3s */
+  /** If one of the ADR's CAS is above V1 - 4kts, confirm for 0.3s */
   public readonly v1SpeedConfirmNode = new NXLogicConfirmNode(0.3);
 
   private readonly masterWarningOutput = MappedSubject.create(
@@ -1441,24 +1441,24 @@ export class PseudoFWC {
     const adr2Discrete1 = Arinc429Word.fromSimVarValue('L:A32NX_ADIRS_ADR_2_DISCRETE_WORD_1');
 
     const v1 = SimVar.GetSimVarValue('L:AIRLINER_V1_SPEED', SimVarValueType.Knots);
-    if(!Number.isNaN(v1) && typeof v1 === "number") {
-    const v1Threshold = v1 - 4;
-    const v1ConfirmNodeStatus = this.v1SpeedConfirmNode.read();
-    this.v1SpeedConfirmNode.write(
-      v1 &&
-        (this.adr1Cas.get().valueOr(0) > v1Threshold ||
-          this.adr2Cas.valueOr(0) > v1Threshold ||
-          this.adr3Cas.valueOr(0) > v1Threshold),
-      deltaTime,
-    );
-    if (
-      this.fwcFlightPhase.get() === 4 &&
-      this.v1SpeedConfirmNode.read() &&
-      !v1ConfirmNodeStatus &&
-      this.v1SpeedConfirmNode.read()
-    ) {
-      this.soundManager.enqueueSound('v1');
-    }
+    if (!Number.isNaN(v1) && typeof v1 === 'number') {
+      const v1Threshold = v1 - 4;
+      const v1ConfirmNodeStatus = this.v1SpeedConfirmNode.read();
+      this.v1SpeedConfirmNode.write(
+        v1 &&
+          (this.adr1Cas.get().valueOr(0) > v1Threshold ||
+            this.adr2Cas.valueOr(0) > v1Threshold ||
+            this.adr3Cas.valueOr(0) > v1Threshold),
+        deltaTime,
+      );
+      if (
+        this.fwcFlightPhase.get() === 4 &&
+        this.v1SpeedConfirmNode.read() &&
+        !v1ConfirmNodeStatus &&
+        this.v1SpeedConfirmNode.read()
+      ) {
+        this.soundManager.enqueueSound('v1');
+      }
     }
 
     /* LANDING GEAR AND LIGHTS acquisition */
@@ -4859,7 +4859,6 @@ export class PseudoFWC {
       ),
       whichCodeToReturn: () => [
         [3, 4, 5, 7, 8, 9].includes(this.fwcFlightPhase.get()) || this.predWsToConfTest.read() ? 1 : 0,
-
       ],
       codesToReturn: ['000054001', '000054002'],
       memoInhibit: () => false,
@@ -5024,17 +5023,6 @@ export class PseudoFWC {
       simVarIsActive: this.gpwsFlaps3,
       whichCodeToReturn: () => [0],
       codesToReturn: ['000030001'],
-      memoInhibit: () => false,
-      failure: 0,
-      sysPage: -1,
-      side: 'RIGHT',
-    },
-    '0000022': {
-      // AUTOBRAKE
-      flightPhaseInhib: [],
-      simVarIsActive: this.fwcFlightPhase.map((v) => v === 7 || v === 8),
-      whichCodeToReturn: () => [this.autoBrake.get() - 1],
-      codesToReturn: ['000002201', '000002202', '000002203', '000002204'],
       memoInhibit: () => false,
       failure: 0,
       sysPage: -1,
