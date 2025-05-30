@@ -316,15 +316,24 @@ export const DoorPage = () => {
             1700
           </text>
 
-          <text className="Standard" x="480" y="380">
+          <text id="cab_vs" x="480" y="380" textAnchor="middle" alignmentBaseline="central">
             CAB V/S
           </text>
-          <text id="CabinVerticalSpeed" className="Large Green" x="515" y="405" textAnchor="end">
+          <text id="CabinVerticalSpeed" className="Value" x="165" y="501" textAnchor="middle">
             {!autoMode ? Math.round(cabinVs / 50) * 50 : Math.abs(Math.round(cabinVs / 50) * 50)}
           </text>
-          <text className="Medium Cyan" x="525" y="405">
+          <text id="vs_unit" className="Unit" x="215" y="495" textAnchor="middle" alignmentBaseline="central">
             FT/MIN
           </text>
+
+          <g
+            id="vsArrow"
+            className={(cabinVs * 60 <= -50 || cabinVs * 60 >= 50) && autoMode ? '' : 'Hide'}
+            transform={cabinVs * 60 <= -50 ? 'translate(0, 795) scale(1, -1)' : 'scale(1, 1)'}
+          >
+            <path d="M433,405 h7 L446,395" className="VsIndicator" strokeLinejoin="miter" />
+            <polygon points="452,388 447,396 457,396" transform="rotate(38,452,388)" className="VsIndicator" />
+          </g>
         </g>
       </svg>
     </>
