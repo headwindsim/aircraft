@@ -4816,6 +4816,17 @@ export class PseudoFWC {
       sysPage: -1,
       side: 'RIGHT',
     },
+    '0000160': {
+      // PTU ON
+      flightPhaseInhib: [],
+      simVarIsActive: this.hydPTU,
+      whichCodeToReturn: () => [0],
+      codesToReturn: ['000016001'],
+      memoInhibit: () => false,
+      failure: 0,
+      sysPage: -1,
+      side: 'RIGHT',
+    },
     '0000210': {
       // RAT OUT
       flightPhaseInhib: [],
