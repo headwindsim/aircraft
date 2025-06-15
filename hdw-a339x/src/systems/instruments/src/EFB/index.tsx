@@ -37,6 +37,7 @@ render(
           engineVolume: true,
           masterVolume: true,
           windVolume: true,
+          ptuCockpit: false,
           paxAmbience: true,
         },
         // FIXME: just inject the aircraft options page from the aircraft context (or plugin in flypadOSv4).
