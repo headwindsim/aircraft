@@ -7,7 +7,8 @@ import { useUpdate, useSimVar, useArinc429Var } from '@flybywiresim/fbw-sdk';
 import { EngPage } from './Pages/Eng/Eng';
 import { BleedPage } from './Pages/Bleed/Bleed';
 import { PressPage } from './Pages/Press/Press';
-import { ElecPage } from './Pages/Elec/Elec';
+import { ElecAcPage } from './Pages/ElecAc/ElecAc';
+import { ElecDcPage } from './Pages/ElecDc/ElecDc';
 import { HydPage } from './Pages/Hyd/Hyd';
 import { FuelPage } from './Pages/Fuel/Fuel';
 import { ApuPage } from './Pages/Apu/Apu';
@@ -271,8 +272,8 @@ export const PagesContainer = () => {
     0: <EngPage />,
     1: <BleedPage />,
     2: <PressPage />,
-    3: <ElecPage />,
-    4: <ElecPage />,
+    3: <ElecAcPage />,
+    4: <ElecDcPage />,
     5: <HydPage />,
     6: <ApuPage />,
     7: <CondPage />,
