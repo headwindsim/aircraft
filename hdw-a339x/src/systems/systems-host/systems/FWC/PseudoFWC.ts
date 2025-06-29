@@ -411,6 +411,8 @@ export class PseudoFWC {
 
   private readonly dc2BusPowered = Subject.create(false);
 
+  private readonly extPwrConnected = Subject.create(false);
+
   /* 27 - FLIGHT CONTROLS */
 
   private readonly altn1LawConfirmNode = new NXLogicConfirmNode(0.3, true);
@@ -833,6 +835,10 @@ export class PseudoFWC {
   private readonly N1IdleEng = Subject.create(0);
 
   private readonly engineOnFor30Seconds = new NXLogicConfirmNode(30);
+
+  public readonly engine1Running = Subject.create(false);
+
+  public readonly engine2Running = Subject.create(false);
 
   // FIXME ECU should provide this in a discrete word
   private readonly engine1AboveIdle = MappedSubject.create(
@@ -1344,6 +1350,7 @@ export class PseudoFWC {
     this.ac1BusPowered.set(SimVar.GetSimVarValue('L:A32NX_ELEC_AC_1_BUS_IS_POWERED', 'bool'));
     this.ac2BusPowered.set(SimVar.GetSimVarValue('L:A32NX_ELEC_AC_2_BUS_IS_POWERED', 'bool'));
     this.acESSBusPowered.set(SimVar.GetSimVarValue('L:A32NX_ELEC_AC_ESS_BUS_IS_POWERED', 'bool'));
+    this.extPwrConnected.set(SimVar.GetSimVarValue('L:A32NX_ELEC_CONTACTOR_3XG_IS_CLOSED', 'bool'));
 
     /* ENGINE AND THROTTLE acquisition */
 
@@ -1354,6 +1361,9 @@ export class PseudoFWC {
     this.N2Eng1.set(SimVar.GetSimVarValue('L:A32NX_ENGINE_N2:1', 'number'));
     this.N2Eng2.set(SimVar.GetSimVarValue('L:A32NX_ENGINE_N2:2', 'number'));
     this.N1IdleEng.set(SimVar.GetSimVarValue('L:A32NX_ENGINE_IDLE_N1', 'number'));
+    this.engine1Running.set(this.engine1State.get() === 1);
+    this.engine2Running.set(this.engine2State.get() === 1);
+
     // FIXME move out of acquisition to logic below
     const oneEngineAboveMinPower = this.engine1AboveIdle.get() || this.engine2AboveIdle.get();
     this.engineOnFor30Seconds.write(this.engine1State.get() === 1 || this.engine2State.get() === 1, deltaTime);
@@ -4986,6 +4996,17 @@ export class PseudoFWC {
       ),
       whichCodeToReturn: () => [0],
       codesToReturn: ['000018001'],
+      memoInhibit: () => false,
+      failure: 0,
+      sysPage: -1,
+      side: 'RIGHT',
+    },
+    '0000190': {
+      // ELEC EXT PWR
+      flightPhaseInhib: [],
+      simVarIsActive: this.extPwrConnected,
+      whichCodeToReturn: () => [this.engine1Running.get() || this.engine2Running.get() ? 0 : 1],
+      codesToReturn: ['000019002', '000019001'],
       memoInhibit: () => false,
       failure: 0,
       sysPage: -1,
