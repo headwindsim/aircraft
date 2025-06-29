@@ -2033,7 +2033,7 @@ export class PseudoFWC {
     this.tcasSensitivity.set(SimVar.GetSimVarValue('L:A32NX_TCAS_SENSITIVITY', 'Enum'));
     this.wingAntiIce.set(SimVar.GetSimVarValue('L:A32NX_PNEU_WING_ANTI_ICE_SYSTEM_SELECTED', 'bool'));
     this.voiceVhf3.set(SimVar.GetSimVarValue('A:COM ACTIVE FREQUENCY:3', 'number'));
-    this.trueNorthRef.set(SimVar.GetSimVarValue('L:A32NX_PUSH_TRUE_REF, bool'));
+    this.trueNorthRef.set(SimVar.GetSimVarValue('L:A32NX_PUSH_TRUE_REF', 'bool'));
 
     /* FUEL */
     const fuelGallonsToKg = SimVar.GetSimVarValue('FUEL WEIGHT PER GALLON', 'kilogram');
@@ -5026,7 +5026,7 @@ export class PseudoFWC {
       simVarIsActive: this.trueNorthRef,
       whichCodeToReturn: () => [0],
       codesToReturn: ['000031001'],
-      memoInhibit: () => false,
+      memoInhibit: () => this.toMemo.get() === 1 || this.ldgMemo.get() === 1,
       failure: 0,
       sysPage: -1,
       side: 'LEFT',
