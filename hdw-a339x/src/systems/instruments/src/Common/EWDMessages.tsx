@@ -95,6 +95,7 @@ const EWDMessages = {
   '000027501': '\x1b<3mICE NOT DET',
   '000029001': '\x1b<3mSWITCHG PNL',
   '000030001': '\x1b<3mGPWS FLAP 3',
+  '000031001': '\x1b<3mTRUE NORTH REF',
   '000032001': '\x1b<3mTCAS STBY',
   '000032501': '\x1b<4mTCAS STBY',
   '000035001': '\x1b<2mLAND ASAP',
