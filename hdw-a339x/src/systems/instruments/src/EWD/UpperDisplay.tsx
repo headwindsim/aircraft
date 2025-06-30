@@ -20,7 +20,6 @@ import { AttentionGetter } from './elements/AttentionGetter';
 interface UpperDisplayProps {
   bus: EventBus;
 }
-
 export class UpperDisplay extends DisplayComponent<UpperDisplayProps> {
   private usingMetric = Subject.create(false);
 
