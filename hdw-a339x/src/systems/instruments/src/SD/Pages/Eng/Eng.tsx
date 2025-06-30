@@ -204,8 +204,8 @@ const PressureGauge = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) 
 
 const QuantityGauge = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) => {
   const [engineOilQuantity] = useSimVar(`ENG OIL QUANTITY:${engineNumber}`, 'percent', 100);
-  const OIL_QTY_MAX = 24.25;
-  const OIL_QTY_LOW_ADVISORY = 1.35;
+  const OIL_QTY_MAX = 20;
+  const OIL_QTY_LOW_ADVISORY = 1.5;
   const displayedEngineOilQuantity =
     engineOilQuantity === 100 ? OIL_QTY_MAX : Math.round(((engineOilQuantity / 100) * OIL_QTY_MAX) / 0.5) * 0.5; // Engine oil quantity has a step of 0.2
   const [quantityAtOrBelowLow, setQuantityAtOrBelowLow] = useState(false);
@@ -242,24 +242,6 @@ const QuantityGauge = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) 
           value={getNeedleValue(engineOilQuantity, OIL_QTY_MAX)}
           className={`NoFill ${displayedEngineOilQuantity === 0 && 'Hidden'} ${shouldQuantityPulse ? 'LinePulse' : 'GreenLine '}`}
           dashOffset={-40}
-        />
-        <Needle
-          x={x}
-          y={y}
-          length={60}
-          scaleMax={100}
-          value={getNeedleValue(OIL_QTY_LOW_ADVISORY, OIL_QTY_MAX) - 3}
-          className="NoFill AmberHeavy"
-          dashOffset={-50}
-        />
-        <Needle
-          x={x}
-          y={y}
-          length={50}
-          scaleMax={100}
-          value={getNeedleValue(OIL_QTY_LOW_ADVISORY, OIL_QTY_MAX) - 2}
-          className="NoFill AmberLine"
-          dashOffset={-45}
         />
         <text x={x + 5} y={y} className={`FontLarge TextCenter ${shouldQuantityPulse ? 'FillPulse' : 'FillGreen'}`}>
           <tspan className="FontLarge">{displayedEngineOilQuantity.toFixed(1).split('.')[0]}</tspan>
