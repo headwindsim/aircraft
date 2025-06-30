@@ -125,7 +125,7 @@ export class PacksNaiWai extends DisplayComponent<PacksNaiWaiProps> {
 
   render(): VNode {
     return (
-      <text class="Green Large End" x={735} y={28}>
+      <text class="Green Large End" x={750} y={25}>
         {this.message}
       </text>
     );

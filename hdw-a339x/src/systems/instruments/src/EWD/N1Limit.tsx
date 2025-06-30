@@ -117,7 +117,7 @@ export class N1Limit extends DisplayComponent<N1LimitProps> {
 
   render(): VNode {
     return (
-      <Layer x={698} y={28}>
+      <Layer x={705} y={28}>
         <g visibility={this.inactiveVisibility}>
           <text class="Large Center Amber" x={0} y={0}>
             XX
@@ -127,24 +127,23 @@ export class N1Limit extends DisplayComponent<N1LimitProps> {
           </text>
         </g>
         <g visibility={this.activeVisibility}>
-          <text class="Huge Center Cyan" x={-15} y={28}>
+          <text class="Huge Cyan" x={25} y={28} text-anchor="end">
             {this.textThrustLimitType}
           </text>
-          <text class="Huge End Green" x={-20} y={56}>
+          <text class="Huge End Green" x={-10} y={56}>
             {this.textThrustLimitInt}
           </text>
-          <text class="Large End Green" x={-10} y={56}>
+          <text class="Large End Green" x={3} y={56}>
             .
           </text>
-          <text class="Standard End Green" x={5} y={56}>
+          <text class="Standard End Green" x={20} y={56}>
             {this.textThrustLimitFract}
           </text>
-          <text class="Medium End Cyan" x={21} y={55}>
+          <text class="Medium End Cyan" x={35} y={55}>
             %
           </text>
-
           <g visibility={this.flexVisibility}>
-            <text class="Standard Cyan" x={-40} y={80}>
+            <text class="Standard Cyan" x={-37.5} y={80}>
               {this.textFlexTemp}
               &deg;C
             </text>
