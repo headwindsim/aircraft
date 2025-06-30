@@ -13,7 +13,8 @@ interface AttentionGetterProps {
   x: number;
   y: number;
   engine: number;
-  active: Subscribable<boolean>;
+  active1: Subscribable<boolean>;
+  active2: Subscribable<boolean>;
 }
 
 export class AttentionGetter extends DisplayComponent<AttentionGetterProps> {
@@ -28,16 +29,16 @@ export class AttentionGetter extends DisplayComponent<AttentionGetterProps> {
   private readonly n1Idle = ConsumerSubject.create(this.sub.on('idleN1').withPrecision(1).whenChanged(), 0);
 
   private readonly visible1 = MappedSubject.create(
-    ([active, n1, idleN1, state]) => active && !!(n1 < Math.floor(idleN1) - 1 && state === 2),
-    this.props.active,
+    ([active1, n1, idleN1, state]) => active1 && !!(n1 < Math.floor(idleN1) - 1 && state === 2),
+    this.props.active1,
     this.engine1N1,
     this.n1Idle,
     this.engine1State,
   );
 
   private readonly visible2 = MappedSubject.create(
-    ([active, n1, idleN1, state]) => active && !!(n1 < Math.floor(idleN1) - 1 && state === 2),
-    this.props.active,
+    ([active2, n1, idleN1, state]) => active2 && !!(n1 < Math.floor(idleN1) - 1 && state === 2),
+    this.props.active2,
     this.engine2N1,
     this.n1Idle,
     this.engine2State,
