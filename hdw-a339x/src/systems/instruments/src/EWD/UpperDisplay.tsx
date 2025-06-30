@@ -15,10 +15,12 @@ import { N3 } from './N3';
 import { N1Limit } from './N1Limit';
 import { PacksNaiWai } from './PacksNaiWai';
 import { Slats } from './Slats';
+import { AttentionGetter } from './elements/AttentionGetter';
 
 interface UpperDisplayProps {
   bus: EventBus;
 }
+
 export class UpperDisplay extends DisplayComponent<UpperDisplayProps> {
   private usingMetric = Subject.create(false);
 
@@ -41,6 +43,10 @@ export class UpperDisplay extends DisplayComponent<UpperDisplayProps> {
         <Idle bus={this.props.bus} />
         <N1Limit bus={this.props.bus} />
         <PacksNaiWai bus={this.props.bus} />
+
+        <AttentionGetter bus={this.props.bus} x={234} y={96} engine={1} active={Subject.create(true)} />
+
+        <AttentionGetter bus={this.props.bus} x={534} y={96} engine={2} active={Subject.create(true)} />
 
         <Layer x={0} y={96}>
           <N1 bus={this.props.bus} engine={1} x={234} y={0} />
