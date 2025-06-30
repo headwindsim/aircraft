@@ -4536,7 +4536,7 @@ export class PseudoFWC {
       side: 'LEFT',
     },
     '0000050': {
-      // REFUELING
+      // REFUEL IN PROCESS
       flightPhaseInhib: [],
       simVarIsActive: MappedSubject.create(
         ([fuel, usrStartRefueling]) => !!(fuel === 100 || usrStartRefueling),
