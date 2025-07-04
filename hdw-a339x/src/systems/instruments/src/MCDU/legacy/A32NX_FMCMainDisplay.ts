@@ -90,6 +90,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
   /** Declaration of every variable used (NOT initialization) */
   private maxCruiseFL = 410;
   private recMaxCruiseFL = 415;
+  public paxNbr: number | undefined;
   public coRoute = { routeNumber: undefined, routes: undefined };
   public perfTOTemp = NaN;
   private _routeFinalFuelWeight = 0;
@@ -714,7 +715,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
 
     this.efisSymbolsLeft?.update();
     this.efisSymbolsRight.update();
-    
+
     this.arincBusOutputs.forEach((word) => word.writeToSimVarIfDirty());
   }
 
@@ -2116,6 +2117,24 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
       }
     }
     this.setScratchpadMessage(NXSystemMessages.formatError);
+    return false;
+  }
+
+  public tryUpdatePaxNbr(paxNbr: string): boolean {
+    const value = parseInt(paxNbr);
+    if (isFinite(value)) {
+      if (value >= 0) {
+        if (value < 1000) {
+          this.paxNbr = value;
+          this.updateManagedSpeeds();
+          return true;
+        } else {
+          this.setScratchpadMessage(NXSystemMessages.entryOutOfRange);
+          return false;
+        }
+      }
+    }
+    this.setScratchpadMessage(NXSystemMessages.notAllowed);
     return false;
   }
 
