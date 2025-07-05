@@ -49,24 +49,12 @@ export const ElecAcPage = () => {
         <Wire description="AC ESS to ESS TR" d="M258.84 237.65 v 28.52 v -28.52" />
       ) : null}
       {trEssSuppliesDcEss ? <Wire description="ESS TR to DC ESS" d="M258.84 143.63 v 7.11 v -7.11" /> : null}
-      <Arrow
-        x={258.84 - arrowSize / 2}
-        y={157.58}
-        description="ESS TR to DC ESS"
-        green={trEssSuppliesDcEss}
-        direction="up"
-      />
+      <Arrow x={280 - arrowSize / 2} y={60} description="ESS TR to DC ESS" green={trEssSuppliesDcEss} direction="up" />
 
       {emergencyGeneratorSupplies ? (
         <Wire description="EMER GEN to ESS TR" d="M 319.02 207.90 h -20.04 h 20.04" />
       ) : null}
-      <Arrow
-        x={326.25}
-        y={214.77}
-        description="EMER GEN to ESS TR"
-        green={emergencyGeneratorSupplies}
-        direction="left"
-      />
+      <Arrow x={230} y={60} description="EMER GEN to ESS TR" green={emergencyGeneratorSupplies} direction="right" />
       {acEssBusContactorClosed && emergencyGeneratorSupplies ? (
         <>
           <Wire description="EMER GEN to AC ESS" d="M 343.55 237.62 v 14.25 v -14.25" />
@@ -95,14 +83,14 @@ export const ElecAcPage = () => {
       ) : null}
 
       {generatorLineContactor1Closed && !busTieContactor1Closed ? (
-        <Wire description="GEN1 to AC1" d="M56.44 302.81 v42.5 v-42.5" />
+        <Wire description="GEN1 to AC1" d="M56.44 302.81 v32.7 v-32.7" />
       ) : null}
       {generatorLineContactor1Closed && busTieContactor1Closed && busTieContactor2Closed ? (
         <Wire description="GEN1 to AC1 and AC2" d="M56.44 302.81 v42.5 v-23.75 h479.81 v-20.75" />
       ) : null}
 
       {generatorLineContactor2Closed && !busTieContactor2Closed ? (
-        <Wire description="GEN2 to AC2" d="M536.25 302.81 v42.5 v-42.5" />
+        <Wire description="GEN2 to AC2" d="M536.25 302.81 v32.7 v-37.2" />
       ) : null}
       {generatorLineContactor2Closed && busTieContactor1Closed && busTieContactor2Closed ? (
         <Wire description="GEN2 to AC1 and AC2" d="M536.25 302.81 v42.5 v-23.75 h-479.81 v-20.75" />
@@ -121,29 +109,29 @@ export const ElecAcPage = () => {
         <Arrow x={209.09} y={363.75} description="APU GEN" green direction="up" />
       ) : null}
 
-      <Bus x={6} y={266.25} width={135} name="AC" number={1} isNormal={ac1IsPowered} />
-      <Bus x={459} y={266.25} width={135} name="AC" number={2} isNormal={ac2IsPowered} />
-      <Bus x={232.5} y={266.25} width={135} name="AC ESS" isNormal={acEssIsPowered} isShed={!acEssShedBusIsPowered} />
-      <EngineGenerator x={13.125} y={345} number={1} />
-      <EngineGenerator x={493.125} y={345} number={2} />
-      <ApuGenerator x={250} y={367.5} />
+      <Bus x={11} y={266.25} width={135} name="AC" number={1} isNormal={ac1IsPowered} />
+      <Bus x={446} y={266.25} width={135} name="AC" number={2} isNormal={ac2IsPowered} />
+      <Bus x={232.5} y={150} width={100} name="AC ESS" isNormal={acEssIsPowered} isShed={!acEssShedBusIsPowered} />
+      <EngineGenerator x={13.125} y={334.8} number={1} />
+      <EngineGenerator x={493.125} y={334.8} number={2} />
+      <ApuGenerator x={250} y={325} />
       {staticInverterInUse ? <StaticInverter x={315} y={390} /> : null}
       {!staticInverterInUse && externalPowerAvailable ? <ExternalPower x={315} y={390} /> : null}
       <TransformerRectifier
-        x={213.75}
-        y={161.25}
+        x={250}
+        y={15}
         number={3}
         titleOnly={!trEssSuppliesDcEss && !acEssBusContactorClosed && !emergencyGeneratorSupplies}
       />
-      <EmergencyGenerator x={330} y={161.25} titleOnly={!emergencyGeneratorSupplies} />
+      <EmergencyGenerator x={120} y={25} titleOnly={!emergencyGeneratorSupplies} />
 
       {galleyIsShed ? <GalleyShed x={300} y={483.75} /> : null}
 
-      <IntegratedDriveGeneratorTitle x={28.13} y={476.25} number={1} />
-      <IntegratedDriveGeneratorTemperature x={135} y={476.25} number={1} />
+      <IntegratedDriveGeneratorTitle x={28.13} y={457} number={1} />
+      <IntegratedDriveGeneratorTemperature x={63.13} y={476.25} number={1} />
       {!idg1Connected ? <IntegratedDriveGeneratorDisconnected x={29.13} y={495} /> : null}
-      <IntegratedDriveGeneratorTitle x={513.75} y={476.25} number={2} />
-      <IntegratedDriveGeneratorTemperature x={480} y={476.25} number={2} />
+      <IntegratedDriveGeneratorTitle x={513.75} y={457} number={2} />
+      <IntegratedDriveGeneratorTemperature x={550.13} y={476.25} number={2} />
       {!idg2Connected ? <IntegratedDriveGeneratorDisconnected x={518.75} y={495} /> : null}
     </EcamPage>
   );
@@ -273,11 +261,7 @@ const Bus = ({ x, y, width, name, number, isNormal, isShed }: BusProps) => {
   return (
     <SvgGroup x={x} y={y}>
       <rect width={width} height={busHeight} className="Bus" />
-      <text
-        x={width / 2}
-        y={21}
-        className={`QuiteLarge ${number ? 'Right' : 'Middle'} ${isNormal ? 'Green' : 'Amber'}`}
-      >
+      <text x={50} y={21} className={`QuiteLarge ${number ? 'Right' : 'Middle'} ${isNormal ? 'Green' : 'Amber'}`}>
         {name}
       </text>
       {number ? (
@@ -519,8 +503,8 @@ const TransformerRectifier = ({ x, y, number, titleOnly }: TransformerRectifierP
 
   const title = (
     <text
-      x={number === 3 ? 105 : 50}
-      y={-130}
+      x={number === 3 ? 80 : 50}
+      y={24.375}
       className={`Right QuiteLarge ${!allParametersWithinNormalRange && !titleOnly ? 'Amber' : ''}`}
     >
       {number === 3 ? 'ESS TR' : 'TR'}
