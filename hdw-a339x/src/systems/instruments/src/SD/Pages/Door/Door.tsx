@@ -316,7 +316,7 @@ export const DoorPage = () => {
             1700
           </text>
 
-          <text id="cab_vs" x="480" y="380" textAnchor="middle" alignmentBaseline="central">
+          <text id="cab_vs" x="480" y="380" className="" textAnchor="middle" alignmentBaseline="central">
             CAB V/S
           </text>
           <text id="CabinVerticalSpeed" className="Value" x="165" y="501" textAnchor="middle">
@@ -329,7 +329,7 @@ export const DoorPage = () => {
           <g
             id="vsArrow"
             className={(cabinVs * 60 <= -50 || cabinVs * 60 >= 50) && autoMode ? '' : 'Hide'}
-            transform={cabinVs * 60 <= -50 ? 'translate(0, 795) scale(1, -1)' : 'scale(1, 1)'}
+            transform={cabinVs * 60 <= -50 ? 'translate(-350, 100) scale(1, -1)' : 'translate(-350, 100) scale(1, 1)'}
           >
             <path d="M433,405 h7 L446,395" className="VsIndicator" strokeLinejoin="miter" />
             <polygon points="452,388 447,396 457,396" transform="rotate(38,452,388)" className="VsIndicator" />
