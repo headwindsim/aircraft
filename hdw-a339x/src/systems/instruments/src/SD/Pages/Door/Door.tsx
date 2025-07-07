@@ -37,7 +37,7 @@ export const DoorPage = () => {
           <path id="DoorCockpit" className={cockpit ? 'DoorShape' : 'WarningShape'} d="M295 105 l0 -15 l9 0 l0 15Z" />
           <path id="DoorFwdCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M336 185 l0 -20 l-18 0 l0 20Z" />
           <path id="DoorAftCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M336 385 l0 -20 l-18 0 l0 20Z" />
-          <path id="DoorBulkCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M328 415 l0 -22 l-8 0 l0 22Z" />
+          <path id="DoorBulkCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M326 415 l0 -22 l-8 0 l0 22Z" />
         </g>
 
         <g id="slides">
@@ -62,9 +62,9 @@ export const DoorPage = () => {
           <path
             id="DoorAftLeft"
             className={cabinAft > 20 ? 'WarningShape' : 'DoorShape'}
-            d="M264 445 l0 -20 l12 0 l0 20Z"
+            d="M264 447.5 l0 -20 l12 0 l0 20Z"
           />
-          <path id="DoorAftRight" className="DoorShape" d="M336 445 l0 -20 l-12 0 l0 20Z" />
+          <path id="DoorAftRight" className="DoorShape" d="M336 447.5 l0 -20 l-12 0 l0 20Z" />
         </g>
 
         <g id="dashes">
@@ -115,6 +115,15 @@ export const DoorPage = () => {
             strokeDasharray="7,4"
             d="M346, 405 l77 0"
           />
+
+          <g
+            id="vsArrow"
+            className={(cabinVs * 60 <= -50 || cabinVs * 60 >= 50) && autoMode ? '' : 'Hide'}
+            transform={cabinVs * 60 <= -50 ? 'translate(-340, 890) scale(1, -1)' : 'translate(-340, 100) scale(1, 1)'}
+          >
+            <path d="M433,405 h7 L446,395" className="VsIndicator" strokeLinejoin="miter" />
+            <polygon points="452,388 447,396 457,396" transform="rotate(38,452,388)" className="VsIndicator" />
+          </g>
         </g>
 
         {/* Texts */}
@@ -316,24 +325,15 @@ export const DoorPage = () => {
             1700
           </text>
 
-          <text id="cab_vs" x="480" y="380" className="" textAnchor="middle" alignmentBaseline="central">
-            CAB V/S
+          <text id="cab_vs" x="40" y="497" className="Oxygen" textAnchor="middle" alignmentBaseline="central">
+            V/S
           </text>
-          <text id="CabinVerticalSpeed" className="Value" x="165" y="501" textAnchor="middle">
+          <text id="CabinVerticalSpeed" className="Value" x="160" y="503.5" textAnchor="middle">
             {!autoMode ? Math.round(cabinVs / 50) * 50 : Math.abs(Math.round(cabinVs / 50) * 50)}
           </text>
-          <text id="vs_unit" className="Unit" x="215" y="495" textAnchor="middle" alignmentBaseline="central">
+          <text id="vs_unit" className="Unit" x="217" y="497" textAnchor="middle" alignmentBaseline="central">
             FT/MIN
           </text>
-
-          <g
-            id="vsArrow"
-            className={(cabinVs * 60 <= -50 || cabinVs * 60 >= 50) && autoMode ? '' : 'Hide'}
-            transform={cabinVs * 60 <= -50 ? 'translate(-350, 100) scale(1, -1)' : 'translate(-350, 100) scale(1, 1)'}
-          >
-            <path d="M433,405 h7 L446,395" className="VsIndicator" strokeLinejoin="miter" />
-            <polygon points="452,388 447,396 457,396" transform="rotate(38,452,388)" className="VsIndicator" />
-          </g>
         </g>
       </svg>
     </>
