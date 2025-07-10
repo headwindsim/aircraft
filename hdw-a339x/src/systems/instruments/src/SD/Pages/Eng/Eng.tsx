@@ -4,6 +4,7 @@ import { usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
 import { PageTitle } from '../../Common/PageTitle';
 import { EcamPage } from '../../Common/EcamPage';
 import { SvgGroup } from '../../Common/SvgGroup';
+import { Position } from '@instruments/common/types';
 
 import './Eng.scss';
 
@@ -331,6 +332,26 @@ const ValveGroup = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) => 
   );
 };
 
+const IgnitionBorder: React.FC<ComponentPositionProps & Position> = ({ x, y, engineNumber, fadecOn }) => {
+  const [engineState] = useSimVar(`L:A32NX_ENGINE_STATE:${engineNumber}`, 'number', 500);
+  const [N1Percent] = useSimVar(`L:A32NX_ENGINE_N1:${engineNumber}`, 'number', 100);
+  const [N1Idle] = useSimVar('L:A32NX_ENGINE_IDLE_N1', 'number', 1000);
+  const showBorder = !!(N1Percent < Math.floor(N1Idle) - 1 && engineState === 2);
+
+  return (
+    <>
+      <g id={`SD-ignition-border-${engineNumber}`}>
+        {fadecOn && showBorder && (
+          <>
+            <path className="WhiteLine" d={`m ${x - 63} ${y + 200} l 0,-65 l 120,0 l 0,65`} />
+            <path className="WhiteLine" d={`m ${x - 63} ${y + 372} l 0,50 l 120,0 l 0,-50`} />
+          </>
+        )}
+      </g>
+    </>
+  );
+};
+
 const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) => {
   // Fuel used has a step of 10 when in Kilograms and 20 when in imperial pounds
   const [weightUnit] = usePersistentProperty('CONFIG_USING_METRIC_UNIT', '1');
@@ -402,6 +423,8 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
 
   return (
     <SvgGroup x={x} y={y}>
+      <IgnitionBorder x={x} y={y} engineNumber={engineNumber} fadecOn={fadecOn} />
+
       <text x={x} y={y - 60} className="FillGreen FontLarge TextCenter">
         <tspan className="FontLarge">{n2Percent.toFixed(1).toString().split('.')[0]}</tspan>
         <tspan className="FontSmall">.</tspan>

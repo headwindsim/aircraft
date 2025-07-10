@@ -45,7 +45,7 @@ export class UpperDisplay extends DisplayComponent<UpperDisplayProps> {
 
         <AttentionGetter
           bus={this.props.bus}
-          x={234}
+          x={229}
           y={96}
           engine={1}
           active1={Subject.create(true)}
@@ -54,7 +54,7 @@ export class UpperDisplay extends DisplayComponent<UpperDisplayProps> {
 
         <AttentionGetter
           bus={this.props.bus}
-          x={534}
+          x={529}
           y={96}
           engine={2}
           active1={Subject.create(false)}
