@@ -41,7 +41,11 @@ export const DoorPage = () => {
           <path id="DoorCockpit" className={cockpit ? 'DoorShape' : 'WarningShape'} d="M295 105 l0 -15 l9 0 l0 15Z" />
           <path id="DoorFwdCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M336 185 l0 -20 l-18 0 l0 20Z" />
           <path id="DoorAftCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M336 385 l0 -20 l-18 0 l0 20Z" />
-          <path id="DoorBulkCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M326 415 l0 -22 l-8 0 l0 22Z" />
+          <path
+            id="DoorBulkCargo"
+            className={!cargo ? 'DoorShape' : 'WarningShape'}
+            d="M326 417.5 l0 -22 l-8 0 l0 22Z"
+          />
         </g>
 
         <g id="slides">
@@ -342,7 +346,7 @@ export const DoorPage = () => {
           <text
             id="CabinVerticalSpeed"
             className={aircraftOnGround ? 'Hide' : 'Value'}
-            x="160"
+            x="158.5"
             y="503.5"
             textAnchor="middle"
           >
