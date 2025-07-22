@@ -22,6 +22,10 @@ export const DoorPage = () => {
   const [manCabinVs] = useSimVar('L:A32NX_PRESS_MAN_CABIN_VS', 'feet per minute', 500);
   const cabinVs = arincCabinVs.isNormalOperation() ? arincCabinVs.value : manCabinVs;
 
+  const [left1LandingGear] = useSimVar('L:A32NX_LGCIU_1_LEFT_GEAR_COMPRESSED', 'bool', 1000);
+  const [right1LandingGear] = useSimVar('L:A32NX_LGCIU_1_RIGHT_GEAR_COMPRESSED', 'bool', 1000);
+  const aircraftOnGround: boolean = left1LandingGear === 1 || right1LandingGear === 1;
+
   return (
     <>
       {/* This is already in an svg so we should remove the containing one - TODO remove style once we are not in the Asobo ECAM */}
@@ -118,7 +122,7 @@ export const DoorPage = () => {
 
           <g
             id="vsArrow"
-            className={(cabinVs * 60 <= -50 || cabinVs * 60 >= 50) && autoMode ? '' : 'Hide'}
+            className={!aircraftOnGround && (cabinVs * 60 <= -50 || cabinVs * 60 >= 50) && autoMode ? '' : 'Hide'}
             transform={cabinVs * 60 <= -50 ? 'translate(-340, 890) scale(1, -1)' : 'translate(-340, 100) scale(1, 1)'}
           >
             <path d="M433,405 h7 L446,395" className="VsIndicator" strokeLinejoin="miter" />
@@ -325,13 +329,33 @@ export const DoorPage = () => {
             1700
           </text>
 
-          <text id="cab_vs" x="40" y="497" className="Oxygen" textAnchor="middle" alignmentBaseline="central">
+          <text
+            id="cab_vs"
+            x="40"
+            y="497"
+            className={aircraftOnGround ? 'Hide' : 'Oxygen'}
+            textAnchor="middle"
+            alignmentBaseline="central"
+          >
             V/S
           </text>
-          <text id="CabinVerticalSpeed" className="Value" x="160" y="503.5" textAnchor="middle">
+          <text
+            id="CabinVerticalSpeed"
+            className={aircraftOnGround ? 'Hide' : 'Value'}
+            x="160"
+            y="503.5"
+            textAnchor="middle"
+          >
             {!autoMode ? Math.round(cabinVs / 50) * 50 : Math.abs(Math.round(cabinVs / 50) * 50)}
           </text>
-          <text id="vs_unit" className="Unit" x="217" y="497" textAnchor="middle" alignmentBaseline="central">
+          <text
+            id="vs_unit"
+            className={aircraftOnGround ? 'Hide' : 'Unit'}
+            x="217"
+            y="497"
+            textAnchor="middle"
+            alignmentBaseline="central"
+          >
             FT/MIN
           </text>
         </g>
