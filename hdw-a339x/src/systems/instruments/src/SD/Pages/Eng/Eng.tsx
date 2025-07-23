@@ -348,6 +348,7 @@ interface NacelleTemperatureGaugeProps {
 }
 
 const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engineNumber, active, value }) => {
+  const [engSelectorPosition] = useSimVar('L:XMLVAR_ENG_MODE_SEL', 'Enum');
   const radius = 45;
   const startAngle = -90;
   const endAngle = 90;
@@ -355,90 +356,92 @@ const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engin
   const max = 500;
 
   return (
-    <g id={`NacelleTemperatureGauge-${engineNumber}`}>
-      {/* Pack inlet flow */}
-      <GaugeComponent
-        x={x}
-        y={y}
-        radius={radius}
-        startAngle={startAngle}
-        endAngle={endAngle}
-        visible
-        className="GaugeComponent Gauge"
-      >
-        <GaugeMarkerComponent
-          value={min}
+    <SvgGroup x={0} y={0} className={`${engSelectorPosition == 2 && 'Hidden'}`}>
+      <g id={`NacelleTemperatureGauge-${engineNumber}`}>
+        {/* Pack inlet flow */}
+        <GaugeComponent
           x={x}
           y={y}
-          min={min}
-          max={max}
           radius={radius}
           startAngle={startAngle}
           endAngle={endAngle}
-          className="White SW2"
-          showValue={false}
-        />
-        <GaugeMarkerComponent
-          value={max}
-          x={x}
-          y={y}
-          min={min}
-          max={max}
-          radius={radius}
-          startAngle={startAngle}
-          endAngle={endAngle}
-          className="White SW2"
-          showValue={false}
-        />
-        {!active && (
-          <text x={x} y={y - 4} className="Amber F29 MiddleAlign">
-            XX
+          visible
+          className="GaugeComponent Gauge"
+        >
+          <GaugeMarkerComponent
+            value={min}
+            x={x}
+            y={y}
+            min={min}
+            max={max}
+            radius={radius}
+            startAngle={startAngle}
+            endAngle={endAngle}
+            className="White SW2"
+            showValue={false}
+          />
+          <GaugeMarkerComponent
+            value={max}
+            x={x}
+            y={y}
+            min={min}
+            max={max}
+            radius={radius}
+            startAngle={startAngle}
+            endAngle={endAngle}
+            className="White SW2"
+            showValue={false}
+          />
+          {!active && (
+            <text x={x} y={y - 4} className="Amber F29 MiddleAlign">
+              XX
+            </text>
+          )}
+          {active && (
+            <>
+              <GaugeMarkerComponent
+                value={300}
+                x={x}
+                y={y}
+                min={min}
+                max={max}
+                radius={radius}
+                startAngle={startAngle}
+                endAngle={endAngle}
+                className="White SW2"
+                showValue={false}
+              />
+
+              <GaugeMarkerComponent
+                value={value}
+                x={x}
+                y={y}
+                min={min}
+                max={max}
+                radius={radius}
+                startAngle={startAngle}
+                endAngle={endAngle}
+                className="GaugeIndicator Gauge LineRound SW4"
+                indicator
+                halfIndicator
+                multiplierInner={0.6}
+                multiplierOuter={1.25}
+              />
+            </>
+          )}
+        </GaugeComponent>
+        {engineNumber === 1 && (
+          <text x={x - 50} y={y + 29} className="FillWhite FontSmall TextCenter">
+            0
           </text>
         )}
-        {active && (
-          <>
-            <GaugeMarkerComponent
-              value={300}
-              x={x}
-              y={y}
-              min={min}
-              max={max}
-              radius={radius}
-              startAngle={startAngle}
-              endAngle={endAngle}
-              className="White SW2"
-              showValue={false}
-            />
-
-            <GaugeMarkerComponent
-              value={value}
-              x={x}
-              y={y}
-              min={min}
-              max={max}
-              radius={radius}
-              startAngle={startAngle}
-              endAngle={endAngle}
-              className="GaugeIndicator Gauge LineRound SW4"
-              indicator
-              halfIndicator
-              multiplierInner={0.6}
-              multiplierOuter={1.25}
-            />
-          </>
+        {engineNumber === 2 && (
+          <text x={x + 15} y={y + 29} className="FillWhite FontSmall TextCenter">
+            500
+          </text>
         )}
-      </GaugeComponent>
-      {engineNumber === 1 && (
-        <text x={x - 50} y={y + 29} className="FillWhite FontSmall TextCenter">
-          0
-        </text>
-      )}
-      {engineNumber === 2 && (
-        <text x={x + 15} y={y + 29} className="FillWhite FontSmall TextCenter">
-          500
-        </text>
-      )}
-    </g>
+      </g>
+    </SvgGroup>
   );
 };
 
