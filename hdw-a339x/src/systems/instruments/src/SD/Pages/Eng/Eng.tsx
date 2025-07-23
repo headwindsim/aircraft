@@ -251,24 +251,6 @@ const QuantityGauge = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) 
           className={`NoFill ${displayedEngineOilQuantity === 0 && 'Hidden'} ${shouldQuantityPulse ? 'LinePulse' : 'GreenLine '}`}
           dashOffset={-40}
         />
-        <Needle
-          x={x}
-          y={y}
-          length={60}
-          scaleMax={100}
-          value={getNeedleValue(OIL_QTY_LOW_ADVISORY, OIL_QTY_MAX) - 3}
-          className="NoFill AmberHeavy"
-          dashOffset={-50}
-        />
-        <Needle
-          x={x}
-          y={y}
-          length={50}
-          scaleMax={100}
-          value={getNeedleValue(OIL_QTY_LOW_ADVISORY, OIL_QTY_MAX) - 2}
-          className="NoFill AmberLine"
-          dashOffset={-45}
-        />
         <text x={x + 5} y={y} className={`FontLarge TextCenter ${shouldQuantityPulse ? 'FillPulse' : 'FillGreen'}`}>
           <tspan className="FontLarge">{displayedEngineOilQuantity.toFixed(1).split('.')[0]}</tspan>
           <tspan className="FontSmall">.</tspan>
@@ -568,7 +550,7 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
           <tspan className="FontSmall">{n2Vibration.toFixed(1).toString().split('.')[1]}</tspan>
         </text>
 
-        <text x={x} y={y + 330} className="FillGreen TextCenter">
+        <text x={x} y={y + 320} className="FillGreen TextCenter">
           <tspan className="FontLarge">{n3Vibration.toFixed(1).toString().split('.')[0]}</tspan>
           <tspan className="FontSmall">.</tspan>
           <tspan className="FontSmall">{n3Vibration.toFixed(1).toString().split('.')[1]}</tspan>
