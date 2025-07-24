@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSimVar } from '@flybywiresim/fbw-sdk';
+import { useSimVar, useArinc429Var } from '@flybywiresim/fbw-sdk';
 
 import './Door.scss';
 
@@ -12,6 +12,19 @@ export const DoorPage = () => {
   const [oxygen] = useSimVar('L:PUSH_OVHD_OXYGEN_CREW', 'bool', 1000);
   const [slides] = useSimVar('L:A32NX_SLIDES_ARMED', 'bool', 1000);
   const [cockpit] = useSimVar('L:A32NX_COCKPIT_DOOR_LOCKED', 'bool', 1000);
+
+  const cpc1DiscreteWord = useArinc429Var('L:A32NX_PRESS_CPC_1_DISCRETE_WORD');
+
+  const [autoMode] = useSimVar('L:A32NX_OVHD_PRESS_MODE_SEL_PB_IS_AUTO', 'Bool', 1000);
+
+  const activeCpcNumber = cpc1DiscreteWord.bitValueOr(11, false) ? 1 : 2;
+  const arincCabinVs = useArinc429Var(`L:A32NX_PRESS_CPC_${activeCpcNumber}_CABIN_VS`, 500);
+  const [manCabinVs] = useSimVar('L:A32NX_PRESS_MAN_CABIN_VS', 'feet per minute', 500);
+  const cabinVs = arincCabinVs.isNormalOperation() ? arincCabinVs.value : manCabinVs;
+
+  const [left1LandingGear] = useSimVar('L:A32NX_LGCIU_1_LEFT_GEAR_COMPRESSED', 'bool', 1000);
+  const [right1LandingGear] = useSimVar('L:A32NX_LGCIU_1_RIGHT_GEAR_COMPRESSED', 'bool', 1000);
+  const aircraftOnGround: boolean = left1LandingGear === 1 || right1LandingGear === 1;
 
   return (
     <>
@@ -28,7 +41,11 @@ export const DoorPage = () => {
           <path id="DoorCockpit" className={cockpit ? 'DoorShape' : 'WarningShape'} d="M295 105 l0 -15 l9 0 l0 15Z" />
           <path id="DoorFwdCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M336 185 l0 -20 l-18 0 l0 20Z" />
           <path id="DoorAftCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M336 385 l0 -20 l-18 0 l0 20Z" />
-          <path id="DoorBulkCargo" className={!cargo ? 'DoorShape' : 'WarningShape'} d="M328 415 l0 -22 l-8 0 l0 22Z" />
+          <path
+            id="DoorBulkCargo"
+            className={!cargo ? 'DoorShape' : 'WarningShape'}
+            d="M326 417.5 l0 -22 l-8 0 l0 22Z"
+          />
         </g>
 
         <g id="slides">
@@ -53,9 +70,9 @@ export const DoorPage = () => {
           <path
             id="DoorAftLeft"
             className={cabinAft > 20 ? 'WarningShape' : 'DoorShape'}
-            d="M264 445 l0 -20 l12 0 l0 20Z"
+            d="M264 447.5 l0 -20 l12 0 l0 20Z"
           />
-          <path id="DoorAftRight" className="DoorShape" d="M336 445 l0 -20 l-12 0 l0 20Z" />
+          <path id="DoorAftRight" className="DoorShape" d="M336 447.5 l0 -20 l-12 0 l0 20Z" />
         </g>
 
         <g id="dashes">
@@ -106,6 +123,15 @@ export const DoorPage = () => {
             strokeDasharray="7,4"
             d="M346, 405 l77 0"
           />
+
+          <g
+            id="vsArrow"
+            className={!aircraftOnGround && (cabinVs * 60 <= -50 || cabinVs * 60 >= 50) && autoMode ? '' : 'Hide'}
+            transform={cabinVs * 60 <= -50 ? 'translate(-340, 890) scale(1, -1)' : 'translate(-340, 100) scale(1, 1)'}
+          >
+            <path d="M433,405 h7 L446,395" className="VsIndicator" strokeLinejoin="miter" />
+            <polygon points="452,388 447,396 457,396" transform="rotate(38,452,388)" className="VsIndicator" />
+          </g>
         </g>
 
         {/* Texts */}
@@ -305,6 +331,36 @@ export const DoorPage = () => {
           </text>
           <text id="psi_val_right" className="Value" x="538" y="42" textAnchor="middle" alignmentBaseline="central">
             1700
+          </text>
+
+          <text
+            id="cab_vs"
+            x="41"
+            y="497"
+            className={aircraftOnGround ? 'Hide' : 'Oxygen'}
+            textAnchor="middle"
+            alignmentBaseline="central"
+          >
+            V/S
+          </text>
+          <text
+            id="CabinVerticalSpeed"
+            className={aircraftOnGround ? 'Hide' : 'Value'}
+            x="158.5"
+            y="503.5"
+            textAnchor="middle"
+          >
+            {!autoMode ? Math.round(cabinVs / 50) * 50 : Math.abs(Math.round(cabinVs / 50) * 50)}
+          </text>
+          <text
+            id="vs_unit"
+            className={aircraftOnGround ? 'Hide' : 'Unit'}
+            x="217"
+            y="497"
+            textAnchor="middle"
+            alignmentBaseline="central"
+          >
+            FT/MIN
           </text>
         </g>
       </svg>
