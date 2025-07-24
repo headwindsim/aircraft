@@ -418,7 +418,7 @@ const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engin
           </text>
         )}
         {engineNumber === 2 && (
-          <text x={x + 20} y={y + 13} className="FillWhite FontSmall TextCenter">
+          <text x={x + 29.5} y={y + 13} className="FillWhite FontSmall TextCenter">
             500
           </text>
         )}
@@ -557,7 +557,7 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
         </text>
       </g>
 
-      <NacelleTemperatureGauge x={x} y={y + 370} engineNumber={engineNumber} active={fadecOn} value={240} />
+      <NacelleTemperatureGauge x={x} y={y + 375} engineNumber={engineNumber} active={fadecOn} value={240} />
 
       <g visibility={inactiveVisibility}>
         <text x={x} y={y + 205} className="FontLarge TextCenter FillAmber">
