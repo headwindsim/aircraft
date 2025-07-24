@@ -331,7 +331,7 @@ interface NacelleTemperatureGaugeProps {
 
 const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engineNumber, active, value }) => {
   const [engSelectorPosition] = useSimVar('L:XMLVAR_ENG_MODE_SEL', 'Enum');
-  const radius = 45;
+  const radius = 30;
   const startAngle = -90;
   const endAngle = 90;
   const min = 0;
@@ -359,7 +359,7 @@ const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engin
             radius={radius}
             startAngle={startAngle}
             endAngle={endAngle}
-            className="White SW2"
+            className="WhiteLine NoFill"
             showValue={false}
           />
           <GaugeMarkerComponent
@@ -371,7 +371,7 @@ const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engin
             radius={radius}
             startAngle={startAngle}
             endAngle={endAngle}
-            className="White SW2"
+            className="WhiteLine NoFill"
             showValue={false}
           />
           {!active && (
@@ -390,7 +390,7 @@ const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engin
                 radius={radius}
                 startAngle={startAngle}
                 endAngle={endAngle}
-                className="White SW2"
+                className="WhiteLine NoFill"
                 showValue={false}
               />
 
@@ -413,12 +413,12 @@ const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engin
           )}
         </GaugeComponent>
         {engineNumber === 1 && (
-          <text x={x - 50} y={y + 29} className="FillWhite FontSmall TextCenter">
+          <text x={x - 27} y={y + 13} className="FillWhite FontSmall TextCenter">
             0
           </text>
         )}
         {engineNumber === 2 && (
-          <text x={x + 15} y={y + 29} className="FillWhite FontSmall TextCenter">
+          <text x={x + 20} y={y + 13} className="FillWhite FontSmall TextCenter">
             500
           </text>
         )}
@@ -438,7 +438,7 @@ const IgnitionBorder: React.FC<ComponentPositionProps & Position> = ({ x, y, eng
       <g id={`SD-ignition-border-${engineNumber}`}>
         {fadecOn && showBorder && (
           <>
-            <path className="WhiteLine" d={`m ${x - 63} ${y + 200} l 0,-65 l 120,0 l 0,65`} />
+            <path className="WhiteLine" d={`m ${x - 63} ${y - 6} l 0,-65 l 120,0 l 0,65`} />
             <path className="WhiteLine" d={`m ${x - 63} ${y + 372} l 0,50 l 120,0 l 0,-50`} />
           </>
         )}
@@ -557,7 +557,7 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
         </text>
       </g>
 
-      <NacelleTemperatureGauge x={x} y={y + 390} engineNumber={engineNumber} active={fadecOn} value={240} />
+      <NacelleTemperatureGauge x={x} y={y + 370} engineNumber={engineNumber} active={fadecOn} value={240} />
 
       <g visibility={inactiveVisibility}>
         <text x={x} y={y + 205} className="FontLarge TextCenter FillAmber">
