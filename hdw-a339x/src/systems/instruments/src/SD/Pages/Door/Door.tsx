@@ -335,7 +335,7 @@ export const DoorPage = () => {
 
           <text
             id="cab_vs"
-            x="40"
+            x="41"
             y="497"
             className={aircraftOnGround ? 'Hide' : 'Oxygen'}
             textAnchor="middle"
