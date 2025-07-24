@@ -166,7 +166,7 @@ export class PseudoFWC {
 
   private readonly stallWarning = Subject.create(false);
 
-    /** If one of the ADR's CAS is above V1 - 4kts, confirm for 0.3s */
+  /** If one of the ADR's CAS is above V1 - 4kts, confirm for 0.3s */
   public readonly v1SpeedConfirmNode = new NXLogicConfirmNode(0.3);
 
   private readonly masterWarningOutput = MappedSubject.create(
@@ -410,6 +410,8 @@ export class PseudoFWC {
   private readonly dcESSBusPowered = Subject.create(false);
 
   private readonly dc2BusPowered = Subject.create(false);
+
+  private readonly extPwrConnected = Subject.create(false);
 
   /* 27 - FLIGHT CONTROLS */
 
@@ -724,8 +726,6 @@ export class PseudoFWC {
 
   private readonly brakesHot = Subject.create(false);
 
-  private readonly landingLight = Subject.create(false);
-
   private readonly lgciu1Fault = Subject.create(false);
 
   private readonly lgciu2Fault = Subject.create(false);
@@ -835,6 +835,10 @@ export class PseudoFWC {
   private readonly N1IdleEng = Subject.create(0);
 
   private readonly engineOnFor30Seconds = new NXLogicConfirmNode(30);
+
+  public readonly engine1Running = Subject.create(false);
+
+  public readonly engine2Running = Subject.create(false);
 
   // FIXME ECU should provide this in a discrete word
   private readonly engine1AboveIdle = MappedSubject.create(
@@ -1038,6 +1042,8 @@ export class PseudoFWC {
   private readonly wingAntiIce = Subject.create(false);
 
   private readonly voiceVhf3 = Subject.create(0);
+
+  private readonly trueNorthRef = Subject.create(false);
 
   /* SETTINGS */
 
@@ -1346,6 +1352,7 @@ export class PseudoFWC {
     this.ac1BusPowered.set(SimVar.GetSimVarValue('L:A32NX_ELEC_AC_1_BUS_IS_POWERED', 'bool'));
     this.ac2BusPowered.set(SimVar.GetSimVarValue('L:A32NX_ELEC_AC_2_BUS_IS_POWERED', 'bool'));
     this.acESSBusPowered.set(SimVar.GetSimVarValue('L:A32NX_ELEC_AC_ESS_BUS_IS_POWERED', 'bool'));
+    this.extPwrConnected.set(SimVar.GetSimVarValue('L:A32NX_ELEC_CONTACTOR_3XG_IS_CLOSED', 'bool'));
 
     /* ENGINE AND THROTTLE acquisition */
 
@@ -1356,6 +1363,9 @@ export class PseudoFWC {
     this.N2Eng1.set(SimVar.GetSimVarValue('L:A32NX_ENGINE_N2:1', 'number'));
     this.N2Eng2.set(SimVar.GetSimVarValue('L:A32NX_ENGINE_N2:2', 'number'));
     this.N1IdleEng.set(SimVar.GetSimVarValue('L:A32NX_ENGINE_IDLE_N1', 'number'));
+    this.engine1Running.set(this.engine1State.get() === 1);
+    this.engine2Running.set(this.engine2State.get() === 1);
+
     // FIXME move out of acquisition to logic below
     const oneEngineAboveMinPower = this.engine1AboveIdle.get() || this.engine2AboveIdle.get();
     this.engineOnFor30Seconds.write(this.engine1State.get() === 1 || this.engine2State.get() === 1, deltaTime);
@@ -1443,24 +1453,24 @@ export class PseudoFWC {
     const adr2Discrete1 = Arinc429Word.fromSimVarValue('L:A32NX_ADIRS_ADR_2_DISCRETE_WORD_1');
 
     const v1 = SimVar.GetSimVarValue('L:AIRLINER_V1_SPEED', SimVarValueType.Knots);
-    if(!Number.isNaN(v1) && typeof v1 === "number") {
-    const v1Threshold = v1 - 4;
-    const v1ConfirmNodeStatus = this.v1SpeedConfirmNode.read();
-    this.v1SpeedConfirmNode.write(
-      v1 &&
-        (this.adr1Cas.get().valueOr(0) > v1Threshold ||
-          this.adr2Cas.valueOr(0) > v1Threshold ||
-          this.adr3Cas.valueOr(0) > v1Threshold),
-      deltaTime,
-    );
-    if (
-      this.fwcFlightPhase.get() === 4 &&
-      this.v1SpeedConfirmNode.read() &&
-      !v1ConfirmNodeStatus &&
-      this.v1SpeedConfirmNode.read()
-    ) {
-      this.soundManager.enqueueSound('v1');
-    }
+    if (!Number.isNaN(v1) && typeof v1 === 'number') {
+      const v1Threshold = v1 - 4;
+      const v1ConfirmNodeStatus = this.v1SpeedConfirmNode.read();
+      this.v1SpeedConfirmNode.write(
+        v1 &&
+          (this.adr1Cas.get().valueOr(0) > v1Threshold ||
+            this.adr2Cas.valueOr(0) > v1Threshold ||
+            this.adr3Cas.valueOr(0) > v1Threshold),
+        deltaTime,
+      );
+      if (
+        this.fwcFlightPhase.get() === 4 &&
+        this.v1SpeedConfirmNode.read() &&
+        !v1ConfirmNodeStatus &&
+        this.v1SpeedConfirmNode.read()
+      ) {
+        this.soundManager.enqueueSound('v1');
+      }
     }
 
     /* LANDING GEAR AND LIGHTS acquisition */
@@ -1468,7 +1478,6 @@ export class PseudoFWC {
     this.antiskidActive.set(SimVar.GetSimVarValue('ANTISKID BRAKES ACTIVE', 'bool'));
     this.brakeFan.set(SimVar.GetSimVarValue('L:A32NX_BRAKE_FAN_RUNNING', 'bool'));
     this.brakesHot.set(SimVar.GetSimVarValue('L:A32NX_BRAKES_HOT', 'bool'));
-    this.landingLight.set(SimVar.GetSimVarValue('LIGHT LANDING ON:2', 'bool'));
     this.lgciu1Fault.set(SimVar.GetSimVarValue('L:A32NX_LGCIU_1_FAULT', 'bool'));
     this.lgciu2Fault.set(SimVar.GetSimVarValue('L:A32NX_LGCIU_2_FAULT', 'bool'));
     this.lgciu1DiscreteWord1.setFromSimVar('L:A32NX_LGCIU_1_DISCRETE_WORD_1');
@@ -2034,6 +2043,7 @@ export class PseudoFWC {
     this.tcasSensitivity.set(SimVar.GetSimVarValue('L:A32NX_TCAS_SENSITIVITY', 'Enum'));
     this.wingAntiIce.set(SimVar.GetSimVarValue('L:A32NX_PNEU_WING_ANTI_ICE_SYSTEM_SELECTED', 'bool'));
     this.voiceVhf3.set(SimVar.GetSimVarValue('A:COM ACTIVE FREQUENCY:3', 'number'));
+    this.trueNorthRef.set(SimVar.GetSimVarValue('L:A32NX_PUSH_TRUE_REF', 'bool'));
 
     /* FUEL */
     const fuelGallonsToKg = SimVar.GetSimVarValue('FUEL WEIGHT PER GALLON', 'kilogram');
@@ -4536,7 +4546,7 @@ export class PseudoFWC {
       side: 'LEFT',
     },
     '0000050': {
-      // REFUELING
+      // REFUEL IN PROCESS
       flightPhaseInhib: [],
       simVarIsActive: MappedSubject.create(
         ([fuel, usrStartRefueling]) => !!(fuel === 100 || usrStartRefueling),
@@ -4862,7 +4872,6 @@ export class PseudoFWC {
       ),
       whichCodeToReturn: () => [
         [3, 4, 5, 7, 8, 9].includes(this.fwcFlightPhase.get()) || this.predWsToConfTest.read() ? 1 : 0,
-
       ],
       codesToReturn: ['000054001', '000054002'],
       memoInhibit: () => false,
@@ -4996,11 +5005,11 @@ export class PseudoFWC {
       side: 'RIGHT',
     },
     '0000190': {
-      // LDG LT
+      // ELEC EXT PWR
       flightPhaseInhib: [],
-      simVarIsActive: this.landingLight,
-      whichCodeToReturn: () => [0],
-      codesToReturn: ['000019001'],
+      simVarIsActive: this.extPwrConnected,
+      whichCodeToReturn: () => [this.engine1Running.get() || this.engine2Running.get() ? 0 : 1],
+      codesToReturn: ['000019002', '000019001'],
       memoInhibit: () => false,
       failure: 0,
       sysPage: -1,
@@ -5032,23 +5041,23 @@ export class PseudoFWC {
       sysPage: -1,
       side: 'RIGHT',
     },
+    '0000310': {
+      // TRUE NORTH REF
+      flightPhaseInhib: [],
+      simVarIsActive: this.trueNorthRef,
+      whichCodeToReturn: () => [0],
+      codesToReturn: ['000031001'],
+      memoInhibit: () => this.toMemo.get() === 1 || this.ldgMemo.get() === 1,
+      failure: 0,
+      sysPage: -1,
+      side: 'LEFT',
+    },
     '0000300': {
       // GPWS FLAPS 3
       flightPhaseInhib: [],
       simVarIsActive: this.gpwsFlaps3,
       whichCodeToReturn: () => [0],
       codesToReturn: ['000030001'],
-      memoInhibit: () => false,
-      failure: 0,
-      sysPage: -1,
-      side: 'RIGHT',
-    },
-    '0000022': {
-      // AUTOBRAKE
-      flightPhaseInhib: [],
-      simVarIsActive: this.fwcFlightPhase.map((v) => v === 7 || v === 8),
-      whichCodeToReturn: () => [this.autoBrake.get() - 1],
-      codesToReturn: ['000002201', '000002202', '000002203', '000002204'],
       memoInhibit: () => false,
       failure: 0,
       sysPage: -1,
