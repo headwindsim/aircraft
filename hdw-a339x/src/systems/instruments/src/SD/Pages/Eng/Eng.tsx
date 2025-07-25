@@ -1,9 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
-import { Arc, Needle } from '@instruments/common/gauges';
+import { Arc, Needle, GaugeComponent, GaugeMarkerComponent } from '@instruments/common/gauges';
 import { usePersistentProperty, useSimVar } from '@flybywiresim/fbw-sdk';
 import { PageTitle } from '../../Common/PageTitle';
 import { EcamPage } from '../../Common/EcamPage';
 import { SvgGroup } from '../../Common/SvgGroup';
+import { Position } from '@instruments/common/types';
 
 import './Eng.scss';
 
@@ -47,29 +48,36 @@ export const EngPage: FC = () => {
         PSI
       </text>
 
-      <line className="Indicator" x1={250} y1={292} x2={225} y2={294} />
-      <text x={300} y={290} className="FillCyan FontSmall TextCenter">
+      <line className="Indicator" x1={250} y1={277} x2={225} y2={279} />
+      <text x={300} y={275} className="FillCyan FontSmall TextCenter">
         &deg;C
       </text>
-      <line className="Indicator" x1={350} y1={292} x2={375} y2={294} />
+      <line className="Indicator" x1={350} y1={277} x2={375} y2={279} />
 
-      <line className="Indicator" x1={250} y1={340} x2={225} y2={342} />
-      <text x={300} y={340} className="FillWhite FontSmall TextCenter">
+      <line className="Indicator" x1={250} y1={330} x2={225} y2={332} />
+      <text x={300} y={330} className="FillWhite FontSmall TextCenter">
         VIB N1
       </text>
-      <line className="Indicator" x1={350} y1={340} x2={375} y2={342} />
+      <line className="Indicator" x1={350} y1={330} x2={375} y2={332} />
 
-      <line className="Indicator" x1={250} y1={370} x2={225} y2={372} />
-      <text x={300} y={370} className="FillWhite FontSmall TextCenter">
+      <line className="Indicator" x1={250} y1={360} x2={225} y2={362} />
+      <text x={300} y={360} className="FillWhite FontSmall TextCenter">
         &nbsp;&nbsp;&nbsp; N2
       </text>
-      <line className="Indicator" x1={350} y1={370} x2={375} y2={372} />
+      <line className="Indicator" x1={350} y1={360} x2={375} y2={362} />
 
-      <line className="Indicator" x1={250} y1={400} x2={225} y2={402} />
-      <text x={300} y={400} className="FillWhite FontSmall TextCenter">
+      <line className="Indicator" x1={250} y1={390} x2={225} y2={392} />
+      <text x={300} y={390} className="FillWhite FontSmall TextCenter">
         &nbsp;&nbsp;&nbsp; N3
       </text>
-      <line className="Indicator" x1={350} y1={400} x2={375} y2={402} />
+      <line className="Indicator" x1={350} y1={390} x2={375} y2={392} />
+
+      <text x={300} y={420} className={`FillWhite FontSmall TextCenter ${engSelectorPosition == 2 && 'Hidden'}`}>
+        NAC
+      </text>
+      <text x={300} y={440} className={`FillCyan FontSmall TextCenter ${engSelectorPosition == 2 && 'Hidden'}`}>
+        °C
+      </text>
 
       <text x={300} y={425} className={`FillWhite FontSmall TextCenter ${engSelectorPosition !== 2 && 'Hidden'}`}>
         IGN
@@ -313,6 +321,132 @@ const ValveGroup = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) => 
   );
 };
 
+interface NacelleTemperatureGaugeProps {
+  x: number;
+  y: number;
+  engineNumber: number;
+  active: boolean;
+  value: number;
+}
+
+const NacelleTemperatureGauge: FC<NacelleTemperatureGaugeProps> = ({ x, y, engineNumber, active, value }) => {
+  const [engSelectorPosition] = useSimVar('L:XMLVAR_ENG_MODE_SEL', 'Enum');
+  const radius = 35;
+  const startAngle = -90;
+  const endAngle = 90;
+  const min = 0;
+  const max = 500;
+
+  return (
+    <SvgGroup x={0} y={0} className={`${engSelectorPosition == 2 && 'Hidden'}`}>
+      <g id={`NacelleTemperatureGauge-${engineNumber}`}>
+        {/* Pack inlet flow */}
+        <GaugeComponent
+          x={x}
+          y={y}
+          radius={radius}
+          startAngle={startAngle}
+          endAngle={endAngle}
+          visible
+          className="GaugeComponent Gauge"
+        >
+          <GaugeMarkerComponent
+            value={min}
+            x={x}
+            y={y}
+            min={min}
+            max={max}
+            radius={radius}
+            startAngle={startAngle}
+            endAngle={endAngle}
+            className="WhiteLine NoFill"
+            showValue={false}
+          />
+          <GaugeMarkerComponent
+            value={max}
+            x={x}
+            y={y}
+            min={min}
+            max={max}
+            radius={radius}
+            startAngle={startAngle}
+            endAngle={endAngle}
+            className="WhiteLine NoFill"
+            showValue={false}
+          />
+          {!active && (
+            <text x={x} y={y - 4} className="Amber F29 MiddleAlign">
+              XX
+            </text>
+          )}
+          {active && (
+            <>
+              <GaugeMarkerComponent
+                value={300}
+                x={x}
+                y={y}
+                min={min}
+                max={max}
+                radius={radius}
+                startAngle={startAngle}
+                endAngle={endAngle}
+                className="WhiteLine NoFill"
+                showValue={false}
+              />
+
+              <GaugeMarkerComponent
+                value={value}
+                x={x}
+                y={y}
+                min={min}
+                max={max}
+                radius={radius}
+                startAngle={startAngle}
+                endAngle={endAngle}
+                className="GaugeIndicator Gauge LineRound SW4"
+                indicator
+                halfIndicator
+                multiplierInner={0.6}
+                multiplierOuter={1.25}
+              />
+            </>
+          )}
+        </GaugeComponent>
+        {engineNumber === 1 && (
+          <text x={x - 31} y={y + 12} className="FillWhite FontSmall TextCenter">
+            0
+          </text>
+        )}
+        {engineNumber === 2 && (
+          <text x={x + 33} y={y + 12} className="FillWhite FontSmall TextCenter">
+            500
+          </text>
+        )}
+      </g>
+    </SvgGroup>
+  );
+};
+
+const IgnitionBorder: React.FC<ComponentPositionProps & Position> = ({ x, y, engineNumber, fadecOn }) => {
+  const [engineState] = useSimVar(`L:A32NX_ENGINE_STATE:${engineNumber}`, 'number', 500);
+  const [N1Percent] = useSimVar(`L:A32NX_ENGINE_N1:${engineNumber}`, 'number', 100);
+  const [N1Idle] = useSimVar('L:A32NX_ENGINE_IDLE_N1', 'number', 1000);
+  const showBorder = !!(N1Percent < Math.floor(N1Idle) - 1 && engineState === 2);
+
+  return (
+    <>
+      <g id={`SD-ignition-border-${engineNumber}`}>
+        {fadecOn && showBorder && (
+          <>
+            <path className="WhiteLine NoFill" d={`m ${x - 63} ${y - 6} l 0,-65 l 120,0 l 0,65`} />
+            <path className="WhiteLine NoFill" d={`m ${x - 63} ${y + 372} l 0,50 l 120,0 l 0,-50`} />
+          </>
+        )}
+      </g>
+    </>
+  );
+};
+
 const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) => {
   // Fuel used has a step of 10 when in Kilograms and 20 when in imperial pounds
   const [weightUnit] = usePersistentProperty('CONFIG_USING_METRIC_UNIT', '1');
@@ -384,7 +518,9 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
 
   return (
     <SvgGroup x={x} y={y}>
-      <text x={x} y={y - 60} className="FillGreen FontLarge TextCenter">
+      <IgnitionBorder x={x} y={y} engineNumber={engineNumber} fadecOn={fadecOn} />
+
+      <text x={x} y={y - 50} className="FillGreen FontLarge TextCenter">
         <tspan className="FontLarge">{n2Percent.toFixed(1).toString().split('.')[0]}</tspan>
         <tspan className="FontSmall">.</tspan>
         <tspan className="FontSmall">{n2Percent.toFixed(1).toString().split('.')[1]}</tspan>
@@ -398,39 +534,42 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
       <PressureGauge x={x} y={y + 110} engineNumber={engineNumber} fadecOn={fadecOn} />
 
       <g visibility={activeVisibility}>
-        <text x={x} y={y + 220} className={`FontLarge TextCenter ${textClassName}`}>
+        <text x={x} y={y + 205} className={`FontLarge TextCenter ${textClassName}`}>
           {displayedEngineOilTemperature}
         </text>
 
-        <text x={x} y={y + 270} className="FillGreen TextCenter">
+        <text x={x} y={y + 260} className="FillGreen TextCenter">
           <tspan className="FontLarge">{n1Vibration.toFixed(1).toString().split('.')[0]}</tspan>
           <tspan className="FontSmall">.</tspan>
           <tspan className="FontSmall">{n1Vibration.toFixed(1).toString().split('.')[1]}</tspan>
         </text>
 
-        <text x={x} y={y + 300} className="FillGreen TextCenter">
+        <text x={x} y={y + 290} className="FillGreen TextCenter">
           <tspan className="FontLarge">{n2Vibration.toFixed(1).toString().split('.')[0]}</tspan>
           <tspan className="FontSmall">.</tspan>
           <tspan className="FontSmall">{n2Vibration.toFixed(1).toString().split('.')[1]}</tspan>
         </text>
 
-        <text x={x} y={y + 330} className="FillGreen TextCenter">
+        <text x={x} y={y + 320} className="FillGreen TextCenter">
           <tspan className="FontLarge">{n3Vibration.toFixed(1).toString().split('.')[0]}</tspan>
           <tspan className="FontSmall">.</tspan>
           <tspan className="FontSmall">{n3Vibration.toFixed(1).toString().split('.')[1]}</tspan>
         </text>
       </g>
+
+      <NacelleTemperatureGauge x={x} y={y + 380} engineNumber={engineNumber} active={fadecOn} value={240} />
+
       <g visibility={inactiveVisibility}>
-        <text x={x} y={y + 220} className="FontLarge TextCenter FillAmber">
+        <text x={x} y={y + 205} className="FontLarge TextCenter FillAmber">
           XX
         </text>
-        <text x={x} y={y + 270} className="FontLarge FillAmber TextCenter">
+        <text x={x} y={y + 260} className="FontLarge FillAmber TextCenter">
           XX
         </text>
-        <text x={x} y={y + 300} className="FontLarge FillAmber TextCenter">
+        <text x={x} y={y + 290} className="FontLarge FillAmber TextCenter">
           XX
         </text>
-        <text x={x} y={y + 330} className="FontLarge FillAmber TextCenter">
+        <text x={x} y={y + 320} className="FontLarge FillAmber TextCenter">
           XX
         </text>
       </g>
