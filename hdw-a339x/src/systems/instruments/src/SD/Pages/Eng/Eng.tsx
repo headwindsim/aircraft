@@ -557,7 +557,7 @@ const EngineColumn = ({ x, y, engineNumber, fadecOn }: ComponentPositionProps) =
         </text>
       </g>
 
-      <NacelleTemperatureGauge x={x} y={y + 378} engineNumber={engineNumber} active={fadecOn} value={240} />
+      <NacelleTemperatureGauge x={x} y={y + 380} engineNumber={engineNumber} active={fadecOn} value={240} />
 
       <g visibility={inactiveVisibility}>
         <text x={x} y={y + 205} className="FontLarge TextCenter FillAmber">
