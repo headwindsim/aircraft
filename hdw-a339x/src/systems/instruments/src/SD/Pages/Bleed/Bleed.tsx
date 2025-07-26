@@ -116,6 +116,8 @@ export const BleedPage: FC = () => {
         <path className={leftHorizontalDuct} d="M 135,267 l 165,0" />
         <path className={!xbleedAirValveFullyClosed ? 'GreenLine' : 'Hide'} d={`M ${300},${267} l 40,0`} />
         <path className={!xbleedAirValveFullyClosed ? 'GreenLine' : 'Hide'} d="M 370,267 l 94,0" />
+        <path className={xbleedAirValveFullyClosed ? 'GreenLine' : 'Hide'} d={`M ${333},${267} l 7,0`} />
+        <path className={xbleedAirValveFullyClosed ? 'GreenLine' : 'Hide'} d={`M ${377},${267} l -7,0`} />
         <Valve
           x={355}
           y={267}
