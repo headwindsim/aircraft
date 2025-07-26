@@ -152,12 +152,7 @@ const Spoiler = ({ x, y, identifier, number, side, fcdcWord3, fcdcWord4 }: Spoil
       <path
         visibility={isSpoilerOut && isPosValid ? 'visible' : 'hidden'}
         className={`${isAvail ? 'GreenLine' : 'AmberLine'}`}
-        d={`M 0 -31 l ${side === 'left' ? 19 : -19} 0 l ${side === 'left' ? -9.5 : 9.5} -16 z`}
-      />
-      <path
-        visibility={isSpoilerOut && isAvail && isPosValid ? 'visible' : 'hidden'}
-        className="GreenLine"
-        d={`M ${side === 'left' ? 9.5 : -9.5} 0 l 0 -31`}
+        d={side === 'left' ? 'M 0 0 L 9.5 -20 L 19 0' : 'M 0 0 L -9.5 -20 L -19 0'}
       />
       <text
         x={side === 'left' ? 12 : -7}
