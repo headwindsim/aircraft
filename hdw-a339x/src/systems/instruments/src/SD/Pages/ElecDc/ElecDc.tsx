@@ -28,7 +28,7 @@ export const ElecDcPage = () => {
   //const [trApuSuppliesDcEss] = useSimVar('L:A32NX_ELEC_CONTACTOR_5PU1_IS_CLOSED', 'Bool', maxStaleness); //change to correct contactor for APU
   //const [ac1SuppliesAcEss] = useSimVar('L:A32NX_ELEC_CONTACTOR_3XC1_IS_CLOSED', 'Bool', maxStaleness);
   const [ac2SuppliesAcEss] = useSimVar('L:A32NX_ELEC_CONTACTOR_3XC2_IS_CLOSED', 'Bool', maxStaleness);
-  //const [dc1AndDcBatConnected] = useSimVar('L:A32NX_ELEC_CONTACTOR_1PC1_IS_CLOSED', 'Bool', maxStaleness);
+  const [dc1AndDcBatConnected] = useSimVar('L:A32NX_ELEC_CONTACTOR_1PC1_IS_CLOSED', 'Bool', maxStaleness);
   //const [dcBatAndDcEssConnected] = useSimVar('L:A32NX_ELEC_CONTACTOR_4PC_IS_CLOSED', 'Bool', maxStaleness);
   const [dc2AndDcBatConnected] = useSimVar('L:A32NX_ELEC_CONTACTOR_1PC2_IS_CLOSED', 'Bool', maxStaleness);
 
@@ -36,7 +36,7 @@ export const ElecDcPage = () => {
   const [acEssBusContactorClosed] = useSimVar('L:A32NX_ELEC_CONTACTOR_15XE1_IS_CLOSED', 'Bool', maxStaleness);
   //const [trEssSuppliesDcEss] = useSimVar('L:A32NX_ELEC_CONTACTOR_3PE_IS_CLOSED', 'Bool', maxStaleness);
 
-  const [externalPowerContactorClosed] = useSimVar('L:A32NX_ELEC_CONTACTOR_3XG_IS_CLOSED', 'Bool', maxStaleness);
+  //const [externalPowerContactorClosed] = useSimVar('L:A32NX_ELEC_CONTACTOR_3XG_IS_CLOSED', 'Bool', maxStaleness);
   const [apuGeneratorContactorClosed] = useSimVar('L:A32NX_ELEC_CONTACTOR_3XS_IS_CLOSED', 'Bool', maxStaleness);
   const [generatorLineContactor1Closed] = useSimVar('L:A32NX_ELEC_CONTACTOR_9XU1_IS_CLOSED', 'Bool', maxStaleness);
   const [generatorLineContactor2Closed] = useSimVar('L:A32NX_ELEC_CONTACTOR_9XU2_IS_CLOSED', 'Bool', maxStaleness);
@@ -47,11 +47,9 @@ export const ElecDcPage = () => {
     <EcamPage name="main-elec-dc">
       <PageTitle x={6} y={18} text="ELEC DC" />
 
-      <BatteryToBatBusWire x={196.611875} y={50.77125} number={1} />
-      <BatteryToBatBusWire x={367.724375} y={50.77125} number={2} />
-
       {ac2SuppliesAcEss ? <Wire description="AC2 to AC ESS" d="M367.5 279.32 h94.63 h-94.63" /> : null}
 
+      {dc1AndDcBatConnected ? <Wire description="DC1 to DC BAT" d="M56.44 70 v180 v-180 h85 h-85" /> : null}
       {dc2AndDcBatConnected ? (
         <Wire description="DC2 to DC BAT" d="M 341.16 103.125 h 166.66 h -166.66 v -42.52 v42.52" />
       ) : null}
@@ -61,16 +59,6 @@ export const ElecDcPage = () => {
           <Wire description="EMER GEN to AC ESS" d="M 343.55 237.62 v 14.25 v -14.25" />
           <Arrow x={350.42} y={252.87} description="EMER GEN to AC ESS" green direction="down" />
         </>
-      ) : null}
-
-      {externalPowerContactorClosed && busTieContactor1Closed && !busTieContactor2Closed ? (
-        <Wire description="EXT PWR to AC1" d="M56.44 302.81 v18.75 h305.10 v57.94" />
-      ) : null}
-      {externalPowerContactorClosed && !busTieContactor1Closed && busTieContactor2Closed ? (
-        <Wire description="EXT PWR to AC2" d="M536.25 302.81 v18.75 h-174.68 v57.94" />
-      ) : null}
-      {externalPowerContactorClosed && busTieContactor1Closed && busTieContactor2Closed ? (
-        <Wire description="EXT PWR to AC1 and AC2" d="M536.25 302.81 v18.75 h-174.68 v57.94 v-57.94 h-305.10 v-18.75" />
       ) : null}
 
       {apuGeneratorContactorClosed && busTieContactor1Closed && !busTieContactor2Closed ? (
@@ -91,7 +79,7 @@ export const ElecDcPage = () => {
       ) : null}
 
       {generatorLineContactor1Closed && !busTieContactor1Closed ? ( // ESS TR to DC ESS
-        <Wire description="GEN1 to AC1" d="M210 277 v98 v-98" />
+        <Wire description="GEN1 to AC1" d="M215 277 v98 v-98" />
       ) : null}
       {generatorLineContactor1Closed && busTieContactor1Closed && busTieContactor2Closed ? (
         <Wire description="GEN1 to AC1 and AC2" d="M56.44 302.81 v42.5 v-23.75 h479.81 v-20.75" />
@@ -111,26 +99,29 @@ export const ElecDcPage = () => {
         <Wire description="GEN2 to AC1 and AC2" d="M536.25 302.81 v42.5 v-23.75 h-479.81 v-20.75" />
       ) : null}
 
-      {externalPowerContactorClosed && (busTieContactor1Closed || busTieContactor2Closed) ? (
-        <Arrow x={354.77} y={385.88} description="EXT PWR" green direction="up" />
-      ) : null}
-      {apuGeneratorContactorClosed && (busTieContactor1Closed || busTieContactor2Closed) ? (
-        <Arrow x={209.09} y={363.75} description="APU GEN" green direction="up" />
-      ) : null}
+      <Arrow description="STAT INV" x={277} y={379} direction="down" />
+      <Arrow description="AC1 to TR1" x={53} y={463} direction="up" />
+      <Arrow description="AC1 to TR ESS" x={210} y={463} direction="up" />
+      <Arrow description="AC2 to TR2" x={385} y={463} direction="up" />
+      <Arrow description="AC2 to TR APU" x={533} y={463} direction="up" />
 
       <Battery x={88} y={140} number={1} />
       <Battery x={255} y={140} number={2} />
       <Battery x={415} y={140} number={3} />
       <BatteryBus x={140} y={60} width={135} number={1} />
-      <BatteryBus x={462} y={60} width={90} number={2} />
-      <Bus x={6} y={250} width={86.25} name="DC" number={1} isNormal={dc1IsPowered} />
+      <BatteryBus x={467} y={60} width={90} number={2} />
+      <Bus x={10} y={250} width={86.25} name="DC" number={1} isNormal={dc1IsPowered} />
       <Bus x={340} y={250} width={86.25} name="DC" number={2} isNormal={dc2IsPowered} />
       <Bus x={150} y={250} width={135} name="DC ESS" isNormal={dcEssIsPowered} isShed={!dcEssShedBusIsPowered} />
       {staticInverterInUse ? <StaticInverter x={315} y={390} /> : null}
       <TransformerRectifier x={13.125} y={375} number={1} />
       <TransformerRectifier x={345} y={375} number={2} />
-      <TransformerRectifier x={150} y={375} number={3} />
+      <TransformerRectifier x={170} y={375} number={3} />
       <TransformerRectifier x={493.125} y={375} number={4} />
+      <AcBusTitle x={43} y={483} number={1} />
+      <AcBusTitle x={200} y={483} number={1} />
+      <AcBusTitle x={375} y={483} number={2} />
+      <AcBusTitle x={523} y={483} number={2} />
     </EcamPage>
   );
 };
@@ -429,6 +420,14 @@ const TransformerRectifier = ({ x, y, number, titleOnly }: TransformerRectifierP
           />
         </>
       )}
+    </SvgGroup>
+  );
+};
+
+const AcBusTitle = ({ x, y, number }) => {
+  return (
+    <SvgGroup x={x} y={y}>
+      <text className="middle">AC{number}</text>
     </SvgGroup>
   );
 };
