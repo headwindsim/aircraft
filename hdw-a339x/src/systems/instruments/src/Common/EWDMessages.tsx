@@ -99,6 +99,8 @@ const EWDMessages = {
   '000031001': '\x1b<3mTRUE NORTH REF',
   '000032001': '\x1b<3mTCAS STBY',
   '000032501': '\x1b<4mTCAS STBY',
+  '000033001': '\x1b<3mPACK FLOW LO',
+  '000034001': '\x1b<3mPACK FLOW HI',
   '000035001': '\x1b<2mLAND ASAP',
   '000036001': '\x1b<4mLAND ASAP',
   '000054001': '\x1b<3mPRED W/S OFF',
