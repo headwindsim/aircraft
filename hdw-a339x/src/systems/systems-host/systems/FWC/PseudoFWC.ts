@@ -280,6 +280,8 @@ export class PseudoFWC {
 
   private readonly packOffNotFailed2Status = Subject.create(false);
 
+  private readonly flowSelectorKnob = Subject.create(0);
+
   private readonly cpc1Fault = Subject.create(false);
 
   private readonly cpc2Fault = Subject.create(false);
@@ -1931,6 +1933,9 @@ export class PseudoFWC {
     const pack2Fault = SimVar.GetSimVarValue('L:A32NX_OVHD_COND_PACK_2_PB_HAS_FAULT', 'bool');
     this.pack1On.set(SimVar.GetSimVarValue('L:A32NX_OVHD_COND_PACK_1_PB_IS_ON', 'bool'));
     this.pack2On.set(SimVar.GetSimVarValue('L:A32NX_OVHD_COND_PACK_2_PB_IS_ON', 'bool'));
+
+    // 0: Low, 1: Norm, 2: High
+    this.flowSelectorKnob.set(SimVar.GetSimVarValue('L:A32NX_KNOB_OVHD_AIRCOND_PACKFLOW_Position', 'number'));
 
     this.cpc1DiscreteWord.setFromSimVar('L:A32NX_PRESS_CPC_1_DISCRETE_WORD');
     this.cpc2DiscreteWord.setFromSimVar('L:A32NX_PRESS_CPC_2_DISCRETE_WORD');
@@ -4999,6 +5004,28 @@ export class PseudoFWC {
       ),
       whichCodeToReturn: () => [0],
       codesToReturn: ['000018001'],
+      memoInhibit: () => false,
+      failure: 0,
+      sysPage: -1,
+      side: 'RIGHT',
+    },
+    '0000330': {
+      // PACK FLOW LO
+      flightPhaseInhib: [],
+      simVarIsActive: this.flowSelectorKnob.map((v) => v == 0),
+      whichCodeToReturn: () => [0],
+      codesToReturn: ['000033001'],
+      memoInhibit: () => false,
+      failure: 0,
+      sysPage: -1,
+      side: 'RIGHT',
+    },
+    '0000340': {
+      // PACK FLOW HI
+      flightPhaseInhib: [],
+      simVarIsActive: this.flowSelectorKnob.map((v) => v == 2),
+      whichCodeToReturn: () => [0],
+      codesToReturn: ['000034001'],
       memoInhibit: () => false,
       failure: 0,
       sysPage: -1,
