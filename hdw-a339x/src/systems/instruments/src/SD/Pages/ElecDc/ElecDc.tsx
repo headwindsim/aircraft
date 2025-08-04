@@ -99,7 +99,7 @@ export const ElecDcPage = () => {
         <Wire description="GEN2 to AC1 and AC2" d="M536.25 302.81 v42.5 v-23.75 h-479.81 v-20.75" />
       ) : null}
 
-      <Arrow description="STAT INV" x={277} y={379} direction="down" />
+      <Arrow description="STAT INV" x={277} y={278} direction="down" />
       <Arrow description="AC1 to TR1" x={53} y={463} direction="up" />
       <Arrow description="AC1 to TR ESS" x={210} y={463} direction="up" />
       <Arrow description="AC2 to TR2" x={385} y={463} direction="up" />
@@ -118,10 +118,11 @@ export const ElecDcPage = () => {
       <TransformerRectifier x={345} y={375} number={2} />
       <TransformerRectifier x={170} y={375} number={3} />
       <TransformerRectifier x={493.125} y={375} number={4} />
-      <AcBusTitle x={43} y={483} number={1} />
-      <AcBusTitle x={200} y={483} number={1} />
-      <AcBusTitle x={375} y={483} number={2} />
-      <AcBusTitle x={523} y={483} number={2} />
+      <AcBusTitle x={44} y={484} number={1} />
+      <AcBusTitle x={201} y={484} number={1} />
+      <AcBusTitle x={376} y={484} number={2} />
+      <AcBusTitle x={524} y={484} number={2} />
+      <StaticInverterTitle x={264} y={307} />
     </EcamPage>
   );
 };
@@ -428,6 +429,21 @@ const AcBusTitle = ({ x, y, number }) => {
   return (
     <SvgGroup x={x} y={y}>
       <text className="middle">AC{number}</text>
+    </SvgGroup>
+  );
+};
+
+const StaticInverterTitle = ({ x, y }) => {
+  return (
+    <SvgGroup x={x} y={y}>
+      <text className="middle">
+        <tspan x={0} dy={0}>
+          STAT
+        </tspan>
+        <tspan x={0} dy={20}>
+          INV
+        </tspan>
+      </text>
     </SvgGroup>
   );
 };
