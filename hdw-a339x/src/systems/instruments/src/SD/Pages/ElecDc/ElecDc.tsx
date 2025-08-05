@@ -49,7 +49,7 @@ export const ElecDcPage = () => {
 
       {ac2SuppliesAcEss ? <Wire description="AC2 to AC ESS" d="M367.5 279.32 h94.63 h-94.63" /> : null}
 
-      {dc1AndDcBatConnected ? <Wire description="DC1 to DC BAT" d="M56.44 70 v180 v-180 h85 h-85" /> : null}
+      {dc1AndDcBatConnected ? <Wire description="DC1 to DC BAT" d="M56.44 73 v177 v-177 h85 h-85" /> : null}
       {dc2AndDcBatConnected ? (
         <Wire description="DC2 to DC BAT" d="M 341.16 103.125 h 166.66 h -166.66 v -42.52 v42.52" />
       ) : null}
@@ -264,15 +264,11 @@ const Bus = ({ x, y, width, name, number, isNormal, isShed }: BusProps) => {
   return (
     <SvgGroup x={x} y={y}>
       <rect width={width} height={busHeight} className="Bus" />
-      <text
-        x={width / 2}
-        y={21}
-        className={`QuiteLarge ${number ? 'Right' : 'Middle'} ${isNormal ? 'Green' : 'Amber'}`}
-      >
+      <text x={width / 2} y={21} className={`QuiteLarge Middle ${isNormal ? 'Green' : 'Amber'}`}>
         {name}
       </text>
       {number ? (
-        <text x={width / 2 + 3.75} y={22} className={`ExtraLarge ${isNormal ? 'Green' : 'Amber'}`}>
+        <text x={width / 2 + 16.875} y={22} className={`ExtraLarge ${isNormal ? 'Green' : 'Amber'}`}>
           {number}
         </text>
       ) : null}
