@@ -47,7 +47,7 @@ export const ElecAcPage = () => {
         <Wire description="AC ESS to ESS TR" d="M258.84 237.65 v 28.52 v -28.52" />
       ) : null}
       {trEssSuppliesDcEss ? <Wire description="ESS TR to DC ESS" d="M258.84 143.63 v 7.11 v -7.11" /> : null}
-      <Arrow x={280 - arrowSize / 2} y={60} description="ESS TR to DC ESS" green={trEssSuppliesDcEss} direction="up" />
+      <Arrow x={292} y={50} description="ESS TR to DC ESS" green={trEssSuppliesDcEss} direction="up" />
       {emergencyGeneratorSupplies ? (
         <Wire description="EMER GEN to ESS TR" d="M 319.02 207.90 h -20.04 h 20.04" />
       ) : null}
@@ -100,23 +100,24 @@ export const ElecAcPage = () => {
       {apuGeneratorContactorClosed && (busTieContactor1Closed || busTieContactor2Closed) ? (
         <Arrow x={209.09} y={363.75} description="APU GEN" green direction="up" />
       ) : null}
-      <Arrow x={290} y={320} description="APU GEN to AC1 or AC 2" green={apuGeneratorContactorClosed} direction="up" />
-      <Bus x={11} y={266.25} width={135} name="AC" number={1} isNormal={ac1IsPowered} />
-      <Bus x={446} y={266.25} width={135} name="AC" number={2} isNormal={ac2IsPowered} />
-      <Bus x={250} y={150} width={100} name="AC ESS" isNormal={acEssIsPowered} isShed={!acEssShedBusIsPowered} />
+      {ac1SuppliesAcEss ? <Wire description="AC ESS to ESS TR" d="M299 50 v90 v-90" /> : null}
+      <Arrow x={292} y={320} description="APU GEN to AC1 or AC 2" green={apuGeneratorContactorClosed} direction="up" />
+      <Bus x={11} y={240} width={135} name="AC" number={1} isNormal={ac1IsPowered} />
+      <Bus x={446} y={240} width={135} name="AC" number={2} isNormal={ac2IsPowered} />
+      <Bus x={252} y={150} width={100} name="AC ESS" isNormal={acEssIsPowered} isShed={!acEssShedBusIsPowered} />
       <EngineGenerator x={13.125} y={334.8} number={1} />
       <EngineGenerator x={493.125} y={334.8} number={2} />
-      <ApuGenerator x={250} y={325} />
+      <ApuGenerator x={252} y={325} />
       {staticInverterInUse ? <StaticInverter x={315} y={390} /> : null}
       {!staticInverterInUse && externalPowerAvailable ? (
         <>
-          <ExternalPower x={320} y={390} number={1} />
-          <ExternalPower x={250} y={390} number={2} />
+          <ExternalPower x={310} y={420} number={1} />
+          <ExternalPower x={195} y={420} number={2} />
         </>
       ) : null}{' '}
       <TransformerRectifier
         x={250}
-        y={15}
+        y={5}
         number={3}
         titleOnly={!trEssSuppliesDcEss && !acEssBusContactorClosed && !emergencyGeneratorSupplies}
       />
@@ -407,7 +408,7 @@ const ExternalPower = ({ x, y, number }) => {
 
   const [frequency] = useSimVar('L:A32NX_ELEC_EXT_PWR_FREQUENCY', 'Hertz', maxStaleness);
   const [frequencyWithinNormalRange] = useSimVar('L:A32NX_ELEC_EXT_PWR_FREQUENCY_NORMAL', 'Bool', maxStaleness);
-  const extPowerTitle = `EXT ${number === 1 ? 'B' : 'A'}`;
+  const extPowerTitle = `EXT ${number === 1 ? 'A' : 'B'}`;
 
   return (
     <PotentialFrequencyBox
