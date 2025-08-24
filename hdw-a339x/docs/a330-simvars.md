@@ -24,6 +24,10 @@
     - [Flight Augmentation Computer (FAC)](#flight-augmentation-computer-fac)
   - [Flaps / Slats (ATA 27)](#flaps--slats-ata-27)
   - [Flight Controls (ATA 27)](#flight-controls-ata-27)
+    - [Indication and Recording Systems (ATA 31)](#indication-and-recording-systems-ata-31)
+    - [ECP](#ecp)
+      - [ARINC429 Output Bus](#arinc429-output-bus)
+      - [Hardwired Discretes](#hardwired-discretes)
   - [Landing Gear (ATA 32)](#landing-gear-ata-32)
   - [ATC (ATA 34)](#atc-ata-34)
   - [Radio Altimeter (ATA 34)](#radio-altimeter-ata-34)
@@ -3870,6 +3874,96 @@ In the variables below, {number} should be replaced with one item in the set: { 
 - A32NX_HYD_TRIM_WHEEL_PERCENT
     - Percent
     - Trim wheel position in percent
+
+## Indication and Recording Systems (ATA 31)
+
+### ECP
+
+Use the `A339XEcpBusPublisher` and `A339XEcpBusEvents` for these in A339X code.
+
+#### ARINC429 Output Bus
+
+- `L:A32NX_ECP_WARNING_SWITCH_WORD`
+  - The ECP warning switch word containg button pressed state.
+    Transmitted to each FWC, DMC, TAWS, FDIMU, and ATSU.
+  - Arinc429<Discrete>
+    | Bit |            Description            |
+    |:---:|:---------------------------------:|
+    | 11  | CLR 1                             |
+    | 13  | STS                               |
+    | 14  | RCL                               |
+    | 16  | CLR 2                             |
+    | 17  | EMERGENCY CANCEL                  |
+    | 18  | TO CONFIG TEST                    |
+
+- `L:A32NX_ECP_SYSTEM_SWITCH_WORD`
+  - The ECP system switch word containg button pressed state.
+    Transmitted to each FWC, DMC, TAWS, FDIMU, and ATSU.
+  - Arinc429<Discrete>
+    | Bit |            Description            |
+    |:---:|:---------------------------------:|
+    | 11  | ENG                               |
+    | 12  | BLEED                             |
+    | 13  | PRESS                             |
+    | 14  | ELEC AC                           |
+    | 15  | ELEC DC                           |
+    | 16  | HYD                               |
+    | 17  | CB                                |
+    | 18  | APU                               |
+    | 19  | COND                              |
+    | 20  | DOOR                              |
+    | 21  | BRAKES                            |
+    | 22  | FLT/CTL                           |
+    | 23  | FUEL                              |
+    | 24  | ALL                               |
+
+- `L:A32NX_ECP_LIGHT_STATUS_WORD`
+  - The ECP light status word containg button light state.
+    Transmitted to each FWC, DMC, TAWS, FDIMU, and ATSU.
+  - Arinc429<Discrete>
+    | Bit |            Description            |
+    |:---:|:---------------------------------:|
+    | 11  | ENG                               |
+    | 12  | BLEED                             |
+    | 13  | PRESS                             |
+    | 14  | ELEC AC                           |
+    | 15  | ELEC DC                           |
+    | 16  | HYD                               |
+    | 17  | CB                                |
+    | 18  | APU                               |
+    | 19  | COND                              |
+    | 20  | DOOR                              |
+    | 21  | BRAKES                            |
+    | 22  | FLT/CTL                           |
+    | 23  | FUEL                              |
+    | 24  | CLR 1                             |
+    | 25  | CLR 2                             |
+    | 26  | STATUS                            |
+    | 27  | L. TEST                           |
+    | 28  | DIM                               |
+
+#### Hardwired Discretes
+
+- `L:A32NX_ECP_DISCRETE_OUT_STS`
+  - The hardwired discrete for STS button to each FWC.
+  - Boolean
+
+- `L:A32NX_ECP_DISCRETE_OUT_RCL`
+  - The hardwired discrete for RCL button to each FWC.
+  - Boolean
+
+- `L:A32NX_ECP_DISCRETE_OUT_CLR`
+  - The hardwired discrete for CLR button to each FWC.
+  - Boolean
+
+- `L:A32NX_ECP_DISCRETE_OUT_EMER_CANC`
+  - The hardwired discrete for emergency cancel/audio suppression to each FWC and the TAWS.
+  - Boolean
+
+- `L:A32NX_ECP_DISCRETE_OUT_ALL`
+  - The hardwired discrete for emergency cancel/audio suppression to each DMC.
+  - Boolean
+
 
 ## Landing Gear (ATA 32)
 

@@ -1,4 +1,5 @@
 <ModelBehaviors>
+    <Include RelativeFile="./Inputs/Pedestal_Inputs.xml"/>
     <Include RelativeFile="../Airbus.xml"/>
     <Include RelativeFile="../AirlinerCommon.xml"/>
     <Include RelativeFile="../generated/A32NX_Interior_ADIRS.xml"/>
@@ -19,4 +20,5 @@
     <Include RelativeFile="../generated/A32NX_Interior_Sidestick.xml"/>
     <Include RelativeFile="../generated/A339X_Interior_ATSAW.xml"/>
     <Include RelativeFile="../generated/A32NX_Windshield.xml"/>
+    <Include RelativeFile="./Pedestal/A339X_ECP.xml"/>
 </ModelBehaviors>
