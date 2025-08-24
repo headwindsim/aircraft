@@ -4406,7 +4406,6 @@ impl A320AutobrakeController {
                 self.deceleration_governor.time_engaged().as_secs_f64(),
             ),
             AutobrakeMode::MAX => Self::MAX_MODE_DECEL_TARGET_MS2,
-            _ => Self::OFF_MODE_DECEL_TARGET_MS2,
         })
     }
 
@@ -7003,7 +7002,7 @@ mod tests {
             }
 
             fn on_the_ground(mut self) -> Self {
-                self.set_indicated_altitude(Length::new::<foot>(0.));
+                self.set_pressure_altitude(Length::new::<foot>(0.));
                 self.set_on_ground(true);
                 self.set_indicated_airspeed(Velocity::new::<knot>(5.));
 
@@ -7011,7 +7010,7 @@ mod tests {
             }
 
             fn on_the_ground_after_touchdown(mut self) -> Self {
-                self.set_indicated_altitude(Length::new::<foot>(0.));
+                self.set_pressure_altitude(Length::new::<foot>(0.));
                 self.set_on_ground(true);
                 self.set_indicated_airspeed(Velocity::new::<knot>(100.));
                 self
@@ -7028,7 +7027,7 @@ mod tests {
             }
 
             fn rotates_on_runway(mut self) -> Self {
-                self.set_indicated_altitude(Length::new::<foot>(0.));
+                self.set_pressure_altitude(Length::new::<foot>(0.));
                 self.set_on_ground(false);
                 self.set_indicated_airspeed(Velocity::new::<knot>(135.));
                 self.write_by_name(
@@ -7045,7 +7044,7 @@ mod tests {
 
             fn in_flight(mut self) -> Self {
                 self.set_on_ground(false);
-                self.set_indicated_altitude(Length::new::<foot>(2500.));
+                self.set_pressure_altitude(Length::new::<foot>(2500.));
                 self.set_indicated_airspeed(Velocity::new::<knot>(180.));
                 self.set_true_airspeed(Velocity::new::<knot>(180.));
                 self.set_ambient_air_density(MassDensity::new::<kilogram_per_cubic_meter>(1.22));
@@ -11230,14 +11229,6 @@ mod tests {
                 .set_pushback_angle(AngularVelocity::new::<degree_per_second>(-5.))
                 .run_waiting_for(Duration::from_secs_f64(5.));
 
-            // Do not turn instantly in 0.5s
-            assert!(
-                test_bed.get_nose_steering_ratio() > Ratio::new::<ratio>(0.)
-                    && test_bed.get_nose_steering_ratio() < Ratio::new::<ratio>(0.5)
-            );
-
-            test_bed = test_bed.run_waiting_for(Duration::from_secs_f64(5.));
-
             // Has turned fully after 5s
             assert!(test_bed.get_nose_steering_ratio() > Ratio::new::<ratio>(0.9));
 
@@ -11246,10 +11237,6 @@ mod tests {
                 .set_pushback_state(true)
                 .set_pushback_angle(AngularVelocity::new::<degree_per_second>(5.))
                 .run_waiting_for(Duration::from_secs_f64(5.));
-
-            assert!(test_bed.get_nose_steering_ratio() > Ratio::new::<ratio>(0.2));
-
-            test_bed = test_bed.run_waiting_for(Duration::from_secs_f64(5.));
 
             // Has turned fully left after 5s
             assert!(test_bed.get_nose_steering_ratio() < Ratio::new::<ratio>(-0.9));

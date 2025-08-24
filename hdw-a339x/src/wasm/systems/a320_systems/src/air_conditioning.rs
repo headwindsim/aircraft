@@ -1718,7 +1718,7 @@ mod tests {
                 stored_vertical_speed: None,
                 vertical_speed: Velocity::default(),
             };
-            test_bed.set_indicated_altitude(Length::default());
+            test_bed.set_pressure_altitude(Length::default());
             test_bed.indicated_airspeed(Velocity::new::<knot>(250.));
             test_bed.set_ambient_temperature(ThermodynamicTemperature::new::<degree_celsius>(24.));
             test_bed.command_measured_temperature(
@@ -1733,7 +1733,7 @@ mod tests {
         fn on_ground(mut self) -> Self {
             self.set_ambient_pressure(Pressure::new::<hectopascal>(1013.25));
             self.indicated_airspeed(Velocity::default());
-            self.set_indicated_altitude(Length::default());
+            self.set_pressure_altitude(Length::default());
             self.set_vertical_speed(Velocity::default());
             self.command_on_ground(true);
             self.command_sea_level_pressure(Pressure::new::<hectopascal>(1013.25));
@@ -1960,7 +1960,7 @@ mod tests {
                 final_altitude,
             ));
             self.set_vertical_speed(Velocity::default());
-            self.set_indicated_altitude(final_altitude);
+            self.set_pressure_altitude(final_altitude);
             self.run_with_vertical_speed(Duration::from_secs(1));
             self
         }
@@ -2064,7 +2064,7 @@ mod tests {
     fn test_bed_in_cruise() -> CabinAirTestBed {
         let mut test_bed =
             test_bed().command_aircraft_climb(Length::default(), Length::new::<foot>(20000.));
-        test_bed.set_indicated_altitude(Length::new::<foot>(20000.));
+        test_bed.set_pressure_altitude(Length::new::<foot>(20000.));
         test_bed.command_ambient_pressure(Pressure::new::<hectopascal>(472.));
         test_bed.set_vertical_speed(Velocity::new::<foot_per_minute>(90.));
         test_bed = test_bed.iterate(55);
