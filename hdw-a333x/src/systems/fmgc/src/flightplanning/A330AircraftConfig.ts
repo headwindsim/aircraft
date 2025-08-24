@@ -54,6 +54,7 @@ const engineModelParams: EngineModelParameters = {
 
 const fmsSymbolConfig: FMSymbolsConfig = {
   publishDepartureIdent: false,
+  showRnpArLabel: false,
 };
 
 export const A330AircraftConfig: AircraftConfig = {

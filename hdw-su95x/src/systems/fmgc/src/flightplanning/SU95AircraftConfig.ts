@@ -142,6 +142,7 @@ const engineModelParams: EngineModelParameters = {
 
 const fmsSymbolConfig: FMSymbolsConfig = {
   publishDepartureIdent: false,
+  showRnpArLabel: false,
 };
 
 export const SU95AircraftConfig: AircraftConfig = {
