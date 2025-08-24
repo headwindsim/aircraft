@@ -10,6 +10,10 @@ members = [
     "build-common/src/wasm/systems/systems_wasm",
 ]
 
+[workspace.dependencies]
+uom = "0.37.0"
+rstest = "0.25.0"
+
 [profile.release]
 lto = true
 strip = true
