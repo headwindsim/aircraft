@@ -1,5 +1,5 @@
 [workspace]
-exclude = ["a32nx"]
+exclude = ["flybywire"]
 resolver = "2"
 
 members = [
