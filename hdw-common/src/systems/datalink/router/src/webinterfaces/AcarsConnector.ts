@@ -174,9 +174,11 @@ export class AcarsConnector {
     if (text === 'error {callsign already in use}') {
       return AtsuStatusCodes.CallsignInUse;
     }
+
     if (text.includes('error')) {
       return AtsuStatusCodes.ProxyError;
     }
+
     if (text.startsWith('ok') !== true) {
       return AtsuStatusCodes.ComFailed;
     }
@@ -223,11 +225,20 @@ export class AcarsConnector {
         break;
     }
 
+    if (text === 'error {callsign already in use}') {
+      return AtsuStatusCodes.CallsignInUse;
+    }
+
     if (text.includes('error')) {
       return AtsuStatusCodes.ProxyError;
     }
+
     if (text.startsWith('ok') !== true) {
       return AtsuStatusCodes.ComFailed;
+    }
+
+    if (text.includes(station) !== true) {
+      return AtsuStatusCodes.NoAtc;
     }
 
     return AtsuStatusCodes.Ok;
@@ -270,6 +281,10 @@ export class AcarsConnector {
           .then((resp) => resp.response)
           .catch(() => 'proxy');
         break;
+    }
+
+    if (text === 'error {callsign already in use}') {
+      return AtsuStatusCodes.CallsignInUse;
     }
 
     if (text === 'proxy') {
@@ -450,6 +465,10 @@ export class AcarsConnector {
             .then((resp) => resp.response)
             .catch(() => 'proxy');
           break;
+      }
+
+      if (text === 'error {callsign already in use}') {
+        return [AtsuStatusCodes.CallsignInUse, retval];
       }
 
       // proxy error during request
