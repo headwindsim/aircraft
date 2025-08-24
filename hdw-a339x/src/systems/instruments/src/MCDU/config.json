@@ -1,6 +1,7 @@
 {
   "isInteractive": true,
   "extraDeps": [
-    "/build-common/src/systems/navdata"
+    "/build-common/src/systems/navdata",
+    "../../../fmgc"
   ]
 }
