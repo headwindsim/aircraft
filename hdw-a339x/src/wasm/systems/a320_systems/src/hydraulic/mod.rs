@@ -120,7 +120,6 @@ impl A330TiltingGearsFactory {
         let left_wing_gear = Self::new_a330_wing_gear(context, true);
         let right_wing_gear = Self::new_a330_wing_gear(context, false);
 
-
         A330TiltingGears::new(left_wing_gear, right_wing_gear)
     }
 }
@@ -2335,9 +2334,6 @@ impl A320Hydraulic {
 
         self.green_circuit
             .update_system_actuator_volumes(self.rudder_mechanical_assembly.green_actuator());
-
-        self.yellow_circuit
-            .update_system_actuator_volumes(self.reversers_assembly.green_actuator());
     }
 
     fn update_yellow_actuators_volume(&mut self) {
@@ -2414,6 +2410,9 @@ impl A320Hydraulic {
 
         self.blue_circuit
             .update_system_actuator_volumes(self.right_spoilers.actuator(2));
+
+        self.blue_circuit
+            .update_system_actuator_volumes(self.reversers_assembly.blue_actuator());
     }
 
     // All the core hydraulics updates that needs to be done at the slowest fixed step rate
@@ -2602,7 +2601,7 @@ impl A320Hydraulic {
         self.reversers_assembly.update(
             context,
             &self.engine_reverser_control,
-            self.green_circuit.system_section(),
+            self.blue_circuit.system_section(),
             self.yellow_circuit.system_section(),
         )
     }
@@ -6128,7 +6127,7 @@ impl A320Reversers {
         self.reversers[1].actuator()
     }
 
-    fn green_actuator(&mut self) -> &mut impl Actuator {
+    fn blue_actuator(&mut self) -> &mut impl Actuator {
         self.reversers[0].actuator()
     }
 }
