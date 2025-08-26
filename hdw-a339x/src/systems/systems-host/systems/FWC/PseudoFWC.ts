@@ -3110,8 +3110,8 @@ export class PseudoFWC {
 
     this.toConfigMemoNormal.set(this.toConfigTestMemoryNode.read() && toConfigNormal);
 
-    this.toConfigOrPhase3.set(!(this.flightPhase3PulseNode.read() || this.toConfighalfSecondTriggeredNode.read()));    
-    
+    this.toConfigOrPhase3.set(!(this.flightPhase3PulseNode.read() || this.toConfighalfSecondTriggeredNode.read()));
+
     /* ELECTRICAL */
     this.phase6For60Seconds.write(this.fwcFlightPhase.get() === 6, deltaTime);
     this.bat1Off.set(this.bat1PbOff.get() && (this.phase6For60Seconds.read() || this.fwcFlightPhase.get() === 2));
@@ -5711,6 +5711,7 @@ export class PseudoFWC {
       sysPage: -1,
       side: 'RIGHT',
     },
+    /* REMOVED AS PER PULL REQUEST #132
     '0000022': {
       // AUTOBRAKE
       flightPhaseInhib: [],
@@ -5722,6 +5723,7 @@ export class PseudoFWC {
       sysPage: -1,
       side: 'RIGHT',
     },
+    */
     '0000230': {
       // MAN LANDING ELEVATION
       flightPhaseInhib: [],
