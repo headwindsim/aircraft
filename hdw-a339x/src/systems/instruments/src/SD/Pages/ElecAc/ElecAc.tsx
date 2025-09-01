@@ -58,6 +58,13 @@ export const ElecAcPage = () => {
           <Arrow x={350.42} y={252.87} description="EMER GEN to AC ESS" green direction="down" />
         </>
       ) : null}
+      <Arrow x={330} y={60} description="STAT INV to ESS TR" green={emergencyGeneratorSupplies} direction="left" />
+      {acEssBusContactorClosed && emergencyGeneratorSupplies ? (
+        <>
+          <Wire description="EMER GEN to AC ESS" d="M 343.55 237.62 v 14.25 v -14.25" />
+          <Arrow x={350.42} y={252.87} description="EMER GEN to AC ESS" green direction="down" />
+        </>
+      ) : null}
       {externalPowerContactorClosed && busTieContactor1Closed && !busTieContactor2Closed ? (
         <Wire description="EXT PWR to AC1" d="M56.44 302.81 v18.75 h305.10 v57.94" />
       ) : null}
@@ -74,7 +81,10 @@ export const ElecAcPage = () => {
         <Wire description="APU GEN to AC2" d="M536.25 302.81 v18.75 h-320.2 v35.67" />
       ) : null}
       {apuGeneratorContactorClosed && busTieContactor1Closed && busTieContactor2Closed ? (
-        <Wire description="APU GEN to AC1 and AC2" d="M536.25 302.81 v18.75 h-320.2 v35.67 v-35.67 h-159.60 v-18.75" />
+        <Wire description="APU GEN to AC1 and AC2" d="M299 205 v100 v-100 h-175 v45 M299 205 h175 v45" />
+      ) : null}
+      {busTieContactor1Closed && busTieContactor2Closed ? (
+        <Wire description="AC1 to AC ESS" d="M55 125 v125 v-125 h242" />
       ) : null}
       {generatorLineContactor1Closed && !busTieContactor1Closed ? (
         <Wire description="GEN1 to AC1" d="M56.44 302.81 v32.7 v-32.7" />
@@ -97,37 +107,37 @@ export const ElecAcPage = () => {
       {externalPowerContactorClosed && (busTieContactor1Closed || busTieContactor2Closed) ? (
         <Arrow x={354.77} y={385.88} description="EXT PWR" green direction="up" />
       ) : null}
-      {apuGeneratorContactorClosed && (busTieContactor1Closed || busTieContactor2Closed) ? (
-        <Arrow x={209.09} y={363.75} description="APU GEN" green direction="up" />
-      ) : null}
-      {ac1SuppliesAcEss ? <Wire description="AC ESS to ESS TR" d="M299 50 v90 v-90" /> : null}
-      <Arrow x={292} y={320} description="APU GEN to AC1 or AC 2" green={apuGeneratorContactorClosed} direction="up" />
-      <Bus x={11} y={240} width={135} name="AC" number={1} isNormal={ac1IsPowered} />
-      <Bus x={446} y={240} width={135} name="AC" number={2} isNormal={ac2IsPowered} />
+      {ac1SuppliesAcEss ? <Wire description="AC ESS to ESS TR" d="M299 60 v90 v-90" /> : null}
+      <Arrow x={292} y={310} description="APU GEN to AC1 or AC 2" green={apuGeneratorContactorClosed} direction="up" />
+      <Arrow x={100} y={200} description="TR1" white={ac1IsPowered} direction="up" />
+      <Arrow x={350} y={200} description="TR2" white={ac2IsPowered} direction="up" />
+      <Arrow x={400} y={200} description="APU TR" white={ac2IsPowered} direction="up" />
+      <Bus x={11} y={250} width={135} name="AC" number={1} isNormal={ac1IsPowered} />
+      <Bus x={446} y={250} width={135} name="AC" number={2} isNormal={ac2IsPowered} />
       <Bus x={252} y={150} width={100} name="AC ESS" isNormal={acEssIsPowered} isShed={!acEssShedBusIsPowered} />
-      <EngineGenerator x={13.125} y={334.8} number={1} />
-      <EngineGenerator x={493.125} y={334.8} number={2} />
+      <EngineGenerator x={13.125} y={325} number={1} />
+      <EngineGenerator x={493.125} y={325} number={2} />
       <ApuGenerator x={252} y={325} />
       {staticInverterInUse ? <StaticInverter x={315} y={390} /> : null}
       {!staticInverterInUse && externalPowerAvailable ? (
         <>
-          <ExternalPower x={310} y={420} number={1} />
-          <ExternalPower x={195} y={420} number={2} />
+          <ExternalPower x={310} y={425} number={1} />
+          <ExternalPower x={195} y={425} number={2} />
         </>
       ) : null}{' '}
       <TransformerRectifier
-        x={250}
+        x={265}
         y={5}
         number={3}
         titleOnly={!trEssSuppliesDcEss && !acEssBusContactorClosed && !emergencyGeneratorSupplies}
       />
       <EmergencyGenerator x={120} y={25} titleOnly={!emergencyGeneratorSupplies} />
       {galleyIsShed ? <GalleyShed x={300} y={483.75} /> : null}
-      <IntegratedDriveGeneratorTitle x={28.13} y={457} number={1} />
-      <IntegratedDriveGeneratorTemperature x={63.13} y={476.25} number={1} />
+      <IntegratedDriveGeneratorTitle x={28.13} y={447} number={1} />
+      <IntegratedDriveGeneratorTemperature x={63.13} y={466.25} number={1} />
       {!idg1Connected ? <IntegratedDriveGeneratorDisconnected x={29.13} y={495} /> : null}
-      <IntegratedDriveGeneratorTitle x={513.75} y={457} number={2} />
-      <IntegratedDriveGeneratorTemperature x={550.13} y={476.25} number={2} />
+      <IntegratedDriveGeneratorTitle x={513.75} y={447} number={2} />
+      <IntegratedDriveGeneratorTemperature x={550.13} y={466.25} number={2} />
       {!idg2Connected ? <IntegratedDriveGeneratorDisconnected x={518.75} y={495} /> : null}
     </EcamPage>
   );
@@ -627,6 +637,7 @@ interface ArrowProps {
   y: number;
   direction: 'up' | 'down' | 'right' | 'left';
   green?: boolean;
+  white?: boolean;
   amber?: boolean;
   description?: string;
 }
