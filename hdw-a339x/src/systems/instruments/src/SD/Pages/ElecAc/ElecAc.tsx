@@ -38,10 +38,12 @@ export const ElecAcPage = () => {
   const [idg1Connected] = useSimVar('L:A32NX_ELEC_ENG_GEN_1_IDG_IS_CONNECTED', 'Bool', maxStaleness);
   const [idg2Connected] = useSimVar('L:A32NX_ELEC_ENG_GEN_2_IDG_IS_CONNECTED', 'Bool', maxStaleness);
 
+  const [masterSwPbOn] = useSimVar('L:A32NX_OVHD_APU_MASTER_SW_PB_IS_ON', 'Bool', maxStaleness);
+
   return (
     <EcamPage name="main-elec-ac">
       <PageTitle x={6} y={18} text="ELEC AC" />
-      {ac1SuppliesAcEss ? <Wire description="AC1 to AC ESS" d="M138.57 279.32 h94.63 h-94.63" /> : null}
+      {ac1SuppliesAcEss ? <Wire description="AC1 to AC ESS" d="M55 125 v125 v-125 h242 h-242" /> : null}
       {ac2SuppliesAcEss ? <Wire description="AC2 to AC ESS" d="M367.5 279.32 h94.63 h-94.63" /> : null}
       {acEssBusContactorClosed && !emergencyGeneratorSupplies ? (
         <Wire description="AC ESS to ESS TR" d="M258.84 237.65 v 28.52 v -28.52" />
@@ -83,40 +85,45 @@ export const ElecAcPage = () => {
       {apuGeneratorContactorClosed && busTieContactor1Closed && busTieContactor2Closed ? (
         <Wire description="APU GEN to AC1 and AC2" d="M299 205 v100 v-100 h-175 v45 M299 205 h175 v45" />
       ) : null}
-      {busTieContactor1Closed && busTieContactor2Closed ? (
-        <Wire description="AC1 to AC ESS" d="M55 125 v125 v-125 h242" />
-      ) : null}
       {generatorLineContactor1Closed && !busTieContactor1Closed ? (
-        <Wire description="GEN1 to AC1" d="M56.44 302.81 v32.7 v-32.7" />
+        <Wire description="GEN1 to AC1" d="M56.44 289 v25 v-25" />
       ) : null}
       {generatorLineContactor1Closed && busTieContactor1Closed && busTieContactor2Closed ? (
         <Wire description="GEN1 to AC1 and AC2" d="M56.44 302.81 v42.5 v-23.75 h479.81 v-20.75" />
       ) : null}
       {generatorLineContactor2Closed && !busTieContactor2Closed ? (
-        <Wire description="GEN2 to AC2" d="M536.25 302.81 v32.7 v-37.2" />
+        <Wire description="GEN2 to AC2" d="M536.25 289 v25 v-25" />
       ) : null}
       {generatorLineContactor2Closed && busTieContactor1Closed && busTieContactor2Closed ? (
         <Wire description="GEN2 to AC1 and AC2" d="M536.25 302.81 v42.5 v-23.75 h-479.81 v-20.75" />
       ) : null}
       {generatorLineContactor1Closed || busTieContactor1Closed ? (
-        <Arrow x={56.25 - arrowSize / 2} y={303.77} description="AC1" green direction="up" />
+        <Arrow x={56.25 - arrowSize / 2} y={287} description="AC1" green direction="up" />
       ) : null}
       {generatorLineContactor2Closed || busTieContactor2Closed ? (
-        <Arrow x={536.25 - arrowSize / 2} y={303.77} description="AC2" green direction="up" />
+        <Arrow x={536.25 - arrowSize / 2} y={287} description="AC2" green direction="up" />
       ) : null}
       {externalPowerContactorClosed && (busTieContactor1Closed || busTieContactor2Closed) ? (
         <Arrow x={354.77} y={385.88} description="EXT PWR" green direction="up" />
       ) : null}
       {ac1SuppliesAcEss ? <Wire description="AC ESS to ESS TR" d="M299 60 v90 v-90" /> : null}
-      <Arrow x={292} y={310} description="APU GEN to AC1 or AC 2" green={apuGeneratorContactorClosed} direction="up" />
+      {masterSwPbOn ? (
+        <Arrow
+          x={292}
+          y={310}
+          description="APU GEN to AC1 or AC 2"
+          green={apuGeneratorContactorClosed}
+          direction="up"
+        />
+      ) : null}
       <Arrow x={100} y={200} description="TR1" white={ac1IsPowered} direction="up" />
       <Arrow x={350} y={200} description="TR2" white={ac2IsPowered} direction="up" />
       <Arrow x={400} y={200} description="APU TR" white={ac2IsPowered} direction="up" />
       <Bus x={11} y={250} width={135} name="AC" number={1} isNormal={ac1IsPowered} />
       <Bus x={446} y={250} width={135} name="AC" number={2} isNormal={ac2IsPowered} />
       <Bus x={252} y={150} width={100} name="AC ESS" isNormal={acEssIsPowered} isShed={!acEssShedBusIsPowered} />
-      <EngineGenerator x={13.125} y={325} number={1} />
-      <EngineGenerator x={493.125} y={325} number={2} />
+      <EngineGenerator x={13.125} y={315} number={1} />
+      <EngineGenerator x={493.125} y={315} number={2} />
       <ApuGenerator x={252} y={325} />
       {staticInverterInUse ? <StaticInverter x={315} y={390} /> : null}
       {!staticInverterInUse && externalPowerAvailable ? (
@@ -133,111 +140,13 @@ export const ElecAcPage = () => {
       />
       <EmergencyGenerator x={120} y={25} titleOnly={!emergencyGeneratorSupplies} />
       {galleyIsShed ? <GalleyShed x={300} y={483.75} /> : null}
-      <IntegratedDriveGeneratorTitle x={28.13} y={447} number={1} />
-      <IntegratedDriveGeneratorTemperature x={63.13} y={466.25} number={1} />
+      <IntegratedDriveGeneratorTitle x={28.13} y={437} number={1} />
+      <IntegratedDriveGeneratorTemperature x={63.13} y={456.25} number={1} />
       {!idg1Connected ? <IntegratedDriveGeneratorDisconnected x={29.13} y={495} /> : null}
-      <IntegratedDriveGeneratorTitle x={513.75} y={447} number={2} />
-      <IntegratedDriveGeneratorTemperature x={550.13} y={466.25} number={2} />
+      <IntegratedDriveGeneratorTitle x={513.75} y={437} number={2} />
+      <IntegratedDriveGeneratorTemperature x={550.13} y={456.25} number={2} />
       {!idg2Connected ? <IntegratedDriveGeneratorDisconnected x={518.75} y={495} /> : null}
     </EcamPage>
-  );
-};
-
-const Battery = ({ x, y, number }) => {
-  const [isAuto] = useSimVar(`L:A32NX_OVHD_ELEC_BAT_${number}_PB_IS_AUTO`, 'Bool', maxStaleness);
-
-  const [potential] = useSimVar(`L:A32NX_ELEC_BAT_${number}_POTENTIAL`, 'Volts', maxStaleness);
-  const [potentialWithinNormalRange] = useSimVar(`L:A32NX_ELEC_BAT_${number}_POTENTIAL_NORMAL`, 'Bool', maxStaleness);
-
-  const [current] = useSimVar(`L:A32NX_ELEC_BAT_${number}_CURRENT`, 'Ampere', maxStaleness);
-  const [currentWithinNormalRange] = useSimVar(`L:A32NX_ELEC_BAT_${number}_CURRENT_NORMAL`, 'Bool', maxStaleness);
-
-  const allParametersWithinNormalRange = potentialWithinNormalRange && currentWithinNormalRange;
-
-  const [staticInverterInUse] = useSimVar('L:A32NX_ELEC_CONTACTOR_15XE2_IS_CLOSED', 'Bool', maxStaleness);
-
-  return (
-    <SvgGroup x={x} y={y}>
-      <Box width={86.25} height={71.25} />
-      <text x={52.5} y={21.625} className={`Right ${!allParametersWithinNormalRange && isAuto ? 'Amber' : ''}`}>
-        BAT
-      </text>
-      <text x={56.25} y={21.625} className={`Large ${!allParametersWithinNormalRange && isAuto ? 'Amber' : ''}`}>
-        {number}
-      </text>
-      {isAuto ? (
-        <>
-          <ElectricalProperty
-            x={52.5}
-            y={43.125}
-            value={potential}
-            unit="V"
-            isWithinNormalRange={potentialWithinNormalRange}
-          />
-          <ElectricalProperty
-            x={52.5}
-            y={65.625}
-            value={Math.abs(current)}
-            unit="A"
-            isWithinNormalRange={currentWithinNormalRange}
-          />
-        </>
-      ) : (
-        <text x={43.125} y={41.25} className="Middle" dominantBaseline="middle">
-          OFF
-        </text>
-      )}
-      {number === 1 && staticInverterInUse ? (
-        <>
-          <Arrow x={92.57625} y={1.875} direction="right" />
-          <text x={108.75} y={15} className="Medium">
-            STAT INV
-          </text>
-        </>
-      ) : null}
-    </SvgGroup>
-  );
-};
-
-const BatteryToBatBusWire = ({ x, y, number }) => {
-  const [contactorClosed] = useSimVar(`L:A32NX_ELEC_CONTACTOR_6PB${number}_IS_CLOSED`, 'Bool', maxStaleness);
-  const [current] = useSimVar(`L:A32NX_ELEC_BAT_${number}_CURRENT`, 'Ampere', maxStaleness);
-  const [showArrowWhenContactorClosed] = useSimVar(
-    `L:A32NX_ELEC_CONTACTOR_6PB${number}_SHOW_ARROW_WHEN_CLOSED`,
-    'Bool',
-    maxStaleness,
-  );
-
-  const showArrow = contactorClosed && showArrowWhenContactorClosed;
-  const isCharging = current > 0;
-  const isDischarging = current < 0;
-
-  const pointingRight = (number === 2 && isCharging) || (number === 1 && isDischarging);
-
-  if (!contactorClosed) {
-    return <></>;
-  }
-
-  return (
-    <SvgGroup x={x} y={y}>
-      {showArrow ? (
-        <>
-          {pointingRight ? (
-            <>
-              <Wire d="M0.3 0 h24.53 h-24.53" amber={isDischarging} />
-              <Arrow x={25.525625} y={-(arrowSize / 2)} direction="right" green={isCharging} amber={isDischarging} />
-            </>
-          ) : (
-            <>
-              <Wire d="M11.5 0 h24.52 h-24.53" amber={isDischarging} />
-              <Arrow x={10} y={arrowSize / 2} direction="left" green={isCharging} amber={isDischarging} />
-            </>
-          )}
-        </>
-      ) : (
-        <Wire d="M0.3 0 h36.15 h-36.15" />
-      )}
-    </SvgGroup>
   );
 };
 
@@ -405,9 +314,7 @@ const ApuGenerator = ({ x, y }) => {
             </text>
           )}
         </>
-      ) : (
-        apuGenTitle
-      )}
+      ) : null}
     </SvgGroup>
   );
 };
