@@ -187,6 +187,7 @@ interface LegacyFmsPageFmsInterface extends FmsDataInterface, FmsDisplayInterfac
   getDestinationTransitionLevel(): number | undefined;
   getNavModeSpeedConstraint(): number;
   trySetPreSelectedClimbSpeed(s: string): boolean;
+  tryUpdatePaxNbr(paxNbr: string): boolean;
   tryUpdateCostIndex(costIndex: string): boolean;
   trySetPerfClbPredToAltitude(value: string): boolean;
   trySetPreSelectedCruiseSpeed(s: string): boolean;
@@ -250,6 +251,8 @@ interface LegacyFmsPageFmsInterface extends FmsDataInterface, FmsDisplayInterfac
   simbrief: any;
   isCostIndexSet: boolean;
   costIndex: number | undefined;
+  isPaxNbrSet: boolean;
+  paxNbr: number | undefined;
   cruiseLevel: number | undefined;
   cruiseTemperature?: number;
   casToMachManualCrossoverCurve: any;
