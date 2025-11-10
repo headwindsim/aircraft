@@ -53,14 +53,14 @@ export const ElecAcPage = () => {
       {emergencyGeneratorSupplies ? (
         <Wire description="EMER GEN to ESS TR" d="M 319.02 207.90 h -20.04 h 20.04" />
       ) : null}
-      <Arrow x={230} y={60} description="EMER GEN to ESS TR" green={emergencyGeneratorSupplies} direction="right" />
+      <Arrow x={230} y={55} description="EMER GEN to ESS TR" green={emergencyGeneratorSupplies} direction="right" />
       {acEssBusContactorClosed && emergencyGeneratorSupplies ? (
         <>
           <Wire description="EMER GEN to AC ESS" d="M 343.55 237.62 v 14.25 v -14.25" />
           <Arrow x={350.42} y={252.87} description="EMER GEN to AC ESS" green direction="down" />
         </>
       ) : null}
-      <Arrow x={330} y={60} description="STAT INV to ESS TR" green={emergencyGeneratorSupplies} direction="left" />
+      <Arrow x={330} y={70} description="STAT INV to ESS TR" green={emergencyGeneratorSupplies} direction="left" />
       {acEssBusContactorClosed && emergencyGeneratorSupplies ? (
         <>
           <Wire description="EMER GEN to AC ESS" d="M 343.55 237.62 v 14.25 v -14.25" />
@@ -116,15 +116,15 @@ export const ElecAcPage = () => {
           direction="up"
         />
       ) : null}
-      <Arrow x={100} y={200} description="TR1" white={ac1IsPowered} direction="up" />
-      <Arrow x={350} y={200} description="TR2" white={ac2IsPowered} direction="up" />
-      <Arrow x={400} y={200} description="APU TR" white={ac2IsPowered} direction="up" />
+      <Arrow x={100} y={244} description="TR1" white={ac1IsPowered} direction="up" />
+      <Arrow x={498} y={244} description="TR2" white={ac2IsPowered} direction="up" />
+      <Arrow x={565} y={244} description="APU TR" white={ac2IsPowered} direction="up" />
       <Bus x={11} y={250} width={135} name="AC" number={1} isNormal={ac1IsPowered} />
       <Bus x={446} y={250} width={135} name="AC" number={2} isNormal={ac2IsPowered} />
-      <Bus x={252} y={150} width={100} name="AC ESS" isNormal={acEssIsPowered} isShed={!acEssShedBusIsPowered} />
+      <Bus x={250} y={150} width={100} name="AC ESS" isNormal={acEssIsPowered} isShed={!acEssShedBusIsPowered} />
       <EngineGenerator x={13.125} y={315} number={1} />
       <EngineGenerator x={493.125} y={315} number={2} />
-      <ApuGenerator x={252} y={325} />
+      <ApuGenerator x={250} y={325} />
       {staticInverterInUse ? <StaticInverter x={315} y={390} /> : null}
       {!staticInverterInUse && externalPowerAvailable ? (
         <>
@@ -132,13 +132,16 @@ export const ElecAcPage = () => {
           <ExternalPower x={195} y={425} number={2} />
         </>
       ) : null}{' '}
+      <TransformerRectifierTitle x={111} y={230} number={1} />
+      <TransformerRectifierTitle x={502} y={230} number={2} />
+      <TransformerRectifierTitle x={565} y={230} number={3} />
       <TransformerRectifier
         x={265}
         y={5}
         number={3}
         titleOnly={!trEssSuppliesDcEss && !acEssBusContactorClosed && !emergencyGeneratorSupplies}
       />
-      <EmergencyGenerator x={120} y={25} titleOnly={!emergencyGeneratorSupplies} />
+      <EmergencyGenerator x={120} y={20} titleOnly={!emergencyGeneratorSupplies} />
       {galleyIsShed ? <GalleyShed x={300} y={483.75} /> : null}
       <IntegratedDriveGeneratorTitle x={28.13} y={437} number={1} />
       <IntegratedDriveGeneratorTemperature x={63.13} y={456.25} number={1} />
@@ -176,11 +179,15 @@ const Bus = ({ x, y, width, name, number, isNormal, isShed }: BusProps) => {
   return (
     <SvgGroup x={x} y={y}>
       <rect width={width} height={busHeight} className="Bus" />
-      <text x={50} y={21} className={`QuiteLarge ${number ? 'Right' : 'Middle'} ${isNormal ? 'Green' : 'Amber'}`}>
+      <text
+        x={number ? 74 : 50}
+        y={21}
+        className={`QuiteLarge ${number ? 'Right' : 'Middle'} ${isNormal ? 'Green' : 'Amber'}`}
+      >
         {name}
       </text>
       {number ? (
-        <text x={width / 2 + 3.75} y={22} className={`ExtraLarge ${isNormal ? 'Green' : 'Amber'}`}>
+        <text x={width / 2 + 16.75} y={22} className={`ExtraLarge ${isNormal ? 'Green' : 'Amber'}`}>
           {number}
         </text>
       ) : null}
@@ -373,7 +380,7 @@ const PotentialFrequencyBox = ({
 
   return (
     <SvgGroup x={x} y={y}>
-      <Box width={93.75} height={67.5} />
+      <Box width={80} height={67.5} />
       <text
         x={46.875}
         y={18.75}
@@ -419,7 +426,7 @@ const TransformerRectifier = ({ x, y, number, titleOnly }: TransformerRectifierP
     <text
       x={number === 3 ? 80 : 50}
       y={24.375}
-      className={`Right QuiteLarge ${!allParametersWithinNormalRange && !titleOnly ? 'Amber' : ''}`}
+      className={`Right Medium ${!allParametersWithinNormalRange && !titleOnly ? 'Amber' : ''}`}
     >
       {number === 3 ? 'ESS TR' : 'TR'}
     </text>
@@ -457,6 +464,12 @@ const TransformerRectifier = ({ x, y, number, titleOnly }: TransformerRectifierP
     </SvgGroup>
   );
 };
+
+const TransformerRectifierTitle = ({ x, y, number }) => (
+  <SvgGroup x={x} y={y}>
+    {number === 3 ? <text className="Middle">APU TR</text> : <text className="Middle">TR{number}</text>}
+  </SvgGroup>
+);
 
 const EmergencyGenerator = ({ x, y, titleOnly }) => {
   const [potential] = useSimVar('L:A32NX_ELEC_EMER_GEN_POTENTIAL', 'Volts', maxStaleness);
