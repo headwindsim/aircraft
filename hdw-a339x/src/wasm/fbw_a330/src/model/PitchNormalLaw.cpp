@@ -245,10 +245,10 @@ PitchNormalLaw::Parameters_PitchNormalLaw_T PitchNormalLaw::PitchNormalLaw_rtP{
   { 0.0, 0.0, -30.0, -30.0 },
 
 
-  { 1.0, 1.0, 0.5, 0.3, 0.3 },
+  { 1.0, 1.0, 1.0, 1.0, 1.0 },
 
 
-  { 1.0, 1.0, 0.5, 0.3, 0.3 },
+  { 1.0, 1.0, 1.0, 1.0, 1.0 },
 
 
   { 1.0, 1.0, 0.5, 0.3, 0.3 },
