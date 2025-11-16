@@ -4423,6 +4423,18 @@ Use the `A339XEcpBusPublisher` and `A339XEcpBusEvents` for these in A339X code.
 
 ## Non-Systems Related
 
+- `L:HDW_BUILD_EDITION`
+    - Enum
+    - Read-Only
+    - Current aircraft build edition (same meaning as package.json edition property).
+      Description | Value
+      ------------ | -
+      Unknown      | 0
+      Release      | 1
+      Staging      | 2
+      Development  | 3
+      Experimental | 4
+      
 - `L:FBW_PILOT_SEAT`
   - Enum
   - Which seat the user/pilot occupies in the flight deck.
