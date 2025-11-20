@@ -1,12 +1,17 @@
-// Copyright (c) 2021-2024 FlyByWire Simulations
+// Copyright (c) 2021-2025 FlyByWire Simulations
 //
 // SPDX-License-Identifier: GPL-3.0
 
-import { NXDataStore, NXUnits } from '@flybywiresim/fbw-sdk';
+import { NXUnits } from '@flybywiresim/fbw-sdk';
 
 // total refuel time for all fuel tank for A330 are roughly 33 minutes (1980 seconds) -> 1300 seconds wing + 680 seconds center
 const WING_FUELRATE_GAL_SEC = 18.5523; // 2 * (inner + outer wing fuel)/ 1300 seconds = 2 * (11095 + 964)/1300
 const CENTER_MODIFIER = 1.00075; // (center + trim)/680 seconds / WING_FUELRATE_GAL_SEC = 12625/680 /18.5523
+enum RefuelRate {
+  REAL = '0',
+  FAST = '1',
+  INSTANT = '2',
+}
 
 // FIXME move to systems host
 export class A32NX_Refuel {
@@ -35,21 +40,16 @@ export class A32NX_Refuel {
     SimVar.SetSimVarValue('L:A32NX_FUEL_RIGHT_AUX_DESIRED', 'Number', ROutCurrentSimVar);
   }
 
-  defuelTank(multiplier) {
+  defuelTank(multiplier: number) {
     return -WING_FUELRATE_GAL_SEC * multiplier;
   }
-  refuelTank(multiplier) {
+  refuelTank(multiplier: number) {
     return WING_FUELRATE_GAL_SEC * multiplier;
   }
 
-  update(_deltaTime) {
+  update(_deltaTime: number) {
     const refuelStartedByUser = SimVar.GetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool');
-    const gsxFuelHose = SimVar.GetSimVarValue('L:FSDT_GSX_FUELHOSE_CONNECTED', 'Number');
-    if (!refuelStartedByUser && gsxFuelHose == 0) {
-      return;
-    }
-    if (!refuelStartedByUser && gsxFuelHose == 1) {
-      SimVar.SetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool', true);
+    if (!refuelStartedByUser) {
       return;
     }
     const busDC2 = SimVar.GetSimVarValue('L:A32NX_ELEC_DC_2_BUS_IS_POWERED', 'Bool');
@@ -58,8 +58,8 @@ export class A32NX_Refuel {
     const onGround = SimVar.GetSimVarValue('SIM ON GROUND', 'Bool');
     const eng1Running = SimVar.GetSimVarValue('ENG COMBUSTION:1', 'Bool');
     const eng2Running = SimVar.GetSimVarValue('ENG COMBUSTION:2', 'Bool');
-    const refuelRate = NXDataStore.get('REFUEL_RATE_SETTING', '0'); // default = real
-    if (refuelRate !== '2') {
+    const refuelRate = SimVar.GetSimVarValue('L:A32NX_EFB_REFUEL_RATE_SETTING', 'number');
+    if (refuelRate !== RefuelRate.INSTANT) {
       if (!onGround || eng1Running || eng2Running || gs > 0.1 || (!busDC2 && !busDCHot1)) {
         return;
       }
@@ -84,7 +84,7 @@ export class A32NX_Refuel {
     const LOutTarget = LOutTargetSimVar;
     const RInnTarget = RInnTargetSimVar;
     const ROutTarget = ROutTargetSimVar;
-    if (refuelRate == '2') {
+    if (refuelRate == RefuelRate.INSTANT) {
       // instant
       SimVar.SetSimVarValue('FUEL TANK CENTER QUANTITY', 'Gallons', centerTarget);
       SimVar.SetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'Gallons', LInnTarget);
@@ -93,7 +93,7 @@ export class A32NX_Refuel {
       SimVar.SetSimVarValue('FUEL TANK RIGHT AUX QUANTITY', 'Gallons', ROutTarget);
     } else {
       let multiplier = 1;
-      if (refuelRate == '1') {
+      if (refuelRate == RefuelRate.FAST) {
         // fast
         multiplier = 5;
       }
@@ -185,7 +185,6 @@ export class A32NX_Refuel {
     ) {
       // DONE FUELING
       SimVar.SetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool', false);
-      SimVar.SetSimVarValue('L:FSDT_GSX_FUELHOSE_CONNECTED', 'Number', 0);
     }
   }
 }
