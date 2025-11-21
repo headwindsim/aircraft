@@ -48,6 +48,9 @@ struct Args {
     /// Print raw interface version of input file
     #[arg(short = 'r', long, default_value_t = false)]
     get_raw_input_file_version: bool,
+    /// Disregard the detected FDR file version, will output garbled data if version is mismatched
+    #[arg(long, default_value_t = false)]
+    override_interface_version: bool,
 }
 
 // Read number of bytes specified by the size of T from the binary file
