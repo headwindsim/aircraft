@@ -34,7 +34,12 @@ class EngineControl_A339X {
   FadecSimData_A339X simData{};
 
   // ATC ID for the aircraft used to load and store the fuel levels
-  std::string atcId{};
+  std::string atcId = "A339X";
+
+  // Whether we have already loaded the fuel configuration from the config file
+  bool hasLoadedFuelConfig = false;
+
+  bool fadecInitialized = false;
 
   // Fuel configuration for loading and storing fuel levels
   FuelConfiguration_A339X fuelConfiguration{};
@@ -98,6 +103,7 @@ class EngineControl_A339X {
   SimpleProfiler profilerUpdateFuel{"Fadec::EngineControl_A339X::updateFuel()", 100};
   SimpleProfiler profilerUpdateThrustLimits{"Fadec::EngineControl_A339X::updateThrustLimits()", 100};
   SimpleProfiler profilerUpdateOil{"Fadec::EngineControl_A339X::updateOil()", 100};
+  SimpleProfiler profilerEnsureFadecIsInitialized{"Fadec::EngineControl_A339X::ensureFadecIsInitialized()", 100};
 #endif
 
   // ===========================================================================
@@ -127,10 +133,20 @@ class EngineControl_A339X {
 
  private:
   /**
+   * @brief Initializes the required data for the engine simulation if it has not been initialized
+   */
+  void loadFuelConfigIfPossible();
+
+  /**
    * @brief Initialize the FADEC and Fuel model
-   * This is done after we have retrieved the ATC ID so we can load the fuel levels
    */
   void initializeEngineControlData();
+
+  /**
+   * @brief Initializes the fuel tanks based on a default config or the saved state of this livery
+   * This method may be called multiple times during initialization
+   */
+  void initializeFuelTanks(FLOAT64 timeStamp, UINT64 tickCounter);
 
   /**
    * @brief Generates a random engine imbalance.
