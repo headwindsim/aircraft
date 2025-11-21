@@ -1211,6 +1211,7 @@
 - A32NX_FLAPS_CONF_INDEX
     - Number
     - Indicates the desired flap configuration index according to the table
+        DO NOT USE IN SYSTEMS, USE SFCC INSTEAD
     - Value | Meaning
             --- | ---
       0 | Conf0
