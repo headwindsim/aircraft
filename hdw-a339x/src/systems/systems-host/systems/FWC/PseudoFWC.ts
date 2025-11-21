@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 // Copyright (c) 2021-2025 FlyByWire Simulations
 //
 // SPDX-License-Identifier: GPL-3.0
@@ -505,7 +506,7 @@ export class PseudoFWC {
 
   public readonly modeReversionMtrig1 = new NXLogicTriggeredMonostableNode(3, true);
 
-  public readonly modeReversionMtrig2 = new NXLogicTriggeredMonostableNode(3, true);  
+  public readonly modeReversionMtrig2 = new NXLogicTriggeredMonostableNode(3, true);
 
   public readonly modeReversion = Subject.create(false);
 
@@ -546,7 +547,6 @@ export class PseudoFWC {
   private readonly fcu1DiscreteWord2 = Arinc429LocalVarConsumerSubject.create(this.sub.on('a32nx_fcu_discrete_word_2'));
   private readonly fcu2DiscreteWord2 = Arinc429LocalVarConsumerSubject.create(this.sub.on('a32nx_fcu_discrete_word_2'));
   private readonly fcuSelectedAlt = Arinc429LocalVarConsumerSubject.create(this.sub.on('a32nx_fcu_selected_altitude'));
-
 
   private readonly fcu12Fault = Subject.create(false);
   private readonly fcu1Fault = Subject.create(false);
@@ -1951,7 +1951,9 @@ export class PseudoFWC {
         this.fmgc2CapabilityChangeMtrig3.read()) ||
       this.fmgc2CapabilityChangeMtrig4.read();
 
-    this.modeReversion.set(this.modeReversionMtrig1.read() || this.modeReversionMtrig2.read());
+    // This confirm node simulates the default monitor confirm time.
+    this.capabilityChangeConfNode1.write(fmgc1CapabilityChange || fmgc2CapabilityChange, deltaTime);
+    this.capabilityChange.set(this.capabilityChangeConfNode1.read());
 
     // A/THR OFF VOLUNTARY
     const athrOffVoluntaryBelow50ft = this.radioHeight1.valueOr(2500) < 50 || this.radioHeight2.valueOr(2500) < 50;
@@ -3051,10 +3053,7 @@ export class PseudoFWC {
     // AP/FD Reversion Triple Click
     this.modeReversionMtrig1.write(this.fmgc1DiscreteWord4.get().bitValueOr(28, false), deltaTime);
     this.modeReversionMtrig2.write(this.fmgc2DiscreteWord4.get().bitValueOr(28, false), deltaTime);
-
-    // This confirm node simulates the default monitor confirm time.
-    this.modeReversionConfNode1.write(this.modeReversionMtrig1.read() || this.modeReversionMtrig2.read(), deltaTime);
-    this.modeReversion.set(this.modeReversionConfNode1.read());
+    this.modeReversion.set(this.modeReversionMtrig1.read() || this.modeReversionMtrig2.read());
 
     /* SETTINGS */
 
@@ -3082,7 +3081,6 @@ export class PseudoFWC {
     }
 
     /* T.O. CONFIG CHECK */
-
     // TODO Note that fuel tank low pressure and gravity feed warnings are not included
     const systemStatus =
       this.engine1Generator.get() &&
