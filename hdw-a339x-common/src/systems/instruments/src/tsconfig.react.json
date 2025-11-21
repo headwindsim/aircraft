@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment",
+    "paths": {
+      "@flybywiresim/checklists": ["./shared/src/checklists/index.ts"],
+      "@flybywiresim/fbw-sdk": ["./index-react.ts"],
+      "@flybywiresim/flypad": ["./instruments/src/EFB/index.ts"],
+      "@fmgc/*": ["../../../build-a339x/src/systems/fmgc/src/*"],
+      "@shared/*": ["../../../build-a339x/src/systems/shared/src/*"],
+      "@simbridge/*": ["../../../build-a339x/src/systems/simbridge-client/src/*"],
+      "@typings/*": ["../typings/*"],
+    }
+  }
+}

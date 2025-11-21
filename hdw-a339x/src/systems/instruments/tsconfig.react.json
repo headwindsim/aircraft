@@ -1,0 +1,23 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "React.createElement",
+    "jsxFragmentFactory": "React.Fragment",
+    "paths": {
+      "@datalink/common": ["../../../build-common/src/systems/datalink/common/src/index.ts"],
+      "@failures": ["./failures/src/index.ts"],
+      "@fmgc/*": ["./fmgc/src/*"],
+      "@flybywiresim/bat": ["../../../build-common/src/systems/instruments/src/BAT/index.ts"],
+      "@flybywiresim/checklists": ["../../../build-common/src/systems/shared/src/checklists/index.ts"],
+      "@flybywiresim/fbw-sdk": ["../../../build-common/src/systems/index-react.ts"],
+      "@flybywiresim/flypad": ["../../../build-common/src/systems/instruments/src/EFB/index.ts"],
+      "@instruments/common/*": ["./instruments/src/Common/*"],
+      "@sentry/*": ["./sentry-client/src/*"],
+      "@shared/*": ["./shared/src/*"],
+      "@simbridge/*": ["./simbridge-client/src/*"],
+      "@tcas/*": ["./tcas/src/*"],
+      "@typings/*": ["../../../build-common/src/typings/*"],
+    }
+  }
+}
