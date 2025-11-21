@@ -3576,6 +3576,11 @@ In the variables below, {number} should be replaced with one item in the set: { 
 - A32NX_SFCC_FAP_{num}
     - Flap actual position discrete output
     - {num} is from 1 to 7
+    
+- A32NX_SFCC_{number}_SAP_{id}
+    - {number} is 1 or 2
+    - {id} is from 1 to 7
+    - Slat actual position discrete output
 
 ## Flight Controls (ATA 27)
 
