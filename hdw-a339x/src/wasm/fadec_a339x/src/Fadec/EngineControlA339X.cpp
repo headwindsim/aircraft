@@ -153,7 +153,7 @@ void EngineControl_A339X::update() {
 // PRIVATE
 // =============================================================================
 
-void EngineControl_A32NX::loadFuelConfigIfPossible() {
+void EngineControl_A339X::loadFuelConfigIfPossible() {
 #ifdef PROFILING
   profilerEnsureFadecIsInitialized.start();
 #endif
@@ -257,7 +257,7 @@ void EngineControl_A339X::initializeEngineControlData() {
   simData.thrustLimitToga->set(0);
 }
 
-void EngineControl_A32NX::initializeFuelTanks(FLOAT64 timeStamp, UINT64 tickCounter) {
+void EngineControl_A339X::initializeFuelTanks(FLOAT64 timeStamp, UINT64 tickCounter) {
   LOG_INFO("Fadec::EngineControl_A339X::initializeFuelTanks()");
 
 #ifdef PROFILING
@@ -344,7 +344,7 @@ double EngineControl_A339X::generateEngineImbalance() {
                                                    oilTemperature         //
   );
 
-  LOG_INFO("Fadec::EngineControl_A32NX::generateEngineImbalance() - Values:\n Engine: " +
+  LOG_INFO("Fadec::EngineControl_A339X::generateEngineImbalance() - Values:\n Engine: " +
            std::to_string(LVarEncoder::extract8Int8FromDouble(imbalanceCode, 1)) + "\n" +
            "EGT Imbalance: " + std::to_string(LVarEncoder::extract8Int8FromDouble(imbalanceCode, 2)) + "\n" +
            "FF Imbalance: " + std::to_string(LVarEncoder::extract8Int8FromDouble(imbalanceCode, 3)) + "\n" +
