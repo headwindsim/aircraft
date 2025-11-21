@@ -35,10 +35,11 @@ import { EgpwcBusPublisher } from '../MsfsAvionicsCommon/providers/EgpwcBusPubli
 import { DmcPublisher } from '../MsfsAvionicsCommon/providers/DmcPublisher';
 import { FMBusPublisher } from '../MsfsAvionicsCommon/providers/FMBusPublisher';
 import { FcuBusPublisher } from '../MsfsAvionicsCommon/providers/FcuBusPublisher';
+import { FMMessageTypes } from '@fmgc/components/fms-messages/FmMessages';
+
 import { FuelSystemPublisher } from '@instruments/FuelSystemPublisher';
 import { EwdSimvarPublisher } from '@flybywiresim/ewd/shared/EwdSimvarPublisher';
 import { ArincValueProvider } from '@flybywiresim/ewd/shared/ArincValueProvider';
-
 
 import './style.scss';
 
@@ -180,6 +181,7 @@ class NDInstrument implements FsInstrument {
           terrainThresholdPaddingText={a320TerrainThresholdPadValue}
           rangeChangeMessage={a320NdRangeChange}
           modeChangeMessage={a320NdModeChange}
+          fmMessages={Object.values(FMMessageTypes)}
         />
       </DisplayUnit>,
       document.getElementById('ND_CONTENT'),
