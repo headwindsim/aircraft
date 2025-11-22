@@ -1010,7 +1010,6 @@ export class PseudoFWC {
   public autoBrakeOffAuralTriggered = false;
 
   /* NAVIGATION */
-
   private readonly adr1Cas = Arinc429LocalVarConsumerSubject.create(this.sub.on('a32nx_adr_computed_airspeed_1'));
 
   private readonly adr2Cas = Arinc429LocalVarConsumerSubject.create(this.sub.on('a32nx_adr_computed_airspeed_2'));
@@ -1460,35 +1459,6 @@ export class PseudoFWC {
     return array;
   }
 
-  private adirsMessage2(adirs, engineRunning) {
-    let rowChoice = 0;
-
-    switch (true) {
-      case Math.ceil(adirs / 60) === 3 && !engineRunning:
-        rowChoice = 0;
-        break;
-      case Math.ceil(adirs / 60) === 3 && engineRunning:
-        rowChoice = 1;
-        break;
-      case Math.ceil(adirs / 60) === 2 && !engineRunning:
-        rowChoice = 2;
-        break;
-      case Math.ceil(adirs / 60) === 2 && engineRunning:
-        rowChoice = 3;
-        break;
-      case Math.ceil(adirs / 60) === 1 && !engineRunning:
-        rowChoice = 4;
-        break;
-      case Math.ceil(adirs / 60) === 1 && engineRunning:
-        rowChoice = 5;
-        break;
-      default:
-        break;
-    }
-
-    return rowChoice;
-  }
-
   private readonly ecpClear1Pulse = new NXLogicPulseNode(true);
   private readonly ecpClear2Pulse = new NXLogicPulseNode(true);
   private readonly ecpClearWirePulse = new NXLogicPulseNode(true);
@@ -1759,7 +1729,6 @@ export class PseudoFWC {
     const yellowSysPressurised = SimVar.GetSimVarValue('L:A32NX_HYD_YELLOW_SYSTEM_1_SECTION_PRESSURE_SWITCH', 'bool');
 
     /* ADIRS acquisition */
-
     const adr1PressureAltitude = this.adr1PressureAlt.get();
     const adr2PressureAltitude = this.adr2PressureAlt.get();
     const adr3PressureAltitude = this.adr3PressureAlt.get();

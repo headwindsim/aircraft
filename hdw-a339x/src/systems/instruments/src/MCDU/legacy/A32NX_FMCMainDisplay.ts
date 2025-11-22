@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 // Copyright (c) 2021-2023, 2025 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
@@ -700,7 +701,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
 
     this.efisSymbolsLeft?.update();
     this.efisSymbolsRight.update();
-    
+
     this.arincBusOutputs.forEach((word) => word.writeToSimVarIfDirty());
 
     this.atsu?.onUpdate();
@@ -2481,7 +2482,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
     }
 
     this.flightNumber = flightNo;
-    
+
     this.arincFlightNumber1.setIso5Value(this.flightNumber.substring(0, 2), Arinc429SignStatusMatrix.NormalOperation);
     this.arincFlightNumber2.setIso5Value(this.flightNumber.substring(2, 4), Arinc429SignStatusMatrix.NormalOperation);
     this.arincFlightNumber3.setIso5Value(this.flightNumber.substring(4, 6), Arinc429SignStatusMatrix.NormalOperation);
@@ -5095,7 +5096,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
     return this.winds;
   }
 
-  public getApproachWind() {
+  public getApproachWind(): FmcWindVector | null {
     const activePlan = this.currFlightPlanService.active;
     const destination = activePlan.destinationAirport;
 

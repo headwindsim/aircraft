@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 // Copyright (c) 2021-2023 FlyByWire Simulations
 //
 // SPDX-License-Identifier: GPL-3.0
@@ -11,7 +12,6 @@ import { EwdSimvarPublisher } from './shared/EwdSimvarPublisher';
 
 import './style.scss';
 import { ExtendedClockEventProvider } from 'instruments/src/MsfsAvionicsCommon/providers/ExtendedClockProvider';
-
 
 class A32NX_EWD extends BaseInstrument {
   private readonly bus = new EventBus();

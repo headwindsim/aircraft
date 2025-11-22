@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 // Copyright (c) 2021-2024 FlyByWire Simulations
 //
 // SPDX-License-Identifier: GPL-3.0
@@ -65,7 +66,7 @@ export const FwsAuralsList: Record<string, FwsAural> = {
     continuous: true,
   },
   tripleClick: {
-    localVarName: '3click',
+    wwiseEventName: '3click',
     length: 0.62,
     priority: 3,
     type: FwsAuralWarningType.AuralWarning,
