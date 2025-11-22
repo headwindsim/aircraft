@@ -1751,8 +1751,8 @@ export class PseudoFWC {
       this.v1SpeedConfirmNode.write(
         v1 &&
           (this.adr1Cas.get().valueOr(0) > v1Threshold ||
-            this.adr2Cas.valueOr(0) > v1Threshold ||
-            this.adr3Cas.valueOr(0) > v1Threshold),
+          this.adr2Cas.get().valueOr(0) > v1Threshold ||
+          this.adr3Cas.get().valueOr(0) > v1Threshold),
         deltaTime,
       );
       if (
