@@ -18,8 +18,8 @@ importers:
         specifier: ^0.5.0
         version: 0.5.2
       '@headwindsimulations/api-client':
-        specifier: ^1.2.2
-        version: 1.2.2
+        specifier: ^1.3.3
+        version: 1.3.3
       '@localazy/cli':
         specifier: ^1.6.0
         version: 1.7.5
@@ -1496,8 +1496,8 @@ packages:
   '@flybywiresim/tailwind-config@0.5.2':
     resolution: {integrity: sha512-MV0IZltNoHm2vAhpL+rOIgK6G7tUu4w7wQf+vPTQDmyCbNfpe5QwfbtF+yjKmqryclm3DQ8smPDDRPFuBAIgbQ==}
 
-  '@headwindsimulations/api-client@1.2.2':
-    resolution: {integrity: sha512-xE0aE8dG9Fl41pB3TtFGHkR0IKhZL/cRNwu2ebk2nqqdewtm3mhvZ3/sjvIi7wssaWVIKMptAJ1T008OwUOfmw==}
+  '@headwindsimulations/api-client@1.3.3':
+    resolution: {integrity: sha512-Qc4A5U+tcdhlApOS96BcuoQPZHHPySmDkVK5SRalzVzj7vNLOCSZ1Mbc/zmnXffxxMA4mXoi7sjvUNR+47biKw==}
 
   '@humanwhocodes/config-array@0.11.14':
     resolution: {integrity: sha512-3T8LkOmg45BV5FICb15QQMsyUSWrQ8AygVfC7ZG32zOalnqrilm018ZVCw0eapXux8FtA33q8PSRSstjee3jSg==}
@@ -1795,6 +1795,7 @@ packages:
 
   '@synaptic-simulations/eslint-config@1.0.2':
     resolution: {integrity: sha512-KFzrWBXMdDwwS4dEEZYqXjdE75pFU5JExHOuhs10gD/KXYkrcp/7tkr1GtZ9wp5n8e5c94QD4qJE0BLNFWdGwg==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
       eslint: ^8.22.0
 
@@ -6752,7 +6753,7 @@ snapshots:
 
   '@flybywiresim/tailwind-config@0.5.2': {}
 
-  '@headwindsimulations/api-client@1.2.2':
+  '@headwindsimulations/api-client@1.3.3':
     dependencies:
       axios: 0.21.4
     transitivePeerDependencies:

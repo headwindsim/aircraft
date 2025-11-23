@@ -83,6 +83,7 @@ export const AtsuAocPage = () => {
     { name: 'Disabled', setting: AcarsNetwork.Disabled },
     { name: 'Hoppie', setting: AcarsNetwork.Hoppie },
     { name: 'SayIntentions', setting: AcarsNetwork.SayIntentions },
+    { name: 'BeyondATC', setting: AcarsNetwork.BeyondATC },
   ];
 
   let tafSourceButtons: ButtonType[] = [
