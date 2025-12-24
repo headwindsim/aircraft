@@ -85,7 +85,6 @@ export class A32NX_Refuel {
     const RInnTarget = RInnTargetSimVar;
     const ROutTarget = ROutTargetSimVar;
     if (refuelRate === RefuelRateNumeric.INSTANT) {
-      // instant
       SimVar.SetSimVarValue('FUEL TANK CENTER QUANTITY', 'Gallons', centerTarget);
       SimVar.SetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'Gallons', LInnTarget);
       SimVar.SetSimVarValue('FUEL TANK LEFT AUX QUANTITY', 'Gallons', LOutTarget);
@@ -94,7 +93,6 @@ export class A32NX_Refuel {
     } else {
       let multiplier = 1;
       if (refuelRate === RefuelRateNumeric.FAST) {
-        // fast
         multiplier = 5;
       }
       multiplier *= _deltaTime / 1000;

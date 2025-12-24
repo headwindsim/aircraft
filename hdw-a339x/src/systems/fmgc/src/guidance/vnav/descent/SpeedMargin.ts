@@ -30,7 +30,7 @@ export class SpeedMargin {
     const vmax = SimVar.GetSimVarValue('L:A32NX_SPEEDS_VMAX', 'number');
     const vMan = this.getVman(approachSpeed);
     const vls = SimVar.GetSimVarValue('L:A32NX_SPEEDS_VLS', 'number');
-    const vmin = Math.max(vls, vMan);
+
     const maxMachAsIas = SimVar.GetGameVarValue('FROM MACH TO KIAS', 'number', this.mmo - 0.006);
     const isMachTarget =
       managedDescentSpeed - SimVar.GetGameVarValue('FROM MACH TO KIAS', 'number', managedDescentSpeedMach) > 1;

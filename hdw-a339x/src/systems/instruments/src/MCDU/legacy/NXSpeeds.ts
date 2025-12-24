@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 /**
  * TO V2 speed table
  * calls function(gross weight (t)) which returns CAS.

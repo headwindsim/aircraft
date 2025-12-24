@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 import * as math from 'mathjs';
 
 export enum FuelPlanningPhases {
@@ -279,9 +280,8 @@ export class A32NX_FuelPred {
     //TODO Create logic for handling 200NM and FL390 = 0
     switch (computation) {
       case this.computations.FUEL:
-        return Math.round(
-          getRealNumber(math.sum(math.dotMultiply(alternate ? altFuelConsumedCoef : fuelConsumedCoeff, mmOfDistFL) * factor)),
-        );
+        const base = math.sum(math.dotMultiply(alternate ? altFuelConsumedCoef : fuelConsumedCoeff, mmOfDistFL));
+        return Math.round(getRealNumber(base * factor));
       case this.computations.TIME:
         return Math.round(getRealNumber(math.sum(math.dotMultiply(alternate ? altTimeCoef : timeCoeff, mmOfDistFL))));
       case this.computations.CORRECTIONS:
