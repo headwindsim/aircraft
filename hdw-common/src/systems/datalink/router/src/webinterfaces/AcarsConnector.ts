@@ -32,10 +32,10 @@ export class AcarsConnector {
     let identifier: any;
     switch (network) {
       case AcarsNetwork.Hoppie:
-        identifier = NXDataStore.get('CONFIG_ACARS_HOPPIE_USERID');
+        identifier = NXDataStore.getLegacy('CONFIG_ACARS_HOPPIE_USERID');
         break;
       case AcarsNetwork.SayIntentions:
-        identifier = NXDataStore.get('CONFIG_ACARS_SAYINTENTIONS_KEY');
+        identifier = NXDataStore.getLegacy('CONFIG_ACARS_SAYINTENTIONS_KEY');
         break;
       default:
         identifier = null;
@@ -91,7 +91,7 @@ export class AcarsConnector {
   public static async activate() {
     SimVar.SetSimVarValue('L:A32NX_ACARS_ACTIVE', 'number', 0);
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
     if (acarsNetwork === AcarsNetwork.Disabled) {
       console.log('ACARS deactivated in EFB');
       return;
@@ -146,7 +146,7 @@ export class AcarsConnector {
       return AtsuStatusCodes.NoAcarsConnection;
     }
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
     if (!acarsNetwork || acarsNetwork === AcarsNetwork.Disabled) {
       console.log('No ACARS Network set');
       return;
@@ -211,7 +211,7 @@ export class AcarsConnector {
       return AtsuStatusCodes.OwnCallsign;
     }
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
 
     if (!acarsNetwork || acarsNetwork === AcarsNetwork.Disabled) {
       console.log('No ACARS Network set');
@@ -274,7 +274,7 @@ export class AcarsConnector {
       return AtsuStatusCodes.NoAcarsConnection;
     }
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
     if (!acarsNetwork || acarsNetwork === AcarsNetwork.Disabled) {
       console.log('No ACARS Network set');
       return;
@@ -482,7 +482,7 @@ export class AcarsConnector {
       return [AtsuStatusCodes.NoAcarsConnection, retval];
     }
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
     const identifier = AcarsConnector.getIdentifierByNetwork(acarsNetwork);
 
     try {

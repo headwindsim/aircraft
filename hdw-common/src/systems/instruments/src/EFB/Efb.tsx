@@ -15,6 +15,7 @@ import {
   usePersistentProperty,
   useSimVar,
   ChecklistProvider,
+  usePersistentSetting
 } from '@flybywiresim/fbw-sdk';
 
 import { Provider } from 'react-redux';
@@ -78,7 +79,7 @@ export const EfbWrapper: React.FC<EfbWrapperProps> = ({ failures, aircraftSetup,
     const nanoid = customAlphabet(ALPHABET, SESSION_ID_LENGTH);
     const generatedSessionID = nanoid();
 
-    NXDataStore.set('SENTRY_SESSION_ID', generatedSessionID);
+    NXDataStore.setLegacy('SENTRY_SESSION_ID', generatedSessionID);
   };
   const [aircraftChecklists, setAircraftChecklists] = useState<ChecklistJsonDefinition[]>([]);
 
@@ -216,7 +217,7 @@ export const Efb: React.FC<EfbProps> = ({ aircraftChecklistsProp }) => {
     (state) => state.simbrief.data,
   );
 
-  const [theme] = usePersistentProperty('EFB_UI_THEME', 'orange');
+  const [theme] = usePersistentSetting('EFB_UI_THEME');
 
   const { showModal } = useModals();
 
