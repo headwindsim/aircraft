@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 // Copyright (c) 2021-2024 FlyByWire Simulations
 //
 // SPDX-License-Identifier: GPL-3.0
@@ -53,12 +54,12 @@ import { A339XEcpBusPublisher } from '../shared/src/publishers/A339XEcpBusPublis
  */
 class ExtrasHost extends BaseInstrument {
   private static readonly flightDeckBounds: FlightDeckBounds = {
-    minX: -0.79,
-    maxX: 0.79,
-    minY: 1.0,
+    minX: -1.10,
+    maxX: 1.10,
+    minY: 0.6,
     maxY: 2.8,
-    minZ: 9.7,
-    maxZ: 11.8,
+    minZ: 19.1,
+    maxZ: 21.1,
   };
 
   private readonly bus = new EventBus();
@@ -146,7 +147,6 @@ class ExtrasHost extends BaseInstrument {
     this.backplane.addPublisher('GsxSimVarPublisher', this.gsxSimVarPublusher);
     this.backplane.addPublisher('A339XEcpBusPublisher', new A339XEcpBusPublisher(this.bus));
     this.backplane.addPublisher('PilotSeatPublisher', new PilotSeatPublisher(this.bus));
-
     this.backplane.addInstrument('PilotSeatManager', this.pilotSeatManager);
     this.backplane.addInstrument('GPUManagement', this.gpuManagement);
     this.backplane.addInstrument('Clock', this.clock);

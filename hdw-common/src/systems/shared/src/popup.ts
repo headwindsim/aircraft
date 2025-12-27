@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 import { SimVarValueType, Wait } from '@microsoft/msfs-sdk';
 import { v4 as uuidv4 } from 'uuid';
 /**
@@ -50,6 +51,7 @@ export class NotificationButton {
     this.enabled = true;
   }
 }
+
 /**
  * PopUpDialog utility class to create a pop-up UI element
  *
@@ -69,7 +71,7 @@ export class PopUpDialog {
    * Creates a Popup
    */
   constructor() {
-    const title = 'HEADWIND SIMULATIONS POPUP';
+    const title = 'HDW POPUP';
     const time = new Date().getTime();
     this.popupListener = undefined;
     this.params = {
