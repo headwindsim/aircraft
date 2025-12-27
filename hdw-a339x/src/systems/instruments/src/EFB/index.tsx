@@ -73,6 +73,8 @@ render(
         },
         autoCalloutsPage: AutomaticCallOutsPage,
       },
+      hashFile: '/Data/a339x_hashes.json',
+      hashSeed: 339,
     }}
   >
     <EfbWrapper failures={A320FailureDefinitions} aircraftSetup={aircraftEfbSetup} eventBus={new EventBus()} />
