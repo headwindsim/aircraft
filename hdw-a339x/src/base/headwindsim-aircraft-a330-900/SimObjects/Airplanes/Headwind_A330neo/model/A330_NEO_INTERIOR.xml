@@ -1815,11 +1815,36 @@
                 </UseTemplate>
 
                 <Update Once="True">
-                    (L:XMLVAR_SWITCH_OVHD_INTLT_SEATBELT_Position) 1 == (A:CABIN SEATBELTS ALERT SWITCH, bool) 0 == and if{
+                    (L:XMLVAR_SWITCH_OVHD_INTLT_SEATBELT_Position) 0 == (A:CABIN SEATBELTS ALERT SWITCH, bool) 0 == and if{
                       (&gt;K:CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE)
                     }
-                    (L:XMLVAR_SWITCH_OVHD_INTLT_SEATBELT_Position) 0 == (A:CABIN SEATBELTS ALERT SWITCH, bool) 1 == and if{
+                    (L:XMLVAR_SWITCH_OVHD_INTLT_SEATBELT_Position) 2 == (A:CABIN SEATBELTS ALERT SWITCH, bool) 1 == and if{
                       (&gt;K:CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE)
+                    }
+                </Update>
+
+                <Update Frequency="500">
+                <!-- In the auto position, the seatbelt signs come on when engines are running and either slats are extended or main gear is downlocked -->
+                <!-- TODO: Move logic to responsible system -->
+                    (L:XMLVAR_SWITCH_OVHD_INTLT_SEATBELT_Position) 1 == if{
+                        (L:A32NX_ENGINE_N1:1) 10 &gt;
+                        (L:A32NX_ENGINE_N1:2) 10 &gt; or
+
+                        (L:A32NX_LEFT_SLATS_POSITION_PERCENT, percent) 0 &gt;
+                        (L:A32NX_RIGHT_SLATS_POSITION_PERCENT, percent) 0 &gt; or
+
+                        (L:A32NX_LGCIU_1_LEFT_GEAR_DOWNLOCKED, bool) 1 ==
+                        (L:A32NX_LGCIU_2_LEFT_GEAR_DOWNLOCKED, bool) 1 == or
+                        (L:A32NX_LGCIU_1_RIGHT_GEAR_DOWNLOCKED, bool) 1 == or
+                        (L:A32NX_LGCIU_2_RIGHT_GEAR_DOWNLOCKED, bool) 1 == or or and if{
+                            (A:CABIN SEATBELTS ALERT SWITCH, bool) 0 == if{
+                                (&gt;K:CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE)
+                            }
+                        } els{
+                            (A:CABIN SEATBELTS ALERT SWITCH, bool) 1 == if{
+                                (&gt;K:CABIN_SEATBELTS_ALERT_SWITCH_TOGGLE)
+                            }
+                        }
                     }
                 </Update>
 
