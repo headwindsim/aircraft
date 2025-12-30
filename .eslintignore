@@ -12,19 +12,4 @@ hdw-**/bundles/*
 build-**/out/*
 build-**/src/*
 
-**/src/base/**/html_ui/Pages/**/math.js
-**/src/systems/fmgc/src/flightplanning/DirectTo.ts
-**/src/systems/fmgc/src/flightplanning/FixNamingScheme.ts
-**/src/systems/fmgc/src/flightplanning/FlightPlanAsoboSync.ts
-**/src/systems/fmgc/src/flightplanning/FlightPlanManager.ts
-**/src/systems/fmgc/src/flightplanning/FlightPlanSegment.ts
-**/src/systems/fmgc/src/flightplanning/GeoMath.ts
-**/src/systems/fmgc/src/flightplanning/GPS.ts
-**/src/systems/fmgc/src/flightplanning/LegsProcedure.ts
-**/src/systems/fmgc/src/flightplanning/ManagedFlightPlan.ts
-**/src/systems/fmgc/src/flightplanning/ProcedureDetails.ts
-**/src/systems/fmgc/src/flightplanning/RawDataMapper.ts
-**/src/systems/fmgc/src/flightplanning/SegmentedFlightPlan.ts
-**/src/systems/fmgc/src/flightplanning/WorldMagneticModel.ts
 **/src/systems/fmgc/src/utils/LzUtf8.js
-**/src/systems/fmgc/src/flightplanning/new/test/*

@@ -77,7 +77,7 @@ export default new TaskOfTasks("all", [
                 ], [
                     "build-common/src/wasm/terronnd",
                     "build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/panel/terronnd.wasm",
-                    "build-common/src/wasm/terronnd/out/terronnd.wasm",
+                    "build-common/src/wasm/terronnd/out/terronnd_A339X.wasm",
                 ]),
                 new ExecTask('cpp-wasm-cmake',
                     "npm run build-a339x:cpp-wasm-cmake",

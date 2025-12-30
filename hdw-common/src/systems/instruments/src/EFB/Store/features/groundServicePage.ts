@@ -21,6 +21,7 @@ interface ButtonSelectionState {
   service2DoorButtonState: ServiceButtonState;
   cargo1DoorButtonState: ServiceButtonState;
   jetWayButtonState: ServiceButtonState;
+  stairsButtonState: ServiceButtonState;
   fuelTruckButtonState: ServiceButtonState;
   gpuButtonState: ServiceButtonState;
   baggageButtonState: ServiceButtonState;
@@ -40,6 +41,7 @@ let initialState: ButtonSelectionState = {
   fuelTruckButtonState: ServiceButtonState.DISABLED,
   gpuButtonState: ServiceButtonState.DISABLED,
   jetWayButtonState: ServiceButtonState.DISABLED,
+  stairsButtonState: ServiceButtonState.DISABLED,
   baggageButtonState: ServiceButtonState.DISABLED,
   cateringButtonState: ServiceButtonState.DISABLED,
   asuButtonState: ServiceButtonState.DISABLED,
@@ -84,6 +86,7 @@ const setInitialState = () => {
         ? ServiceButtonState.ACTIVE
         : ServiceButtonState.INACTIVE,
     jetWayButtonState: ServiceButtonState.INACTIVE,
+    stairsButtonState: ServiceButtonState.INACTIVE,
     baggageButtonState: ServiceButtonState.INACTIVE,
     cateringButtonState: ServiceButtonState.INACTIVE,
     asuButtonState:
@@ -128,6 +131,9 @@ export const buttonsSlice = createSlice({
     setJetWayButtonState: (state, action: PayloadAction<ServiceButtonState>) => {
       state.jetWayButtonState = action.payload;
     },
+    setStairsButtonState: (state, action: PayloadAction<ServiceButtonState>) => {
+      state.stairsButtonState = action.payload;
+    },
     setFuelTruckButtonState: (state, action: PayloadAction<ServiceButtonState>) => {
       state.fuelTruckButtonState = action.payload;
     },
@@ -155,6 +161,7 @@ export const {
   setService2DoorButtonState,
   setCargo1DoorButtonState,
   setJetWayButtonState,
+  setStairsButtonState,
   setFuelTruckButtonState,
   setGpuButtonState,
   setBaggageButtonState,

@@ -1,24 +1,43 @@
 {
-    "compilerOptions": {
-      "target": "es2017" /* Specifies the ES2017 target, compatible with Coherent GT */,
-      "baseUrl": ".",
-      "resolveJsonModule" : true,
-      "typeRoots": [
-        "../typings",
-      ],
-      "moduleResolution": "node",
-      "allowSyntheticDefaultImports": true,
-      "forceConsistentCasingInFileNames": true,
-      "jsx": "react",
-      "skipLibCheck": true,
-      "paths": {
-        "@fmgc/*": ["../../../build-a339x/src/systems/fmgc/src/*"],
-        "@shared/*": ["../../../build-a339x/src/systems/shared/src/*"],
-        "@simbridge/*": ["../../../build-a339x/src/systems/simbridge-client/src/*"],
-        "@typings/*": ["../typings/*"],
-        "@flybywiresim/fbw-sdk": ["./index.ts"],
-        "@flybywiresim/flypad": ["./instruments/src/EFB/index.ts"],
-        "@flybywiresim/checklists": ["./shared/src/checklists/index.ts"]
+  "compilerOptions": {
+    "target": "es2017" /* Specifies the ES2017 target, compatible with Coherent GT */,
+    "strict": false,
+    "plugins": [
+      {
+        "name": "typescript-strict-plugin"
       }
+    ],
+    "baseUrl": ".",
+    "resolveJsonModule" : true,
+    "typeRoots": [
+      "../typings",
+      "../../../node_modules/@types",
+    ],
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "jsx": "react",
+    "paths": {
+      "@datalink/aoc": ["./datalink/aoc/src/index.ts"],
+      "@datalink/atc": ["./datalink/atc/src/index.ts"],
+      "@datalink/common": ["./datalink/common/src/index.ts"],
+      "@datalink/router": ["./datalink/router/src/index.ts"],
+      "@failures": ["./failures/src/index.ts"],
+      "@flybywiresim/checklists": ["./shared/src/checklists/index.ts"],
+      "@flybywiresim/fbw-sdk": ["./index.ts"],
+      "@flybywiresim/flypad": ["./instruments/src/EFB/index.ts"],
+      "@flybywiresim/oanc": ["./instruments/src/OANC/index.ts"],
+      // FIXME no a32nx imports in fbw-common!
+      "@fmgc/*": ["../../../build-a339x/src/systems/fmgc/src/*"],
+      "@instruments/common/*": ["./instruments/src/Common/*"],
+      "@localization/*": ["../localization/*"],
+      "@sentry/*": ["./sentry-client/src/*"],
+      "@shared/*": ["../../../build-a339x/src/systems/shared/src/*"],
+      "@simbridge/*": ["../../../build-a339x/src/systems/simbridge-client/src/*"],
+      "@tcas/*": ["./tcas/src/*"],
+      "@typings/*": ["../typings/*"],
+      "@ewd/*": ["../../../build-a339x/src/systems/instruments/src/EWD/*"],
     }
   }
+}

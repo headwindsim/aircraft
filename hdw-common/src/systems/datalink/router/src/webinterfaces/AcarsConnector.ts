@@ -3,7 +3,7 @@
 
 import { NXDataStore } from '@flybywiresim/fbw-sdk';
 import { Hoppie } from '@flybywiresim/api-client';
-import { SayIntentions } from '@headwindsimulations/api-client';
+import { SayIntentions, BeyondATC } from '@headwindsimulations/api-client';
 import {
   AcarsNetwork,
   AtsuStatusCodes,
@@ -32,10 +32,10 @@ export class AcarsConnector {
     let identifier: any;
     switch (network) {
       case AcarsNetwork.Hoppie:
-        identifier = NXDataStore.get('CONFIG_ACARS_HOPPIE_USERID');
+        identifier = NXDataStore.getLegacy('CONFIG_ACARS_HOPPIE_USERID');
         break;
       case AcarsNetwork.SayIntentions:
-        identifier = NXDataStore.get('CONFIG_ACARS_SAYINTENTIONS_KEY');
+        identifier = NXDataStore.getLegacy('CONFIG_ACARS_SAYINTENTIONS_KEY');
         break;
       default:
         identifier = null;
@@ -91,9 +91,14 @@ export class AcarsConnector {
   public static async activate() {
     SimVar.SetSimVarValue('L:A32NX_ACARS_ACTIVE', 'number', 0);
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
     if (acarsNetwork === AcarsNetwork.Disabled) {
       console.log('ACARS deactivated in EFB');
+      return;
+    }
+
+    if(acarsNetwork === AcarsNetwork.BeyondATC) {
+      SimVar.SetSimVarValue('L:A32NX_ACARS_ACTIVE', 'number', 1);
       return;
     }
 
@@ -141,16 +146,16 @@ export class AcarsConnector {
       return AtsuStatusCodes.NoAcarsConnection;
     }
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
     if (!acarsNetwork || acarsNetwork === AcarsNetwork.Disabled) {
       console.log('No ACARS Network set');
       return;
     }
 
     const identifier = AcarsConnector.getIdentifierByNetwork(acarsNetwork);
-    if (!identifier) {
-      console.log('No ACARS-ID set');
-      return;
+
+    if(acarsNetwork === AcarsNetwork.BeyondATC) {
+      console.log("Using BeyondATC network");
     }
 
     const body = {
@@ -164,19 +169,32 @@ export class AcarsConnector {
     let text: string = '';
     switch (acarsNetwork) {
       case AcarsNetwork.Hoppie:
+        if (!identifier) {
+          console.log('No ACARS-ID set');
+          return;
+        }
         text = await Hoppie.sendRequest(body).then((resp) => resp.response);
         break;
       case AcarsNetwork.SayIntentions:
+        if (!identifier) {
+          console.log('No ACARS-ID set');
+          return;
+        }
         text = await SayIntentions.sendRequest(body).then((resp) => resp.response);
+        break;
+      case AcarsNetwork.BeyondATC:
+        text = await BeyondATC.sendRequest(body);
         break;
     }
 
     if (text === 'error {callsign already in use}') {
       return AtsuStatusCodes.CallsignInUse;
     }
+
     if (text.includes('error')) {
       return AtsuStatusCodes.ProxyError;
     }
+
     if (text.startsWith('ok') !== true) {
       return AtsuStatusCodes.ComFailed;
     }
@@ -193,17 +211,14 @@ export class AcarsConnector {
       return AtsuStatusCodes.OwnCallsign;
     }
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+
     if (!acarsNetwork || acarsNetwork === AcarsNetwork.Disabled) {
       console.log('No ACARS Network set');
       return;
     }
 
     const identifier = AcarsConnector.getIdentifierByNetwork(acarsNetwork);
-    if (!identifier) {
-      console.log('No ACARS-ID set');
-      return;
-    }
 
     const body = {
       logon: identifier,
@@ -216,18 +231,39 @@ export class AcarsConnector {
     let text: string = '';
     switch (acarsNetwork) {
       case AcarsNetwork.Hoppie:
+        if(!identifier) {
+          console.log('No ACARS-ID set');
+          return;
+        }
         text = await Hoppie.sendRequest(body).then((resp) => resp.response);
         break;
       case AcarsNetwork.SayIntentions:
+        if(!identifier) {
+          console.log('No ACARS-ID set');
+          return;
+        }
         text = await SayIntentions.sendRequest(body).then((resp) => resp.response);
         break;
+      case AcarsNetwork.BeyondATC:
+        console.log('Send Request BeyondATC');
+        text = await BeyondATC.sendRequest(body);
+        break;
+    }
+
+    if (text === 'error {callsign already in use}') {
+      return AtsuStatusCodes.CallsignInUse;
     }
 
     if (text.includes('error')) {
       return AtsuStatusCodes.ProxyError;
     }
+
     if (text.startsWith('ok') !== true) {
       return AtsuStatusCodes.ComFailed;
+    }
+
+    if (text.includes(station) !== true) {
+      return AtsuStatusCodes.NoAtc;
     }
 
     return AtsuStatusCodes.Ok;
@@ -238,38 +274,57 @@ export class AcarsConnector {
       return AtsuStatusCodes.NoAcarsConnection;
     }
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
     if (!acarsNetwork || acarsNetwork === AcarsNetwork.Disabled) {
       console.log('No ACARS Network set');
       return;
     }
 
     const identifier = AcarsConnector.getIdentifierByNetwork(acarsNetwork);
-    if (!identifier) {
-      console.log('No ACARS-ID set');
-      return;
+
+    if(acarsNetwork === AcarsNetwork.BeyondATC) {
+      console.log("Using BeyondATC network");
     }
 
     const body = {
       logon: identifier,
       from: AcarsConnector.flightNumber,
       to: message.Station,
-      type,
+      type: type,
       packet: message.serialize(AtsuMessageSerializationFormat.Network),
     };
 
     let text: string = '';
     switch (acarsNetwork) {
       case AcarsNetwork.Hoppie:
+        if (!identifier) {
+          console.log('No ACARS-ID set');
+          return;
+        }
+
         text = await Hoppie.sendRequest(body)
           .then((resp) => resp.response)
           .catch(() => 'proxy');
         break;
       case AcarsNetwork.SayIntentions:
+        if (!identifier) {
+          console.log('No ACARS-ID set');
+          return;
+        }
+
         text = await SayIntentions.sendRequest(body)
           .then((resp) => resp.response)
           .catch(() => 'proxy');
         break;
+      case AcarsNetwork.BeyondATC:
+        text = await BeyondATC.sendRequest(body)
+          .then((resp) => resp)
+          .catch(() => 'proxy');
+        break;
+    }
+
+    if (text === 'error {callsign already in use}') {
+      return AtsuStatusCodes.CallsignInUse;
     }
 
     if (text === 'proxy') {
@@ -427,7 +482,7 @@ export class AcarsConnector {
       return [AtsuStatusCodes.NoAcarsConnection, retval];
     }
 
-    const acarsNetwork = NXDataStore.get('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
+    const acarsNetwork = NXDataStore.getLegacy('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
     const identifier = AcarsConnector.getIdentifierByNetwork(acarsNetwork);
 
     try {
@@ -435,7 +490,7 @@ export class AcarsConnector {
         logon: identifier,
         from: AcarsConnector.flightNumber,
         to: AcarsConnector.flightNumber,
-        type: 'poll',
+        type: 'poll'
       };
 
       let text: string = '';
@@ -450,6 +505,15 @@ export class AcarsConnector {
             .then((resp) => resp.response)
             .catch(() => 'proxy');
           break;
+        case AcarsNetwork.BeyondATC:
+          text = await BeyondATC.sendRequest(body)
+            .then((resp) => resp)
+            .catch(() => 'proxy');
+          break;
+      }
+
+      if (text === 'error {callsign already in use}') {
+        return [AtsuStatusCodes.CallsignInUse, retval];
       }
 
       // proxy error during request
@@ -462,23 +526,12 @@ export class AcarsConnector {
         return [AtsuStatusCodes.ComFailed, retval];
       }
 
-      // split up the received data into multiple messages
-      let messages = text.split(/({[\s\S\n]*?})/gm);
-      messages = messages.filter(
-        (elem) => elem !== 'ok' && elem !== 'ok ' && elem !== '} ' && elem !== '}' && elem !== '',
-      );
-
-      // create the messages
-      messages.forEach((element) => {
-        // get the single entries of the message
-        // example: [CALLSIGN telex, {Hello world!}]
-        const entries = element.substring(1).split(/({[\s\S\n]*?})/gm);
-
-        // get all relevant information
-        const metadata = entries[0].split(' ');
-        const sender = metadata[0].toUpperCase();
-        const type = metadata[1].toLowerCase();
-        const content = entries[1].replace(/{/, '').replace(/}/, '').toUpperCase();
+      const re = /{(\S+)\s+(\S+)\s+{([\s\S]*?)}}/g;
+      let m: RegExpExecArray | null;
+      while ((m = re.exec(text)) !== null) {
+        const sender = m[1].toUpperCase();
+        const type = m[2].toLowerCase();
+        const content = m[3].toUpperCase();
 
         switch (type) {
           case 'telex': {
@@ -513,12 +566,15 @@ export class AcarsConnector {
             break;
           }
           default:
+            console.warn("[POLL] Unknown message type:", { sender, type, content });
             break;
         }
-      });
+      }
 
       return [AtsuStatusCodes.Ok, retval];
-    } catch (_err) {
+    } catch (err) {
+      console.error("ACARS poll failed:");
+      console.error(err);
       return [AtsuStatusCodes.NoAcarsConnection, []];
     }
   }
