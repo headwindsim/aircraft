@@ -120,7 +120,7 @@ export class NXApiConnector {
     const storedMetarSrc = NXDataStore.getLegacy('CONFIG_METAR_SRC', 'MSFS');
 
     switch (storedMetarSrc) {
-      case 'BEYONDATC':
+      case 'BATC':
         return await BeyondATC.getMetar(icao)
           .then((metar) => {
             if (!metar || metar === undefined || metar === '' || metar === 'no_airport_found') {
@@ -133,8 +133,8 @@ export class NXApiConnector {
             message.Reports.push({ airport: icao, report: 'NO METAR AVAILABLE' });
             return AtsuStatusCodes.Ok;
           });
-      case 'SAYINTENTIONS':
-        let identifier = NXDataStore.getLegacy('CONFIG_ACARS_SAYINTENTIONS_KEY', '');
+      case 'SAI':
+        let identifier = NXDataStore.getLegacy('CONFIG_SAI_LOGON_KEY', '');
         if (!identifier || identifier === '') {
           return AtsuStatusCodes.NoAcarsConnection;
         }
@@ -177,27 +177,53 @@ export class NXApiConnector {
   public static async receiveTaf(icao: string, message: WeatherMessage): Promise<AtsuStatusCodes> {
     const storedTafSrc = NXDataStore.getLegacy('CONFIG_TAF_SRC', isMsfs2024() ? 'MSFS' : 'NOAA');
 
-    return Taf.get(icao, ConfigWeatherMap[storedTafSrc])
-      .then((data) => {
-        let taf = data.taf;
-        if (!taf || taf === undefined || taf === '') {
-          taf = 'NO TAF AVAILABLE';
+    switch (storedTafSrc) {
+      case 'SAI':
+        let identifier = NXDataStore.getLegacy('CONFIG_SAI_LOGON_KEY', '');
+        if (!identifier || identifier === '') {
+          return AtsuStatusCodes.NoAcarsConnection;
         }
 
-        message.Reports.push({ airport: icao, report: taf });
-        return AtsuStatusCodes.Ok;
-      })
-      .catch(() => {
-        message.Reports.push({ airport: icao, report: 'NO TAF AVAILABLE' });
-        return AtsuStatusCodes.Ok;
-      });
+        const body = {
+          key: identifier,
+          icao: icao,
+        };
+
+        return await SayIntentions.getTaf(body)
+          .then((taf) => {
+            if (!taf || taf === undefined || taf === '') {
+              taf = 'NO TAF AVAILABLE';
+            }
+            message.Reports.push({ airport: icao, report: taf });
+            return AtsuStatusCodes.Ok;
+          })
+          .catch(() => {
+            message.Reports.push({ airport: icao, report: 'NO TAF AVAILABLE' });
+            return AtsuStatusCodes.Ok;
+          });
+      default:
+        return Taf.get(icao, ConfigWeatherMap[storedTafSrc])
+          .then((data) => {
+            let taf = data.taf;
+            if (!taf || taf === undefined || taf === '') {
+              taf = 'NO TAF AVAILABLE';
+            }
+
+            message.Reports.push({ airport: icao, report: taf });
+            return AtsuStatusCodes.Ok;
+          })
+          .catch(() => {
+            message.Reports.push({ airport: icao, report: 'NO TAF AVAILABLE' });
+            return AtsuStatusCodes.Ok;
+          });
+    }
   }
 
   public static async receiveAtis(icao: string, type: AtisType, message: AtisMessage): Promise<AtsuStatusCodes> {
     const storedAtisSrc = NXDataStore.getLegacy('CONFIG_ATIS_SRC', 'FAA');
 
     switch (storedAtisSrc) {
-      case 'BEYONDATC':
+      case 'BATC':
         return await BeyondATC.getAtis(icao)
           .then((atis) => {
             if (!atis || atis === undefined || atis === '') {
@@ -210,8 +236,8 @@ export class NXApiConnector {
             message.Reports.push({ airport: icao, report: 'D-ATIS NOT AVAILABLE' });
             return AtsuStatusCodes.Ok;
           });
-      case 'SAYINTENTIONS':
-        let identifier = NXDataStore.getLegacy('CONFIG_ACARS_SAYINTENTIONS_KEY', '');
+      case 'SAI':
+        let identifier = NXDataStore.getLegacy('CONFIG_SAI_LOGON_KEY', '');
         if (!identifier || identifier === '') {
           return AtsuStatusCodes.NoAcarsConnection;
         }

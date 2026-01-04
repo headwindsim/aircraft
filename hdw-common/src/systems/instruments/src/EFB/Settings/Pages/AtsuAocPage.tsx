@@ -4,7 +4,15 @@
 /* eslint-disable max-len */
 import React from 'react';
 
-import { usePersistentProperty, SENTRY_CONSENT_KEY, SentryConsentState, isMsfs2024 } from '@flybywiresim/fbw-sdk';
+import {
+  usePersistentProperty,
+  SENTRY_CONSENT_KEY,
+  SentryConsentState,
+  isMsfs2024,
+  usePersistentSetting,
+  NXDataStoreSettings,
+  useSimVar,
+} from '@flybywiresim/fbw-sdk';
 
 import { toast } from 'react-toastify';
 import { t } from '../../Localization/translation';
@@ -13,34 +21,106 @@ import { Toggle } from '../../UtilComponents/Form/Toggle';
 import { SelectGroup, SelectItem } from '../../UtilComponents/Form/Select';
 import { SimpleInput } from '../../UtilComponents/Form/SimpleInput/SimpleInput';
 import { ButtonType, SettingItem, SettingsPage } from '../Settings';
-import { AcarsConnector } from '../../../../../datalink/router/src';
-import { AcarsNetwork } from '../../../../../datalink/common/src/messages';
+import { AcarsConnector, AcarsClient } from '../../../../../datalink/router/src';
 
 export const AtsuAocPage = () => {
+  const aircraftProjectPrefix: string = process.env.AIRCRAFT_PROJECT_PREFIX.toUpperCase();
+
   const [atisSource, setAtisSource] = usePersistentProperty('CONFIG_ATIS_SRC', 'FAA');
   const [metarSource, setMetarSource] = usePersistentProperty('CONFIG_METAR_SRC', 'MSFS');
   const [tafSource, setTafSource] = usePersistentProperty('CONFIG_TAF_SRC', isMsfs2024() ? 'MSFS' : 'NOAA');
   const [telexEnabled, setTelexEnabled] = usePersistentProperty('CONFIG_ONLINE_FEATURES_STATUS', 'DISABLED');
 
-  const [acarsNetwork, setAcarsNetwork] = usePersistentProperty('CONFIG_ACARS_NETWORK', AcarsNetwork.Disabled);
-  const [hoppieUserId, setHoppieUserId] = usePersistentProperty('CONFIG_ACARS_HOPPIE_USERID');
-  const [sayIntentionsKey, setSayIntentionsKey] = usePersistentProperty('CONFIG_ACARS_SAYINTENTIONS_KEY');
+  const [hoppieUserId, setHoppieUserId] = usePersistentProperty('CONFIG_HOPPIE_USERID');
+  const [saiLogonKey, setSaiLogonKey] = usePersistentProperty('CONFIG_SAI_LOGON_KEY');
+
+  const [acarsProvider, setAcarsProvider] = usePersistentSetting('ACARS_PROVIDER');
+  const [acarsState] = useSimVar('L:A32NX_ACARS_ACTIVE', 'boolean', 1000);
 
   const [trafficSource, setTrafficSource] = usePersistentProperty('CONFIG_TRAFFIC_SOURCE', "NONE");
   const [trafficDisplayHideCallsign, setTrafficDisplayHideCallsign] = usePersistentProperty('CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN', "YES");
 
   const [sentryEnabled, setSentryEnabled] = usePersistentProperty(SENTRY_CONSENT_KEY, SentryConsentState.Refused);
 
-  const handleAcarsNetwork = (network: string | AcarsNetwork) => {
-    setAcarsNetwork(network);
-    if (network === AcarsNetwork.Disabled) {
-      AcarsConnector.deactivate();
+  const getAcarsResponse = (value: string): Promise<any> =>
+    new Promise((resolve, reject) => {
+      if (!value || value === '') {
+        resolve(value);
+      }
+
+      const body = {
+        from: `HDW${aircraftProjectPrefix}`,
+        to: 'SERVER',
+        type: 'ping',
+        packet: '',
+      };
+      return AcarsClient.getData(body).then((resp) => {
+        if (resp.response === 'error {invalid logon code}') {
+          reject(new Error(`Error: Unknown user ID: ${resp.response}`));
+        } else {
+          resolve(value);
+        }
+      });
+    });
+
+  const formatAcarsMessage = (messageKey: string) =>
+    t(messageKey).replace(
+      '{acarsid}',
+      acarsProvider === 'SAI' ? t('Settings.AtsuAoc.SAIApiKey') : t('Settings.AtsuAoc.HoppieUserId'),
+    );
+
+  const handleAcarsUsernameInput = (value: string) => {
+    getAcarsResponse(value)
+      .then((response) => {
+        if (!value) {
+          toast.success(`${formatAcarsMessage('Settings.AtsuAoc.YourAcarsIdHasBeenRemoved')} ${response}`);
+          return;
+        }
+        toast.success(`${formatAcarsMessage('Settings.AtsuAoc.YourAcarsIdHasBeenValidated')} ${response}`);
+        AcarsConnector.activateAcars();
+      })
+      .catch(() => {
+        toast.error(formatAcarsMessage('Settings.AtsuAoc.ThereWasAnErrorEncounteredWhenValidatingYourAcarsId'));
+      });
+  };
+
+  const handleAcarsProviderChange = (provider: NXDataStoreSettings['ACARS_PROVIDER']) => {
+    setAcarsProvider(provider);
+    if (provider == 'NONE') {
+      AcarsConnector.deactivateAcars();
     } else {
-      AcarsConnector.activate();
+      AcarsConnector.activateAcars();
+    }
+
+    switch (provider) {
+      case 'BATC':
+        handleWeatherSource('BATC', 'ATIS');
+        handleWeatherSource('BATC', 'METAR');
+        break;
+
+      case 'SAI':
+        handleWeatherSource('SAI', 'ATIS');
+        handleWeatherSource('SAI', 'METAR');
+        handleWeatherSource('SAI', 'TAF');
+        break;
+
+      default:
+        if (atisSource === 'BATC' || atisSource === 'SAI') {
+          handleWeatherSource('FAA', 'ATIS');
+        }
+
+        if (metarSource === 'BATC' || metarSource === 'SAI') {
+          handleWeatherSource('MSFS', 'METAR');
+        }
+
+        if (tafSource === 'SAI') {
+          handleWeatherSource(isMsfs2024() ? 'MSFS' : 'NOAA', 'TAF');
+        }
+        break;
     }
   };
 
-  const handleTrafficSourceChange = (entry: string) => {
+    const handleTrafficSourceChange = (entry: string) => {
     const map = {"NONE": 0, "SIM":1, "VATSIM": 2, "IVAO": 3};
     setTrafficSource(entry);
     SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_SOURCE', 'number', map[entry]);
@@ -51,27 +131,13 @@ export const AtsuAocPage = () => {
     SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', entry === "YES" ? 1 : 0);
   }
 
-  const handleAcarsIdentifierInput = (network: string | AcarsNetwork, value: string) => {
-    AcarsConnector.validate(network, value)
-      .then((response) => {
-        if (!value) {
-          toast.success(`${t('Headwind.Settings.AtsuAoc.YourAcarsIdHasBeenRemoved')} ${response}`);
-          return;
-        }
-        toast.success(`${t('Headwind.Settings.AtsuAoc.YourAcarsIdHasBeenValidated')} ${response}`);
-      })
-      .catch((_error) => {
-        toast.error(t('Headwind.Settings.AtsuAoc.ThereWasAnErrorEncounteredWhenValidatingYourAcarsID'));
-      });
-  };
-
   const atisSourceButtons: ButtonType[] = [
     { name: 'FAA (US)', setting: 'FAA' },
     { name: 'PilotEdge', setting: 'PILOTEDGE' },
     { name: 'IVAO', setting: 'IVAO' },
     { name: 'VATSIM', setting: 'VATSIM' },
-    { name: 'SayIntentions', setting: 'SAYINTENTIONS'},
-    { name: 'BeyondATC', setting: 'BEYONDATC' },
+    ...(acarsProvider === 'BATC' ? [{ name: t('Settings.AtsuAoc.AcarsProviderBatc'), setting: 'BATC' }] : []),
+    ...(acarsProvider === 'SAI' ? [{ name: t('Settings.AtsuAoc.AcarsProviderSai'), setting: 'SAI' }] : []),
   ];
 
   const metarSourceButtons: ButtonType[] = [
@@ -79,20 +145,21 @@ export const AtsuAocPage = () => {
     { name: 'NOAA', setting: 'NOAA' },
     { name: 'PilotEdge', setting: 'PILOTEDGE' },
     { name: 'VATSIM', setting: 'VATSIM' },
-    { name: 'SayIntentions', setting: 'SAYINTENTIONS'},
-    { name: 'BeyondATC', setting: 'BEYONDATC' },
+    ...(acarsProvider === 'BATC' ? [{ name: t('Settings.AtsuAoc.AcarsProviderBatc'), setting: 'BATC' }] : []),
+    ...(acarsProvider === 'SAI' ? [{ name: t('Settings.AtsuAoc.AcarsProviderSai'), setting: 'SAI' }] : []),
   ];
 
-  const acarsNetworkButtons: ButtonType[] = [
-    { name: 'Disabled', setting: AcarsNetwork.Disabled },
-    { name: 'Hoppie', setting: AcarsNetwork.Hoppie },
-    { name: 'SayIntentions', setting: AcarsNetwork.SayIntentions },
-    { name: 'BeyondATC', setting: AcarsNetwork.BeyondATC },
-  ];
+  const acarsProviderButtons = [
+    { name: t('Settings.AtsuAoc.AcarsProviderNone'), setting: 'NONE' },
+    { name: t('Settings.AtsuAoc.AcarsProviderHoppie'), setting: 'HOPPIE' },
+    { name: t('Settings.AtsuAoc.AcarsProviderBatc'), setting: 'BATC' },
+    { name: t('Settings.AtsuAoc.AcarsProviderSai'), setting: 'SAI' },
+  ] as const;
 
   let tafSourceButtons: ButtonType[] = [
     { name: 'MSFS', setting: 'MSFS' },
     { name: 'NOAA', setting: 'NOAA' },
+    ...(acarsProvider === 'SAI' ? [{ name: t('Settings.AtsuAoc.AcarsProviderSai'), setting: 'SAI' }] : []),
   ];
 
   let trafficSourceButtons: ButtonType[] = [
@@ -145,7 +212,7 @@ export const AtsuAocPage = () => {
 
   function handleWeatherSource(source: string, type: string) {
     if (type !== 'TAF') {
-      AcarsConnector.deactivate();
+      AcarsConnector.deactivateAcars();
     }
 
     if (type === 'ATIS') {
@@ -157,7 +224,7 @@ export const AtsuAocPage = () => {
     }
 
     if (type !== 'TAF') {
-      AcarsConnector.activate();
+      AcarsConnector.activateAcars();
     }
   }
 
@@ -239,38 +306,50 @@ export const AtsuAocPage = () => {
         <Toggle value={telexEnabled === 'ENABLED'} onToggle={(toggleValue) => handleTelexToggle(toggleValue)} />
       </SettingItem>
 
-      <SettingItem name={t('Headwind.Settings.AtsuAoc.AcarsNetwork')}>
-        <SelectGroup>
-          {acarsNetworkButtons.map((button) => (
-            <SelectItem
-              key={button.setting}
-              onSelect={() => handleAcarsNetwork(button.setting)}
-              selected={acarsNetwork === button.setting}
-            >
-              {button.name}
-            </SelectItem>
-          ))}
-        </SelectGroup>
+      <SettingItem name={t('Settings.AtsuAoc.HoppieProvider')}>
+        <div className="flex items-center">
+          {acarsProvider !== 'NONE' && (
+            <span className="mr-6 flex items-center">
+              {acarsState ? t('Settings.AtsuAoc.AcarsConnected') : t('Settings.AtsuAoc.WaitingForConnection')}
+              <span
+                className={`ml-2 inline-block h-4 w-4 rounded-full ${acarsState ? 'bg-green-600' : 'bg-orange-600'}`}
+              />
+            </span>
+          )}
+          <SelectGroup>
+            {acarsProviderButtons.map((button) => (
+              <SelectItem
+                key={button.setting}
+                onSelect={() => handleAcarsProviderChange(button.setting)}
+                selected={acarsProvider === button.setting}
+              >
+                {button.name}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </div>
       </SettingItem>
-
-      {acarsNetwork === AcarsNetwork.Hoppie && (
-        <SettingItem name={t('Settings.AtsuAoc.HoppieUserId')}>
+      {(acarsProvider === 'HOPPIE' || acarsProvider === 'SAI') && (
+        <SettingItem name={acarsProvider === 'SAI' ? 'SAI API Key' : t('Settings.AtsuAoc.HoppieUserId')}>
           <SimpleInput
             className="w-30 text-center"
-            value={hoppieUserId}
-            onBlur={(value) => handleAcarsIdentifierInput(AcarsNetwork.Hoppie, value.replace(/\s/g, ''))}
-            onChange={(value) => setHoppieUserId(value)}
-          />
-        </SettingItem>
-      )}
-
-      {acarsNetwork === AcarsNetwork.SayIntentions && (
-        <SettingItem name={t('Headwind.Settings.AtsuAoc.SayIntentionsKey')}>
-          <SimpleInput
-            className="w-30 text-center"
-            value={sayIntentionsKey}
-            onBlur={(value) => handleAcarsIdentifierInput(AcarsNetwork.SayIntentions, value.replace(/\s/g, ''))}
-            onChange={(value) => setSayIntentionsKey(value)}
+            value={acarsProvider === 'SAI' ? saiLogonKey : hoppieUserId}
+            onBlur={(value) => {
+              const trimmed = value.replace(/\s/g, '');
+              if (acarsProvider === 'SAI') {
+                setSaiLogonKey(trimmed);
+              } else {
+                setHoppieUserId(trimmed);
+              }
+              handleAcarsUsernameInput(trimmed);
+            }}
+            onChange={(value) => {
+              if (acarsProvider === 'SAI') {
+                setSaiLogonKey(value);
+              } else {
+                setHoppieUserId(value);
+              }
+            }}
           />
         </SettingItem>
       )}
