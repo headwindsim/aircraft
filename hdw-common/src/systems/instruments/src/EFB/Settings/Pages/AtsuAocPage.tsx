@@ -38,29 +38,32 @@ export const AtsuAocPage = () => {
   const [acarsProvider, setAcarsProvider] = usePersistentSetting('ACARS_PROVIDER');
   const [acarsState] = useSimVar('L:A32NX_ACARS_ACTIVE', 'boolean', 1000);
 
-  const [trafficSource, setTrafficSource] = usePersistentProperty('CONFIG_TRAFFIC_SOURCE', "NONE");
-  const [trafficDisplayHideCallsign, setTrafficDisplayHideCallsign] = usePersistentProperty('CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN', "YES");
+  const [trafficSource, setTrafficSource] = usePersistentProperty('CONFIG_TRAFFIC_SOURCE', 'NONE');
+  const [trafficDisplayHideCallsign, setTrafficDisplayHideCallsign] = usePersistentProperty(
+    'CONFIG_TRAFFIC_DISPLAY_HIDE_CALLSIGN',
+    'YES',
+  );
 
   const [sentryEnabled, setSentryEnabled] = usePersistentProperty(SENTRY_CONSENT_KEY, SentryConsentState.Refused);
 
   const getAcarsResponse = async (value: string): Promise<string> => {
     if (!value || value === '') {
-        return value;
+      return value;
     }
 
     try {
-        const body: CpdlcMessageDto = {
-            from: `HDW${aircraftProjectPrefix}`,
-            to: 'SERVER',
-            type: 'ping',
-        };
+      const body: CpdlcMessageDto = {
+        from: `HDW${aircraftProjectPrefix}`,
+        to: 'SERVER',
+        type: 'ping',
+      };
 
-        await AcarsClient.getData(body);
-        return value;
+      await AcarsClient.getData(body);
+      return value;
     } catch (err: any) {
-        throw new Error(`Error: Unknown user ID: ${err.message || err}`);
+      throw new Error(`Error: Unknown user ID: ${err.message || err}`);
     }
-  }
+  };
 
   const formatAcarsMessage = (messageKey: string) =>
     t(messageKey).replace(
@@ -81,7 +84,6 @@ export const AtsuAocPage = () => {
       })
       .catch(() => {
         toast.error(formatAcarsMessage('Settings.AtsuAoc.ThereWasAnErrorEncounteredWhenValidatingYourAcarsId'));
-
       });
   };
 
@@ -122,15 +124,15 @@ export const AtsuAocPage = () => {
   };
 
   const handleTrafficSourceChange = (entry: string) => {
-    const map = {"NONE": 0, "SIM":1, "VATSIM": 2, "IVAO": 3};
+    const map = { NONE: 0, SIM: 1, VATSIM: 2, IVAO: 3 };
     setTrafficSource(entry);
     SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_SOURCE', 'number', map[entry]);
-  }
+  };
 
   const handleTrafficDefaultChange = (entry: string) => {
     setTrafficDisplayHideCallsign(entry);
-    SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', entry === "YES" ? 1 : 0);
-  }
+    SimVar.SetSimVarValue('L:A339X_TRAFFIC_SELECTOR_DISPLAY_HIDE_CALLSIGN', 'number', entry === 'YES' ? 1 : 0);
+  };
 
   const atisSourceButtons: ButtonType[] = [
     { name: 'FAA (US)', setting: 'FAA' },
@@ -167,10 +169,10 @@ export const AtsuAocPage = () => {
     { name: 'None', setting: 'NONE' },
     { name: 'MSFS', setting: 'SIM' },
     { name: 'VATSIM', setting: 'VATSIM' },
-    { name: 'IVAO', setting: 'IVAO'},
+    { name: 'IVAO', setting: 'IVAO' },
   ];
 
- let trafficDisplayButtons: ButtonType[] = [
+  let trafficDisplayButtons: ButtonType[] = [
     { name: 'No', setting: 'NO' },
     { name: 'Yes', setting: 'YES' },
   ];
@@ -283,7 +285,7 @@ export const AtsuAocPage = () => {
           ))}
         </SelectGroup>
       </SettingItem>
-            <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficHideCallsign')}>
+      <SettingItem name={t('Headwind.Settings.AtsuAoc.TrafficHideCallsign')}>
         <SelectGroup>
           {trafficDisplayButtons.map((button) => (
             <SelectItem
