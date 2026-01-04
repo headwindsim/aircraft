@@ -2,10 +2,9 @@
   "Headwind": {
     "Settings": {
       "AtsuAoc": {
-        "AcarsNetwork": "ACARS Network",
         "TrafficSource": "ATSAW Traffic: Data Source",
         "TrafficHideCallsign": "ATSAW Traffic: Hide Aircraft Callsigns",
-        "OptionalA32nxErrorReporting": "Optional Headwind Simulations Error Reporting",
+        "OptionalA32nxErrorReporting": "Optional Headwind Simulations Error Reporting"
       },
       "flyPad": {
         "Orange": "Orange"
