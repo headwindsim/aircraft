@@ -21,19 +21,8 @@ export const A330GroundServiceOutline = ({
   aftLeftStatus: boolean;
   aftRightStatus: boolean;
 }) => (
-  <svg
-    id="SVG"
-    className={className}
-    xmlns="http://www.w3.org/2000/svg"
-    width="777"
-    height="814"
-    viewBox="0 0 549 576"
-    style={{
-      transform: 'rotate(90deg)',
-      transformOrigin: 'center center',
-    }}
-  >
-    <g id="g1940">
+  <svg id="SVG" className={className} xmlns="http://www.w3.org/2000/svg" width="777" height="814" viewBox="0 0 549 576">
+    <g id="g1940" transform="rotate(90 274.5 288)">
       <path d="M149.338,265.103l0,45.485" style={{ fill: 'none', stroke: '#4c4c4c', strokeWidth: 1 }} />
       <path d="M170.709,265.103l0,45.528" style={{ fill: 'none', stroke: '#4c4c4c', strokeWidth: 1 }} />
       <path d="M295.066,265.103l0,45.894" style={{ fill: 'none', stroke: '#4c4c4c', strokeWidth: 1 }} />

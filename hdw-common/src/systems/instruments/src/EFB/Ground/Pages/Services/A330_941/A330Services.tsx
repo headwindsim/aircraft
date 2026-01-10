@@ -1,3 +1,4 @@
+// @ts-strict-ignore
 // Copyright (c) 2023-2024 FlyByWire Simulations
 // SPDX-License-Identifier: GPL-3.0
 
@@ -350,7 +351,8 @@ export const A330Services: React.FC = () => {
           setBoarding1DoorButtonState,
           midLeftDoorOpen,
         );
-        toggleStairs();        break;
+        toggleStairs();
+        break;
       case ServiceButton.BaggageTruck:
         handleComplexService(
           ServiceButton.BaggageTruck,
@@ -367,8 +369,8 @@ export const A330Services: React.FC = () => {
           ServiceButton.CateringTruck,
           cateringButtonStateRef,
           setCateringButtonState,
-          service1DoorButtonState,
-          setService1DoorButtonState,
+          service2DoorButtonState,
+          setService2DoorButtonState,
           fwdRightDoorOpen,
         );
         toggleCateringTruck();
@@ -505,16 +507,16 @@ export const A330Services: React.FC = () => {
     );
   }, [cargoDoorOpen]);
 
-  // Fwd Cabin Door listener for Catering Button
+  // Mid Cabin Door listener for Catering Button
   useEffect(() => {
     complexServiceListenerHandling(
       cateringButtonStateRef,
       setCateringButtonState,
-      service1DoorButtonState,
-      setService1DoorButtonState,
-      fwdRightDoorOpen,
+      service2DoorButtonState,
+      setService2DoorButtonState,
+      midRightDoorOpen,
     );
-  }, [fwdRightDoorOpen]);
+  }, [midRightDoorOpen]);
 
   // Asu
   useEffect(() => {
@@ -645,16 +647,42 @@ export const A330Services: React.FC = () => {
         >
           <Fan size={36} />
         </GroundServiceButton>
+      </ServiceButtonWrapper>
 
-        {/* FUEL TRUCK for 2024 */}
-        {isMsfs2024() && (
-          <GroundServiceButton
-            name={t('Ground.Services.FuelTruck')}
-            state={fuelTruckButtonState}
-            onClick={() => handleButtonClick(ServiceButton.FuelTruck)}
+      <ServiceButtonWrapper xr={930} y={600} className="">
+        {/* AFT DOOR */}
+        <GroundServiceButton
+          name={t('Ground.Services.DoorAft')}
+          state={boarding2DoorButtonState}
+          onClick={() => handleButtonClick(ServiceButton.AftLeftDoor)}
+        >
+          <DoorClosedFill size={36} />
+        </GroundServiceButton>
+
+        {/* Wheel Chocks and Security Cones are only visual information. To reuse styling */}
+        {/* the ServiceButtonWrapper has been re-used. */}
+        {!!wheelChocksEnabled && (
+          <div
+            className={`flex cursor-pointer flex-row items-center space-x-6 p-6 ${wheelChocksVisible ? 'text-green-500' : 'text-gray-500'}`}
           >
-            <Truck size={36} />
-          </GroundServiceButton>
+            <div
+              className={`-ml-2 mr-[-2px] flex items-end justify-center ${wheelChocksVisible ? 'text-green-500' : 'text-gray-500'}`}
+            >
+              <Chock size="12" stroke="4" />
+              <Wheel size="36" stroke="5" className="-mx-0.5" />
+              <Chock size="12" stroke="4" />
+            </div>
+            <h1 className="shrink-0 text-2xl font-medium text-current">{t('Ground.Services.WheelChocks')}</h1>
+          </div>
+        )}
+
+        {!!conesEnabled && (
+          <div
+            className={`flex cursor-pointer flex-row items-center space-x-6 p-6 ${conesVisible ? 'text-green-500' : 'text-gray-500'}`}
+          >
+            <ConeStriped size="38" stroke="1.5" className="mr-2" />
+            <h1 className="shrink-0 text-2xl font-medium text-current">{t('Ground.Services.Cones')}</h1>
+          </div>
         )}
       </ServiceButtonWrapper>
 
@@ -714,47 +742,18 @@ export const A330Services: React.FC = () => {
         >
           <HandbagFill size={36} />
         </GroundServiceButton>
-      </ServiceButtonWrapper>
 
-      <ServiceButtonWrapper xr={800} y={600} className="">
-        {/* AFT DOOR */}
-        <GroundServiceButton
-          name={t('Ground.Services.DoorAft')}
-          state={boarding2DoorButtonState}
-          onClick={() => handleButtonClick(ServiceButton.AftLeftDoor)}
-        >
-          <DoorClosedFill size={36} />
-        </GroundServiceButton>
+        {/* FUEL TRUCK for 2024 */}
+        {isMsfs2024() && (
+          <GroundServiceButton
+            name={t('Ground.Services.FuelTruck')}
+            state={fuelTruckButtonState}
+            onClick={() => handleButtonClick(ServiceButton.FuelTruck)}
+          >
+            <Truck size={36} />
+          </GroundServiceButton>
+        )}
       </ServiceButtonWrapper>
-
-      {/* TODO FIXME: Redesign chocks and security cones UI */}
-      {/* Wheel Chocks and Security Cones are only visual information. To reuse styling */}
-      {/* the ServiceButtonWrapper has been re-used. */}
-      {/*
-      <ServiceButtonWrapper xr={800} y={600} className="border-0 divide-y-0">
-          {!!wheelChocksEnabled && (
-              <div className={`flex flex-row items-center space-x-6 py-6 px-6 cursor-pointer ${(wheelChocksVisible) ? 'text-green-500' : 'text-gray-500'}`}>
-                  <div className={`flex justify-center items-end -ml-2 -mr-[2px] ${(wheelChocksVisible) ? 'text-green-500' : 'text-gray-500'}`}>
-                      <Chock size="12" stroke="4" />
-                      <Wheel size="36" stroke="5" className="-mx-0.5" />
-                      <Chock size="12" stroke="4" />
-                  </div>
-                  <h1 className="flex-shrink-0 text-2xl font-medium text-current">
-                      {t('Ground.Services.WheelChocks')}
-                  </h1>
-              </div>
-          )}
-
-          {!!conesEnabled && (
-              <div className={`flex flex-row items-center space-x-6 py-6 px-6 cursor-pointer ${(conesVisible) ? 'text-green-500' : 'text-gray-500'}`}>
-                  <ConeStriped size="38" stroke="1.5" className="mr-2" />
-                  <h1 className="flex-shrink-0 text-2xl font-medium text-current">
-                      {t('Ground.Services.Cones')}
-                  </h1>
-              </div>
-          )}
-      </ServiceButtonWrapper>
-      */}
 
       {/* Visual indications for tug and doors */}
       {!!pushBackAttached && (
@@ -784,22 +783,13 @@ export const A330Services: React.FC = () => {
       )}
       {cargoDoorOpen >= 1.0 && (
         <div>
-          <div
-            className="text-xl font-bold text-utility-amber"
-            style={{ position: 'absolute', left: 700, right: 0, top: 160 }}
-          >
+          <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 160 }}>
             FWD CARGO
           </div>
-          <div
-            className="text-xl font-bold text-utility-amber"
-            style={{ position: 'absolute', left: 700, right: 0, top: 530 }}
-          >
+          <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 530 }}>
             AFT CARGO
           </div>
-          <div
-            className="text-xl font-bold text-utility-amber"
-            style={{ position: 'absolute', left: 700, right: 0, top: 585 }}
-          >
+          <div className={serviceIndicationCss} style={{ position: 'absolute', left: 700, right: 0, top: 585 }}>
             BULK
           </div>
         </div>
