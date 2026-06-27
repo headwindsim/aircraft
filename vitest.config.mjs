@@ -11,6 +11,5 @@ export default defineConfig({
     },
     environment: 'jsdom',
     setupFiles: ['./build-common/src/jest/setupJestMock.ts'],
-    onConsoleLog: console.log,
   },
 });
