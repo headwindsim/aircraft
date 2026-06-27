@@ -22,13 +22,14 @@ on:
 
 jobs:
   build:
+    name: Build and publish A339X
+    # Prevent running this on forks
+    if: github.repository_owner == 'headwindsim'
     runs-on: ubuntu-latest
     env:
       HDW_PRODUCTION_BUILD: 1
       STANDALONE_ZIP_NAME: headwindsim-aircraft-a330-900-dev.zip
       BUILD_DIR_NAME: development
-      CLOUDFLARE_WORKER_PASSWORD: ${{ secrets.CLOUDFLARE_WORKER_PASSWORD }}
-      CDN_BUCKET_DESTINATION: addons/a339x/development
       AIRCRAFT_PROJECT_PREFIX: a339x
       AIRCRAFT_VARIANT: a330-941
     steps:
@@ -62,6 +63,7 @@ jobs:
       - name: Setup Package
         run: |
           ./scripts/dev-env/run.sh ./scripts/setup.sh --clean
+          sudo apt-get install -y rclone
       - name: Copy Sources
         run: |
           ./scripts/dev-env/run.sh ./scripts/copy_a339x.sh
@@ -71,9 +73,29 @@ jobs:
           docker system prune -af
       - name: Build Fragmenter modules
         run: |
+          df -h
           node ./scripts/fragment-a339x.js
           cp ./build-a339x/out/build-modules/modules.json ./build-a339x/out/headwindsim-aircraft-a330-900/install.json
           node ./scripts/install-source-a339x.js
-      - name: Upload to CloudFlare CDN
+          df -h
+      - name: Configure rclone for Cloudflare R2
         run: |
-          ./scripts/cdn.sh $CDN_BUCKET_DESTINATION ./build-a339x/out/build-modules
+            mkdir -p ~/.config/rclone
+            cat > ~/.config/rclone/rclone.conf <<EOF
+            [cloudflare-r2]
+            type = s3
+            provider = Cloudflare
+            env_auth = false
+            access_key_id = ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+            secret_access_key = ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+            endpoint = ${{ secrets.CLOUDFLARE_R2_ENDPOINT }}
+            region = auto
+            EOF
+      - name: Upload to CloudFlare CDN
+        env:
+          CLOUDFLARE_CDN_ZONE_ID: ${{ secrets.CLOUDFLARE_CDN_ZONE_ID }}
+          CLOUDFLARE_PURGE_TOKEN: ${{ secrets.CLOUDFLARE_PURGE_TOKEN }}
+          CDN_BUCKET_DESTINATION: addons/a339x/development
+        run: |
+          ./scripts/cdn.sh ./build-a339x/out/build-modules $CDN_BUCKET_DESTINATION
+
