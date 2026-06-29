@@ -11,6 +11,8 @@ jobs:
   create_github_release:
     name: Create GitHub release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       id: ${{ steps.create_release.outputs.id }}

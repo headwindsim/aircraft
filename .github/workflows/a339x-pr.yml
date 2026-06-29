@@ -25,6 +25,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.event.pull_request.draft == false
+    permissions:
+      contents: read
     env:
       run: |
         echo HDW_PRODUCTION_BUILD=1 >> hdw-a339x/.env
