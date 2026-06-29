@@ -197,7 +197,8 @@ export class A320_Neo_CDU_MainDisplay
     AOCFreeText: 76,
     StepAltsPage: 77,
     ATCDepartReq: 78,
-    AcarsMenuPage: 79,
+    RTAPage: 79,
+    AcarsMenuPage: 80,
   };
 
   private mcduServerClient?: McduServerClient;
