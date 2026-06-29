@@ -65,8 +65,7 @@ cp -ra ./hdw-a339x/src/base/headwindsim-aircraft-a330-900/. ./build-a339x/out/he
 cp -ra ./hdw-a339x/src/base/headwindsim-aircraft-a330-900-lock-highlight/. ./build-a339x/out/headwindsim-aircraft-a330-900-lock-highlight
 
 # copy A32NX sound pack to A339X sound folder
-cp -ra ./flybywire/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/*.PC.PCK ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/sound
-
+cp -ra ./flybywire/large-files/fbw-a32nx/src/base/flybywire-aircraft-a320-neo/SimObjects/AirPlanes/FlyByWire_A320_NEO/sound/. ./build-a339x/out/headwindsim-aircraft-a330-900/SimObjects/Airplanes/Headwind_A330neo/sound
 
 chmod +x ./build-a339x/src/wasm/fbw_a330/build.sh
 
