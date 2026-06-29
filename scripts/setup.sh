@@ -15,7 +15,7 @@ git config --global --add safe.directory "*"
 
 # initialize submodule
 if [ "${GITHUB_ACTIONS}" == "true" ]; then
-  git submodule update --init flybywire
+  git submodule update --init --recursive flybywire
 else
   git submodule update --init --recursive
 fi
