@@ -1,3 +1,6 @@
 [submodule "flybywire"]
 	path = flybywire
 	url = https://github.com/flybywiresim/aircraft
+[submodule "large-files"]
+	path = large-files
+	url = https://github.com/headwindsim/aircraft-large-files

@@ -54,7 +54,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: true
-          lfs: true
       - name: Set BUILT_DATE_TIME
         run: echo "BUILT_DATE_TIME=$(date -u -Iseconds)" >> $GITHUB_ENV
       - name: Create .env file
