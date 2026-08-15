@@ -1,0 +1,77 @@
+@import "../../style";
+@import "../../../Common/definitions";
+
+#main-elec-dc {
+  .Box {
+    stroke: $display-grey;
+    fill: none;
+    stroke-width: 2.5px;
+  }
+
+  path {
+    stroke: $display-white;
+    stroke-width: 2.25px;
+    stroke-linecap: square;
+    stroke-linejoin: miter;
+
+    &.Green {
+      stroke: $display-green;
+    }
+
+    &.Amber {
+      stroke: $display-amber;
+    }
+  }
+
+  rect.Bus {
+      fill: $display-grey;
+  }
+
+  text {
+    fill: $display-white;
+    font-size: 19px;
+
+    &.ExtraLarge {
+      font-size: 26px;
+    }
+
+    // Seriously, we need to fix this at some point ^^
+    &.QuiteLarge {
+      font-size: 24px;
+    }
+
+    &.Large {
+      font-size: 22px;
+    }
+
+    &.Small {
+      font-size: 16.875px;
+    }
+
+    &.ExtraSmall {
+      font-size: 15px;
+    }
+
+    &.Middle {
+      text-anchor: middle;
+      text-align: middle;
+    }
+
+    &.Right {
+      text-anchor: end;
+      text-align: end;
+    }
+
+    &.Green {
+      fill: $display-green;
+    }
+
+    &.Amber {
+      fill: $display-amber;
+    }
+
+    &.Cyan {
+      fill: $display-cyan;
+    }
+  }
+}
