@@ -181,23 +181,30 @@ export class VerticalProfileComputationParametersObserver {
   }
 
   canComputeProfile(): boolean {
-    const areApproachSpeedsValid =
-      this.parameters.cleanSpeed > 100 &&
-      this.parameters.slatRetractionSpeed > 100 &&
-      this.parameters.flapRetractionSpeed > 100 &&
-      this.parameters.approachSpeed > 100;
+    const areApproachSpeedsValid = [
+      this.parameters.cleanSpeed,
+      this.parameters.slatRetractionSpeed,
+      this.parameters.flapRetractionSpeed,
+      this.parameters.approachSpeed,
+    ].every((speed) => Number.isFinite(speed) && speed > 100);
 
-    const hasZeroFuelWeight = Number.isFinite(this.parameters.zeroFuelWeight);
-    const hasGrossWeight = Number.isFinite(this.fmgc.getGrossWeight());
-    const hasCruiseAltitude = Number.isFinite(this.parameters.cruiseAltitude);
-    const hasTakeoffParameters =
-      this.parameters.thrustReductionAltitude > 0 && this.parameters.accelerationAltitude > 0;
+    const hasZeroFuelWeight = Number.isFinite(this.parameters.zeroFuelWeight) && this.parameters.zeroFuelWeight > 0;
+    const grossWeight = this.fmgc.getGrossWeight();
+    const hasGrossWeight = Number.isFinite(grossWeight) && grossWeight > 0;
+    const hasCruiseAltitude = Number.isFinite(this.parameters.cruiseAltitude) && this.parameters.cruiseAltitude > 0;
+    const hasFuel = Number.isFinite(this.parameters.fuelOnBoard) && this.parameters.fuelOnBoard >= 0;
+    const hasPosition = Number.isFinite(this.parameters.presentPosition?.alt);
+    const hasTakeoffParameters = [this.parameters.thrustReductionAltitude, this.parameters.accelerationAltitude].every(
+      (altitude) => Number.isFinite(altitude) && altitude > 0,
+    );
 
     return (
       (this.parameters.flightPhase > FmgcFlightPhase.Takeoff || hasTakeoffParameters) &&
       areApproachSpeedsValid &&
       hasZeroFuelWeight &&
       hasGrossWeight &&
+      hasFuel &&
+      hasPosition &&
       hasCruiseAltitude
     );
   }

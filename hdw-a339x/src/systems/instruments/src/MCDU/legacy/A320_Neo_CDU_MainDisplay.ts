@@ -1370,7 +1370,7 @@ export class A320_Neo_CDU_MainDisplay
       case AtsuStatusCodes.CallsignInUse:
         this.atsuScratchpad.setMessage(NXFictionalMessages.fltNbrInUse);
         break;
-      case AtsuStatusCodes.NoHoppieConnection:
+      case AtsuStatusCodes.NoAcarsConnection:
         this.atsuScratchpad.setMessage(NXFictionalMessages.noAcarsConnection);
         break;
       case AtsuStatusCodes.ComFailed:

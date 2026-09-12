@@ -186,14 +186,16 @@ const _buildBMatrix6 = (value) => {
   );
 };
 
-// math.js typings seem to not be nice... it says it may return a complex number when it shouldn't
-function isComplex(v: math.MathScalarType): v is math.Complex {
-  return typeof v === 'object' && 'im' in v;
+// Matrix operations have a scalar-or-collection return type in the installed mathjs API.
+function sumMatrix(value: math.MathType): math.MathNumericType {
+  if (!math.isMatrix(value)) {
+    throw new TypeError('Fuel prediction expected a matrix product');
+  }
+  return math.sum(value);
 }
 
-function getRealNumber(v: math.MathScalarType): number {
-  // should throw maybe??
-  return isComplex(v) ? v.re : math.number(v);
+function getRealNumber(v: math.MathNumericType): number {
+  return math.isComplex(v) ? v.re : math.number(v);
 }
 
 //A330 Factor
@@ -234,7 +236,7 @@ export class A32NX_FuelPred {
     const fuelMatrix = _buildAMatrix6(fuel);
     const flightLevelMatrix = _buildBMatrix6(flightLevel);
     const mmOfFuelFL = math.multiply(flightLevelMatrix, fuelMatrix);
-    return Math.round(getRealNumber(math.sum(math.dotMultiply(userAltTimeCoeff, mmOfFuelFL)) * factor));
+    return Math.round(Number(sumMatrix(math.dotMultiply(userAltTimeCoeff, mmOfFuelFL))) * factor);
   }
 
   /**
@@ -249,7 +251,7 @@ export class A32NX_FuelPred {
     const windMatrix = _buildBMatrix7(windComponent);
 
     const mmOfGroundWind = math.multiply(windMatrix, groundMatrix);
-    return Math.round(getRealNumber(math.sum(math.dotMultiply(airDistanceCoeff, mmOfGroundWind))));
+    return Math.round(getRealNumber(sumMatrix(math.dotMultiply(airDistanceCoeff, mmOfGroundWind))));
   }
 
   /**
@@ -262,7 +264,7 @@ export class A32NX_FuelPred {
     const weightMatrix = _buildAMatrix7(weight);
     const flightLevelMatrix = _buildBMatrix7(flightLevel);
     const mmOfWeightFL = math.multiply(flightLevelMatrix, weightMatrix);
-    return Math.round(getRealNumber(math.sum(math.dotMultiply(holdingFFCoeff, mmOfWeightFL)) * factor));
+    return Math.round(Number(sumMatrix(math.dotMultiply(holdingFFCoeff, mmOfWeightFL))) * factor);
   }
 
   /**
@@ -280,13 +282,13 @@ export class A32NX_FuelPred {
     //TODO Create logic for handling 200NM and FL390 = 0
     switch (computation) {
       case this.computations.FUEL:
-        const base = math.sum(math.dotMultiply(alternate ? altFuelConsumedCoef : fuelConsumedCoeff, mmOfDistFL));
-        return Math.round(getRealNumber(base * factor));
+        const base = sumMatrix(math.dotMultiply(alternate ? altFuelConsumedCoef : fuelConsumedCoeff, mmOfDistFL));
+        return Math.round(Number(base) * factor);
       case this.computations.TIME:
-        return Math.round(getRealNumber(math.sum(math.dotMultiply(alternate ? altTimeCoef : timeCoeff, mmOfDistFL))));
+        return Math.round(getRealNumber(sumMatrix(math.dotMultiply(alternate ? altTimeCoef : timeCoeff, mmOfDistFL))));
       case this.computations.CORRECTIONS:
         return Math.round(
-          getRealNumber(math.sum(math.dotMultiply(alternate ? altCorrectionsCoeff : correctionsCoef, mmOfDistFL))),
+          getRealNumber(sumMatrix(math.dotMultiply(alternate ? altCorrectionsCoeff : correctionsCoef, mmOfDistFL))),
         );
     }
   }

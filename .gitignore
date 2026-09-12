@@ -154,6 +154,8 @@ CMakeLists.txt
 # Build scripts
 !/scripts/**
 !/build-utils.js
+!/docs/development/fuel-trim/**
+/.fuel-trim-local/
 
 # explicit exclusions
 /.env

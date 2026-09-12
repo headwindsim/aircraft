@@ -6,6 +6,7 @@
 
 #include <MSFS/Legacy/gauges.h>
 
+#include <array>
 #include "DataManager.h"
 
 // Make access to variables more readable
@@ -48,22 +49,31 @@ class FadecSimData_A339X {
     FLOAT64 fuelRightMain;  // Gallons
   };
   DataDefinitionVector fuelLRDataDef = {
-      {"FUEL TANK LEFT MAIN QUANTITY",  0, UNITS.Gallons}, //
-      {"FUEL TANK RIGHT MAIN QUANTITY", 0, UNITS.Gallons}  //
+      {"FUELSYSTEM TANK QUANTITY", 2, UNITS.Gallons}, //
+      {"FUELSYSTEM TANK QUANTITY", 3, UNITS.Gallons}  //
   };
   DataDefinitionVariablePtr<FuelFeedTankData> fuelFeedTankDataPtr;
 
-  struct FuelTankData {
-    FLOAT64 fuelCenter;    // Gallons
-    FLOAT64 fuelLeftAux;   // Gallons
-    FLOAT64 fuelRightAux;  // Gallons
+  // A single native write moves both ends of the custom transfer together.
+  struct TrimTankData {
+    FLOAT64 center;
+    FLOAT64 trim;
   };
-  DataDefinitionVector fuelCandAuxDataDef = {
-      {"FUEL TANK CENTER QUANTITY",    0, UNITS.Gallons}, //
-      {"FUEL TANK LEFT AUX QUANTITY",  0, UNITS.Gallons}, //
-      {"FUEL TANK RIGHT AUX QUANTITY", 0, UNITS.Gallons}  //
+  DataDefinitionVector trimTankDataDef = {
+      {"FUELSYSTEM TANK QUANTITY", 1, UNITS.Gallons},
+      {"FUELSYSTEM TANK QUANTITY", 6, UNITS.Gallons},
   };
-  DataDefinitionVariablePtr<FuelTankData> fuelCandAuxDataPtr;
+  DataDefinitionVariablePtr<TrimTankData> trimTankDataPtr;
+  using FuelStateData                   = std::array<FLOAT64, 6>;
+  DataDefinitionVector fuelStateDataDef = {
+      {"FUELSYSTEM TANK QUANTITY", 1, UNITS.Gallons},
+      {"FUELSYSTEM TANK QUANTITY", 2, UNITS.Gallons},
+      {"FUELSYSTEM TANK QUANTITY", 3, UNITS.Gallons},
+      {"FUELSYSTEM TANK QUANTITY", 4, UNITS.Gallons},
+      {"FUELSYSTEM TANK QUANTITY", 5, UNITS.Gallons},
+      {"FUELSYSTEM TANK QUANTITY", 6, UNITS.Gallons},
+  };
+  DataDefinitionVariablePtr<FuelStateData> fuelStateDataPtr;
 
   // Oil Temp Data in separate Data Definitions as they are updated separately
   // clang-format off
@@ -114,6 +124,7 @@ class FadecSimData_A339X {
     FLOAT64 fuelTankQuantityLeftAux;   // Gallons
     FLOAT64 fuelTankQuantityRight;     // Gallons
     FLOAT64 fuelTankQuantityRightAux;  // Gallons
+    FLOAT64 fuelTankQuantityTrim;      // Gallons
     FLOAT64 fuelWeightPerGallon;       // Pounds
     FLOAT64 lineToCenterFlow[2];       // Gallons per hour
     FLOAT64 pressureAltitude;          // Feet
@@ -125,6 +136,9 @@ class FadecSimData_A339X {
     FLOAT64 xfrValveCenterOpen[2];     // Number
     FLOAT64 xfrValveOuter1[2];         // Number
     FLOAT64 xfrValveOuter2[2];         // Number
+    FLOAT64 totalWeightPounds;
+    FLOAT64 cgPercent;
+    FLOAT64 unlimitedFuel;
   };
   DataDefinitionVector simVarsDataDef = {
       {"AIRSPEED MACH",                0,  UNITS.Mach     }, // airSpeedMach
@@ -149,6 +163,7 @@ class FadecSimData_A339X {
       {"FUELSYSTEM TANK QUANTITY",     4,  UNITS.Gallons  }, // fuelTankQuantityLeftAux
       {"FUELSYSTEM TANK QUANTITY",     3,  UNITS.Gallons  }, // fuelTankQuantityRight
       {"FUELSYSTEM TANK QUANTITY",     5,  UNITS.Gallons  }, // fuelTankQuantityRightAux
+      {"FUELSYSTEM TANK QUANTITY",     6,  UNITS.Gallons  }, // fuelTankQuantityTrim
       {"FUEL WEIGHT PER GALLON",       0,  UNITS.Pounds   }, // fuelWeightPerGallon
       {"FUELSYSTEM LINE FUEL FLOW",    27, UNITS.Gph      }, // lineToCenterFlow[0]
       {"FUELSYSTEM LINE FUEL FLOW",    28, UNITS.Gph      }, // lineToCenterFlow[1]
@@ -168,6 +183,9 @@ class FadecSimData_A339X {
       {"FUELSYSTEM VALVE OPEN",        7,  UNITS.Number   }, // xfrValveOuter1[1]
       {"FUELSYSTEM VALVE OPEN",        4,  UNITS.Number   }, // xfrValveOuter2[0]
       {"FUELSYSTEM VALVE OPEN",        5,  UNITS.Number   }, // xfrValveOuter2[1]
+      {"TOTAL WEIGHT",                 0,  UNITS.Pounds   },
+      {"CG PERCENT",                   0,  UNITS.Percent  },
+      {"UNLIMITED FUEL",               0,  UNITS.Bool     },
   };
   DataDefinitionVariablePtr<SimVarsData> simVarsDataPtr;
 
@@ -222,6 +240,27 @@ class FadecSimData_A339X {
   NamedVariablePtr thrustLimitType;
   NamedVariablePtr wingAntiIce;
 
+  NamedVariablePtr trimEnabled;
+  NamedVariablePtr trimCommand;
+  NamedVariablePtr trimTarget;
+  NamedVariablePtr trimRate;
+  NamedVariablePtr trimPumpFailed;
+  NamedVariablePtr trimValveStuck;
+  NamedVariablePtr trimPumpPower;
+  NamedVariablePtr trimValvePower;
+  NamedVariablePtr fuelTelemetry;
+  NamedVariablePtr fuelExternalSequence;
+  NamedVariablePtr fuelRestoreRequest;
+  NamedVariablePtr fuelSaveRequest;
+  NamedVariablePtr trimMode;
+  NamedVariablePtr trimFlow;
+  NamedVariablePtr trimValveCommand;
+  NamedVariablePtr trimValvePosition;
+  NamedVariablePtr trimPumpCommand;
+  NamedVariablePtr trimPumpActive;
+  NamedVariablePtr fuelStateStatus;
+  NamedVariablePtr trimPredictedCg;
+
   NamedVariablePtr aircraftPresetQuickMode;  // 0 or 1
   // ===============================================================================================
 
@@ -239,9 +278,10 @@ class FadecSimData_A339X {
   }
 
   void initDataDefinitions(DataManager* dm) {
+    fuelStateDataPtr    = dm->make_datadefinition_var<FuelStateData>("FUEL STATE DATA", fuelStateDataDef, NO_AUTO_UPDATE);
+    trimTankDataPtr     = dm->make_datadefinition_var<TrimTankData>("FUEL TRIM DATA", trimTankDataDef, NO_AUTO_UPDATE);
     atcIdDataPtr        = dm->make_datadefinition_var<AtcIdData>("ATC ID DATA", atcIdDataDef, NO_AUTO_UPDATE);
     fuelFeedTankDataPtr = dm->make_datadefinition_var<FuelFeedTankData>("FUEL LR DATA", fuelLRDataDef, NO_AUTO_UPDATE);
-    fuelCandAuxDataPtr  = dm->make_datadefinition_var<FuelTankData>("FUEL CAND AUX DATA", fuelCandAuxDataDef, NO_AUTO_UPDATE);
     oilTempDataPtr[L]   = dm->make_datadefinition_var<OliTempData>("OIL TEMP LEFT DATA", oilTempE1DataDef, NO_AUTO_UPDATE);
     oilTempDataPtr[R]   = dm->make_datadefinition_var<OliTempData>("OIL TEMP RIGHT DATA", oilTempE2DataDef, NO_AUTO_UPDATE);
     oilPsiDataPtr[L]    = dm->make_datadefinition_var<OilPsiData>("OIL PSI LEFT DATA", oilPsiE1DataDef, NO_AUTO_UPDATE);
@@ -287,6 +327,31 @@ class FadecSimData_A339X {
   }
 
   void initLvars(DataManager* dm) {
+    trimEnabled          = dm->make_named_var("A339X_TRIM_EXPERIMENTAL_ENABLE", UNITS.Number, AUTO_READ);
+    trimCommand          = dm->make_named_var("A339X_TRIM_COMMAND", UNITS.Number, AUTO_READ);
+    trimTarget           = dm->make_named_var("A339X_TRIM_TARGET_GALLONS", UNITS.Number, AUTO_READ);
+    trimRate             = dm->make_named_var("A339X_TRIM_RATE_GPS", UNITS.Number, AUTO_READ);
+    trimPumpFailed       = dm->make_named_var("A339X_TRIM_PUMP_FAILED", UNITS.Number, AUTO_READ);
+    trimValveStuck       = dm->make_named_var("A339X_TRIM_VALVE_STUCK", UNITS.Number, AUTO_READ);
+    trimPumpPower        = dm->make_named_var("A32NX_ELEC_AC_1_BUS_IS_POWERED", UNITS.Number, AUTO_READ);
+    trimValvePower       = dm->make_named_var("A32NX_ELEC_DC_1_BUS_IS_POWERED", UNITS.Number, AUTO_READ);
+    fuelTelemetry        = dm->make_named_var("A339X_FUEL_TELEMETRY_ENABLE", UNITS.Number, AUTO_READ);
+    fuelExternalSequence = dm->make_named_var("A339X_FUEL_EXTERNAL_EDIT_SEQUENCE", UNITS.Number, AUTO_READ);
+    fuelRestoreRequest   = dm->make_named_var("A339X_FUEL_RESTORE_REQUEST", UNITS.Number, AUTO_READ);
+    fuelSaveRequest      = dm->make_named_var("A339X_FUEL_SAVE_REQUEST", UNITS.Number, AUTO_READ);
+    trimMode             = dm->make_named_var("A339X_TRIM_STATE", UNITS.Number, AUTO_WRITE);
+    trimFlow             = dm->make_named_var("A339X_TRIM_FLOW_GPS", UNITS.Number, AUTO_WRITE);
+    trimValveCommand     = dm->make_named_var("A339X_TRIM_VALVE_COMMAND", UNITS.Number, AUTO_WRITE);
+    trimValvePosition    = dm->make_named_var("A339X_TRIM_VALVE_POSITION", UNITS.Number, AUTO_WRITE);
+    trimPumpCommand      = dm->make_named_var("A339X_TRIM_PUMP_COMMAND", UNITS.Number, AUTO_WRITE);
+    trimPumpActive       = dm->make_named_var("A339X_TRIM_PUMP_ACTIVE", UNITS.Number, AUTO_WRITE);
+    fuelStateStatus      = dm->make_named_var("A339X_FUEL_STATE_STATUS", UNITS.Number, AUTO_WRITE);
+    trimPredictedCg      = dm->make_named_var("A339X_TRIM_PREDICTED_CG_DELTA", UNITS.Number, AUTO_WRITE);
+    trimEnabled->setAndWriteToSim(0);
+    trimCommand->setAndWriteToSim(0);
+    trimRate->setAndWriteToSim(0);
+    fuelRestoreRequest->setAndWriteToSim(0);
+    fuelSaveRequest->setAndWriteToSim(0);
     // TODO: consider DataDefinition for the groups tha are read/write each tick
 
     startState = dm->make_named_var("A32NX_START_STATE", UNITS.Number, NO_AUTO_UPDATE);

@@ -10,11 +10,17 @@ import './Fuel.scss';
 export const FuelPage = () => {
   const [crossFeedPosition] = useSimVar('FUELSYSTEM VALVE OPEN:3', 'number', 500);
 
-  const [tankLeftOuter] = useSimVar('FUEL TANK LEFT AUX QUANTITY', 'gallons', 500);
-  const [tankLeftInner] = useSimVar('FUEL TANK LEFT MAIN QUANTITY', 'gallons', 500);
-  const [tankCenter] = useSimVar('FUEL TANK CENTER QUANTITY', 'gallons', 500);
-  const [tankRightInner] = useSimVar('FUEL TANK RIGHT MAIN QUANTITY', 'gallons', 500);
-  const [tankRightOuter] = useSimVar('FUEL TANK RIGHT AUX QUANTITY', 'gallons', 500);
+  const [tankLeftOuter] = useSimVar('FUELSYSTEM TANK QUANTITY:4', 'gallons', 500);
+  const [tankLeftInner] = useSimVar('FUELSYSTEM TANK QUANTITY:2', 'gallons', 500);
+  const [tankTrim] = useSimVar('FUELSYSTEM TANK QUANTITY:6', 'gallons', 500);
+  const [trimState] = useSimVar('L:A339X_TRIM_STATE', 'number', 500);
+  const [trimFlow] = useSimVar('L:A339X_TRIM_FLOW_GPS', 'number', 500);
+  const [trimValve] = useSimVar('L:A339X_TRIM_VALVE_POSITION', 'number', 500);
+  const [trimPump] = useSimVar('L:A339X_TRIM_PUMP_ACTIVE', 'bool', 500);
+  const trimStatus = ['OFF', 'HOLDING', 'AFT', 'FORWARD', 'INHIBITED', 'FAULT', 'LIMIT'][trimState] ?? 'UNKNOWN';
+  const [tankCenter] = useSimVar('FUELSYSTEM TANK QUANTITY:1', 'gallons', 500);
+  const [tankRightInner] = useSimVar('FUELSYSTEM TANK QUANTITY:3', 'gallons', 500);
+  const [tankRightOuter] = useSimVar('FUELSYSTEM TANK QUANTITY:5', 'gallons', 500);
   const [leftOuterInnerValve] = useSimVar('FUELSYSTEM VALVE OPEN:4', 'bool', 500);
   const [rightOuterInnerValve] = useSimVar('FUELSYSTEM VALVE OPEN:5', 'bool', 500);
   const [modelSelectManual] = useSimVar('L:A32NX_OVHD_FUEL_MODESEL_MANUAL', 'bool', 500);
@@ -168,6 +174,28 @@ export const FuelPage = () => {
           °C
         </text>
       </>
+
+      {/* Experimental trim telemetry uses actual quantity, flow, valve and pump feedback. */}
+      <g id="ExperimentalTrimTank">
+        <text className="White" fontSize={18} x={365} y={375}>
+          TRIM EXP
+        </text>
+        <text className="Green" fontSize={20} x={365} y={400}>
+          {fuelInTanksForDisplay(tankTrim, useMetric, fuelWeightPerGallon)} {useMetric ? 'KG' : 'LBS'}
+        </text>
+        <text className={trimState >= 4 ? 'Amber' : 'Green'} fontSize={16} x={365} y={423}>
+          {trimStatus}
+        </text>
+        <text className="White" fontSize={16} x={365} y={446}>
+          FLOW {Number.isFinite(trimFlow) ? trimFlow.toFixed(2) : 'XX'} GAL/S
+        </text>
+        <text className="White" fontSize={16} x={365} y={469}>
+          VLV {Number.isFinite(trimValve) ? Math.round(trimValve * 100) : 'XX'}%
+        </text>
+        <text className={trimPump ? 'Green' : 'White'} fontSize={16} x={475} y={469}>
+          PUMP {trimPump ? 'ON' : 'OFF'}
+        </text>
+      </g>
 
       {/* F. FLOW */}
       <FuelFlow useMetric={useMetric} />

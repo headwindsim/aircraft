@@ -1,0 +1,546 @@
+// @ts-strict-ignore
+// Copyright (c) 2021-2026 FlyByWire Simulations
+//
+// SPDX-License-Identifier: GPL-3.0
+
+import { VerticalProfileComputationParametersObserver } from '@fmgc/guidance/vnav/VerticalProfileComputationParameters';
+import { ManagedSpeedType, SpeedProfile } from '@fmgc/guidance/vnav/climb/SpeedProfile';
+import { ArmedVerticalMode, isArmed, VerticalMode } from '@shared/autopilot';
+import { ClimbStrategy } from '@fmgc/guidance/vnav/climb/ClimbStrategy';
+import { EngineModel } from '@fmgc/guidance/vnav/EngineModel';
+import { AircraftConfig } from '@fmgc/flightplanning/AircraftConfigTypes';
+import { assertValidForwardStep, InvalidVnavPredictionError } from '@fmgc/guidance/vnav/PredictionValidation';
+import { Predictions, StepResults } from '../Predictions';
+import { ProfilePhase, VerticalCheckpoint, VerticalCheckpointReason } from '../profile/NavGeometryProfile';
+import { BaseGeometryProfile } from '../profile/BaseGeometryProfile';
+import { AtmosphericConditions } from '../AtmosphericConditions';
+
+export class ClimbPathBuilder {
+  constructor(
+    private computationParametersObserver: VerticalProfileComputationParametersObserver,
+    private atmosphericConditions: AtmosphericConditions,
+  ) {}
+
+  /**
+   * Compute climb profile assuming climb thrust until top of climb.
+   * @param profile
+   * @returns
+   */
+  computeClimbPath(
+    profile: BaseGeometryProfile,
+    config: AircraftConfig,
+    climbStrategy: ClimbStrategy,
+    speedProfile: SpeedProfile,
+    targetAltitude: Feet,
+  ) {
+    const { fcuVerticalMode, fcuArmedVerticalMode } = this.computationParametersObserver.get();
+
+    this.addClimbSteps(
+      profile,
+      config,
+      climbStrategy,
+      speedProfile,
+      targetAltitude,
+      VerticalCheckpointReason.TopOfClimb,
+    );
+
+    if (this.shouldAddFcuAltAsCheckpoint(fcuVerticalMode, fcuArmedVerticalMode)) {
+      this.addFcuAltitudeAsCheckpoint(profile);
+    }
+
+    if (speedProfile.shouldTakeClimbSpeedLimitIntoAccount()) {
+      this.addSpeedLimitAsCheckpoint(profile);
+    }
+  }
+
+  private addClimbSteps(
+    profile: BaseGeometryProfile,
+    config: AircraftConfig,
+    climbStrategy: ClimbStrategy,
+    speedProfile: SpeedProfile,
+    finalAltitude: Feet,
+    finalAltitudeReason: VerticalCheckpointReason = VerticalCheckpointReason.AtmosphericConditions,
+  ) {
+    const { managedClimbSpeedMach } = this.computationParametersObserver.get();
+
+    for (const constraint of profile.maxAltitudeConstraints) {
+      const { maxAltitude: constraintAltitude, distanceFromStart: constraintDistanceFromStart } = constraint;
+
+      if (constraintAltitude >= finalAltitude) {
+        break;
+      }
+
+      if (constraintAltitude > profile.lastCheckpoint.altitude) {
+        // Continue climb
+        if (profile.lastCheckpoint.reason === VerticalCheckpointReason.AltitudeConstraint) {
+          profile.lastCheckpoint.reason = VerticalCheckpointReason.ContinueClimb;
+        }
+
+        // Mark where we are
+        let indexToResetTo = profile.checkpoints.length;
+        // Try going to the next altitude
+        this.buildIteratedClimbSegment(
+          profile,
+          climbStrategy,
+          speedProfile,
+          profile.lastCheckpoint.altitude,
+          constraintAltitude,
+        );
+
+        let currentSpeedConstraint = speedProfile.getMaxClimbSpeedConstraint(profile.lastCheckpoint.distanceFromStart);
+        for (
+          let i = 0;
+          i++ < 10 && currentSpeedConstraint;
+          currentSpeedConstraint = speedProfile.getMaxClimbSpeedConstraint(profile.lastCheckpoint.distanceFromStart)
+        ) {
+          // This means we did not pass a constraint during the climb
+          if (currentSpeedConstraint.distanceFromStart > profile.lastCheckpoint.distanceFromStart) {
+            break;
+          }
+
+          // Reset
+          profile.checkpoints.splice(indexToResetTo);
+
+          // Use distance step instead
+          this.buildIteratedDistanceStep(
+            profile,
+            climbStrategy,
+            currentSpeedConstraint.distanceFromStart - profile.lastCheckpoint.distanceFromStart,
+            VerticalCheckpointReason.SpeedConstraint,
+          );
+
+          // Repeat
+          indexToResetTo = profile.checkpoints.length;
+          this.buildIteratedClimbSegment(
+            profile,
+            climbStrategy,
+            speedProfile,
+            profile.lastCheckpoint.altitude,
+            constraintAltitude,
+          );
+        }
+
+        // We reach the target altitude before the constraint, so we insert a level segment.
+        if (profile.lastCheckpoint.distanceFromStart < constraintDistanceFromStart) {
+          profile.lastCheckpoint.reason = VerticalCheckpointReason.LevelOffForClimbConstraint;
+
+          this.addLevelSegmentSteps(profile, config, speedProfile, constraintDistanceFromStart);
+        }
+      } else if (Math.abs(profile.lastCheckpoint.altitude - constraintAltitude) < 250) {
+        // Continue in level flight to the next constraint
+        this.addLevelSegmentSteps(profile, config, speedProfile, constraintDistanceFromStart);
+      }
+    }
+
+    if (profile.lastCheckpoint.reason === VerticalCheckpointReason.AltitudeConstraint) {
+      profile.lastCheckpoint.reason = VerticalCheckpointReason.ContinueClimb;
+    }
+
+    // We get here if there are still waypoints with speed constrainst after all the altitude constraints
+    for (const speedConstraint of profile.maxClimbSpeedConstraints) {
+      const { distanceFromStart, altitude, speed, remainingFuelOnBoard } = profile.lastCheckpoint;
+
+      if (distanceFromStart > speedConstraint.distanceFromStart) {
+        continue;
+      }
+
+      const speedTarget = speedProfile.getTarget(distanceFromStart, altitude, ManagedSpeedType.Climb);
+      if (speedTarget - speed > 1) {
+        const accelerationStep = climbStrategy.predictToSpeed(
+          altitude,
+          speedTarget,
+          speed,
+          managedClimbSpeedMach,
+          remainingFuelOnBoard,
+          -profile.winds.getClimbTailwind(distanceFromStart, altitude),
+        );
+
+        // If we shoot through the final altitude trying to accelerate, pretend we didn't accelerate all the way
+        if (accelerationStep.finalAltitude > finalAltitude) {
+          const scaling =
+            accelerationStep.finalAltitude - accelerationStep.initialAltitude !== 0
+              ? (finalAltitude - accelerationStep.initialAltitude) /
+                (accelerationStep.finalAltitude - accelerationStep.initialAltitude)
+              : 0;
+
+          this.scaleStepBasedOnLastCheckpoint(profile.lastCheckpoint, accelerationStep, scaling);
+        }
+
+        this.addCheckpointFromStep(profile, accelerationStep, VerticalCheckpointReason.AtmosphericConditions);
+      }
+
+      if (speedConstraint.distanceFromStart > profile.lastCheckpoint.distanceFromStart) {
+        this.buildIteratedDistanceStep(
+          profile,
+          climbStrategy,
+          speedConstraint.distanceFromStart - profile.lastCheckpoint.distanceFromStart,
+          VerticalCheckpointReason.SpeedConstraint,
+        );
+
+        // This occurs if we somehow overshot the target altitude
+        if (profile.lastCheckpoint.altitude > finalAltitude) {
+          // Remove all checkpoints that are above the final altitude
+          profile.checkpoints = profile.checkpoints.filter((c) => c.altitude <= finalAltitude);
+
+          // Use an altitude step instead
+          this.buildIteratedClimbSegment(
+            profile,
+            climbStrategy,
+            speedProfile,
+            profile.lastCheckpoint.altitude,
+            finalAltitude,
+          );
+        }
+      }
+    }
+
+    // We get here if we have passed all speed and altitude constraints, but are not at our final altitude yet.
+    this.buildIteratedClimbSegment(
+      profile,
+      climbStrategy,
+      speedProfile,
+      profile.lastCheckpoint.altitude,
+      finalAltitude,
+    );
+    profile.lastCheckpoint.reason = finalAltitudeReason;
+  }
+
+  private buildIteratedClimbSegment(
+    profile: BaseGeometryProfile,
+    climbStrategy: ClimbStrategy,
+    speedProfile: SpeedProfile,
+    startingAltitude: Feet,
+    targetAltitude: Feet,
+  ): void {
+    const { managedClimbSpeedMach } = this.computationParametersObserver.get();
+
+    if (!Number.isFinite(startingAltitude) || !Number.isFinite(targetAltitude)) {
+      throw new InvalidVnavPredictionError('Non-finite climb altitude');
+    }
+
+    let altitude = startingAltitude;
+    for (let i = 0; i < 100 && altitude < targetAltitude; i++) {
+      const { speed, remainingFuelOnBoard, distanceFromStart } = profile.lastCheckpoint;
+
+      const speedTarget = speedProfile.getTarget(distanceFromStart, altitude, ManagedSpeedType.Climb);
+      const isAboveCrossoverAltitude =
+        speedTarget > this.atmosphericConditions.computeCasFromMach(altitude, managedClimbSpeedMach);
+
+      const headwind = -profile.winds.getClimbTailwind(distanceFromStart, altitude);
+
+      // If we're below the target speed, we need to accelerate, unless we're above the crossover altitude. In that case, IAS is always below the managed IAS speed.
+      const step =
+        isAboveCrossoverAltitude || speedTarget - speed < 1
+          ? climbStrategy.predictToAltitude(
+              altitude,
+              Math.min(altitude + 1500, targetAltitude),
+              speedTarget,
+              managedClimbSpeedMach,
+              remainingFuelOnBoard,
+              headwind,
+            )
+          : climbStrategy.predictToSpeed(
+              altitude,
+              speedTarget,
+              speed,
+              managedClimbSpeedMach,
+              remainingFuelOnBoard,
+              headwind,
+            );
+
+      if (step.finalAltitude - targetAltitude > 10) {
+        const scaling =
+          step.finalAltitude - step.initialAltitude !== 0
+            ? (targetAltitude - step.initialAltitude) / (step.finalAltitude - step.initialAltitude)
+            : 0;
+        this.scaleStepBasedOnLastCheckpoint(profile.lastCheckpoint, step, scaling);
+      }
+
+      if (step.finalAltitude <= altitude && !(step.speed > speed)) {
+        throw new InvalidVnavPredictionError('Climb prediction makes no altitude or speed progress');
+      }
+
+      this.addCheckpointFromStep(profile, step, VerticalCheckpointReason.AtmosphericConditions);
+
+      altitude = step.finalAltitude;
+    }
+
+    if (altitude < targetAltitude) {
+      throw new InvalidVnavPredictionError('Climb prediction did not reach the target altitude');
+    }
+  }
+
+  private buildIteratedDistanceStep(
+    profile: BaseGeometryProfile,
+    climbStrategy: ClimbStrategy,
+    distance: NauticalMiles,
+    reason: VerticalCheckpointReason,
+  ) {
+    if (!Number.isFinite(distance) || distance < 0) {
+      throw new InvalidVnavPredictionError('Invalid forward climb distance');
+    }
+    let distanceCrossed = 0;
+    let iterations = 0;
+    for (; distanceCrossed + 3 < distance; distanceCrossed += 3) {
+      if (iterations++ >= 1000) {
+        throw new InvalidVnavPredictionError('Climb distance prediction exceeded the iteration limit');
+      }
+      this.distanceStepFromLastCheckpoint(profile, climbStrategy, 3, VerticalCheckpointReason.AtmosphericConditions);
+    }
+
+    this.distanceStepFromLastCheckpoint(profile, climbStrategy, distance - distanceCrossed, reason);
+  }
+
+  private distanceStepFromLastCheckpoint(
+    profile: BaseGeometryProfile,
+    climbStrategy: ClimbStrategy,
+    distance: NauticalMiles,
+    reason: VerticalCheckpointReason,
+  ) {
+    const { managedClimbSpeedMach } = this.computationParametersObserver.get();
+    const { distanceFromStart, altitude, speed: initialSpeed, remainingFuelOnBoard } = profile.lastCheckpoint;
+
+    const step = climbStrategy.predictToDistance(
+      altitude,
+      distance,
+      initialSpeed,
+      managedClimbSpeedMach,
+      remainingFuelOnBoard,
+      -profile.winds.getClimbTailwind(distanceFromStart, altitude),
+    );
+
+    if (distance > 0 && step.distanceTraveled <= 0) {
+      throw new InvalidVnavPredictionError('Climb prediction makes no distance progress');
+    }
+    this.addCheckpointFromStep(profile, step, reason);
+  }
+
+  private addLevelSegmentSteps(
+    profile: BaseGeometryProfile,
+    config: AircraftConfig,
+    speedProfile: SpeedProfile,
+    toDistanceFromStart: NauticalMiles,
+  ): void {
+    // The only reason we have to build this iteratively is because there could be speed constraints along the way
+    const altitude = profile.lastCheckpoint.altitude;
+
+    // Go over all constraints
+    for (const speedConstraint of profile.maxClimbSpeedConstraints) {
+      // Ignore constraint since we're already past it
+      if (
+        profile.lastCheckpoint.distanceFromStart >= speedConstraint.distanceFromStart ||
+        toDistanceFromStart <= speedConstraint.distanceFromStart
+      ) {
+        continue;
+      }
+
+      const currentSpeed = profile.lastCheckpoint.speed;
+      const speedTarget = speedProfile.getTarget(
+        profile.lastCheckpoint.distanceFromStart,
+        altitude,
+        ManagedSpeedType.Climb,
+      );
+
+      if (speedTarget > currentSpeed) {
+        const step = this.computeLevelFlightAccelerationStep(
+          config,
+          altitude,
+          currentSpeed,
+          speedTarget,
+          profile.lastCheckpoint.remainingFuelOnBoard,
+        );
+
+        // We could not accelerate in time
+        if (profile.lastCheckpoint.distanceFromStart + step.distanceTraveled > speedConstraint.distanceFromStart) {
+          const scaling =
+            (speedConstraint.distanceFromStart - profile.lastCheckpoint.distanceFromStart) / step.distanceTraveled;
+
+          this.scaleStepBasedOnLastCheckpoint(profile.lastCheckpoint, step, scaling);
+          this.addCheckpointFromStep(profile, step, VerticalCheckpointReason.AtmosphericConditions);
+
+          continue;
+        } else {
+          // End of acceleration
+          this.addCheckpointFromStep(profile, step, VerticalCheckpointReason.AtmosphericConditions);
+        }
+      }
+
+      // Compute step after accelerating to next constraint
+      const levelStepToConstraint = this.computeLevelFlightSegmentPrediction(
+        config,
+        speedConstraint.distanceFromStart - profile.lastCheckpoint.distanceFromStart,
+        altitude,
+        profile.lastCheckpoint.speed,
+        profile.lastCheckpoint.remainingFuelOnBoard,
+      );
+
+      this.addCheckpointFromStep(profile, levelStepToConstraint, VerticalCheckpointReason.AltitudeConstraint);
+    }
+
+    // TODO: This exact piece of code appears a couple of lines above, extract to function!
+    const currentSpeed = profile.lastCheckpoint.speed;
+    const speedTarget = speedProfile.getTarget(
+      profile.lastCheckpoint.distanceFromStart,
+      altitude,
+      ManagedSpeedType.Climb,
+    );
+
+    if (speedTarget > currentSpeed) {
+      const accelerationStep = this.computeLevelFlightAccelerationStep(
+        config,
+        altitude,
+        currentSpeed,
+        speedTarget,
+        profile.lastCheckpoint.remainingFuelOnBoard,
+      );
+
+      // We could not accelerate in time
+      if (profile.lastCheckpoint.distanceFromStart + accelerationStep.distanceTraveled > toDistanceFromStart) {
+        const scaling =
+          (toDistanceFromStart - profile.lastCheckpoint.distanceFromStart) / accelerationStep.distanceTraveled;
+        this.scaleStepBasedOnLastCheckpoint(profile.lastCheckpoint, accelerationStep, scaling);
+        this.addCheckpointFromStep(profile, accelerationStep, VerticalCheckpointReason.AtmosphericConditions);
+
+        return;
+      }
+
+      // End of acceleration
+      this.addCheckpointFromStep(profile, accelerationStep, VerticalCheckpointReason.AtmosphericConditions);
+    }
+
+    const levelStepToConstraint = this.computeLevelFlightSegmentPrediction(
+      config,
+      toDistanceFromStart - profile.lastCheckpoint.distanceFromStart,
+      altitude,
+      profile.lastCheckpoint.speed,
+      profile.lastCheckpoint.remainingFuelOnBoard,
+    );
+
+    this.addCheckpointFromStep(profile, levelStepToConstraint, VerticalCheckpointReason.AltitudeConstraint);
+  }
+
+  private computeLevelFlightSegmentPrediction(
+    config: AircraftConfig,
+    stepSize: Feet,
+    altitude: Feet,
+    initialSpeed: Knots,
+    fuelWeight: number,
+  ): StepResults {
+    const { zeroFuelWeight, managedClimbSpeedMach, tropoPause, perfFactor } = this.computationParametersObserver.get();
+
+    return Predictions.levelFlightStep(
+      config,
+      altitude,
+      stepSize,
+      initialSpeed,
+      managedClimbSpeedMach,
+      zeroFuelWeight,
+      fuelWeight,
+      0,
+      this.atmosphericConditions.isaDeviation,
+      tropoPause,
+      perfFactor,
+    );
+  }
+
+  private computeLevelFlightAccelerationStep(
+    config: AircraftConfig,
+    altitude: Feet,
+    initialSpeed: Knots,
+    speedTarget: Knots,
+    fuelWeight: number,
+  ): StepResults {
+    const { zeroFuelWeight, managedClimbSpeedMach, tropoPause, perfFactor } = this.computationParametersObserver.get();
+
+    const staticAirTemperature = this.atmosphericConditions.predictStaticAirTemperatureAtAltitude(altitude);
+
+    return Predictions.speedChangeStep(
+      config,
+      0,
+      altitude,
+      initialSpeed,
+      speedTarget,
+      managedClimbSpeedMach,
+      managedClimbSpeedMach,
+      EngineModel.getClimbThrustCorrectedN1(config.engineModelParameters, altitude, staticAirTemperature),
+      zeroFuelWeight,
+      fuelWeight,
+      0,
+      this.atmosphericConditions.isaDeviation,
+      tropoPause,
+      perfFactor,
+    );
+  }
+
+  addSpeedLimitAsCheckpoint(profile: BaseGeometryProfile) {
+    const {
+      climbSpeedLimit: { underAltitude },
+      presentPosition: { alt },
+      cruiseAltitude,
+    } = this.computationParametersObserver.get();
+
+    if (underAltitude <= alt || underAltitude > cruiseAltitude) {
+      return;
+    }
+
+    const distance = profile.interpolateDistanceAtAltitude(underAltitude);
+
+    profile.addInterpolatedCheckpoint(distance, { reason: VerticalCheckpointReason.CrossingClimbSpeedLimit });
+  }
+
+  private addFcuAltitudeAsCheckpoint(profile: BaseGeometryProfile) {
+    const { fcuAltitude, presentPosition, cruiseAltitude } = this.computationParametersObserver.get();
+
+    if (fcuAltitude <= presentPosition.alt || fcuAltitude > cruiseAltitude) {
+      return;
+    }
+
+    const distance = profile.interpolateDistanceAtAltitude(fcuAltitude);
+
+    profile.addInterpolatedCheckpoint(distance, { reason: VerticalCheckpointReason.CrossingFcuAltitudeClimb });
+  }
+
+  private shouldAddFcuAltAsCheckpoint(verticalMode: VerticalMode, armedVerticalMode: ArmedVerticalMode) {
+    const verticalModesToShowLevelOffArrowFor = [
+      VerticalMode.OP_CLB,
+      VerticalMode.VS,
+      VerticalMode.FPA,
+      VerticalMode.CLB,
+      VerticalMode.SRS,
+      VerticalMode.SRS_GA,
+    ];
+
+    return (
+      isArmed(armedVerticalMode, ArmedVerticalMode.CLB) || verticalModesToShowLevelOffArrowFor.includes(verticalMode)
+    );
+  }
+
+  private addCheckpointFromStep(profile: BaseGeometryProfile, step: StepResults, reason: VerticalCheckpointReason) {
+    assertValidForwardStep(step);
+    if (step.finalAltitude < profile.lastCheckpoint.altitude) {
+      throw new InvalidVnavPredictionError('Climb prediction loses altitude');
+    }
+    profile.addCheckpointFromLast(({ distanceFromStart, secondsFromPresent, remainingFuelOnBoard }) => ({
+      reason,
+      distanceFromStart: distanceFromStart + step.distanceTraveled,
+      altitude: step.finalAltitude,
+      secondsFromPresent: secondsFromPresent + step.timeElapsed,
+      speed: step.speed,
+      remainingFuelOnBoard: remainingFuelOnBoard - step.fuelBurned,
+      mach: this.computationParametersObserver.get().managedClimbSpeedMach,
+      profilePhase: ProfilePhase.Climb,
+    }));
+  }
+
+  private scaleStepBasedOnLastCheckpoint(lastCheckpoint: VerticalCheckpoint, step: StepResults, scaling: number) {
+    assertValidForwardStep(step);
+    if (!Number.isFinite(scaling) || scaling < 0 || scaling > 1) {
+      throw new InvalidVnavPredictionError('Invalid climb segment scaling');
+    }
+    step.distanceTraveled *= scaling;
+    step.fuelBurned *= scaling;
+    step.timeElapsed *= scaling;
+    step.finalAltitude = (1 - scaling) * lastCheckpoint.altitude + scaling * step.finalAltitude;
+    step.speed = (1 - scaling) * lastCheckpoint.speed + scaling * step.speed;
+  }
+}

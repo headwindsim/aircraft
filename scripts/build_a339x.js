@@ -107,6 +107,12 @@ fs.writeFileSync(
     JSON.stringify(
       {
         ...manifestBase,
+        // The lock-highlight package ships with this exact aircraft build.
+        dependencies: manifestBase.dependencies.map((dependency) =>
+          dependency.name === 'headwindsim-aircraft-a330-900'
+            ? { ...dependency, package_version: packageInfo.version }
+            : dependency,
+        ),
         title: manifestBase.title + titleSuffix,
         package_version: packageInfo.version + `-${buildInfo?.commitHash}`,
         total_package_size: totalPackageSize.toString().padStart(20, '0'),

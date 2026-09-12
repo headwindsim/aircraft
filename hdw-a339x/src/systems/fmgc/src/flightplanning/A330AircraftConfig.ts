@@ -53,7 +53,6 @@ const flightModelParams: FlightModelParameters = {
     [FlapConf.CONF_3]: [0.0902, 0.0005, -0.0056, 0.013],
     [FlapConf.CONF_FULL]: [0.1405, -0.001, -0.0056, 0.0077],
   },
-  dragCoeffFactor: 1,
 };
 
 const engineModelParams: EngineModelParameters = {

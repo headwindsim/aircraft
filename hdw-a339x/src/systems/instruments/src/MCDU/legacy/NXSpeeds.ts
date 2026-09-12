@@ -720,18 +720,22 @@ export class NXSpeedsUtils {
 
   /** @private */
   static interpolateTable(table, alt) {
+    if (!Number.isFinite(alt)) {
+      return NaN;
+    }
     if (alt <= table[0][0]) {
-      return vmca[0][1];
+      return table[0][1];
     }
     if (alt >= table[table.length - 1][0]) {
-      table[table.length - 1][1];
+      return table[table.length - 1][1];
     }
     for (let i = 0; i < table.length - 1; i++) {
       if (alt >= table[i][0] && alt <= table[i + 1][0]) {
         const d = (alt - table[i][0]) / (table[i + 1][0] - table[i][0]);
-        return Avionics.Utils.lerpAngle(table[i][1], table[i + 1][1], d);
+        return table[i][1] + (table[i + 1][1] - table[i][1]) * d;
       }
     }
+    return NaN;
   }
 
   /**
@@ -760,6 +764,15 @@ export class NXSpeedsUtils {
    * @param {boolean} gearDown true if the gear is down
    */
   static getVs1g(mass, conf, gearDown) {
-    return vs[conf][_correctMass(mass)]();
+    if (!Number.isFinite(mass) || mass < 127 || mass > 251 || !Number.isInteger(conf) || !vs[conf]) {
+      return NaN;
+    }
+    // The table covers 130..250t; use its endpoints only within the A339X 127..251t bounds.
+    // Interpolate within the 10-tonne table, rather than treating 230.2t as 240t.
+    const position = (Math.min(250, Math.max(130, mass)) - 130) / 10;
+    const lower = Math.floor(position);
+    const upper = Math.ceil(position);
+    const lowSpeed = vs[conf][lower]();
+    return lowSpeed + (vs[conf][upper]() - lowSpeed) * (position - lower);
   }
 }

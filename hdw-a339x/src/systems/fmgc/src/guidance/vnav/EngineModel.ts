@@ -183,13 +183,21 @@ export class EngineModel {
     pressureAltitude: Feet,
     outsideTemperature: Celsius,
   ): number {
+    if (!Number.isFinite(pressureAltitude) || !Number.isFinite(outsideTemperature)) {
+      return NaN;
+    }
     let loAltRow = 0;
     let hiAltRow = 0;
 
     // Check for over/under flows. Else, find top row value
-    if (pressureAltitude >= parameters.cn1ClimbLimit[parameters.cn1ClimbLimit.length - 1][0]) {
+    if (pressureAltitude <= parameters.cn1ClimbLimit[0][0]) {
+      pressureAltitude = parameters.cn1ClimbLimit[0][0];
+      hiAltRow = 1;
+      loAltRow = 0;
+    } else if (pressureAltitude >= parameters.cn1ClimbLimit[parameters.cn1ClimbLimit.length - 1][0]) {
       hiAltRow = parameters.cn1ClimbLimit.length - 1;
-      loAltRow = parameters.cn1ClimbLimit.length - 1;
+      loAltRow = hiAltRow - 1;
+      pressureAltitude = parameters.cn1ClimbLimit[hiAltRow][0];
     } else {
       hiAltRow = parameters.cn1ClimbLimit.reduce((acc, val, idx) => {
         return val[0] <= pressureAltitude ? idx + 1 : acc;

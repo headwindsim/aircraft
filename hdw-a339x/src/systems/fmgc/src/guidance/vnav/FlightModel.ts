@@ -49,7 +49,7 @@ export class FlightModel {
 
     const spdBrkIncrement = spdBrkDeflected ? config.speedBrakeDrag : 0;
     const gearIncrement = gearExtended ? config.gearDrag : 0;
-    return config.dragCoeffFactor * (baseDrag + spdBrkIncrement + gearIncrement);
+    return baseDrag + spdBrkIncrement + gearIncrement;
   }
 
   /**

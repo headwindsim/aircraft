@@ -4,9 +4,17 @@
 
 import { NXUnits } from '@flybywiresim/fbw-sdk';
 
-// total refuel time for all fuel tank for A330 are roughly 33 minutes (1980 seconds) -> 1300 seconds wing + 680 seconds center
-const WING_FUELRATE_GAL_SEC = 18.5523; // 2 * (inner + outer wing fuel)/ 1300 seconds = 2 * (11095 + 964)/1300
-const CENTER_MODIFIER = 1.00075; // (center + trim)/680 seconds / WING_FUELRATE_GAL_SEC = 12625/680 /18.5523
+const WING_FUELRATE_GAL_SEC = 18.5523;
+const CENTER_MODIFIER = 1.00075;
+const TANKS = [
+  { index: 1, name: 'CENTER', capacity: 10979 },
+  { index: 2, name: 'LEFT_MAIN', capacity: 11095 },
+  { index: 3, name: 'RIGHT_MAIN', capacity: 11095 },
+  { index: 4, name: 'LEFT_AUX', capacity: 964 },
+  { index: 5, name: 'RIGHT_AUX', capacity: 964 },
+  { index: 6, name: 'TRIM', capacity: 1646 },
+];
+
 enum RefuelRateNumeric {
   REAL = 0,
   FAST = 1,
@@ -15,173 +23,104 @@ enum RefuelRateNumeric {
 
 // FIXME move to systems host
 export class A32NX_Refuel {
-  constructor() {}
-
   init() {
-    const totalFuelGallons = 36743;
+    const current = TANKS.map((tank) => SimVar.GetSimVarValue(`FUELSYSTEM TANK QUANTITY:${tank.index}`, 'Gallons'));
+    const total = current.reduce((sum, quantity) => sum + quantity, 0);
     const fuelWeight = SimVar.GetSimVarValue('FUEL WEIGHT PER GALLON', 'kilograms');
-    const centerCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK CENTER QUANTITY', 'Gallons');
-    const LInnCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'Gallons');
-    const LOutCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK LEFT AUX QUANTITY', 'Gallons');
-    const RInnCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'Gallons');
-    const ROutCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK RIGHT AUX QUANTITY', 'Gallons');
-    const total = Math.round(
-      Math.max(LInnCurrentSimVar + LOutCurrentSimVar + RInnCurrentSimVar + ROutCurrentSimVar + centerCurrentSimVar, 0),
-    );
-    const totalConverted = Math.round(NXUnits.kgToUser(total * fuelWeight));
     SimVar.SetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool', false);
     SimVar.SetSimVarValue('L:A32NX_FUEL_TOTAL_DESIRED', 'Number', total);
-    SimVar.SetSimVarValue('L:A32NX_FUEL_DESIRED', 'Number', totalConverted); // TODO this looks sus... should not be user units in simvars
-    SimVar.SetSimVarValue('L:A32NX_FUEL_DESIRED_PERCENT', 'Number', Math.round((total / totalFuelGallons) * 100));
-    SimVar.SetSimVarValue('L:A32NX_FUEL_CENTER_DESIRED', 'Number', centerCurrentSimVar);
-    SimVar.SetSimVarValue('L:A32NX_FUEL_LEFT_MAIN_DESIRED', 'Number', LInnCurrentSimVar);
-    SimVar.SetSimVarValue('L:A32NX_FUEL_LEFT_AUX_DESIRED', 'Number', LOutCurrentSimVar);
-    SimVar.SetSimVarValue('L:A32NX_FUEL_RIGHT_MAIN_DESIRED', 'Number', RInnCurrentSimVar);
-    SimVar.SetSimVarValue('L:A32NX_FUEL_RIGHT_AUX_DESIRED', 'Number', ROutCurrentSimVar);
+    SimVar.SetSimVarValue('L:A32NX_FUEL_DESIRED', 'Number', Math.round(NXUnits.kgToUser(total * fuelWeight)));
+    SimVar.SetSimVarValue('L:A32NX_FUEL_DESIRED_PERCENT', 'Number', (total / 36743) * 100);
+    TANKS.forEach((tank, i) => SimVar.SetSimVarValue(`L:A32NX_FUEL_${tank.name}_DESIRED`, 'Number', current[i]));
   }
 
-  defuelTank(multiplier: number) {
-    return -WING_FUELRATE_GAL_SEC * multiplier;
-  }
-  refuelTank(multiplier: number) {
-    return WING_FUELRATE_GAL_SEC * multiplier;
-  }
-
-  update(_deltaTime: number) {
-    const refuelStartedByUser = SimVar.GetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool');
-    if (!refuelStartedByUser) {
+  update(deltaTime: number) {
+    if (!SimVar.GetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool')) {
       return;
     }
-    const busDC2 = SimVar.GetSimVarValue('L:A32NX_ELEC_DC_2_BUS_IS_POWERED', 'Bool');
-    const busDCHot1 = SimVar.GetSimVarValue('L:A32NX_ELEC_DC_HOT_1_BUS_IS_POWERED', 'Bool');
-    const gs = SimVar.GetSimVarValue('GPS GROUND SPEED', 'knots');
-    const onGround = SimVar.GetSimVarValue('SIM ON GROUND', 'Bool');
-    const eng1Running = SimVar.GetSimVarValue('ENG COMBUSTION:1', 'Bool');
-    const eng2Running = SimVar.GetSimVarValue('ENG COMBUSTION:2', 'Bool');
-    const refuelRate = SimVar.GetSimVarValue('L:A32NX_EFB_REFUEL_RATE_SETTING', 'number');
-    if (refuelRate !== RefuelRateNumeric.INSTANT) {
-      if (!onGround || eng1Running || eng2Running || gs > 0.1 || (!busDC2 && !busDCHot1)) {
+    // Pause preserves the request. Cancel ineligible requests so FADEC can resume fuel consumption.
+    if (!Number.isFinite(deltaTime) || deltaTime <= 0) {
+      return;
+    }
+    if (!SimVar.GetSimVarValue('SIM ON GROUND', 'Bool')) {
+      SimVar.SetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool', false);
+      return;
+    }
+    const rate = SimVar.GetSimVarValue('L:A32NX_EFB_REFUEL_RATE_SETTING', 'number');
+    if (![RefuelRateNumeric.REAL, RefuelRateNumeric.FAST, RefuelRateNumeric.INSTANT].includes(rate)) {
+      SimVar.SetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool', false);
+      return;
+    }
+    if (rate !== RefuelRateNumeric.INSTANT) {
+      const powered =
+        SimVar.GetSimVarValue('L:A32NX_ELEC_DC_2_BUS_IS_POWERED', 'Bool') ||
+        SimVar.GetSimVarValue('L:A32NX_ELEC_DC_HOT_1_BUS_IS_POWERED', 'Bool');
+      if (
+        !powered ||
+        SimVar.GetSimVarValue('ENG COMBUSTION:1', 'Bool') ||
+        SimVar.GetSimVarValue('ENG COMBUSTION:2', 'Bool') ||
+        SimVar.GetSimVarValue('GPS GROUND SPEED', 'knots') > 0.1
+      ) {
+        SimVar.SetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool', false);
         return;
       }
     }
-    const centerTargetSimVar = SimVar.GetSimVarValue('L:A32NX_FUEL_CENTER_DESIRED', 'Number');
-    const LInnTargetSimVar = SimVar.GetSimVarValue('L:A32NX_FUEL_LEFT_MAIN_DESIRED', 'Number');
-    const LOutTargetSimVar = SimVar.GetSimVarValue('L:A32NX_FUEL_LEFT_AUX_DESIRED', 'Number');
-    const RInnTargetSimVar = SimVar.GetSimVarValue('L:A32NX_FUEL_RIGHT_MAIN_DESIRED', 'Number');
-    const ROutTargetSimVar = SimVar.GetSimVarValue('L:A32NX_FUEL_RIGHT_AUX_DESIRED', 'Number');
-    const centerCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK CENTER QUANTITY', 'Gallons');
-    const LInnCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'Gallons');
-    const LOutCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK LEFT AUX QUANTITY', 'Gallons');
-    const RInnCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'Gallons');
-    const ROutCurrentSimVar = SimVar.GetSimVarValue('FUEL TANK RIGHT AUX QUANTITY', 'Gallons');
-    let centerCurrent = centerCurrentSimVar;
-    let LInnCurrent = LInnCurrentSimVar;
-    let LOutCurrent = LOutCurrentSimVar;
-    let RInnCurrent = RInnCurrentSimVar;
-    let ROutCurrent = ROutCurrentSimVar;
-    const centerTarget = centerTargetSimVar;
-    const LInnTarget = LInnTargetSimVar;
-    const LOutTarget = LOutTargetSimVar;
-    const RInnTarget = RInnTargetSimVar;
-    const ROutTarget = ROutTargetSimVar;
-    if (refuelRate === RefuelRateNumeric.INSTANT) {
-      SimVar.SetSimVarValue('FUEL TANK CENTER QUANTITY', 'Gallons', centerTarget);
-      SimVar.SetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'Gallons', LInnTarget);
-      SimVar.SetSimVarValue('FUEL TANK LEFT AUX QUANTITY', 'Gallons', LOutTarget);
-      SimVar.SetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'Gallons', RInnTarget);
-      SimVar.SetSimVarValue('FUEL TANK RIGHT AUX QUANTITY', 'Gallons', ROutTarget);
-    } else {
-      let multiplier = 1;
-      if (refuelRate === RefuelRateNumeric.FAST) {
-        multiplier = 5;
-      }
-      multiplier *= _deltaTime / 1000;
-      //DEFUELING (center tank first, then main, then aux)
-      if (centerCurrent > centerTarget) {
-        centerCurrent += this.defuelTank(multiplier) * CENTER_MODIFIER;
-        if (centerCurrent < centerTarget) {
-          centerCurrent = centerTarget;
-        }
-        SimVar.SetSimVarValue('FUEL TANK CENTER QUANTITY', 'Gallons', centerCurrent);
-      }
-      if (LInnCurrent > LInnTarget || RInnCurrent > RInnTarget) {
-        LInnCurrent += this.defuelTank(multiplier) / 2;
-        RInnCurrent += this.defuelTank(multiplier) / 2;
-        if (LInnCurrent < LInnTarget) {
-          LInnCurrent = LInnTarget;
-        }
-        if (RInnCurrent < RInnTarget) {
-          RInnCurrent = RInnTarget;
-        }
-        SimVar.SetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'Gallons', RInnCurrent);
-        SimVar.SetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'Gallons', LInnCurrent);
-        if (LInnCurrent != LInnTarget || RInnCurrent != RInnTarget) {
-          return;
-        }
-      }
-      if (LOutCurrent > LOutTarget || ROutCurrent > ROutTarget) {
-        LOutCurrent += this.defuelTank(multiplier) / 2;
-        ROutCurrent += this.defuelTank(multiplier) / 2;
-        if (LOutCurrent < LOutTarget) {
-          LOutCurrent = LOutTarget;
-        }
-        if (ROutCurrent < ROutTarget) {
-          ROutCurrent = ROutTarget;
-        }
-        SimVar.SetSimVarValue('FUEL TANK RIGHT AUX QUANTITY', 'Gallons', ROutCurrent);
-        SimVar.SetSimVarValue('FUEL TANK LEFT AUX QUANTITY', 'Gallons', LOutCurrent);
-        if (LOutCurrent != LOutTarget || ROutCurrent != ROutTarget) {
-          return;
-        }
-      }
-      // REFUELING (aux first, then main, then center tank)
-      if (centerCurrent < centerTarget) {
-        centerCurrent += this.refuelTank(multiplier) * CENTER_MODIFIER;
-        if (centerCurrent > centerTarget) {
-          centerCurrent = centerTarget;
-        }
-        SimVar.SetSimVarValue('FUEL TANK CENTER QUANTITY', 'Gallons', centerCurrent);
-      }
-      if (LOutCurrent < LOutTarget || ROutCurrent < ROutTarget) {
-        LOutCurrent += this.refuelTank(multiplier) / 2;
-        ROutCurrent += this.refuelTank(multiplier) / 2;
-        if (LOutCurrent > LOutTarget) {
-          LOutCurrent = LOutTarget;
-        }
-        if (ROutCurrent > ROutTarget) {
-          ROutCurrent = ROutTarget;
-        }
-        SimVar.SetSimVarValue('FUEL TANK RIGHT AUX QUANTITY', 'Gallons', ROutCurrent);
-        SimVar.SetSimVarValue('FUEL TANK LEFT AUX QUANTITY', 'Gallons', LOutCurrent);
-        if (LOutCurrent != LOutTarget || ROutCurrent != ROutTarget) {
-          return;
-        }
-      }
-      if (LInnCurrent < LInnTarget || RInnCurrent < RInnTarget) {
-        LInnCurrent += this.refuelTank(multiplier) / 2;
-        RInnCurrent += this.refuelTank(multiplier) / 2;
-        if (LInnCurrent > LInnTarget) {
-          LInnCurrent = LInnTarget;
-        }
-        if (RInnCurrent > RInnTarget) {
-          RInnCurrent = RInnTarget;
-        }
-        SimVar.SetSimVarValue('FUEL TANK RIGHT MAIN QUANTITY', 'Gallons', RInnCurrent);
-        SimVar.SetSimVarValue('FUEL TANK LEFT MAIN QUANTITY', 'Gallons', LInnCurrent);
-        if (LInnCurrent != LInnTarget || RInnCurrent != RInnTarget) {
-          return;
-        }
-      }
-    }
-
+    const targets = TANKS.map((tank) => SimVar.GetSimVarValue(`L:A32NX_FUEL_${tank.name}_DESIRED`, 'Number'));
+    const current = TANKS.map((tank) => SimVar.GetSimVarValue(`FUELSYSTEM TANK QUANTITY:${tank.index}`, 'Gallons'));
     if (
-      parseInt(centerCurrent) === parseInt(centerTarget) &&
-      parseInt(LInnCurrent) === parseInt(LInnTarget) &&
-      parseInt(LOutCurrent) === parseInt(LOutTarget) &&
-      parseInt(RInnCurrent) === parseInt(RInnTarget) &&
-      parseInt(ROutCurrent) === parseInt(ROutTarget)
+      TANKS.some(
+        (tank, i) =>
+          !Number.isFinite(targets[i]) ||
+          targets[i] < 0 ||
+          targets[i] > tank.capacity ||
+          !Number.isFinite(current[i]) ||
+          current[i] < 0 ||
+          current[i] > tank.capacity,
+      )
     ) {
-      // DONE FUELING
+      return;
+    }
+    const next = [...current];
+    if (rate === RefuelRateNumeric.INSTANT) {
+      targets.forEach((target, i) => {
+        next[i] = target;
+      });
+    } else {
+      const gallons = (WING_FUELRATE_GAL_SEC * (rate === RefuelRateNumeric.FAST ? 5 : 1) * deltaTime) / 1000;
+      // Each bank has one shared budget, including when a tank reaches its target partway through a tick.
+      const banks = [
+        { fillOrder: [3, 1], budget: gallons / 2 },
+        { fillOrder: [4, 2], budget: gallons / 2 },
+        { fillOrder: [0, 5], budget: gallons * CENTER_MODIFIER },
+      ];
+      banks.forEach(({ fillOrder, budget }) => {
+        const order = [...fillOrder]
+          .reverse()
+          .filter((i) => next[i] > targets[i])
+          .concat(fillOrder.filter((i) => next[i] < targets[i]));
+        order.forEach((i) => {
+          const difference = targets[i] - next[i];
+          const amount = Math.min(Math.abs(difference), budget);
+          next[i] = amount === Math.abs(difference) ? targets[i] : next[i] + Math.sign(difference) * amount;
+          budget -= amount;
+        });
+      });
+    }
+    if (next.some((quantity, i) => quantity !== current[i])) {
+      // The FADEC can miss a start flag that is cleared during this same batch.
+      const sequence = SimVar.GetSimVarValue('L:A339X_FUEL_EXTERNAL_EDIT_SEQUENCE', 'Number');
+      SimVar.SetSimVarValue(
+        'L:A339X_FUEL_EXTERNAL_EDIT_SEQUENCE',
+        'Number',
+        Number.isSafeInteger(sequence) && sequence < Number.MAX_SAFE_INTEGER ? sequence + 1 : 0,
+      );
+    }
+    TANKS.forEach((tank, i) => {
+      if (next[i] !== current[i]) {
+        SimVar.SetSimVarValue(`FUELSYSTEM TANK QUANTITY:${tank.index}`, 'Gallons', next[i]);
+      }
+    });
+    if (next.every((quantity, i) => quantity === targets[i])) {
       SimVar.SetSimVarValue('L:A32NX_REFUEL_STARTED_BY_USR', 'Bool', false);
     }
   }

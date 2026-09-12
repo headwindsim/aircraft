@@ -17,6 +17,8 @@
 #include "ThrustLimits_A339X.hpp"
 
 #include <algorithm>
+#include <numeric>
+#include <sstream>
 
 void EngineControl_A339X::initialize(MsfsHandler* msfsHandler) {
   this->msfsHandlerPtr = msfsHandler;
@@ -44,7 +46,7 @@ void EngineControl_A339X::update() {
   }
 
   if (!fadecInitialized) {
-    loadFuelConfigIfPossible();
+    initializeFuelStatePath();
     initializeEngineControlData();
     fadecInitialized = true;
   }
@@ -133,7 +135,7 @@ void EngineControl_A339X::update() {
   }
 
   // update fuel & tank data
-  updateFuel(deltaTime);
+  updateFuel(msfsHandlerPtr->getSimulationDeltaTime());
 
   // Obtain Bleed Variables and update Thrust Limits
   const int packs = (simData.packsState[L]->get() > 0.5 || simData.packsState[R]->get() > 0.5) ? 1 : 0;
@@ -153,35 +155,31 @@ void EngineControl_A339X::update() {
 // PRIVATE
 // =============================================================================
 
-void EngineControl_A339X::loadFuelConfigIfPossible() {
+void EngineControl_A339X::initializeFuelStatePath() {
 #ifdef PROFILING
-  profilerEnsureFadecIsInitialized.start();
+  profilerInitializeFuelStatePath.start();
 #endif
-  const FLOAT64 simTime     = msfsHandlerPtr->getSimulationTime();
-  const UINT64  tickCounter = msfsHandlerPtr->getTickCounter();
-
-  if (!hasLoadedFuelConfig) {
+  if (!fuelStatePathInitialized) {
     bool isSimulationReady = msfsHandlerPtr->getAircraftIsReadyVar();
 
-    // we only receive the data one tick later as we request it via simconnect. But it should be enought to only perform the check after
-    // isSimulationReady as this is set by the JS instruments after spawn
+    // Wait for instrument initialization so SimConnect can return the ATC ID.
     if (isSimulationReady) {
       if (simData.atcIdDataPtr->data().atcID[0] != '\0') {
         atcId = simData.atcIdDataPtr->data().atcID;
-        LOG_INFO("Fadec::EngineControl_A339X::ensureFadecIsInitialized() - received ATC ID: " + atcId);
-        initializeFuelTanks(simTime, tickCounter);
+        LOG_INFO("Fadec::EngineControl_A339X::initializeFuelStatePath() - received ATC ID: " + atcId);
+        fuelConfiguration.setConfigFilename(FILENAME_FADEC_CONF_DIRECTORY + atcId + FILENAME_FADEC_CONF_FILE_EXTENSION);
       } else {
-        LOG_INFO("Fadec::EngineControl_A339X::ensureFadecIsInitialized() - no ATC ID received, taking default: " + atcId);
+        LOG_INFO("Fadec::EngineControl_A339X::initializeFuelStatePath() - no ATC ID received, taking default: " + atcId);
       }
-      // if ATC ID is empty, we take the default and still set hasLoadedFuelConfig to as it won't change anymore
-      hasLoadedFuelConfig = true;
+      // An empty ATC ID keeps the default path.
+      fuelStatePathInitialized = true;
     }
   }
 
 #ifdef PROFILING
-  profilerEnsureFadecIsInitialized.stop();
+  profilerInitializeFuelStatePath.stop();
   if (msfsHandlerPtr->getTickCounter() % 100 == 0) {
-    profilerEnsureFadecIsInitialized.print();
+    profilerInitializeFuelStatePath.print();
   }
 #endif
 }
@@ -257,49 +255,12 @@ void EngineControl_A339X::initializeEngineControlData() {
   simData.thrustLimitToga->set(0);
 }
 
-void EngineControl_A339X::initializeFuelTanks(FLOAT64 timeStamp, UINT64 tickCounter) {
-  LOG_INFO("Fadec::EngineControl_A339X::initializeFuelTanks()");
-
-#ifdef PROFILING
-  ScopedTimer timer("Fadec::EngineControl_A339X::initializeFuelTanks()");
-#endif
-  const double fuelWeightGallon = simData.simVarsDataPtr->data().fuelWeightPerGallon;  // weight of gallon of jet A in lbs
-
-  const double centerQuantity   = simData.simVarsDataPtr->data().fuelTankQuantityCenter;    // gal
-  const double leftQuantity     = simData.simVarsDataPtr->data().fuelTankQuantityLeft;      // gal
-  const double rightQuantity    = simData.simVarsDataPtr->data().fuelTankQuantityRight;     // gal
-  const double leftAuxQuantity  = simData.simVarsDataPtr->data().fuelTankQuantityLeftAux;   // gal
-  const double rightAuxQuantity = simData.simVarsDataPtr->data().fuelTankQuantityRightAux;  // gal
-
-  // only loads saved fuel quantity on C/D spawn
-  if (simData.startState->updateFromSim(timeStamp, tickCounter) == 2) {
-    // Load fuel configuration from file
-    fuelConfiguration.setConfigFilename(FILENAME_FADEC_CONF_DIRECTORY + atcId + FILENAME_FADEC_CONF_FILE_EXTENSION);
-    fuelConfiguration.loadConfigurationFromIni();
-
-    simData.fuelCenterPre->set(fuelConfiguration.getFuelCenter() * fuelWeightGallon);      // in Pounds
-    simData.fuelLeftPre->set(fuelConfiguration.getFuelLeft() * fuelWeightGallon);          // in Pounds
-    simData.fuelRightPre->set(fuelConfiguration.getFuelRight() * fuelWeightGallon);        // in Pounds
-    simData.fuelAuxLeftPre->set(fuelConfiguration.getFuelLeftAux() * fuelWeightGallon);    // in Pounds
-    simData.fuelAuxRightPre->set(fuelConfiguration.getFuelRightAux() * fuelWeightGallon);  // in Pounds
-
-    // set fuel levels from configuration to the sim
-    simData.fuelFeedTankDataPtr->data().fuelLeftMain  = fuelConfiguration.getFuelLeft();
-    simData.fuelFeedTankDataPtr->data().fuelRightMain = fuelConfiguration.getFuelRight();
-    simData.fuelFeedTankDataPtr->writeDataToSim();
-    simData.fuelCandAuxDataPtr->data().fuelCenter   = fuelConfiguration.getFuelCenter();
-    simData.fuelCandAuxDataPtr->data().fuelLeftAux  = fuelConfiguration.getFuelLeftAux();
-    simData.fuelCandAuxDataPtr->data().fuelRightAux = fuelConfiguration.getFuelRightAux();
-    simData.fuelCandAuxDataPtr->writeDataToSim();
-  }
-  // on a non C/D spawn, set fuel levels from the sim
-  else {
-    simData.fuelCenterPre->set(centerQuantity * fuelWeightGallon);      // in Pounds
-    simData.fuelLeftPre->set(leftQuantity * fuelWeightGallon);          // in Pounds
-    simData.fuelRightPre->set(rightQuantity * fuelWeightGallon);        // in Pounds
-    simData.fuelAuxLeftPre->set(leftAuxQuantity * fuelWeightGallon);    // in Pounds
-    simData.fuelAuxRightPre->set(rightAuxQuantity * fuelWeightGallon);  // in Pounds
-  }
+void EngineControl_A339X::initializeFuelTanks(FLOAT64, UINT64) {
+  // Native loading (cold, running, airborne, or saved flight) is authoritative.
+  // Legacy INI restoration now requires an explicit grounded developer request.
+  trimState             = {};
+  havePreviousFuelTotal = false;
+  simData.fuelStateStatus->set(0);
 }
 
 double EngineControl_A339X::generateEngineImbalance() {
@@ -717,329 +678,236 @@ void EngineControl_A339X::updateEGT(int         engine,
 }
 
 void EngineControl_A339X::updateFuel(double deltaTimeSeconds) {
-#ifdef PROFILING
-  profilerUpdateFuel.start();
-#endif
-
-  bool uiFuelTamper = false;
-
-  const double pumpStateLeft           = simData.fuelPumpState[L]->get();
-  const double pumpStateRight          = simData.fuelPumpState[R]->get();
-  const bool   xfrCenterLeftManual     = simData.simVarsDataPtr->data().xfrCenterManual[L] > 1.5;                              // junction 4
-  const bool   xfrCenterRightManual    = simData.simVarsDataPtr->data().xfrCenterManual[R] > 1.5;                              // junction 5
-  const bool   xfrCenterLeftAuto       = simData.simVarsDataPtr->data().xfrValveCenterAuto[L] > 0.0 && !xfrCenterLeftManual;   // valve 11
-  const bool   xfrCenterRightAuto      = simData.simVarsDataPtr->data().xfrValveCenterAuto[R] > 0.0 && !xfrCenterRightManual;  // valve 12
-  const bool   xfrValveCenterLeftOpen  = simData.simVarsDataPtr->data().xfrValveCenterOpen[L] > 0.0                            //
-                                         && (xfrCenterLeftAuto || xfrCenterLeftManual);                                        // valve 9
-  const bool   xfrValveCenterRightOpen = simData.simVarsDataPtr->data().xfrValveCenterOpen[R] > 0.0                            //
-                                         && (xfrCenterRightAuto || xfrCenterRightManual);                                      // valve 10
-  const double xfrValveOuterLeft1      = simData.simVarsDataPtr->data().xfrValveOuter1[L];                                     // valve 6
-  const double xfrValveOuterRight1     = simData.simVarsDataPtr->data().xfrValveOuter1[R];                                     // valve 7
-  const double xfrValveOuterLeft2      = simData.simVarsDataPtr->data().xfrValveOuter2[L];                                     // valve 4
-  const double xfrValveOuterRight2     = simData.simVarsDataPtr->data().xfrValveOuter2[R];                                     // valve 5
-  const double lineLeftToCenterFlow    = simData.simVarsDataPtr->data().lineToCenterFlow[L];
-  const double lineRightToCenterFlow   = simData.simVarsDataPtr->data().lineToCenterFlow[R];
-
-  const double engine1PreFF = simData.enginePreFF[L]->get();
-  const double engine2PreFF = simData.enginePreFF[R]->get();
-
-  const double engine1FF = simData.engineFF[L]->get();
-  const double engine2FF = simData.engineFF[R]->get();
-
-  /// weight of one gallon of fuel in pounds
-  const double weightLbsPerGallon = simData.simVarsDataPtr->data().fuelWeightPerGallon;
-
-  double fuelLeftPre     = simData.fuelLeftPre->get();
-  double fuelRightPre    = simData.fuelRightPre->get();
-  double fuelAuxLeftPre  = simData.fuelAuxLeftPre->get();
-  double fuelAuxRightPre = simData.fuelAuxRightPre->get();
-  double fuelCenterPre   = simData.fuelCenterPre->get();
-
-  const double leftQuantity     = simData.simVarsDataPtr->data().fuelTankQuantityLeft * weightLbsPerGallon;      // Pounds
-  const double rightQuantity    = simData.simVarsDataPtr->data().fuelTankQuantityRight * weightLbsPerGallon;     // Pounds
-  const double leftAuxQuantity  = simData.simVarsDataPtr->data().fuelTankQuantityLeftAux * weightLbsPerGallon;   // Pounds
-  const double rightAuxQuantity = simData.simVarsDataPtr->data().fuelTankQuantityRightAux * weightLbsPerGallon;  // Pounds
-  const double centerQuantity   = simData.simVarsDataPtr->data().fuelTankQuantityCenter * weightLbsPerGallon;    // Pounds
-
-  const double fuelTotalActual = leftQuantity + rightQuantity + leftAuxQuantity + rightAuxQuantity + centerQuantity;    // Pounds
-  const double fuelTotalPre    = fuelLeftPre + fuelRightPre + fuelAuxLeftPre + fuelAuxRightPre + fuelCenterPre;         // Pounds
-  const double deltaFuelRate   = (std::abs)(fuelTotalActual - fuelTotalPre) / (weightLbsPerGallon * deltaTimeSeconds);  // Pounds/ sec
-
-  const EngineState engine1State = static_cast<EngineState>(simData.engineState[L]->get());
-  const EngineState engine2State = static_cast<EngineState>(simData.engineState[R]->get());
-
-  const double xFeedValve  = simData.simVarsDataPtr->data().xFeedValve;
-  const double leftPump1   = simData.simVarsDataPtr->data().fuelPump1[L];
-  const double rightPump1  = simData.simVarsDataPtr->data().fuelPump1[R];
-  const double leftPump2   = simData.simVarsDataPtr->data().fuelPump2[L];
-  const double rightPump2  = simData.simVarsDataPtr->data().fuelPump2[R];
-  const double apuNpercent = simData.apuRpmPercent->get();
-
-  int isTankClosed = 0;
-
-  /// Delta time for this update in hours
-  const double deltaTimeHours = deltaTimeSeconds / 3600;
-
-  // Pump State Logic for Left Wing
-  // TODO: unclear why a timer is used here
-  const double time        = msfsHandlerPtr->getSimulationTime();
-  const double elapsedLeft = time - pumpStateLeftTimeStamp;
-  if (pumpStateLeft == 0 && elapsedLeft >= 1.0) {
-    if (fuelLeftPre - leftQuantity > 0 && leftQuantity == 0) {
-      pumpStateLeftTimeStamp = time;
-      simData.fuelPumpState[L]->set(1);
-    } else if (fuelLeftPre == 0 && leftQuantity - fuelLeftPre > 0) {
-      pumpStateLeftTimeStamp = time;
-      simData.fuelPumpState[L]->set(2);
-    } else {
-      simData.fuelPumpState[L]->set(0);
-    }
-  } else if (pumpStateLeft == 1 && elapsedLeft >= 2.1) {
-    pumpStateLeftTimeStamp = time;
-    simData.fuelPumpState[L]->set(0);
-  } else if (pumpStateLeft == 2 && elapsedLeft >= 2.7) {
-    pumpStateLeftTimeStamp = time;
-    simData.fuelPumpState[L]->set(0);
+  using namespace a339x::fuel;
+  const auto& native = simData.simVarsDataPtr->data();
+  Input       input;
+  input.tanksGallons            = {native.fuelTankQuantityCenter,  native.fuelTankQuantityLeft,     native.fuelTankQuantityRight,
+                                   native.fuelTankQuantityLeftAux, native.fuelTankQuantityRightAux, native.fuelTankQuantityTrim};
+  input.densityKgPerGallon      = native.fuelWeightPerGallon * Fadec::LBS_TO_KGS;
+  const bool paused             = msfsHandlerPtr->getPauseState() != 0 || deltaTimeSeconds <= 0.;
+  input.dtSeconds               = paused ? 0. : deltaTimeSeconds;
+  const bool   refuelRequested  = simData.refuelStartedByUser->getAsBool();
+  const double externalSequence = simData.fuelExternalSequence->get();
+  // A refuel batch may start and finish between two FADEC reads. Its sequence
+  // marks that write even when the start flag is already false. Let native
+  // quantity readback settle before issuing another custom quantity write.
+  input.refueling            = refuelRequested || wasRefueling || externalSequence != previousExternalSequence;
+  wasRefueling               = refuelRequested;
+  previousExternalSequence   = externalSequence;
+  input.onGround             = msfsHandlerPtr->getSimOnGround();
+  input.crossfeedOpen        = native.xFeedValve > 0.;
+  input.engineFeedPumpActive = {native.fuelPump1[L] > 0. || native.fuelPump2[L] > 0., native.fuelPump1[R] > 0. || native.fuelPump2[R] > 0.};
+  input.trimEnabled          = simData.trimEnabled->getAsBool();
+  const double command       = simData.trimCommand->get();
+  input.trimCommand          = command == 0.   ? TrimCommand::Off
+                               : command == 1. ? TrimCommand::Aft
+                               : command == 2. ? TrimCommand::Forward
+                                               : static_cast<TrimCommand>(-1);
+  input.trimTargetGallons    = simData.trimTarget->get();
+  input.trimRateGallonsPerSecond = simData.trimRate->get();
+  input.pumpPowered              = simData.trimPumpPower->getAsBool();
+  input.valvePowered             = simData.trimValvePower->getAsBool();
+  input.pumpFailed               = simData.trimPumpFailed->getAsBool();
+  input.valveStuck               = simData.trimValveStuck->getAsBool();
+  const bool invalidTrimControl =
+      input.trimEnabled &&
+      (!std::isfinite(input.trimTargetGallons) || input.trimTargetGallons < 0. || input.trimTargetGallons > TankCapacities[5] ||
+       !std::isfinite(input.trimRateGallonsPerSecond) || input.trimRateGallonsPerSecond < 0. ||
+       !std::isfinite(input.trimRateGallonsPerSecond * input.dtSeconds) || (command != 0. && command != 1. && command != 2.));
+  // An invalid developer transfer setting must never grant engines free fuel.
+  if (!input.trimEnabled || invalidTrimControl) {
+    input.trimEnabled              = false;
+    input.trimCommand              = TrimCommand::Off;
+    input.trimTargetGallons        = 0.;
+    input.trimRateGallonsPerSecond = 0.;
   }
 
-  // Pump State Logic for Right Wing
-  // TODO: unclear why a timer is used here
-  const double elapsedRight = time - pumpStateRightTimeStamp;
-  if (pumpStateRight == 0 && (elapsedRight >= 1.0)) {
-    if (fuelRightPre - rightQuantity > 0 && rightQuantity == 0) {
-      pumpStateRightTimeStamp = time;
-      simData.fuelPumpState[R]->set(1);
-    } else if (fuelRightPre == 0 && rightQuantity - fuelRightPre > 0) {
-      pumpStateRightTimeStamp = time;
-      simData.fuelPumpState[R]->set(2);
-    } else {
-      simData.fuelPumpState[R]->set(0);
+  // Native engine consumption is disabled by engines.cfg fuel_flow_scalar=0.
+  // Native APU consumption and native center/outer transfers stay in this snapshot.
+  // Never reconstruct those transfers from old quantities or subtract the APU twice.
+  const bool freezeBurn = paused || input.refueling || native.unlimitedFuel > 0. || msfsHandlerPtr->getAircraftDevelopmentStateVar() == 2;
+  for (int e = 0; e < 2; ++e) {
+    const double flow = simData.engineFF[e]->get();  // kg/hour
+    if (!freezeBurn && simData.engineState[e]->getAsInt64() != OFF && native.engineFuelValveOpen[e] > 0.) {
+      input.engineKgPerSecond[e] = (flow + simData.enginePreFF[e]->get()) / 7200.;
     }
-  } else if (pumpStateRight == 1 && elapsedRight >= 2.1) {
-    pumpStateRightTimeStamp = time;
-    simData.fuelPumpState[R]->set(0);
-  } else if (pumpStateRight == 2 && elapsedRight >= 2.7) {
-    pumpStateRightTimeStamp = time;
-    simData.fuelPumpState[R]->set(0);
+    simData.enginePreFF[e]->set(flow);
   }
 
-  // Checking for in-game UI Fuel tampering
-  const bool   isReadyVar          = msfsHandlerPtr->getAircraftIsReadyVar();
-  const double refuelRate          = simData.refuelRate->get();
-  const bool   refuelStartedByUser = simData.refuelStartedByUser->getAsBool();
-  if ((isReadyVar && !refuelStartedByUser && deltaFuelRate > FUEL_RATE_THRESHOLD) ||
-      (isReadyVar && refuelStartedByUser && deltaFuelRate > FUEL_RATE_THRESHOLD && refuelRate < 2)) {
-    uiFuelTamper = true;
-  }
-
-  const FLOAT64 aircraftDevelopmentStateVar = msfsHandlerPtr->getAircraftDevelopmentStateVar();
-
-  if (uiFuelTamper && aircraftDevelopmentStateVar == 0) {
-    simData.fuelLeftPre->set(fuelLeftPre);          // in Pounds
-    simData.fuelRightPre->set(fuelRightPre);        // in Pounds
-    simData.fuelAuxLeftPre->set(fuelAuxLeftPre);    // in Pounds
-    simData.fuelAuxRightPre->set(fuelAuxRightPre);  // in Pounds
-    simData.fuelCenterPre->set(fuelCenterPre);      // in Pounds
-
-    simData.fuelFeedTankDataPtr->data().fuelLeftMain  = (fuelLeftPre / weightLbsPerGallon);
-    simData.fuelFeedTankDataPtr->data().fuelRightMain = (fuelRightPre / weightLbsPerGallon);
-    simData.fuelFeedTankDataPtr->writeDataToSim();
-
-    simData.fuelCandAuxDataPtr->data().fuelCenter   = (fuelCenterPre / weightLbsPerGallon);
-    simData.fuelCandAuxDataPtr->data().fuelLeftAux  = (fuelAuxLeftPre / weightLbsPerGallon);
-    simData.fuelCandAuxDataPtr->data().fuelRightAux = (fuelAuxRightPre / weightLbsPerGallon);
-    simData.fuelCandAuxDataPtr->writeDataToSim();
-
-  }
-  // Detects refueling from the EFB
-  else if (!uiFuelTamper && refuelStartedByUser == 1) {
-    simData.fuelLeftPre->set(leftQuantity);          // in Pounds
-    simData.fuelRightPre->set(rightQuantity);        // in Pounds
-    simData.fuelAuxLeftPre->set(leftAuxQuantity);    // in Pounds
-    simData.fuelAuxRightPre->set(rightAuxQuantity);  // in Pounds
-    simData.fuelCenterPre->set(centerQuantity);      // in Pounds
-  } else {
-    if (uiFuelTamper == 1) {
-      fuelLeftPre     = leftQuantity;      // Pounds
-      fuelRightPre    = rightQuantity;     // Pounds
-      fuelAuxLeftPre  = leftAuxQuantity;   // Pounds
-      fuelAuxRightPre = rightAuxQuantity;  // Pounds
-      fuelCenterPre   = centerQuantity;    // Pounds
-    }
-    //-----------------------------------------------------------
-    // Cross-feed Logic
-    // isTankClosed = 0, x-feed valve closed
-    // isTankClosed = 1, left tank does not supply fuel
-    // isTankClosed = 2, right tank does not supply fuel
-    // isTankClosed = 3, left & right tanks do not supply fuel
-    // isTankClosed = 4, both tanks supply fuel
-    if (xFeedValve > 0.0) {
-      if (leftPump1 == 0 && leftPump2 == 0 && rightPump1 == 0 && rightPump2 == 0)
-        isTankClosed = 3;
-      else if (leftPump1 == 0 && leftPump2 == 0)
-        isTankClosed = 1;
-      else if (rightPump1 == 0 && rightPump2 == 0)
-        isTankClosed = 2;
-      else
-        isTankClosed = 4;
-    }
-
-    double xfrCenterToLeft  = 0;
-    double xfrCenterToRight = 0;
-    double xfrAuxLeft       = 0;
-    double xfrAuxRight      = 0;
-
-    double fuelFlowRateChange   = 0;
-    double previousFuelFlowRate = 0;
-    double fuelBurn1            = 0;
-    double fuelBurn2            = 0;
-    double apuBurn1             = 0;
-    double apuBurn2             = 0;
-    double apuFuelConsumption   = 0;
-
-    //--------------------------------------------
-    // Left Engine and Wing routine
-    if (fuelLeftPre > 0) {
-      // Cycle Fuel Burn for Engine 1
-      if (aircraftDevelopmentStateVar != 2 && msfsHandlerPtr->getPauseState() == 0) {
-        fuelFlowRateChange   = (engine1FF - engine1PreFF) / deltaTimeHours;
-        previousFuelFlowRate = engine1PreFF;
-        fuelBurn1            = (fuelFlowRateChange * pow(deltaTimeHours, 2) / 2) + (previousFuelFlowRate * deltaTimeHours);  // KG
+  // Reload never loads an arbitrary old INI over a valid simulator fuel selection.
+  // Explicit restore/save requests are one-shot and require stopped ground engines.
+  const bool stateRequest = simData.fuelRestoreRequest->getAsBool() || simData.fuelSaveRequest->getAsBool();
+  if (stateRequest) {
+    const bool restore = simData.fuelRestoreRequest->getAsBool();
+    simData.fuelRestoreRequest->setAndWriteToSim(0);
+    simData.fuelSaveRequest->setAndWriteToSim(0);
+    const bool allowed = input.onGround && !input.refueling && !paused && simData.engineState[L]->getAsInt64() == OFF &&
+                         simData.engineState[R]->getAsInt64() == OFF;
+    simData.fuelStateStatus->set(allowed ? 0 : -1);
+    if (allowed && restore) {
+      if (!fuelConfiguration.loadConfigurationFromIni()) {
+        simData.fuelStateStatus->set(-2);  // Missing, invalid, or old over-capacity save; native fuel untouched.
+      } else {
+        simData.fuelStateDataPtr->data() = {fuelConfiguration.getFuelCenter(),   fuelConfiguration.getFuelLeft(),
+                                            fuelConfiguration.getFuelRight(),    fuelConfiguration.getFuelLeftAux(),
+                                            fuelConfiguration.getFuelRightAux(), fuelConfiguration.getFuelTrim()};
+        if (!simData.fuelStateDataPtr->writeDataToSim()) {
+          simData.fuelStateStatus->set(-4);
+          return;
+        }
+        havePreviousFuelTotal = false;
+        trimState             = {};
+        simData.trimEnabled->setAndWriteToSim(0);
+        simData.trimCommand->setAndWriteToSim(0);
+        simData.fuelStateStatus->set(1);
       }
-      // Fuel transfer routine for Left Wing
-      if (xfrValveOuterLeft1 > 0.0 || xfrValveOuterLeft2 > 0.0) {
-        xfrAuxLeft = fuelAuxLeftPre - leftAuxQuantity;
-      }
-    } else {
-      fuelBurn1   = 0;
-      fuelLeftPre = 0;
+      return;  // Await native readback instead of immediately overwriting the restore.
     }
-
-    //--------------------------------------------
-    // Right Engine and Wing routine
-    if (fuelRightPre > 0) {
-      // Cycle Fuel Burn for Engine 2
-      if (aircraftDevelopmentStateVar != 2 && msfsHandlerPtr->getPauseState() == 0) {
-        fuelFlowRateChange   = (engine2FF - engine2PreFF) / deltaTimeHours;
-        previousFuelFlowRate = engine2PreFF;
-        fuelBurn2            = (fuelFlowRateChange * pow(deltaTimeHours, 2) / 2) + (previousFuelFlowRate * deltaTimeHours);  // KG
-      }
-      // Fuel transfer routine for Right Wing
-      if (xfrValveOuterRight1 > 0.0 || xfrValveOuterRight2 > 0.0) {
-        xfrAuxRight = fuelAuxRightPre - rightAuxQuantity;
-      }
-    } else {
-      fuelBurn2    = 0;
-      fuelRightPre = 0;
+    if (allowed && !restore) {
+      fuelConfiguration.setFuelCenter(input.tanksGallons[0]);
+      fuelConfiguration.setFuelLeft(input.tanksGallons[1]);
+      fuelConfiguration.setFuelRight(input.tanksGallons[2]);
+      fuelConfiguration.setFuelLeftAux(input.tanksGallons[3]);
+      fuelConfiguration.setFuelRightAux(input.tanksGallons[4]);
+      fuelConfiguration.setFuelTrim(input.tanksGallons[5]);
+      simData.fuelStateStatus->set(fuelConfiguration.saveConfigurationToIni() ? 2 : -2);
     }
-
-    /// apu fuel consumption for this frame in pounds
-    if (aircraftDevelopmentStateVar != 2 && msfsHandlerPtr->getPauseState() == 0 || apuNpercent <= 0.0) {
-      apuFuelConsumption = simData.simVarsDataPtr->data().apuFuelConsumption * weightLbsPerGallon * deltaTimeHours;
-    }
-
-    apuBurn1 = apuFuelConsumption;
-    apuBurn2 = 0;
-
-    //--------------------------------------------
-    // Fuel used accumulators
-    double fuelUsedLeft  = simData.engineFuelUsed[L]->get() + fuelBurn1;
-    double fuelUsedRight = simData.engineFuelUsed[R]->get() + fuelBurn2;
-
-    //--------------------------------------------
-    // Cross-feed fuel burn routine
-    // If fuel pumps for a given tank are closed,
-    // all fuel will be burnt on the other tank
-    switch (isTankClosed) {
-      case 1:
-        fuelBurn2 = fuelBurn1 + fuelBurn2;
-        fuelBurn1 = 0;
-        apuBurn1  = 0;
-        apuBurn2  = apuFuelConsumption;
-        break;
-      case 2:
-        fuelBurn1 = fuelBurn1 + fuelBurn2;
-        fuelBurn2 = 0;
-        break;
-      case 3:
-        fuelBurn1 = 0;
-        fuelBurn2 = 0;
-        apuBurn1  = apuFuelConsumption * 0.5;
-        apuBurn2  = apuFuelConsumption * 0.5;
-        break;
-      case 4:
-        apuBurn1 = apuFuelConsumption * 0.5;
-        apuBurn2 = apuFuelConsumption * 0.5;
-        break;
-      default:
-        break;
-    }
-
-    //--------------------------------------------
-    // Center Tank transfer routine
-    double lineFlowRatio = 0;
-    if (xfrValveCenterLeftOpen && xfrValveCenterRightOpen) {
-      if (lineLeftToCenterFlow < 0.1 && lineRightToCenterFlow < 0.1)
-        lineFlowRatio = 0.5;
-      else
-        lineFlowRatio = lineLeftToCenterFlow / (lineLeftToCenterFlow + lineRightToCenterFlow);
-
-      xfrCenterToLeft  = (fuelCenterPre - centerQuantity) * lineFlowRatio;
-      xfrCenterToRight = (fuelCenterPre - centerQuantity) * (1 - lineFlowRatio);
-    } else if (xfrValveCenterLeftOpen)
-      xfrCenterToLeft = fuelCenterPre - centerQuantity;
-    else if (xfrValveCenterRightOpen)
-      xfrCenterToRight = fuelCenterPre - centerQuantity;
-
-    //--------------------------------------------
-    // Final Fuel levels for left and right inner tanks
-    const double fuelLeft  = (fuelLeftPre - (fuelBurn1 * Fadec::KGS_TO_LBS)) + xfrAuxLeft + xfrCenterToLeft - apuBurn1;     // Pounds
-    const double fuelRight = (fuelRightPre - (fuelBurn2 * Fadec::KGS_TO_LBS)) + xfrAuxRight + xfrCenterToRight - apuBurn2;  // Pounds
-
-    //--------------------------------------------
-    // Setting new pre-cycle conditions
-    simData.enginePreFF[L]->set(engine1FF);
-    simData.enginePreFF[R]->set(engine2FF);
-
-    simData.engineFuelUsed[L]->set(fuelUsedLeft);
-    simData.engineFuelUsed[R]->set(fuelUsedRight);
-
-    simData.fuelAuxLeftPre->set(leftAuxQuantity);
-    simData.fuelAuxRightPre->set(rightAuxQuantity);
-    simData.fuelCenterPre->set(centerQuantity);
-
-    simData.fuelLeftPre->set(fuelLeft);    // in Pounds
-    simData.fuelRightPre->set(fuelRight);  // in Pounds
-
-    simData.fuelFeedTankDataPtr->data().fuelLeftMain  = (fuelLeft / weightLbsPerGallon);
-    simData.fuelFeedTankDataPtr->data().fuelRightMain = (fuelRight / weightLbsPerGallon);
-    simData.fuelFeedTankDataPtr->writeDataToSim();
   }
 
-  //--------------------------------------------
-  // Will save the current fuel quantities at a certain interval
-  // if the simulation is ready
-  // and the aircraft is on the ground and the engines are off/shutting down
+  Result result = step(input, trimState);
+  simData.trimMode->set(static_cast<int>(result.mode));
+  simData.trimFlow->set(result.valid && input.dtSeconds > 0. ? result.diagnostics.actualTransferGallons / input.dtSeconds : 0.);
+  if (!result.valid) {
+    simData.fuelStateStatus->set(-3);
+    simData.trimPumpActive->set(0);
+    return;  // Invalid native/control inputs are diagnostic faults, never silently repaired.
+  }
+  auto& d = result.diagnostics;
+  if (invalidTrimControl) {
+    result.mode = TrimMode::Fault;
+    simData.fuelStateStatus->set(-3);
+  }
+  if (!paused && !input.refueling) {
+    if (result.tanksGallons[1] != input.tanksGallons[1] || result.tanksGallons[2] != input.tanksGallons[2]) {
+      simData.fuelFeedTankDataPtr->data() = {result.tanksGallons[1], result.tanksGallons[2]};
+      if (!simData.fuelFeedTankDataPtr->writeDataToSim()) {
+        result.tanksGallons[1] = input.tanksGallons[1];
+        result.tanksGallons[2] = input.tanksGallons[2];
+        d.actualEngineBurnKg   = {};
+        result.mode            = TrimMode::Fault;
+        simData.fuelStateStatus->set(-4);
+      }
+    }
+    if (d.actualTransferGallons != 0.) {
+      simData.trimTankDataPtr->data() = {result.tanksGallons[0], result.tanksGallons[5]};
+      if (!simData.trimTankDataPtr->writeDataToSim()) {
+        result.tanksGallons[0]  = input.tanksGallons[0];
+        result.tanksGallons[5]  = input.tanksGallons[5];
+        d.actualTransferGallons = d.transferMomentDeltaKgFeet = 0.;
+        d.pumpActive                                          = false;
+        result.mode                                           = TrimMode::Fault;
+        simData.fuelStateStatus->set(-4);
+      }
+    }
+    d.totalAfterGallons = std::accumulate(result.tanksGallons.begin(), result.tanksGallons.end(), 0.);
+  }
+  trimState = result.state;
+  simData.trimMode->set(static_cast<int>(result.mode));
+  simData.trimFlow->set(input.dtSeconds > 0. ? d.actualTransferGallons / input.dtSeconds : 0.);
+  simData.trimValveCommand->set(d.valveCommandOpen);
+  simData.trimValvePosition->set(d.valveActualPosition);
+  simData.trimPumpCommand->set(d.pumpCommandOn);
+  simData.trimPumpActive->set(d.pumpActive && !paused);
+  const double totalKg = native.totalWeightPounds * Fadec::LBS_TO_KGS;
+  // Existing aircraft MAC=23.19 ft; this diagnostic is trim-only, not a CG writer.
+  const double predictedCgDelta = totalKg > 0. ? -100. * d.transferMomentDeltaKgFeet / (totalKg * 23.19) : 0.;
+  simData.trimPredictedCg->set(predictedCgDelta);
+  if (paused)
+    return;
 
-  if (msfsHandlerPtr->getAircraftIsReadyVar() && msfsHandlerPtr->getSimOnGround() &&
-      (msfsHandlerPtr->getSimulationTime() - lastFuelSaveTime) > FUEL_SAVE_INTERVAL &&
-      (engine1State == OFF || engine1State == SHUTTING || engine2State == OFF || engine2State == SHUTTING)) {
-    fuelConfiguration.setFuelLeft(simData.fuelLeftPre->get() / weightLbsPerGallon);
-    fuelConfiguration.setFuelRight(simData.fuelRightPre->get() / weightLbsPerGallon);
-    fuelConfiguration.setFuelCenter(simData.fuelCenterPre->get() / weightLbsPerGallon);
-    fuelConfiguration.setFuelLeftAux(simData.fuelAuxLeftPre->get() / weightLbsPerGallon);
-    fuelConfiguration.setFuelRightAux(simData.fuelAuxRightPre->get() / weightLbsPerGallon);
-
-    fuelConfiguration.saveConfigurationToIni();
-    lastFuelSaveTime = msfsHandlerPtr->getSimulationTime();
+  // Preserve the inherited pump/cavitation sound gates in sound.xml.
+  const double                time          = msfsHandlerPtr->getSimulationTime();
+  const std::array<double, 2> previousInner = {simData.fuelLeftPre->get(), simData.fuelRightPre->get()};
+  for (int e = 0; e < 2; ++e) {
+    const int    soundState = simData.fuelPumpState[e]->getAsInt64();
+    const double elapsed    = time - pumpSoundTimestamp[e];
+    if (havePreviousFuelTotal && soundState == 0 && elapsed >= 1.) {
+      if (previousInner[e] > 0. && input.tanksGallons[e + 1] == 0.) {
+        simData.fuelPumpState[e]->set(1);
+        pumpSoundTimestamp[e] = time;
+      } else if (previousInner[e] == 0. && input.tanksGallons[e + 1] > 0.) {
+        simData.fuelPumpState[e]->set(2);
+        pumpSoundTimestamp[e] = time;
+      }
+    } else if ((soundState == 1 && elapsed >= 2.1) || (soundState == 2 && elapsed >= 2.7)) {
+      simData.fuelPumpState[e]->set(0);
+      pumpSoundTimestamp[e] = time;
+    }
   }
 
-#ifdef PROFILING
-  profilerUpdateFuel.stop();
-  if (msfsHandlerPtr->getTickCounter() % 100 == 0) {
-    profilerUpdateFuel.print();
+  for (int e = 0; e < 2; ++e)
+    simData.engineFuelUsed[e]->set(simData.engineFuelUsed[e]->get() + d.actualEngineBurnKg[e]);
+  simData.fuelCenterPre->set(result.tanksGallons[0] * native.fuelWeightPerGallon);
+  simData.fuelLeftPre->set(result.tanksGallons[1] * native.fuelWeightPerGallon);
+  simData.fuelRightPre->set(result.tanksGallons[2] * native.fuelWeightPerGallon);
+  simData.fuelAuxLeftPre->set(result.tanksGallons[3] * native.fuelWeightPerGallon);
+  simData.fuelAuxRightPre->set(result.tanksGallons[4] * native.fuelWeightPerGallon);
+
+  // Native edits, EFB refueling, native APU use and line storage may all affect this
+  // residual. It is observed, accepted, and labelled, rather than guessed as tampering.
+  const double nativeNet   = havePreviousFuelTotal ? d.totalBeforeGallons - previousFuelTotalGallons : 0.;
+  previousFuelTotalGallons = d.totalAfterGallons;
+  havePreviousFuelTotal    = true;
+  if (!simData.fuelTelemetry->getAsBool()) {
+    telemetrySamples = 0;
+    telemetryElapsed = telemetryEngineKg = telemetryNativeGallons = telemetryApuGallons = 0.;
+    telemetryTransferGallons = telemetryPredictedCg = 0.;
+    telemetryTransitions                            = 0;
+    previousTrimMode                                = static_cast<int>(result.mode);
+    return;
   }
-#endif
+  if (telemetrySamples >= 300)
+    return;  // Bounded opt-in capture; toggle off/on to restart.
+  if (previousTrimMode != static_cast<int>(result.mode)) {
+    const auto slot          = telemetryTransitions % telemetryModes.size();
+    telemetryModes[slot]     = static_cast<int>(result.mode);
+    telemetryModeTimes[slot] = time;
+    ++telemetryTransitions;
+    previousTrimMode = static_cast<int>(result.mode);
+  }
+  telemetryElapsed += input.dtSeconds;
+  telemetryEngineKg += d.actualEngineBurnKg[0] + d.actualEngineBurnKg[1];
+  telemetryNativeGallons += nativeNet;
+  telemetryApuGallons += native.apuFuelConsumption * input.dtSeconds / 3600.;
+  telemetryTransferGallons += d.actualTransferGallons;
+  telemetryPredictedCg += predictedCgDelta;
+  if (telemetryElapsed >= 1.) {
+    std::ostringstream row;
+    row.precision(12);
+    row << "A339X_FUEL_DIAG t=" << msfsHandlerPtr->getSimulationTime() << " dt=" << input.dtSeconds << " window=" << telemetryElapsed
+        << " tanks_gal=";
+    for (const auto quantity : result.tanksGallons)
+      row << quantity << ',';
+    row << " total_gal=" << d.totalAfterGallons << " engine_kg=" << telemetryEngineKg << " apu_est_gal=" << telemetryApuGallons
+        << " native_net_gal=" << telemetryNativeGallons << " refueling=" << input.refueling << " modeled_losses_gal=0"
+        << " enabled=" << input.trimEnabled << " command=" << command << " target_gal=" << input.trimTargetGallons
+        << " rate_gps=" << input.trimRateGallonsPerSecond << " pump_cmd=" << d.pumpCommandOn << " pump_power=" << input.pumpPowered
+        << " pump_actual=" << d.pumpActive << " valve_cmd=" << d.valveCommandOpen << " valve_power=" << input.valvePowered
+        << " valve_actual=" << d.valveActualPosition << " transfer_gal=" << telemetryTransferGallons << " cg_mac=" << native.cgPercent
+        << " trim_delta_mac=" << telemetryPredictedCg << " mode=" << static_cast<int>(result.mode) << " pump_failed=" << input.pumpFailed
+        << " valve_stuck=" << input.valveStuck;
+    row << " transitions=" << telemetryTransitions << " recent_modes=";
+    const unsigned kept = std::min<unsigned>(telemetryTransitions, telemetryModes.size());
+    for (unsigned n = telemetryTransitions - kept; n < telemetryTransitions; ++n) {
+      const auto slot = n % telemetryModes.size();
+      row << telemetryModeTimes[slot] << ':' << telemetryModes[slot] << ',';
+    }
+    LOG_INFO(row.str());
+    ++telemetrySamples;
+    telemetryElapsed = telemetryEngineKg = telemetryNativeGallons = telemetryApuGallons = 0.;
+    telemetryTransferGallons = telemetryPredictedCg = 0.;
+    telemetryTransitions                            = 0;
+  }
 }
 
 void EngineControl_A339X::updateThrustLimits(double                  simulationTime,

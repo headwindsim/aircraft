@@ -13,6 +13,7 @@
 #define INI_SECTION_FUEL_RIGHT_QUANTITY "FUEL_RIGHT_QUANTITY"
 #define INI_SECTION_FUEL_LEFT_AUX_QUANTITY "FUEL_LEFT_AUX_QUANTITY"
 #define INI_SECTION_FUEL_RIGHT_AUX_QUANTITY "FUEL_RIGHT_AUX_QUANTITY"
+#define INI_SECTION_FUEL_TRIM_QUANTITY "FUEL_TRIM_QUANTITY"
 
 /**
  * @class FuelConfiguration_A339X
@@ -36,6 +37,7 @@ class FuelConfiguration_A339X {
   double fuelRight    = fuelRightDefault;
   double fuelLeftAux  = fuelLeftAuxDefault;
   double fuelRightAux = fuelRightAuxDefault;
+  double fuelTrim     = 0.;
 
   std::string configFilename{"A339X-default-fuel-config.ini"};
 
@@ -61,7 +63,7 @@ class FuelConfiguration_A339X {
    * This method reads the INI file specified in the configFilename member variable and updates the fuel quantities accordingly.
    * If the INI file cannot be read, an error message is logged and the method returns without making any changes.
    */
-  void loadConfigurationFromIni();
+  bool loadConfigurationFromIni();
 
   /**
    * @brief Saves the current fuel configuration to an INI file.
@@ -69,7 +71,7 @@ class FuelConfiguration_A339X {
    * This method writes the current fuel quantities to the INI file specified in the configFilename member variable.
    * If the INI file cannot be written, an error message is logged.
    */
-  void saveConfigurationToIni();
+  bool saveConfigurationToIni();
 
   /**
    * @brief Converts the current fuel configuration to a string.
@@ -82,6 +84,9 @@ class FuelConfiguration_A339X {
   std::string toString() const;
 
   // === Getters and setters ===
+
+  double getFuelTrim() const { return fuelTrim; }
+  void   setFuelTrim(double quantity) { fuelTrim = quantity; }
 
   double getFuelCenter() const { return fuelCenter; }
   double getFuelLeft() const { return fuelLeft; }

@@ -68,7 +68,6 @@ import {
   ConsumerSubject,
   Vec2Math,
 } from '@microsoft/msfs-sdk';
-import { BitFlags, EventBus, Subscription, SimVarValueType, ClockEvents, ConsumerSubject } from '@microsoft/msfs-sdk';
 import { AdfRadioTuningStatus, MmrRadioTuningStatus, VorRadioTuningStatus } from '@fmgc/navigation/NavaidTuner';
 import { Coordinates } from '@fmgc/flightplanning/data/geo';
 import { FmsFormatters } from './FmsFormatters';
@@ -243,6 +242,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
   private speedLimitExceeded = undefined;
   private toSpeedsNotInserted = false;
   private toSpeedsTooLow = false;
+  private toSpeedsCheckUnavailable = false;
   private vSpeedDisagree = false;
   public isTrueRefMode = false;
 
@@ -555,6 +555,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
     this.destinationLongitude = undefined;
     this.toSpeedsNotInserted = false;
     this.toSpeedsTooLow = false;
+    this.toSpeedsCheckUnavailable = false;
     this.vSpeedDisagree = false;
     this.takeoffEngineOutSpeed = undefined;
     this.checkSpeedModeMessageActive = false;
@@ -1961,7 +1962,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
         (isClimbVsDescent && stepLevel >= oldCruiseLevel && stepLevel <= newCruiseLevel) ||
         (!isClimbVsDescent && stepLevel <= oldCruiseLevel && stepLevel >= newCruiseLevel)
       ) {
-        element.cruiseStep = undefined; // TODO call a method on FPS so that we sync this (fms-v2)
+        this.flightPlanService.removeCruiseStep(i);
         this.removeMessageFromQueue(NXSystemMessages.stepAhead.text);
       }
     }
@@ -2758,12 +2759,12 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
     return this.zeroFuelWeight + fob;
   }
 
-  private getToSpeedsTooLow() {
+  private getToSpeedsTooLow(): boolean | null {
     const grossWeight = this.getGrossWeight();
     const plan = this.getFlightPlan(FlightPlanIndex.Active);
 
     if (plan.performanceData.takeoffFlaps.get() === null || grossWeight === null) {
-      return false;
+      return null;
     }
 
     const departureElevation = this.getDepartureElevation();
@@ -2772,30 +2773,42 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
       departureElevation !== null
         ? this.getPressureAltAtElevation(departureElevation, this.getBaroCorrection1())
         : this.getPressureAlt();
-    if (zp === null) {
-      return false;
+    if (zp === null || !Number.isFinite(zp)) {
+      return null;
     }
 
     const taxiFuel = plan.performanceData.taxiFuel.get() ?? undefined;
     const tow = grossWeight - (this.isAnEngineOn() || taxiFuel === undefined ? 0 : taxiFuel);
+    const vmcg = NXSpeedsUtils.getVmcg(zp);
+    const vmca = NXSpeedsUtils.getVmca(zp);
+    const vs1g = NXSpeedsUtils.getVs1g(tow, plan.performanceData.takeoffFlaps.get(), true);
+    if (![vmcg, vmca, vs1g].every(Number.isFinite)) {
+      return null;
+    }
 
     return (
-      (this.v1Speed == null ? Infinity : this.v1Speed) < Math.trunc(NXSpeedsUtils.getVmcg(zp)) ||
-      (this.vRSpeed == null ? Infinity : this.vRSpeed) < Math.trunc(1.05 * NXSpeedsUtils.getVmca(zp)) ||
-      (this.v2Speed == null ? Infinity : this.v2Speed) < Math.trunc(1.1 * NXSpeedsUtils.getVmca(zp)) ||
-      (isFinite(tow) &&
-        (this.v2Speed == null ? Infinity : this.v2Speed) <
-          Math.trunc(1.13 * NXSpeedsUtils.getVs1g(tow, plan.performanceData.takeoffFlaps.get(), true)))
+      (this.v1Speed ?? Infinity) < vmcg ||
+      (this.vRSpeed ?? Infinity) < 1.05 * vmca ||
+      (this.v2Speed ?? Infinity) < 1.1 * vmca ||
+      (this.v2Speed ?? Infinity) < 1.13 * vs1g
     );
   }
 
   private toSpeedsChecks() {
-    const toSpeedsNotInserted = !this.v1Speed || !this.vRSpeed || !this.v2Speed;
+    const toSpeedsNotInserted = [this.v1Speed, this.vRSpeed, this.v2Speed].some(
+      (speed) => !Number.isFinite(speed) || speed <= 0,
+    );
     if (toSpeedsNotInserted !== this.toSpeedsNotInserted) {
       this.toSpeedsNotInserted = toSpeedsNotInserted;
     }
 
-    const toSpeedsTooLow = this.getToSpeedsTooLow();
+    const speedCheck = this.getToSpeedsTooLow();
+    const checkUnavailable = speedCheck === null && !toSpeedsNotInserted;
+    if (checkUnavailable && !this.toSpeedsCheckUnavailable) {
+      this.addMessageToQueue(NXSystemMessages.checkToData, () => this.getToSpeedsTooLow() !== null);
+    }
+    this.toSpeedsCheckUnavailable = checkUnavailable;
+    const toSpeedsTooLow = speedCheck === true;
     if (toSpeedsTooLow !== this.toSpeedsTooLow) {
       this.toSpeedsTooLow = toSpeedsTooLow;
       if (toSpeedsTooLow) {
@@ -5279,7 +5292,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
         computations.alternateFuel = 0;
         computations.alternateTime = 0;
       } else {
-      const trueCourseToAlternate = bearingTo(
+        const trueCourseToAlternate = bearingTo(
           plan.destinationAirport.location,
           plan.alternateDestinationAirport.location,
         );
@@ -5619,7 +5632,7 @@ export abstract class FMCMainDisplay implements FmsDataInterface, FmsDisplayInte
     this.bus.pub('troubleshooting_log_error', String(msg), true, false);
   }
 
-public async uplinkWinds(forPlan: FlightPlanIndex, sentCallback = () => {}): Promise<void> {
+  public async uplinkWinds(forPlan: FlightPlanIndex, sentCallback = () => {}): Promise<void> {
     const plan = this.getFlightPlan(forPlan);
     if (!plan) {
       throw new Error(`Flight plan ${forPlan} does not exist.`);

@@ -89,19 +89,23 @@ export class LatchedDescentGuidance {
       newState === DescentVerticalGuidanceState.InvalidProfile
     ) {
       this.reset();
-      this.writeToSimVars();
     }
 
     this.verticalState = newState;
   }
 
   reset() {
+    this.verticalState = DescentVerticalGuidanceState.InvalidProfile;
+    this.changeSpeedState(DescentSpeedGuidanceState.NotInDescentPhase, true);
+    this.todGuidance.reset();
     this.requestedVerticalMode = RequestedVerticalMode.None;
     this.targetAltitude = 0;
+    this.targetAltitudeGuidance = 0;
     this.targetVerticalSpeed = 0;
     this.showLinearDeviationOnPfd = false;
     this.showDescentLatchOnPfd = false;
     this.isInOverspeedCondition = false;
+    this.writeToSimVars();
   }
 
   update(deltaTime: number, distanceToEnd: NauticalMiles) {
@@ -237,13 +241,13 @@ export class LatchedDescentGuidance {
     );
   }
 
-  private changeSpeedState(newState: DescentSpeedGuidanceState) {
-    if (this.speedState === newState) {
+  private changeSpeedState(newState: DescentSpeedGuidanceState, force = false) {
+    if (!force && this.speedState === newState) {
       return;
     }
 
     // Hide margins if they were previously visible, but the state changed to literally anything else
-    if (this.speedState === DescentSpeedGuidanceState.TargetAndMargins) {
+    if (newState !== DescentSpeedGuidanceState.TargetAndMargins) {
       SimVar.SetSimVarValue('L:A32NX_PFD_SHOW_SPEED_MARGINS', 'boolean', false);
       SimVar.SetSimVarValue('L:A32NX_PFD_LOWER_SPEED_MARGIN', 'Knots', 0);
       SimVar.SetSimVarValue('L:A32NX_PFD_UPPER_SPEED_MARGIN', 'Knots', 0);

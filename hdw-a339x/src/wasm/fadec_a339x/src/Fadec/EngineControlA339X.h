@@ -8,6 +8,7 @@
 
 #include "FadecSimData_A339X.hpp"
 #include "FuelConfiguration_A339X.h"
+#include "FuelTrimModel.hpp"
 
 #define FILENAME_FADEC_CONF_DIRECTORY "\\work\\AircraftStates\\"
 #define FILENAME_FADEC_CONF_FILE_EXTENSION ".ini"
@@ -36,21 +37,31 @@ class EngineControl_A339X {
   // ATC ID for the aircraft used to load and store the fuel levels
   std::string atcId = "A339X";
 
-  // Whether we have already loaded the fuel configuration from the config file
-  bool hasLoadedFuelConfig = false;
+  // Whether the fuel-state path has been selected for this aircraft.
+  bool fuelStatePathInitialized = false;
 
   bool fadecInitialized = false;
 
   // Fuel configuration for loading and storing fuel levels
   FuelConfiguration_A339X fuelConfiguration{};
 
-  // previous time the fuel levels were saved to file
-  double                  lastFuelSaveTime   = 0.0;
-  static constexpr double FUEL_SAVE_INTERVAL = 5.0;  // seconds
-
-  // some pump timings - unclear why these are needed
-  double pumpStateLeftTimeStamp = 0.0;
-  double pumpStateRightTimeStamp = 0.0;
+  a339x::fuel::State     trimState{};
+  std::array<double, 2>  pumpSoundTimestamp{};
+  double                 previousFuelTotalGallons = 0.;
+  bool                   havePreviousFuelTotal    = false;
+  bool                   wasRefueling             = false;
+  double                 previousExternalSequence = -1.;
+  double                 telemetryElapsed         = 0.;
+  unsigned               telemetrySamples         = 0;
+  double                 telemetryEngineKg        = 0.;
+  double                 telemetryNativeGallons   = 0.;
+  double                 telemetryApuGallons      = 0.;
+  double                 telemetryTransferGallons = 0.;
+  double                 telemetryPredictedCg     = 0.;
+  int                    previousTrimMode         = 0;
+  std::array<int, 16>    telemetryModes{};
+  std::array<double, 16> telemetryModeTimes{};
+  unsigned               telemetryTransitions = 0;
 
   bool isTransitionActive = false;
   // thrust limits transition for flex
@@ -70,7 +81,6 @@ class EngineControl_A339X {
   // additional constants
   static constexpr int    MAX_OIL             = 200;
   static constexpr int    MIN_OIL             = 140;
-  static constexpr double FUEL_RATE_THRESHOLD = 661;  // lbs/sec for determining fuel ui tampering
 
   /**
    * @enum EngineState
@@ -103,7 +113,7 @@ class EngineControl_A339X {
   SimpleProfiler profilerUpdateFuel{"Fadec::EngineControl_A339X::updateFuel()", 100};
   SimpleProfiler profilerUpdateThrustLimits{"Fadec::EngineControl_A339X::updateThrustLimits()", 100};
   SimpleProfiler profilerUpdateOil{"Fadec::EngineControl_A339X::updateOil()", 100};
-  SimpleProfiler profilerEnsureFadecIsInitialized{"Fadec::EngineControl_A339X::ensureFadecIsInitialized()", 100};
+  SimpleProfiler profilerInitializeFuelStatePath{"Fadec::EngineControl_A339X::initializeFuelStatePath()", 100};
 #endif
 
   // ===========================================================================
@@ -133,9 +143,9 @@ class EngineControl_A339X {
 
  private:
   /**
-   * @brief Initializes the required data for the engine simulation if it has not been initialized
+   * @brief Selects the fuel-state file after instrument initialization.
    */
-  void loadFuelConfigIfPossible();
+  void initializeFuelStatePath();
 
   /**
    * @brief Initialize the FADEC and Fuel model

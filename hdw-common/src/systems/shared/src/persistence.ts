@@ -4,6 +4,12 @@
 
 import { MutableSubscribable, Subject } from '@microsoft/msfs-sdk';
 
+declare global {
+  interface Window {
+    NXDATASTORE_SUBJECT_MAP: Map<string, Subject<any>> | undefined;
+  }
+}
+
 export type DataStoreSettingKey = keyof NXDataStoreSettings & string;
 type DataStoreSettingValue = string | number | boolean;
 
@@ -136,7 +142,7 @@ export class NXDataStore {
     const rawValue = JSON.stringify(value);
 
     NXDataStore.setRaw(key, rawValue);
-    this.listener.triggerToAllSubscribers('FBW_NXDATASTORE_UPDATE', key, rawValue);
+    this.listener.triggerToAllSubscribers('HDW_NXDATASTORE_UPDATE', key, rawValue);
   }
 
   /**

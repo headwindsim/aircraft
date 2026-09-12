@@ -26,6 +26,7 @@ pub enum A320FuelTankType {
     LeftOuter,
     RightInner,
     RightOuter,
+    Trim,
 }
 
 impl From<A320FuelTankType> for usize {
@@ -41,40 +42,47 @@ impl From<usize> for A320FuelTankType {
             2 => A320FuelTankType::LeftOuter,
             3 => A320FuelTankType::RightInner,
             4 => A320FuelTankType::RightOuter,
+            5 => A320FuelTankType::Trim,
             i => panic!("Cannot convert from {} to A320FuelTankType.", i),
         }
     }
 }
 
 pub struct A320Fuel {
-    fuel_system: FuelSystem<5, 5>,
+    fuel_system: FuelSystem<6, 5>,
 }
 impl A320Fuel {
-    pub const A320_FUEL: [FuelInfo<'static>; 5] = [
+    pub const A320_FUEL: [FuelInfo<'static>; 6] = [
         FuelInfo {
-            fuel_tank_id: "FUEL TANK CENTER QUANTITY",
+            fuel_tank_id: "FUELSYSTEM TANK QUANTITY:1",
             position: (-20.3, 0., 4.),
-            total_capacity_gallons: 12625.,
+            total_capacity_gallons: 10979.,
         },
         FuelInfo {
-            fuel_tank_id: "FUEL TANK LEFT MAIN QUANTITY",
+            fuel_tank_id: "FUELSYSTEM TANK QUANTITY:2",
             position: (-25.5, -33.8, 1.3),
             total_capacity_gallons: 11095.,
         },
         FuelInfo {
-            fuel_tank_id: "FUEL TANK LEFT AUX QUANTITY",
+            fuel_tank_id: "FUELSYSTEM TANK QUANTITY:4",
             position: (-41.0, -70.0, 6.1),
             total_capacity_gallons: 964.,
         },
         FuelInfo {
-            fuel_tank_id: "FUEL TANK RIGHT MAIN QUANTITY",
+            fuel_tank_id: "FUELSYSTEM TANK QUANTITY:3",
             position: (-25.5, 33.8, 1.3),
             total_capacity_gallons: 11095.,
         },
         FuelInfo {
-            fuel_tank_id: "FUEL TANK RIGHT AUX QUANTITY",
+            fuel_tank_id: "FUELSYSTEM TANK QUANTITY:5",
             position: (-41.0, 70.0, 6.1),
             total_capacity_gallons: 964.,
+        },
+        FuelInfo {
+            fuel_tank_id: "FUELSYSTEM TANK QUANTITY:6",
+            // Experimental PR 76 position, pending native CG validation.
+            position: (-107., 0., 23.5),
+            total_capacity_gallons: 1646.,
         },
     ];
 
